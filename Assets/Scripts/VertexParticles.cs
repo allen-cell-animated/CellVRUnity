@@ -69,13 +69,13 @@ public class VertexParticles : MonoBehaviour
 		}
 
 		ParticleSystem.EmitParams emitParameters = GetEmitParameters();
-		SetCenter();
-		SetMaxRadius();
+//		SetCenter();
+//		SetMaxRadius();
 
 		foreach (Vector3 vertex in mesh.vertices)
 		{
 			emitParameters.position = vertex;
-			emitParameters.startColor = ColorForVertexRadius(vertex);
+//			emitParameters.startColor = ColorForVertexRadius(vertex);
 			emitter.Emit(emitParameters, 1);
 		}
 	}
