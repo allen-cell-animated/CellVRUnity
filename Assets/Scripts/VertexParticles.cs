@@ -6,6 +6,7 @@ public class VertexParticles : MonoBehaviour
 {
 	public Color color;
 	public float size = 10f;
+	public bool gradientShading;
 
 	Mesh _mesh;
 	Mesh mesh
@@ -69,13 +70,16 @@ public class VertexParticles : MonoBehaviour
 		}
 
 		ParticleSystem.EmitParams emitParameters = GetEmitParameters();
-//		SetCenter();
-//		SetMaxRadius();
+		if (gradientShading)
+		{
+			SetCenter();
+			SetMaxRadius();
+		}
 
 		foreach (Vector3 vertex in mesh.vertices)
 		{
 			emitParameters.position = vertex;
-//			emitParameters.startColor = ColorForVertexRadius(vertex);
+			if (gradientShading) { emitParameters.startColor = ColorForVertexRadius(vertex); }
 			emitter.Emit(emitParameters, 1);
 		}
 	}
