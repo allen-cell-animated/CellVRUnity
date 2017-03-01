@@ -7,6 +7,22 @@ public class VertexParticles : MonoBehaviour
 	public Color color;
 	public float size = 10f;
 
+	Mesh _mesh;
+	Mesh mesh
+	{
+		get
+		{
+			if (_mesh == null)
+			{
+				_mesh = GetComponent<MeshFilter>().sharedMesh;
+			}
+			return _mesh;
+		}
+	}
+
+	Vector3 center;
+	float maxRadius;
+
 	ParticleSystem _emitter;
 	ParticleSystem emitter
 	{
@@ -46,18 +62,20 @@ public class VertexParticles : MonoBehaviour
 			return;
 		}
 
-		ParticleSystem.EmitParams emitParameters = GetEmitParameters();
-		Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
-
 		if (mesh == null)
 		{
 			Debug.LogError(name + " has no mesh to emit particles from!");
 			return;
 		}
 
+		ParticleSystem.EmitParams emitParameters = GetEmitParameters();
+		SetCenter();
+		SetMaxRadius();
+
 		foreach (Vector3 vertex in mesh.vertices)
 		{
 			emitParameters.position = vertex;
+			emitParameters.startColor = ColorForVertexRadius(vertex);
 			emitter.Emit(emitParameters, 1);
 		}
 	}
@@ -71,5 +89,46 @@ public class VertexParticles : MonoBehaviour
 		emitParameters.startColor = color;
 		emitParameters.startSize = size;
 		return emitParameters;
+	}
+
+	Color ColorForVertexRadius (Vector3 vertex)
+	{
+		float normalizedRadius = VertexRadius(vertex) / maxRadius;
+		return new Color(Remap(color.r, normalizedRadius), Remap(color.g, normalizedRadius), Remap(color.b, normalizedRadius), color.a);
+	}
+
+	float Remap (float colorComponent, float normalizedVertexRadius)
+	{
+//		return colorComponent + (1f - normalizedVertexRadius) * (1f - colorComponent); // white center
+		return colorComponent * normalizedVertexRadius; // black center
+	}
+
+	float VertexRadius (Vector3 vertex)
+	{
+		return Vector3.Distance(center, vertex);
+	}
+
+	void SetMaxRadius ()
+	{
+		maxRadius = 0;
+		float d;
+		foreach (Vector3 vertex in mesh.vertices)
+		{
+			d = VertexRadius(vertex);
+			if (d > maxRadius)
+			{
+				maxRadius = d;
+			}
+		}
+	}
+
+	void SetCenter ()
+	{
+		center = Vector3.zero;
+		foreach (Vector3 vertex in mesh.vertices)
+		{
+			center += vertex;
+		}
+		center /= mesh.vertices.Length;
 	}
 }
