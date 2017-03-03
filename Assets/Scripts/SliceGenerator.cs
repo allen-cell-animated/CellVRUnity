@@ -10,6 +10,7 @@ public class SliceGenerator : MonoBehaviour
 	public int slicesPerDimension = 4;
 	public float distanceBetweenSlices = 1f;
 	public int startSlice = 12;
+	public Color color;
 
 	Sprite[][] sprites;
 
@@ -37,11 +38,11 @@ public class SliceGenerator : MonoBehaviour
 
 		for (int i = 0; i < sprites.Length; i++) // foreach dimension 
 		{
-			float depth = (-distanceBetweenSlices * ((slicesPerDimension - startSlice) - 1f)) / 2f;
+			float depth = (distanceBetweenSlices * ((slicesPerDimension - startSlice) - 1f)) / 2f;
 			for (int j = startSlice; j < sprites[i].Length; j++) // foreach image in dimension
 			{
 				AddSlice(new Vector3(0, 0, depth), sprites[i][j]);
-				depth += distanceBetweenSlices;
+				depth -= distanceBetweenSlices;
 			}
 		}
 	}
@@ -76,5 +77,6 @@ public class SliceGenerator : MonoBehaviour
 		SpriteRenderer spriteRenderer = Instantiate(slicePrefab, transform) as SpriteRenderer;
 		spriteRenderer.sprite = sprite;
 		spriteRenderer.transform.localPosition = position;
+		spriteRenderer.color = color;
 	}
 }
