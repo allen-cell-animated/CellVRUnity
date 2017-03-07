@@ -39,35 +39,18 @@ Shader "Custom/Volume"
 		sampler2D _TextureAtlas;
 
 		// constants
-		float3 AABB_CLIP_MIN;
-		float3 AABB_CLIP_MAX;
-		int BREAK_STEPS;
-		float BRIGHTNESS;
-		float DENS;
-		int ATLAS_X;
-		int ATLAS_Y;
-		int SLICES;
-		float maskAlpha;
-		float GAMMA_MIN;
-		float GAMMA_MAX;
-		float GAMMA_SCALE;
-
-		bool setConstants ()
-		{
-			AABB_CLIP_MIN = float3(-1,-1,-1);
-			AABB_CLIP_MAX = float3( 1, 1, 1);
-			BREAK_STEPS = 72;
-			BRIGHTNESS = 1;
-			DENS = 0.0820849986238988;
-			ATLAS_X = 8;
-			ATLAS_Y = 6;
-			SLICES = 46;
-			maskAlpha = 0;
-			GAMMA_MIN = 0;
-			GAMMA_MAX = 1;
-			GAMMA_SCALE = 1;
-			return true;
-		}
+		static const float3 AABB_CLIP_MIN = float3(-0.5, -0.5, -0.5);
+		static const float3 AABB_CLIP_MAX = float3(0.5, 0.5, 0.5);
+		static const int BREAK_STEPS = 72;
+		static const float BRIGHTNESS = 1;
+		static const float DENS = 0.0820849986238988;
+		static const int ATLAS_X = 8;
+		static const int ATLAS_Y = 6;
+		static const int SLICES = 46;
+		static const float maskAlpha = 0;
+		static const float GAMMA_MIN = 0;
+		static const float GAMMA_MAX = 1;
+		static const float GAMMA_SCALE = 1;
 
 		bool intersectBox (in float3 r_o, in float3 r_d, in float3 boxMin, in float3 boxMax, out float tnear, out float tfar)
 		{ 
@@ -104,7 +87,7 @@ Shader "Custom/Volume"
 
 		float2 offsetFrontBack (float t, float nx, float ny)
 		{
-			float2 os = float2((fmod(t / nx, 1.0)) * nx - 1.0, ny - floor(t / nx) - 1.0);
+			float2 os = float2(fmod(t, nx)/nx, floor(t/nx)/ny);
 			return os;
 		}
 
@@ -123,16 +106,18 @@ Shader "Custom/Volume"
 			float2 o1 = offsetFrontBack(z1, ATLAS_X, ATLAS_Y);
 			o0 = clamp(o0, 0.0, 1.0) + loc0;
 			o1 = clamp(o1, 0.0, 1.0) + loc0;
+			o0.y = 1.0 - o0.y;
+			o1.y = 1.0 - o1.y;
 			float t = z - zfloor;
-			float4 slice0Color = float4(1.0,1.0,1.0,1.0);// tex2D(tex, o0);
-			float4 slice1Color = float4(1.0,1.0,1.0,1.0);// tex2D(tex, o1);
+			float4 slice0Color = tex2D(tex, o0);
+			float4 slice1Color = tex2D(tex, o1);
 			float slice0Mask = tex2D(_TextureAtlasMask, o0).x;
 			float slice1Mask = tex2D(_TextureAtlasMask, o1).x;
 			float maskVal = lerp(slice0Mask, slice1Mask, t);
 			maskVal = lerp(maskVal, 1.0, maskAlpha);
 			float4 retval = lerp(slice0Color, slice1Color, t);
 			retval.rgb *= maskVal;
-			return retval; //bounds * 
+			return bounds*retval; //bounds * 
 		}
 
 		float4 sampleStack (sampler2D tex, float4 pos) 
@@ -170,7 +155,7 @@ Shader "Custom/Volume"
         		col = sampleStack(textureAtlas, pos);
 
         		//Finish up by adding brightness/density
-        		col.xyz *= 10 * BRIGHTNESS;
+        		col.xyz *= BRIGHTNESS;
         		col.w *= DENS;
         		float s = 0.5 * float(256) / float(BREAK_STEPS);
         		float stepScale = (1.0 - pow((1.0 - col.w), s));
@@ -189,10 +174,6 @@ Shader "Custom/Volume"
 		float4 frag (v2f In): COLOR
 		{
 			uv = In.pObj.xy;
-			if (BRIGHTNESS == 0)
-			{
-				setConstants();
-			}
 
 			float3 eyeRay_o = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1.0)).xyz;
 			float3 eyeRay_d = In.pObj - eyeRay_o;
