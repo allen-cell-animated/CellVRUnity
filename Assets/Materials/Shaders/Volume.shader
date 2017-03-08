@@ -132,7 +132,7 @@ Shader "Custom/Volume"
         	float4 C = float4(0.0, 0.0, 0.0, 0.0);
         	float tend = tfar;
         	float tbegin = tnear;
-        	int maxSteps = 128;// 256;
+        	int maxSteps = 256;
         	float csteps = float(BREAK_STEPS);
         	csteps = clamp(csteps, 0.0, float(maxSteps));
         	float isteps = 1.0 / csteps;
@@ -148,7 +148,7 @@ Shader "Custom/Volume"
         	// unable to unroll loop, loop does not appear to terminate in a timely manner (236 iterations) or unrolled loop is too large
         	// use the [unroll(n)] attribute to force and exact higher number
         	// https://forum.unity3d.com/threads/issues-with-shaderproperty-and-for-loop.344469/
-        	for (int i = 0; i < maxSteps; i++) 
+        	[unroll(256)] for (int i = 0; i < maxSteps; i++) 
         	{
         		pos = eye_o + eye_d * t;
         		pos.xyz = (pos.xyz - AABB_CLIP_MIN) / (AABB_CLIP_MAX - AABB_CLIP_MIN); // map position from [boxMin, boxMax] to [0, 1] coordinates

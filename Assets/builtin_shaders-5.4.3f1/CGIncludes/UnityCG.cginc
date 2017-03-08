@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+
 #ifndef UNITY_CG_INCLUDED
 #define UNITY_CG_INCLUDED
 
@@ -34,7 +36,7 @@ struct appdata_base {
 	float4 vertex : POSITION;
 	float3 normal : NORMAL;
 	float4 texcoord : TEXCOORD0;
-	UNITY_INSTANCE_ID
+	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 struct appdata_tan {
@@ -42,7 +44,7 @@ struct appdata_tan {
 	float4 tangent : TANGENT;
 	float3 normal : NORMAL;
 	float4 texcoord : TEXCOORD0;
-	UNITY_INSTANCE_ID
+	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 struct appdata_full {
@@ -58,7 +60,7 @@ struct appdata_full {
 	half4 texcoord5 : TEXCOORD5;
 #endif
 	fixed4 color : COLOR;
-	UNITY_INSTANCE_ID
+	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
 inline bool IsGammaSpace()
