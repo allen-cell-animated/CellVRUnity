@@ -143,7 +143,8 @@ public class ViveController : MonoBehaviour
 	{
 		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
 		{
-			if (!triggerPressing)
+            
+            if (!triggerPressing)
 			{
 				OnTriggerDown();
 				triggerPressing = true;
@@ -158,6 +159,10 @@ public class ViveController : MonoBehaviour
 			OnTriggerUp();
 			triggerPressing = false;
 		}
+        if (controller.GetPress(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            OnTriggerStay();
+        }
 	}
 
 	public virtual void OnDPadUpEnter () { }

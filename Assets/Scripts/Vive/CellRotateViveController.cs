@@ -11,22 +11,24 @@ public class CellRotateViveController : ViveController
 	Vector3 thisLastPosition;
 
 	public override void OnTriggerDown () 
-	{ 
+	{
 		thisLastPosition = transform.position;
 		DoRotation();
 	}
 
 	public override void OnTriggerStay () 
-	{ 
-		DoRotation();
+	{
+        Debug.Log("stay");
+        DoRotation();
 	}
 
 	void DoRotation ()
 	{
 		Vector3 axis = Vector3.Cross( thisLastPosition, transform.position ).normalized;
 		float angle = Vector3.Dot( thisLastPosition, transform.position );
+        Debug.Log(angle);
 
-		objectToRotate.RotateAround( objectToRotate.position, axis, multiplier * angle );
+        objectToRotate.RotateAround( objectToRotate.position, axis, multiplier * angle );
 
 		thisLastPosition = transform.position;
 	}
