@@ -18,7 +18,6 @@ public class CellRotateViveController : ViveController
 
 	public override void OnTriggerStay () 
 	{
-        Debug.Log("stay");
         DoRotation();
 	}
 

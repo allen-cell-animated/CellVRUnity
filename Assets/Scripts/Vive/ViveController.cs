@@ -32,7 +32,6 @@ public class ViveController : MonoBehaviour
 
 	Vector2 dPadPosition;
 	bool[] dPadHovering = new bool[4];
-	bool triggerPressing;
 
 	// Update is called once per frame
 	void Update ()
@@ -143,21 +142,7 @@ public class ViveController : MonoBehaviour
 	{
 		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
 		{
-            
-            if (!triggerPressing)
-			{
-				OnTriggerDown();
-				triggerPressing = true;
-			}
-			else
-			{
-				OnTriggerStay();
-			}
-		}
-		else if (triggerPressing)
-		{
-			OnTriggerUp();
-			triggerPressing = false;
+			OnTriggerDown();
 		}
         if (controller.GetPress(SteamVR_Controller.ButtonMask.Trigger))
         {
@@ -186,6 +171,4 @@ public class ViveController : MonoBehaviour
 	public virtual void OnTriggerDown () { }
 
 	public virtual void OnTriggerStay () { }
-
-	public virtual void OnTriggerUp () { }
 }
