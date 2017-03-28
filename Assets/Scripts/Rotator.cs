@@ -5,7 +5,7 @@ using UnityEngine;
 public class Rotator : MonoBehaviour 
 {
 	public Transform objectToRotate;
-	public float multiplier;
+	public float multiplier = 0.1f;
 
 	Vector3 thisLastPosition;
 
