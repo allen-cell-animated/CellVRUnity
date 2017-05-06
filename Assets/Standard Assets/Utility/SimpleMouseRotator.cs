@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
 
-namespace UnityStandardAssets.Utility
+
+namespace FluffyUnderware.Curvy.Examples.StandardAssets
 {
-    public class SimpleMouseRotator : MonoBehaviour
+    public class SimpleMouseRotator_CE : MonoBehaviour
     {
         // A mouselook behaviour with constraints which operate relative to
         // this gameobject's initial rotation.
@@ -45,8 +45,8 @@ namespace UnityStandardAssets.Utility
             float inputV;
             if (relative)
             {
-                inputH = CrossPlatformInputManager.GetAxis("Mouse X");
-                inputV = CrossPlatformInputManager.GetAxis("Mouse Y");
+                inputH = Input.GetAxis("Mouse X");
+                inputV = Input.GetAxis("Mouse Y");
 
                 // wrap values to avoid springing quickly the wrong way from positive to negative
                 if (m_TargetAngles.y > 180)

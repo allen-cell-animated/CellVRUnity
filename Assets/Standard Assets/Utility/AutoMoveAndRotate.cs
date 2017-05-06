@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace UnityStandardAssets.Utility
+namespace FluffyUnderware.Curvy.Examples.StandardAssets
 {
-    public class AutoMoveAndRotate : MonoBehaviour
+    public class AutoMoveAndRotate_CE : MonoBehaviour
     {
         public Vector3andSpace moveUnitsPerSecond;
         public Vector3andSpace rotateDegreesPerSecond;

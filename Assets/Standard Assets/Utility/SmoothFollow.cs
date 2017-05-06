@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace UnityStandardAssets.Utility
+namespace FluffyUnderware.Curvy.Examples.StandardAssets
 {
-	public class SmoothFollow : MonoBehaviour
+	public class SmoothFollow_CE : MonoBehaviour
 	{
 
 		// The target we are following
