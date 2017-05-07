@@ -13,13 +13,14 @@ public class ResolutionManager : MonoBehaviour
 {
 	public int currentLOD = 0;
 	public LOD[] lods = new LOD[2];
-	public float updateInterval = 1f;
+	public float maxUpdateInterval = 1f;
 
 	float lastTime = -1;
+	float lastDistance = 20f;
 
 	void Update () 
 	{
-		if (Time.time - lastTime > updateInterval)
+		if (Time.time - lastTime > maxUpdateInterval * lastDistance / 20f)
 		{
 			CheckLOD();
 			lastTime = Time.time;
@@ -28,9 +29,9 @@ public class ResolutionManager : MonoBehaviour
 
 	void CheckLOD ()
 	{
-		float cameraDistance = Vector3.Distance( transform.position, Camera.main.transform.position );
+		lastDistance = Vector3.Distance( transform.position, Camera.main.transform.position );
 
-		if (cameraDistance > lods[lods.Length - 1].maxDistance)
+		if (lastDistance > lods[lods.Length - 1].maxDistance)
 		{
 			if (currentLOD != -1)
 			{
@@ -41,7 +42,7 @@ public class ResolutionManager : MonoBehaviour
 
 		for (int i = 0; i < lods.Length; i++)
 		{
-			if (lods[i].maxDistance <= 0 || cameraDistance < lods[i].maxDistance)
+			if (lods[i].maxDistance <= 0 || lastDistance < lods[i].maxDistance)
 			{
 				if (currentLOD != i)
 				{
