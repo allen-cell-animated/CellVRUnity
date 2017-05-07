@@ -15,7 +15,7 @@ public class ResolutionManager : MonoBehaviour
 	public LOD[] lods = new LOD[2];
 	public float updateInterval = 1f;
 
-	float lastTime = 0;
+	float lastTime = -1;
 
 	void Update () 
 	{
@@ -28,9 +28,20 @@ public class ResolutionManager : MonoBehaviour
 
 	void CheckLOD ()
 	{
+		float cameraDistance = Vector3.Distance( transform.position, Camera.main.transform.position );
+
+		if (cameraDistance > lods[lods.Length - 1].maxDistance)
+		{
+			if (currentLOD != -1)
+			{
+				SwitchLOD( -1 );
+			}
+			return;
+		}
+
 		for (int i = 0; i < lods.Length; i++)
 		{
-			if (lods[i].maxDistance <= 0 || Vector3.Distance( transform.position, Camera.main.transform.position ) < lods[i].maxDistance)
+			if (lods[i].maxDistance <= 0 || cameraDistance < lods[i].maxDistance)
 			{
 				if (currentLOD != i)
 				{
@@ -43,8 +54,14 @@ public class ResolutionManager : MonoBehaviour
 
 	void SwitchLOD (int newLOD)
 	{
-		lods[currentLOD].geometry.SetActive( false );
-		lods[newLOD].geometry.SetActive( true );
+		if (currentLOD >= 0)
+		{
+			lods[currentLOD].geometry.SetActive( false );
+		}
+		if (newLOD >= 0)
+		{
+			lods[newLOD].geometry.SetActive( true );
+		}
 		currentLOD = newLOD;
 	}
 }
