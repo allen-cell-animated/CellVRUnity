@@ -24,9 +24,6 @@ public class Rotator : MonoBehaviour
 
 	void DoRotation ()
 	{
-		Vector3 startPosition = objectToRotate.InverseTransformPoint(thisLastPosition);
-		Vector3 endPosition = objectToRotate.InverseTransformPoint(transform.position);
-
 		Vector3 axis = Vector3.Cross( thisLastPosition, transform.position ).normalized;
 		float angle = Vector3.Dot( thisLastPosition, transform.position );
 
