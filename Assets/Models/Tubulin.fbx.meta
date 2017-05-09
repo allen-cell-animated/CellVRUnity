@@ -1,75 +1,27 @@
 fileFormatVersion: 2
-guid: 05e32e4a0795f4045b786980be15751c
-timeCreated: 1493316866
+guid: 9a355793b57ed4895bf46397e4f501ec
+timeCreated: 1494361802
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: CINEMA_4D_Editor
-    100002: Joint
-    100004: Joint_1
-    100006: Joint_2
-    100008: Joint_3
-    100010: Joint_4
-    100012: Joint_5
-    100014: //RootNode
-    100016: Motor_11
-    100018: necklinker
-    100020: Root
-    100022: Collider
-    100024: Joint_0
-    100026: Sphere
-    100028: Sphere_2
-    100030: Sphere_3
-    100032: Sphere_4
-    100034: Sphere_5
-    100036: Sphere_6
+    100002: //RootNode
+    100004: Tubulin
+    100006: TubulinA
+    100008: TubulinB
     400000: CINEMA_4D_Editor
-    400002: Joint
-    400004: Joint_1
-    400006: Joint_2
-    400008: Joint_3
-    400010: Joint_4
-    400012: Joint_5
-    400014: //RootNode
-    400016: Motor_11
-    400018: necklinker
-    400020: Root
-    400022: Collider
-    400024: Joint_0
-    400026: Sphere
-    400028: Sphere_2
-    400030: Sphere_3
-    400032: Sphere_4
-    400034: Sphere_5
-    400036: Sphere_6
-    2300000: Motor_11
-    2300002: Collider
-    2300004: Sphere
-    2300006: Sphere_2
-    2300008: Sphere_3
-    2300010: Sphere_4
-    2300012: Sphere_5
-    2300014: Sphere_6
-    3300000: Motor_11
-    3300002: Collider
-    3300004: Sphere
-    3300006: Sphere_2
-    3300008: Sphere_3
-    3300010: Sphere_4
-    3300012: Sphere_5
-    3300014: Sphere_6
-    4300000: Motor_11
-    4300002: necklinker
-    4300004: Collider
-    4300006: Sphere
-    4300008: Sphere_2
-    4300010: Sphere_3
-    4300012: Sphere_4
-    4300014: Sphere_5
-    4300016: Sphere_6
+    400002: //RootNode
+    400004: Tubulin
+    400006: TubulinA
+    400008: TubulinB
+    2300000: TubulinA
+    2300002: TubulinB
+    3300000: TubulinA
+    3300002: TubulinB
+    4300000: TubulinA
+    4300002: TubulinB
     9500000: //RootNode
-    13700000: necklinker
   materials:
     importMaterials: 1
     materialName: 0
@@ -80,8 +32,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    animationImportErrors: "Avatar creation failed:\n\tCannot find root motion transform
-      'Joint'.\n"
+    animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
@@ -95,7 +46,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 10
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -113,7 +64,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
+    tangentImportMode: 0
   importAnimation: 0
   copyAvatar: 0
   humanDescription:
@@ -127,7 +78,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    rootMotionBoneName: Joint
+    rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
