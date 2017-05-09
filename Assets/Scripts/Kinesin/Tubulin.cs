@@ -15,7 +15,6 @@ namespace AICS.Kinesin
 				Attractor motor = collision.collider.GetComponent<Attractor>();
 				if (motor != null && motor.target != transform)
 				{
-					Debug.Log("motor collided with " + name);
 					motor.target = transform;
 					motor.GetComponent<RandomForces>().enabled = false;
 				}
