@@ -16,6 +16,14 @@ ModelImporter:
     100016: Motor_11
     100018: necklinker
     100020: Root
+    100022: Collider
+    100024: Joint_0
+    100026: Sphere
+    100028: Sphere_2
+    100030: Sphere_3
+    100032: Sphere_4
+    100034: Sphere_5
+    100036: Sphere_6
     400000: CINEMA_4D_Editor
     400002: Joint
     400004: Joint_1
@@ -27,10 +35,39 @@ ModelImporter:
     400016: Motor_11
     400018: necklinker
     400020: Root
+    400022: Collider
+    400024: Joint_0
+    400026: Sphere
+    400028: Sphere_2
+    400030: Sphere_3
+    400032: Sphere_4
+    400034: Sphere_5
+    400036: Sphere_6
     2300000: Motor_11
+    2300002: Collider
+    2300004: Sphere
+    2300006: Sphere_2
+    2300008: Sphere_3
+    2300010: Sphere_4
+    2300012: Sphere_5
+    2300014: Sphere_6
     3300000: Motor_11
+    3300002: Collider
+    3300004: Sphere
+    3300006: Sphere_2
+    3300008: Sphere_3
+    3300010: Sphere_4
+    3300012: Sphere_5
+    3300014: Sphere_6
     4300000: Motor_11
     4300002: necklinker
+    4300004: Collider
+    4300006: Sphere
+    4300008: Sphere_2
+    4300010: Sphere_3
+    4300012: Sphere_4
+    4300014: Sphere_5
+    4300016: Sphere_6
     9500000: //RootNode
     13700000: necklinker
   materials:
@@ -43,7 +80,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    animationImportErrors: 
+    animationImportErrors: "Avatar creation failed:\n\tCannot find root motion transform
+      'Joint'.\n"
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
