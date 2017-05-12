@@ -39,6 +39,22 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Rotator _rotator;
+		Rotator rotator
+		{
+			get {
+				if (_rotator == null)
+				{
+					_rotator = GetComponent<Rotator>();
+					if (_rotator == null)
+					{
+						_rotator = gameObject.AddComponent<Rotator>();
+					}
+				}
+				return _rotator;
+			}
+		}
+
 		Rigidbody _body;
 		Rigidbody body
 		{
@@ -57,12 +73,18 @@ namespace AICS.Kinesin
 			bound = true;
 			body.isKinematic = true;
 			randomForces.enabled = false;
-			mover.MoveToOverDuration( GetBindingPosition( tubulin.transform ), 1f );
+			mover.MoveToOverDuration( GetBindingPosition( tubulin.transform ), 0.1f );
+			rotator.RotateToOverDuration( GetBindingRotation( tubulin.transform ), 0.1f );
 		}
 
 		Vector3 GetBindingPosition (Transform tubulin)
 		{
 			return tubulin.position + bindingPosition.x * tubulin.right + bindingPosition.y * tubulin.up + bindingPosition.z * tubulin.forward;
+		}
+
+		Quaternion GetBindingRotation (Transform tubulin)
+		{
+			return tubulin.rotation * Quaternion.Euler( bindingRotation );
 		}
 	}
 }
