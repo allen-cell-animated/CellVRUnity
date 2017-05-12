@@ -6,11 +6,12 @@ namespace AICS.Kinesin
 {
 	public class Mover : MonoBehaviour 
 	{
+		public bool moving;
+
 		Vector3 startPosition;
 		Vector3 goalPosition;
 		float t;
 		float speed;
-		bool moving;
 
 		public void MoveToOverDuration (Vector3 _goalPosition, float _duration)
 		{

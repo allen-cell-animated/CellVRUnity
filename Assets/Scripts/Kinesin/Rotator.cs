@@ -6,11 +6,12 @@ namespace AICS.Kinesin
 {
 	public class Rotator : MonoBehaviour 
 	{
+		public bool rotating;
+
 		Quaternion startRotation;
 		Quaternion goalRotation;
 		float t;
 		float speed;
-		bool rotating;
 
 		public void RotateToOverDuration (Quaternion _goalRotation, float _duration)
 		{

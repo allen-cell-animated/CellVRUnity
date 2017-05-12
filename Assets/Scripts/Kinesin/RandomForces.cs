@@ -36,6 +36,7 @@ namespace AICS.Kinesin
 		{
 			if (Time.time - lastTime > timeInterval)
 			{
+				body.velocity = body.angularVelocity = Vector3.zero;
 				body.AddForce( GetRandomVector() );
 
 				SetTimeInterval();

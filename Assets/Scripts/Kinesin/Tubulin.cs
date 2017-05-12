@@ -7,6 +7,7 @@ namespace AICS.Kinesin
 	public class Tubulin : MonoBehaviour 
 	{
 		public int type;
+		public bool hasMotorBound;
 
 		void Start ()
 		{
@@ -19,7 +20,7 @@ namespace AICS.Kinesin
 		void OnCollisionEnter (Collision collision)
 		{
 			Motor motor = collision.collider.GetComponent<Motor>();
-			if (motor != null && !motor.bound)
+			if (!hasMotorBound && motor != null && !motor.bound)
 			{
 				motor.BindToMT( this );
 			}
