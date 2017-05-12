@@ -8,16 +8,20 @@ namespace AICS.Kinesin
 	{
 		public int type;
 
+		void Start ()
+		{
+			if (type == 0)
+			{
+				GetComponent<Collider>().enabled = false;
+			}
+		}
+
 		void OnCollisionEnter (Collision collision)
 		{
-			if (type == 1)
+			Motor motor = collision.collider.GetComponent<Motor>();
+			if (motor != null && !motor.bound)
 			{
-				Attractor motor = collision.collider.GetComponent<Attractor>();
-				if (motor != null && motor.target != transform)
-				{
-					motor.target = transform;
-					motor.GetComponent<RandomForces>().enabled = false;
-				}
+				motor.BindToMT( this );
 			}
 		}
 	}
