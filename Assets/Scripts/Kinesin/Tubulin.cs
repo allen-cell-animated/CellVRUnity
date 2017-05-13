@@ -20,7 +20,7 @@ namespace AICS.Kinesin
 		void OnCollisionEnter (Collision collision)
 		{
 			Motor motor = collision.collider.GetComponent<Motor>();
-			if (!hasMotorBound && motor != null && !motor.bound)
+			if (!hasMotorBound && motor != null && motor.state == MotorState.Free)
 			{
 				motor.BindToMT( this );
 			}

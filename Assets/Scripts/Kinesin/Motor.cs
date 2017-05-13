@@ -4,14 +4,28 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
+	public enum MotorState
+	{
+		Free,
+		Weak,
+		Strong
+	}
+
 	public class Motor : MonoBehaviour 
 	{
-		public bool bound;
+		public MotorState state = MotorState.Free;
 		
 		float[] linkerLengthExtents = new float[]{1f, 8f};
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
+
+		bool bound
+		{
+			get {
+				return state != MotorState.Free;
+			}
+		}
 
 		Kinesin _kinesin;
 		Kinesin kinesin
@@ -83,7 +97,7 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			UpdateTension();
+			CheckUnbind();
 		}
 
 		// ---------------------------------------------- Binding
@@ -95,7 +109,8 @@ namespace AICS.Kinesin
 				Debug.Log( name + " bind MT" );
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
-				bound = body.isKinematic = true;
+				state = MotorState.Weak;
+				body.isKinematic = true;
 				randomForces.enabled = false;
 				mover.MoveToOverDuration( GetBindingPosition(), 0.1f );
 				rotator.RotateToOverDuration( GetBindingRotation(), 0.1f );
@@ -113,24 +128,27 @@ namespace AICS.Kinesin
 			return tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 		}
 
-		void Unbind ()
+		void CheckUnbind ()
 		{
-			Debug.Log( name + " unbind" );
-			tubulin.hasMotorBound = false;
-			mover.moving = rotator.rotating = false;
-			bound = body.isKinematic = false;
-			randomForces.enabled = true;
+			if (bound)
+			{
+				float random = Random.Range(0, 1f);
+				float probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
+				if (random < probability || neckLinkerTension > 0.8f)
+				{
+					Unbind();
+				}
+			}
 		}
 
-		// ---------------------------------------------- Linker Tension
-
-		void UpdateTension ()
+		float ProbabilityOfEjectionFromWeak ()
 		{
-			if (bound && neckLinkerTension >= kinesin.tensionToRemoveBoundMotor)
-			{
-				Debug.Log( name + " tension = " + neckLinkerTension );
-				Unbind();
-			}
+			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinkerTension - kinesin.tensionToRemoveBoundMotor) ));
+		}
+
+		float ProbabilityOfEjectionFromStrong ()
+		{
+			return 0.1f;
 		}
 
 		float neckLinkerTension
@@ -139,6 +157,16 @@ namespace AICS.Kinesin
 				float linkerLength = Vector3.Distance( transform.position, kinesin.hips.transform.position );
 				return (linkerLength - linkerLengthExtents[0]) / (linkerLengthExtents[1] - linkerLengthExtents[0]);
 			}
+		}
+
+		void Unbind ()
+		{
+			Debug.Log( name + " unbind" );
+			tubulin.hasMotorBound = false;
+			mover.moving = rotator.rotating = false;
+			state = MotorState.Free;
+			body.isKinematic = false;
+			randomForces.enabled = true;
 		}
 	}
 }
