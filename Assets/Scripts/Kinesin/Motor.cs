@@ -96,8 +96,36 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Transform _firstNeckLink;
+		Transform firstNeckLink
+		{
+			get {
+				if (_firstNeckLink == null)
+				{
+					_firstNeckLink = transform.FindChild("Root").GetChild(0).GetChild(0).GetChild(0).GetChild(0);
+				}
+				return _firstNeckLink;
+			}
+		}
+
+		Color color;
+
+		void Start ()
+		{
+			color = GetComponent<MeshRenderer>().material.color;
+		}
+
 		void Update ()
 		{
+			if (TensionIsForward())
+			{
+				GetComponent<MeshRenderer>().material.color = Color.red;
+			}
+			else
+			{
+				GetComponent<MeshRenderer>().material.color = color;
+			}
+
 			CheckUnbind();
 		}
 
@@ -183,6 +211,15 @@ namespace AICS.Kinesin
 			body.isKinematic = false;
 			randomForces.enabled = true;
 			binding = false;
+		}
+
+		// ---------------------------------------------- Binding
+
+		bool TensionIsForward ()
+		{
+			Vector3 toFirstNeckLink = Vector3.Normalize( firstNeckLink.position - transform.position );
+			float angle = Mathf.Acos( Vector3.Dot( toFirstNeckLink, -transform.right ) );
+			return angle < Mathf.PI / 2f;
 		}
 	}
 }
