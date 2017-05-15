@@ -22,7 +22,7 @@ namespace AICS.Kinesin
 
 		public void RotateToWithSpeed (Quaternion _goalRotation, float _speed)
 		{
-			float angle = Quaternion.Angle(transform.rotation, _goalRotation);
+			float angle = Mathf.PI * Quaternion.Angle(transform.rotation, _goalRotation) / 180f;
 			speed = 1f / (angle / _speed);
 
 			RotateTo( _goalRotation );

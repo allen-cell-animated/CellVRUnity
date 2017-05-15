@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
+	public delegate void CompletionDelegate ();
+
 	public class Mover : MonoBehaviour 
 	{
 		public bool moving;
@@ -12,16 +14,19 @@ namespace AICS.Kinesin
 		Vector3 goalPosition;
 		float t;
 		float speed;
+		CompletionDelegate callback;
 
-		public void MoveToOverDuration (Vector3 _goalPosition, float _duration)
+		public void MoveToOverDuration (Vector3 _goalPosition, float _duration, CompletionDelegate _callback)
 		{
+			callback = _callback;
 			speed = 1f / _duration;
 
 			MoveTo( _goalPosition );
 		}
 
-		public void MoveToWithSpeed (Vector3 _goalPosition, float _speed)
+		public void MoveToWithSpeed (Vector3 _goalPosition, float _speed, CompletionDelegate _callback)
 		{
+			callback = _callback;
 			float distance = Vector3.Distance(transform.position, _goalPosition);
 			speed = 1f / (distance / _speed);
 
@@ -45,6 +50,7 @@ namespace AICS.Kinesin
 				{
 					t = 1f;
 					moving = false;
+					callback();
 				}
 
 				transform.position = Vector3.Lerp( startPosition, goalPosition, t );

@@ -20,6 +20,7 @@ namespace AICS.Kinesin
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
 
+		bool binding;
 		bool bound
 		{
 			get {
@@ -112,8 +113,9 @@ namespace AICS.Kinesin
 				state = MotorState.Weak;
 				body.isKinematic = true;
 				randomForces.enabled = false;
-				mover.MoveToOverDuration( GetBindingPosition(), 0.1f );
-				rotator.RotateToOverDuration( GetBindingRotation(), 0.1f );
+				mover.MoveToWithSpeed( GetBindingPosition(), 15f, FinishBinding );
+				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
+				binding = true;
 			}
 		}
 
@@ -128,13 +130,26 @@ namespace AICS.Kinesin
 			return tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 		}
 
+		void FinishBinding ()
+		{
+			binding = false;
+			Debug.Log("binding finished!");
+		}
+
 		void CheckUnbind ()
 		{
 			if (bound)
 			{
-				float random = Random.Range(0, 1f);
-				float probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
-				if (random < probability || neckLinkerTension > 0.8f)
+				if (!binding)
+				{
+					float random = Random.Range(0, 1f);
+					float probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
+					if (random < probability || neckLinkerTension > 0.8f)
+					{
+						Unbind();
+					}
+				}
+				else if (neckLinkerTension > 0.8f)
 				{
 					Unbind();
 				}
@@ -167,6 +182,7 @@ namespace AICS.Kinesin
 			state = MotorState.Free;
 			body.isKinematic = false;
 			randomForces.enabled = true;
+			binding = false;
 		}
 	}
 }
