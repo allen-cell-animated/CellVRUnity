@@ -127,34 +127,15 @@ namespace AICS.Kinesin
 			nucleotide.Init( this );
 
 			nucleotide.ReleaseADP();
-			nucleotide.Invoke("StartATPBinding", 10f);
-		}
+			nucleotide.Invoke("StartATPBinding", 5f);
+			nucleotide.Invoke("Hydrolyze", 25f);
+			nucleotide.Invoke("ReleaseADP", 30f);
 
-		float lastTime = -1f;
+		}
 
 		void Update ()
 		{
 			CheckRelease();
-
-//			if (Time.time - lastTime > 10f)
-//			{
-//				if (nucleotide.isATP)
-//				{
-//					nucleotide.Hydrolyze();
-//				}
-//				else 
-//				{
-//					if (nucleotide.bound)
-//					{
-//						nucleotide.ReleaseADP();
-//					}
-//					else
-//					{
-//						nucleotide.StartATPBinding();
-//					}
-//				}
-//				lastTime = Time.time;
-//			}
 		}
 
 		// ---------------------------------------------- Binding
@@ -235,7 +216,7 @@ namespace AICS.Kinesin
 			binding = false;
 		}
 
-		// ---------------------------------------------- Binding
+		// ---------------------------------------------- Tension
 
 		bool TensionIsForward ()
 		{

@@ -9,7 +9,7 @@ namespace AICS.Kinesin
 		public bool isATP;
 		public bool bound = true;
 		public float rangeRadius = 10f;
-		public float simulationSpeed = 5f;
+		public float simulationForce = 5f;
 		public float minRandomForce = 20f;
 		public float maxRandomForce = 50f;
 		public float timeBetweenImpulses = 0.1f;
@@ -58,10 +58,10 @@ namespace AICS.Kinesin
 
 		public void StartATPBinding ()
 		{
+			Debug.Log(motor.name + " Start ATP binding");
 			isATP = true;
-			transform.position = randomPosition;
+			transform.position = motor.transform.position + randomPosition;
 			goalPosition = motor.transform.TransformPoint( bindingPosition );
-			Debug.Log(goalPosition);
 			meshRenderer.material.color = atpColor;
 			Enable( true );
 			simulating = true;
@@ -77,12 +77,22 @@ namespace AICS.Kinesin
 
 		public void ReleaseADP ()
 		{
-			bound = false;
+			if (bound)
+			{
+				Debug.Log(motor.name + " Release ADP");
+				bound = false;
+				AddRigidbody();
+				transform.SetParent( null );
+				goalPosition = motor.transform.position + randomPosition;
+				simulating = true;
+			}
+		}
+
+		void AddRigidbody ()
+		{
 			body = gameObject.AddComponent<Rigidbody>();
 			body.useGravity = false;
-			transform.SetParent( null );
-			goalPosition = motor.transform.position + randomPosition;
-			simulating = true;
+			body.mass = 0.1f;
 		}
 
 		void TurnOffADP ()
@@ -92,8 +102,12 @@ namespace AICS.Kinesin
 
 		public void Hydrolyze ()
 		{
-			meshRenderer.material.color = adpColor;
-			isATP = false;
+			if (bound)
+			{
+				Debug.Log(motor.name + " Hydrolyze");
+				meshRenderer.material.color = adpColor;
+				isATP = false;
+			}
 		}
 
 		void Update ()
@@ -102,34 +116,43 @@ namespace AICS.Kinesin
 			{
 				body.velocity = body.angularVelocity = Vector3.zero;
 
-				float distanceFromMotor = Vector3.Distance( motor.transform.position, transform.position );
-				if ((isATP && distanceFromMotor < 2f) || (!isATP && distanceFromMotor > rangeRadius))
+				if (isATP)
 				{
-					simulating = false;
-					if (isATP)
-					{
-						BindATP();
-					}
-					else
-					{
-						TurnOffADP();
-					}
+					SimulateATP();
 				}
 				else
 				{
-					if (isATP)
-					{
-						body.AddForce( simulationSpeed * (motor.transform.TransformPoint( bindingPosition ) - transform.position) 
-							+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
-					}
-					else
-					{
-						body.AddForce( simulationSpeed * (goalPosition - transform.position) 
-							+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
-					}
+					SimulateADP();
 				}
-
 				lastTime = Time.time;
+			}
+		}
+
+		void SimulateATP ()
+		{
+			if (Vector3.Distance( motor.transform.TransformPoint( bindingPosition ), transform.position ) < 2f)
+			{
+				simulating = false;
+				BindATP();
+			}
+			else
+			{
+				body.AddForce( simulationForce * (motor.transform.TransformPoint( bindingPosition ) - transform.position) 
+					+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
+			}
+		}
+
+		void SimulateADP ()
+		{
+			if (Vector3.Distance( motor.transform.position, transform.position ) > rangeRadius - 1f)
+			{
+				simulating = false;
+				TurnOffADP();
+			}
+			else
+			{
+				body.AddForce( simulationForce * (goalPosition - transform.position) 
+					+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
 			}
 		}
 
@@ -148,7 +171,7 @@ namespace AICS.Kinesin
 		Vector3 randomPosition
 		{
 			get {
-				float theta = Mathf.PI / 2f * Random.Range( 0, 1f );
+				float theta = Mathf.PI * Random.Range( 0, 1f );
 				float phi = 2f * Mathf.PI * Random.Range( 0, 1f );
 				return rangeRadius * new Vector3( Mathf.Sin( theta ) * Mathf.Cos( phi ), Mathf.Sin( theta ) * Mathf.Sin( phi ), Mathf.Cos( theta ) );
 			}
