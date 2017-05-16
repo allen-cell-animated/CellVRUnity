@@ -31,5 +31,7 @@ namespace AICS.Kinesin
 		}
 
 		public float tensionToRemoveBoundMotor = 0.8f;
+		public Color atpColor;
+		public Color adpColor;
 	}
 }

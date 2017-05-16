@@ -37,7 +37,7 @@ namespace AICS.Kinesin
 			if (Time.time - lastTime > timeInterval)
 			{
 				body.velocity = body.angularVelocity = Vector3.zero;
-				body.AddForce( GetRandomVector() );
+				body.AddForce( Helpers.GetRandomVector( minForceMagnitude, maxForceMagnitude ) );
 
 				SetTimeInterval();
 				lastTime = Time.time;
@@ -47,12 +47,6 @@ namespace AICS.Kinesin
 		void SetTimeInterval ()
 		{
 			timeInterval = Random.Range( minTimeBetweenImpulses, maxTimeBetweenImpulses );
-		}
-
-		Vector3 GetRandomVector ()
-		{
-			Vector3 random = new Vector3( Random.Range( -1f, 1f ), Random.Range( -1f, 1f ), Random.Range( -1f, 1f ) );
-			return Random.Range( minForceMagnitude, maxForceMagnitude ) * Vector3.Normalize( random );
 		}
 	}
 }

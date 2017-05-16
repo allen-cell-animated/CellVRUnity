@@ -14,11 +14,13 @@ namespace AICS.Kinesin
 	public class Motor : MonoBehaviour 
 	{
 		public MotorState state = MotorState.Free;
+		public Nucleotide nucleotidePrefab;
 		
 		float[] linkerLengthExtents = new float[]{1f, 8f};
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
+		Nucleotide nucleotide;
 
 		bool binding;
 		bool bound
@@ -29,7 +31,7 @@ namespace AICS.Kinesin
 		}
 
 		Kinesin _kinesin;
-		Kinesin kinesin
+		public Kinesin kinesin
 		{
 			get {
 				if (_kinesin == null)
@@ -108,25 +110,51 @@ namespace AICS.Kinesin
 			}
 		}
 
-		Color color;
-
 		void Start ()
 		{
-			color = GetComponent<MeshRenderer>().material.color;
+			CreateNucleotide();
 		}
+
+		void CreateNucleotide ()
+		{
+			if (nucleotidePrefab == null)
+			{
+				Debug.LogWarning("Nucleotide prefab is missing!");
+				return;
+			}
+
+			nucleotide = Instantiate<Nucleotide>( nucleotidePrefab, kinesin.transform );
+			nucleotide.Init( this );
+
+			nucleotide.ReleaseADP();
+			nucleotide.Invoke("StartATPBinding", 10f);
+		}
+
+		float lastTime = -1f;
 
 		void Update ()
 		{
-			if (TensionIsForward())
-			{
-				GetComponent<MeshRenderer>().material.color = Color.red;
-			}
-			else
-			{
-				GetComponent<MeshRenderer>().material.color = color;
-			}
+			CheckRelease();
 
-			CheckUnbind();
+//			if (Time.time - lastTime > 10f)
+//			{
+//				if (nucleotide.isATP)
+//				{
+//					nucleotide.Hydrolyze();
+//				}
+//				else 
+//				{
+//					if (nucleotide.bound)
+//					{
+//						nucleotide.ReleaseADP();
+//					}
+//					else
+//					{
+//						nucleotide.StartATPBinding();
+//					}
+//				}
+//				lastTime = Time.time;
+//			}
 		}
 
 		// ---------------------------------------------- Binding
@@ -141,16 +169,10 @@ namespace AICS.Kinesin
 				state = MotorState.Weak;
 				body.isKinematic = true;
 				randomForces.enabled = false;
-				mover.MoveToWithSpeed( GetBindingPosition(), 15f, FinishBinding );
+				mover.MoveToWithSpeed( tubulin.transform.TransformPoint( bindingPosition ), 15f, FinishBinding );
 				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
 				binding = true;
 			}
-		}
-
-		Vector3 GetBindingPosition ()
-		{
-			return tubulin.transform.position + bindingPosition.x * tubulin.transform.right 
-				+ bindingPosition.y * tubulin.transform.up + bindingPosition.z * tubulin.transform.forward;
 		}
 
 		Quaternion GetBindingRotation ()
@@ -164,22 +186,22 @@ namespace AICS.Kinesin
 			Debug.Log("binding finished!");
 		}
 
-		void CheckUnbind ()
+		void CheckRelease ()
 		{
 			if (bound)
 			{
-				if (!binding)
+				if (neckLinkerTension > 0.8f)
+				{
+					Release();
+				}
+				else if (!binding)
 				{
 					float random = Random.Range(0, 1f);
 					float probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
-					if (random < probability || neckLinkerTension > 0.8f)
+					if (random < probability)
 					{
-						Unbind();
+						Release();
 					}
-				}
-				else if (neckLinkerTension > 0.8f)
-				{
-					Unbind();
 				}
 			}
 		}
@@ -202,7 +224,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void Unbind ()
+		void Release ()
 		{
 			Debug.Log( name + " unbind" );
 			tubulin.hasMotorBound = false;
