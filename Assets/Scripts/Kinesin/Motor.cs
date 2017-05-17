@@ -15,8 +15,7 @@ namespace AICS.Kinesin
 	{
 		public MotorState state = MotorState.Free;
 		public Nucleotide nucleotidePrefab;
-		
-		float[] linkerLengthExtents = new float[]{1f, 8f};
+
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
@@ -39,6 +38,18 @@ namespace AICS.Kinesin
 					_kinesin = GetComponentInParent<Kinesin>();
 				}
 				return _kinesin;
+			}
+		}
+
+		Necklinker _neckLinker;
+		Necklinker neckLinker
+		{
+			get {
+				if (_neckLinker == null)
+				{
+					_neckLinker = GetComponentInChildren<Necklinker>();
+				}
+				return _neckLinker;
 			}
 		}
 
@@ -98,18 +109,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		Transform _firstNeckLink;
-		Transform firstNeckLink
-		{
-			get {
-				if (_firstNeckLink == null)
-				{
-					_firstNeckLink = transform.FindChild("Root").GetChild(0).GetChild(0).GetChild(0).GetChild(0);
-				}
-				return _firstNeckLink;
-			}
-		}
-
 		void Start ()
 		{
 			CreateNucleotide();
@@ -125,16 +124,11 @@ namespace AICS.Kinesin
 
 			nucleotide = Instantiate<Nucleotide>( nucleotidePrefab, kinesin.transform );
 			nucleotide.Init( this );
-
-			nucleotide.ReleaseADP();
-			nucleotide.Invoke("StartATPBinding", 5f);
-			nucleotide.Invoke("Hydrolyze", 25f);
-			nucleotide.Invoke("ReleaseADP", 30f);
-
 		}
 
 		void Update ()
 		{
+			if (neckLinker.stretched) { Debug.Log(name + " stretched!! "); }
 			CheckRelease();
 		}
 
@@ -142,7 +136,7 @@ namespace AICS.Kinesin
 
 		public void BindToMT (Tubulin _tubulin)
 		{
-			if (neckLinkerTension < kinesin.tensionToRemoveBoundMotor)
+			if (neckLinker.tension < kinesin.tensionToRemoveBoundMotor)
 			{
 				Debug.Log( name + " bind MT" );
 				tubulin = _tubulin;
@@ -171,7 +165,7 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				if (neckLinkerTension > 0.8f)
+				if (neckLinker.tension > kinesin.maxTension)
 				{
 					Release();
 				}
@@ -189,20 +183,12 @@ namespace AICS.Kinesin
 
 		float ProbabilityOfEjectionFromWeak ()
 		{
-			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinkerTension - kinesin.tensionToRemoveBoundMotor) ));
+			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveBoundMotor) ));
 		}
 
 		float ProbabilityOfEjectionFromStrong ()
 		{
 			return 0.1f;
-		}
-
-		float neckLinkerTension
-		{
-			get {
-				float linkerLength = Vector3.Distance( transform.position, kinesin.hips.transform.position );
-				return (linkerLength - linkerLengthExtents[0]) / (linkerLengthExtents[1] - linkerLengthExtents[0]);
-			}
 		}
 
 		void Release ()
@@ -214,15 +200,6 @@ namespace AICS.Kinesin
 			body.isKinematic = false;
 			randomForces.enabled = true;
 			binding = false;
-		}
-
-		// ---------------------------------------------- Tension
-
-		bool TensionIsForward ()
-		{
-			Vector3 toFirstNeckLink = Vector3.Normalize( firstNeckLink.position - transform.position );
-			float angle = Mathf.Acos( Vector3.Dot( toFirstNeckLink, -transform.right ) );
-			return angle < Mathf.PI / 2f;
 		}
 	}
 }
