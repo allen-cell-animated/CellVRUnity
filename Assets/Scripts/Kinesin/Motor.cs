@@ -165,7 +165,7 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				if (neckLinker.tension > kinesin.maxTension)
+				if (neckLinker.tension > kinesin.maxTension || neckLinker.stretched)
 				{
 					Release();
 				}

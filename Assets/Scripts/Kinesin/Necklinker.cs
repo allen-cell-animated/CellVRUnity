@@ -58,7 +58,7 @@ namespace AICS.Kinesin
 		public bool stretched
 		{
 			get {
-				return length > 1.3f * startingLength;
+				return length > 1.2f * startingLength;
 			}
 		}
 
