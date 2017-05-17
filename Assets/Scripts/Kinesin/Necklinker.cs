@@ -41,8 +41,8 @@ namespace AICS.Kinesin
 		public bool tensionIsForward
 		{
 			get {
-				Vector3 toHips = Vector3.Normalize( motor.kinesin.hips.transform.position - transform.position );
-				float angle = Mathf.Acos( Vector3.Dot( toHips, -transform.right ) );
+				Vector3 motorToHips = Vector3.Normalize( motor.kinesin.hips.transform.position - motor.transform.position );
+				float angle = Mathf.Acos( Vector3.Dot( motorToHips, -motor.transform.right ) );
 				return angle < Mathf.PI / 2f;
 			}
 		}

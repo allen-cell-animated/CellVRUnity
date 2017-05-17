@@ -73,6 +73,7 @@ namespace AICS.Kinesin
 			Destroy( body );
 			transform.position = motor.transform.TransformPoint( bindingPosition );
 			transform.SetParent( motor.transform );
+			motor.state = MotorState.Strong;
 		}
 
 		public void ReleaseADP ()
@@ -130,7 +131,7 @@ namespace AICS.Kinesin
 
 		void SimulateATP ()
 		{
-			if (Vector3.Distance( motor.transform.TransformPoint( bindingPosition ), transform.position ) < 2f)
+			if (motor.shouldATPBind && Vector3.Distance( motor.transform.TransformPoint( bindingPosition ), transform.position ) < 2f)
 			{
 				simulating = false;
 				BindATP();

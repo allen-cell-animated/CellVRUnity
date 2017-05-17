@@ -109,8 +109,11 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Color color;
+
 		void Start ()
 		{
+			color = GetComponent<MeshRenderer>().material.color;
 			CreateNucleotide();
 		}
 
@@ -128,15 +131,24 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (neckLinker.stretched) { Debug.Log(name + " stretched!! "); }
+			if (neckLinker.tensionIsForward)
+			{
+				GetComponent<MeshRenderer>().material.color = Color.red;
+			}
+			else
+			{
+				GetComponent<MeshRenderer>().material.color = color;
+			}
+				
 			CheckRelease();
+			UpdateNucleotide();
 		}
 
 		// ---------------------------------------------- Binding
 
 		public void BindToMT (Tubulin _tubulin)
 		{
-			if (neckLinker.tension < kinesin.tensionToRemoveBoundMotor)
+			if (!bindIsPhysicallyImpossible)
 			{
 				Debug.Log( name + " bind MT" );
 				tubulin = _tubulin;
@@ -158,37 +170,6 @@ namespace AICS.Kinesin
 		void FinishBinding ()
 		{
 			binding = false;
-			Debug.Log("binding finished!");
-		}
-
-		void CheckRelease ()
-		{
-			if (bound)
-			{
-				if (neckLinker.tension > kinesin.maxTension || neckLinker.stretched)
-				{
-					Release();
-				}
-				else if (!binding)
-				{
-					float random = Random.Range(0, 1f);
-					float probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
-					if (random < probability)
-					{
-						Release();
-					}
-				}
-			}
-		}
-
-		float ProbabilityOfEjectionFromWeak ()
-		{
-			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveBoundMotor) ));
-		}
-
-		float ProbabilityOfEjectionFromStrong ()
-		{
-			return 0.1f;
 		}
 
 		void Release ()
@@ -200,6 +181,130 @@ namespace AICS.Kinesin
 			body.isKinematic = false;
 			randomForces.enabled = true;
 			binding = false;
+		}
+
+		// ---------------------------------------------- State Management
+
+		void CheckRelease ()
+		{
+			if (bound)
+			{
+				if (bindIsPhysicallyImpossible)
+				{
+					Release();
+				}
+				else if (!binding)
+				{
+					if (shouldRelease)
+					{
+						Release();
+					}
+				}
+			}
+		}
+
+		bool bindIsPhysicallyImpossible
+		{
+			get {
+				return neckLinker.tension > kinesin.maxTension || neckLinker.stretched;
+			}
+		}
+
+		float lastCheckReleaseTime = -1f;
+
+		bool shouldRelease
+		{
+			get {
+				if (Time.time - lastCheckReleaseTime > 1f) // only check once per second
+				{
+					lastCheckReleaseTime = Time.time;
+					float probability = 0.1f;
+					if (neckLinker.tensionIsForward) // this is the back motor
+					{
+						probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
+					}
+					float random = Random.Range(0, 1f);
+					return random < probability;
+				}
+				return false;
+			}
+		}
+
+		float ProbabilityOfEjectionFromWeak ()
+		{
+			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
+		}
+
+		float ProbabilityOfEjectionFromStrong ()
+		{
+			return 0.1f;
+		}
+
+		// ---------------------------------------------- Nucleotide
+
+		float lastUpdateNucleotideTime = -1f;
+
+		void UpdateNucleotide ()
+		{
+			if (Time.time - lastUpdateNucleotideTime > 1f) // only check once per second
+			{
+				if (shouldReleaseADP)
+				{
+					nucleotide.ReleaseADP();
+					nucleotide.Invoke("StartATPBinding", 3f);
+				}
+				else if (shouldHydrolyzeATP)
+				{
+					nucleotide.Hydrolyze();
+					state = MotorState.Weak;
+				}
+				lastUpdateNucleotideTime = Time.time;
+			}
+		}
+
+		bool shouldReleaseADP
+		{
+			get {
+				if (nucleotide.bound && !nucleotide.isATP)
+				{
+					float probability = 0.5f;
+					if (neckLinker.tensionIsForward)
+					{
+						probability -= neckLinker.tension / kinesin.maxTension;
+					}
+					float random = Random.Range(0, 1f);
+					return random < probability;
+				}
+				return false;
+			}
+		}
+
+		public bool shouldATPBind 
+		{
+			get {
+				float probability = 0.5f;
+				if (!neckLinker.tensionIsForward)
+				{
+					probability -= neckLinker.tension / kinesin.maxTension;
+				}
+				float random = Random.Range(0, 1f);
+				return random < probability;
+			}
+		}
+
+		float atpBindingTime = -1f;
+
+		bool shouldHydrolyzeATP
+		{
+			get {
+				if (nucleotide.bound && nucleotide.isATP)
+				{
+					float probability = (Time.time - atpBindingTime) / kinesin.atpHydrolysisTime - 0.5f;
+					float random = Random.Range(0, 1f);
+					return random < probability;
+				}
+				return false;
+			}
 		}
 	}
 }
