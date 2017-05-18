@@ -139,16 +139,19 @@ namespace AICS.Kinesin
 			{
 				GetComponent<MeshRenderer>().material.color = color;
 			}
-				
-			CheckRelease();
-			UpdateNucleotide();
+
+			if (!pause)
+			{
+				CheckRelease();
+				UpdateNucleotide();
+			}
 		}
 
 		// ---------------------------------------------- Binding
 
 		public void BindToMT (Tubulin _tubulin)
 		{
-			if (!bindIsPhysicallyImpossible)
+			if (!bindIsPhysicallyImpossible && !pause)
 			{
 				Debug.Log( name + " bind MT" );
 				tubulin = _tubulin;
@@ -197,7 +200,7 @@ namespace AICS.Kinesin
 				{
 					if (shouldRelease)
 					{
-						Release();
+//						Release();
 					}
 				}
 			}
@@ -243,6 +246,7 @@ namespace AICS.Kinesin
 		// ---------------------------------------------- Nucleotide
 
 		float lastUpdateNucleotideTime = -1f;
+		public bool pause;
 
 		void UpdateNucleotide ()
 		{
@@ -255,8 +259,7 @@ namespace AICS.Kinesin
 				}
 				else if (shouldHydrolyzeATP)
 				{
-					nucleotide.Hydrolyze();
-					state = MotorState.Weak;
+					HydrolyzeATP();
 				}
 				lastUpdateNucleotideTime = Time.time;
 			}
@@ -290,6 +293,21 @@ namespace AICS.Kinesin
 				float random = Random.Range(0, 1f);
 				return random < probability;
 			}
+		}
+
+		public void BindATP ()
+		{
+			state = MotorState.Strong;
+			atpBindingTime = Time.time;
+			neckLinker.StartSnapping();
+			pause = true;
+		}
+
+		void HydrolyzeATP ()
+		{
+			nucleotide.Hydrolyze();
+			state = MotorState.Weak;
+			neckLinker.StopSnapping();
 		}
 
 		float atpBindingTime = -1f;

@@ -35,5 +35,33 @@ namespace AICS.Kinesin
 		public float atpHydrolysisTime = 1f;
 		public Color atpColor;
 		public Color adpColor;
+		public float neckLinkerSnappingForce = 200;
+
+		void Start ()
+		{
+			StoreDockedNecklinkPositions();
+		}
+
+		void StoreDockedNecklinkPositions ()
+		{
+			Necklinker[] necklinkers = GetComponentsInChildren<Necklinker>();
+			Vector3[] dockedLinkPositions = new Vector3[necklinkers[0].links.Length];
+			foreach (Necklinker necklinker in necklinkers)
+			{
+				if (necklinker.startDocked)
+				{
+					Motor motor = necklinker.GetComponentInParent<Motor>();
+					for (int i = 0; i < necklinker.links.Length; i++)
+					{
+						dockedLinkPositions[i] = motor.transform.InverseTransformPoint( necklinker.links[i].transform.position );
+					}
+				}
+			}
+
+			foreach (Necklinker necklinker in necklinkers)
+			{
+				necklinker.SetDockedPositions( dockedLinkPositions );
+			}
+		}
 	}
 }

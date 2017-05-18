@@ -73,7 +73,7 @@ namespace AICS.Kinesin
 			Destroy( body );
 			transform.position = motor.transform.TransformPoint( bindingPosition );
 			transform.SetParent( motor.transform );
-			motor.state = MotorState.Strong;
+			motor.BindATP();
 		}
 
 		public void ReleaseADP ()
@@ -152,8 +152,10 @@ namespace AICS.Kinesin
 			}
 			else
 			{
-				body.AddForce( simulationForce * (goalPosition - transform.position) 
-					+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
+				Vector3 toGoal = goalPosition - transform.position;
+				float distanceToGoal = Mathf.Min( 1f, Vector3.Magnitude( toGoal ) / 15f );
+				body.AddForce( simulationForce * toGoal 
+					+ Helpers.GetRandomVector( distanceToGoal * minRandomForce, distanceToGoal * maxRandomForce ) );
 			}
 		}
 
