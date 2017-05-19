@@ -10,8 +10,7 @@ namespace AICS.Kinesin
 		public Rigidbody body;
 		public RandomForces randomForces;
 		public Vector3 dockedPosition;
-		public Vector3 aboveDockedPosition;
-		public bool readyToSnap;
+		public Quaternion dockedRotation;
 
 		public Link (Rigidbody link)
 		{
@@ -20,10 +19,28 @@ namespace AICS.Kinesin
 			randomForces = link.GetComponent<RandomForces>();
 		}
 
-		public void SetDockedPosition (Vector3 _dockedPosition)
+		public void SetDockedPosition (Vector3 _dockedPosition, Quaternion _dockedRotation)
 		{
 			dockedPosition = _dockedPosition;
-			aboveDockedPosition = dockedPosition + Vector3.forward;
+			dockedRotation = _dockedRotation;
+		}
+
+		public void ToggleRandomForces (bool enable)
+		{
+			if (randomForces != null)
+			{
+				randomForces.enabled = enable;
+			}
+		}
+
+		public void ToggleFreeze (bool freeze)
+		{
+			Debug.Log( transform.name );
+			body.isKinematic = freeze; 
+			if (freeze)
+			{
+				transform.localRotation = dockedRotation;
+			}
 		}
 	}
 
@@ -43,6 +60,7 @@ namespace AICS.Kinesin
 					_links = new Link[linkBodies.Length];
 					for (int i = 0; i < _links.Length; i++)
 					{
+						Debug.Log( linkBodies[i].name );
 						_links[i] = new Link( linkBodies[i] );
 					}
 				}
@@ -99,11 +117,11 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void SetDockedPositions (Vector3[] dockedPositions)
+		public void SetDockedLocations (Vector3[] dockedPositions, Quaternion[] dockedRotations)
 		{
 			for (int i = 0; i < links.Length; i++)
 			{
-				links[i].SetDockedPosition( dockedPositions[i] );
+				links[i].SetDockedPosition( dockedPositions[i], dockedRotations[i] );
 			}
 		}
 
@@ -118,7 +136,7 @@ namespace AICS.Kinesin
 		public void StartSnapping ()
 		{
 			snapping = true;
-			links[0].randomForces.enabled = false;
+			links[0].ToggleRandomForces( false );
 			FinishSnappingLink( 0 );
 		}
 
@@ -128,8 +146,8 @@ namespace AICS.Kinesin
 			{
 				foreach (Link link in links)
 				{
-					link.body.constraints = RigidbodyConstraints.None;
-					link.randomForces.enabled = true;
+					link.ToggleRandomForces( true );
+					link.ToggleFreeze( false );
 				}
 				snapping = false;
 			}
@@ -146,53 +164,31 @@ namespace AICS.Kinesin
 		void StartSnappingLink (int index)
 		{
 			currentLink = index;
-			links[currentLink].randomForces.enabled = false;
-			links[currentLink].readyToSnap = false;
-			readyToSnap = false;
-			GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			sphere.transform.position = motor.transform.TransformPoint( links[currentLink].dockedPosition );
-			sphere.transform.localScale =  0.5f * Vector3.one;
+			links[currentLink].ToggleRandomForces( false );
 		}
 
-		public float distanceToGoal;
-		public bool readyToSnap;
+		public float distanceToGoal; //testing
 
 		void SimulateSnapping ()
 		{
-//			if (!links[currentLink].readyToSnap)
-//			{
-//				Vector3 toGoal = motor.transform.TransformPoint( links[currentLink].aboveDockedPosition ) - links[currentLink].transform.position;
-//				distanceToGoal = Vector3.Magnitude( toGoal );
-//				if (Vector3.Magnitude( toGoal ) > 0.5f)
-//				{
-//					links[currentLink].body.AddForce( motor.kinesin.neckLinkerSnappingForce * toGoal );
-//				}
-//				else
-//				{
-//					links[currentLink].readyToSnap = true;
-//					readyToSnap = true;
-//				}
-//			}
-//			else
-//			{
-				Vector3 toGoal = motor.transform.TransformPoint( links[currentLink].dockedPosition ) - links[currentLink].transform.position;
-				distanceToGoal = Vector3.Magnitude( toGoal );
-				if (Vector3.Magnitude( toGoal ) > 1f)
-				{
-					links[currentLink].body.AddForce( motor.kinesin.neckLinkerSnappingForce * toGoal );
-				}
-				else
-				{
-					FinishSnappingLink( currentLink );
-				}
-//			}
+			Vector3 toGoal = motor.transform.TransformPoint( links[currentLink].dockedPosition ) - links[currentLink].transform.position;
+			distanceToGoal = Vector3.Magnitude( toGoal );
+			if (Vector3.Magnitude( toGoal ) > 1f)
+			{
+				links[currentLink].body.AddForce( motor.kinesin.neckLinkerSnappingForce * toGoal );
+			}
+			else
+			{
+				FinishSnappingLink( currentLink );
+			}
 		}
 
 		void FinishSnappingLink (int index)
 		{
-//			links[index].body.constraints = RigidbodyConstraints.FreezePosition;
-			links[index].body.isKinematic = true;
-			links[index].body.position = motor.transform.TransformPoint( links[index].dockedPosition );
+			if (index > 0) 
+			{ 
+				links[index - 1].ToggleFreeze( true );
+			}
 
 			if (index < links.Length - 1)
 			{
