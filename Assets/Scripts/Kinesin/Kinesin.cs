@@ -32,9 +32,9 @@ namespace AICS.Kinesin
 
 		public float tensionToRemoveWeaklyBoundMotor = 0.6f;
 		public float maxTension = 0.8f;
-		public float atpHydrolysisTime = 1f;
-		public Color atpColor;
-		public Color adpColor;
+		public float ATPHydrolysisTime = 1f;
+		public Color ATPColor;
+		public Color ADPColor;
 		public float neckLinkerSnappingForce = 200;
 
 		void Start ()

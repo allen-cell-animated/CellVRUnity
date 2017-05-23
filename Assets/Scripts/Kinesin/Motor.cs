@@ -317,7 +317,7 @@ namespace AICS.Kinesin
 			get {
 				if (nucleotide.bound && nucleotide.isATP)
 				{
-					float probability = (Time.time - atpBindingTime) / kinesin.atpHydrolysisTime - 0.5f;
+					float probability = (Time.time - atpBindingTime) / kinesin.ATPHydrolysisTime - 0.5f;
 					float random = Random.Range(0, 1f);
 					return random < probability;
 				}

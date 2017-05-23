@@ -31,29 +31,29 @@ namespace AICS.Kinesin
 
 		public void Set (float _sliderValue) // slider goes from 0 --> 10
 		{
-			value = SetValue( _sliderValue );
+			value = MapValue( _sliderValue );
 			displayValue.text = FormatDisplay();
 		}
 
-		float SetValue (float _sliderValue)
+		float MapValue (float _sliderValue)
 		{
 			switch (mapping) 
 			{
 				case SliderMapping.Linear :
-					return SetLinearValue( _sliderValue );
+					return MapValueLinear( _sliderValue );
 				case SliderMapping.Logarithmic :
-					return SetLogarithmicValue( _sliderValue );
+					return MapValueLogarithmic( _sliderValue );
 				default :
 					return 0;
 			}
 		}
 
-		float SetLinearValue (float _sliderValue)
+		float MapValueLinear (float _sliderValue)
 		{
 			return min + _sliderValue / 10f * (max - min);
 		}
 
-		float SetLogarithmicValue (float _sliderValue)
+		float MapValueLogarithmic (float _sliderValue)
 		{
 			return Mathf.Pow( 10f, Mathf.Log10( min ) + _sliderValue / 10f * (Mathf.Log10( max ) - Mathf.Log10( min )) );
 		}
@@ -107,6 +107,22 @@ namespace AICS.Kinesin
 	{
 		public Parameter dTime; // = 100f, 100 ps --> 1 us
 		public Parameter diffusionCoefficient; // = 0.005f, 0.0002 --> 0.0140 A2/ps
+		public Text meanSquaredDisplacementDisplay;
+		public float velocityMultiplier = 7.5f;
+		public float angularVelocityMultiplier = 1f;
+		public float simulationTimePassed;
+
+		static ParameterInput _instance;
+		public static ParameterInput Instance
+		{
+			get {
+				if (_instance == null)
+				{
+					_instance = GameObject.FindObjectOfType<ParameterInput>();
+				}
+				return _instance;
+			}
+		}
 
 		public void SetDTime (float _sliderValue)
 		{
@@ -116,6 +132,18 @@ namespace AICS.Kinesin
 		public void SetDiffusionCoefficient (float _sliderValue)
 		{
 			diffusionCoefficient.Set( _sliderValue );
+		}
+
+		void Update ()
+		{
+			simulationTimePassed += dTime.value;
+			CalculateMeanSquaredDisplacement();
+		}
+
+		void CalculateMeanSquaredDisplacement ()
+		{
+			float msd = 6f * 0.01f * diffusionCoefficient.value * simulationTimePassed;
+			meanSquaredDisplacementDisplay.text = "msd = " + Mathf.Round( msd ).ToString(); 
 		}
 	}
 }

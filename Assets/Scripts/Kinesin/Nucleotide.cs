@@ -52,8 +52,8 @@ namespace AICS.Kinesin
 			motor = _motor;
 			transform.position = motor.transform.TransformPoint( bindingPosition );
 			transform.SetParent( motor.transform );
-			atpColor = motor.kinesin.atpColor;
-			adpColor = motor.kinesin.adpColor;
+			atpColor = motor.kinesin.ATPColor;
+			adpColor = motor.kinesin.ADPColor;
 		}
 
 		public void StartATPBinding ()
@@ -139,7 +139,7 @@ namespace AICS.Kinesin
 			else
 			{
 				body.AddForce( simulationForce * (motor.transform.TransformPoint( bindingPosition ) - transform.position) 
-					+ Helpers.GetRandomVector( minRandomForce, maxRandomForce ) );
+					+ Helpers.GetRandomVector( Random.Range( minRandomForce, maxRandomForce ) ) );
 			}
 		}
 
@@ -154,8 +154,9 @@ namespace AICS.Kinesin
 			{
 				Vector3 toGoal = goalPosition - transform.position;
 				float distanceToGoal = Mathf.Min( 1f, Vector3.Magnitude( toGoal ) / 15f );
+
 				body.AddForce( simulationForce * toGoal 
-					+ Helpers.GetRandomVector( distanceToGoal * minRandomForce, distanceToGoal * maxRandomForce ) );
+					+ Helpers.GetRandomVector( distanceToGoal * Random.Range( minRandomForce, maxRandomForce ) ) );
 			}
 		}
 

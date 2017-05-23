@@ -60,7 +60,6 @@ namespace AICS.Kinesin
 					_links = new Link[linkBodies.Length];
 					for (int i = 0; i < _links.Length; i++)
 					{
-						Debug.Log( linkBodies[i].name );
 						_links[i] = new Link( linkBodies[i] );
 					}
 				}
