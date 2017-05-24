@@ -13,7 +13,6 @@ namespace AICS.Kinesin
 		float lastTime = -1f;
 		float timeInterval;
 		Vector3 startPosition;
-		bool startPositionSet;
 		int samples;
 
 		Rigidbody _rigidbody;
@@ -45,27 +44,26 @@ namespace AICS.Kinesin
 				lastTime = Time.time;
 				CalculateDisplacement();
 			}
+		}
 
-			if (Time.time > 1f && !startPositionSet)
-			{
-				startPosition = transform.position;
-				startPositionSet = true;
-			}
+		public void SetStartPosition ()
+		{
+			startPosition = transform.position;
 		}
 
 		float velocityMagnitude
 		{
 			get {
-				return ParameterInput.Instance.velocityMultiplier 
-					* Mathf.Sqrt( 6f * 0.01f * ParameterInput.Instance.diffusionCoefficient.value * dTimePS ) / timeInterval;
+				return timeInterval * ParameterInput.Instance.velocityMultiplier 
+					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
 			}
 		}
 
 		float angularVelocityMagnitude
 		{
 			get {
-				return ParameterInput.Instance.angularVelocityMultiplier 
-					* Mathf.Sqrt( 6f * 0.01f * ParameterInput.Instance.diffusionCoefficient.value * dTimePS ) / timeInterval;
+				return timeInterval * ParameterInput.Instance.angularVelocityMultiplier 
+					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
 			}
 		}
 

@@ -12,7 +12,9 @@ namespace AICS.Kinesin
 		public float meanSquaredDisplacement;
 
 		RandomForces[] particles;
-		float lastTime = -1f;
+		string data = "time,msd\n";
+		float lastDataTime = -1000000f;
+		bool startedLogging;
 
 		void Start ()
 		{
@@ -35,23 +37,58 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (Time.time - lastTime > 1f)
+			if (Time.time > 1f)
 			{
-				float sum = 0;
-				foreach (RandomForces particle in particles)
+				if (!startedLogging)
 				{
-					particle.CalculateDisplacement();
-					sum += Mathf.Pow( particle.displacement, 2f );
+					StartLogging();
 				}
-				meanSquaredDisplacement = sum / n;
 
-				lastTime = Time.time;
+				CalculateMSD();
+
+				LogMSD();
+			}
+		}
+
+		void StartLogging ()
+		{
+			ParameterInput.Instance.simulationTimePassed = 0;
+			foreach (RandomForces particle in particles)
+			{
+				particle.SetStartPosition();
+			}
+			startedLogging = true;
+		}
+
+		void CalculateMSD ()
+		{
+			float sum = 0;
+			foreach (RandomForces particle in particles)
+			{
+				particle.CalculateDisplacement();
+				sum += Mathf.Pow( particle.displacement, 2f );
+			}
+			meanSquaredDisplacement = sum / n;
+		}
+
+		void LogMSD ()
+		{
+			float t = ParameterInput.Instance.simulationTimePassed;
+			if (t - lastDataTime >= ParameterInput.Instance.dTime.value)
+			{
+				data += t + "," + meanSquaredDisplacement + "\n";
+				lastDataTime = t;
 			}
 		}
 
 		void OnDrawGizmos ()
 		{
 			Gizmos.DrawWireCube( transform.position, size );
+		}
+
+		void OnApplicationQuit ()
+		{
+			Debug.Log( data );
 		}
 	}
 }
