@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AICS.Diffusion;
 
 namespace AICS.Kinesin
 {
@@ -8,7 +9,7 @@ namespace AICS.Kinesin
 	{
 		public Transform transform;
 		public Rigidbody body;
-		public RandomForces randomForces;
+		public DiffusingParticle randomForces;
 		public Vector3 dockedPosition;
 		public Quaternion dockedRotation;
 
@@ -16,7 +17,7 @@ namespace AICS.Kinesin
 		{
 			transform = link.transform;
 			body = link;
-			randomForces = link.GetComponent<RandomForces>();
+			randomForces = link.GetComponent<DiffusingParticle>();
 		}
 
 		public void SetDockedPosition (Vector3 _dockedPosition, Quaternion _dockedRotation)

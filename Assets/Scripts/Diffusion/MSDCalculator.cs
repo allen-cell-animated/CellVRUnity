@@ -2,36 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Kinesin
+namespace AICS.Diffusion
 {
 	public class MSDCalculator : MonoBehaviour 
 	{
-		public int n;
-		public GameObject particlePrefab;
-		public Vector3 size;
 		public float meanSquaredDisplacement;
 
-		RandomForces[] particles;
 		string data = "time,msd\n";
 		float lastDataTime = -1000000f;
 		bool startedLogging;
 
-		void Start ()
-		{
-			particles = new RandomForces[n];
-			for (int i = 0; i < n; i++)
-			{
-				particles[i] = Instantiate( particlePrefab, transform.position + randomPositionInBounds, Random.rotation ).GetComponent<RandomForces>();
-				particles[i].transform.SetParent( transform );
-			}
-		}
-
-		Vector3 randomPositionInBounds
+		DiffusingParticle[] _particles;
+		DiffusingParticle[] particles
 		{
 			get {
-				return new Vector3( Random.Range( -size.x / 2f, size.x / 2f ),
-					Random.Range( -size.y / 2f, size.y / 2f ),
-					Random.Range( -size.z / 2f, size.z / 2f ) );
+				if (_particles == null)
+				{
+					_particles = ParticleFactory.Instance.particles;
+				}
+				return _particles;
 			}
 		}
 
@@ -53,7 +42,7 @@ namespace AICS.Kinesin
 		void StartLogging ()
 		{
 			ParameterInput.Instance.simulationTimePassed = 0;
-			foreach (RandomForces particle in particles)
+			foreach (DiffusingParticle particle in particles)
 			{
 				particle.SetStartPosition();
 			}
@@ -63,12 +52,11 @@ namespace AICS.Kinesin
 		void CalculateMSD ()
 		{
 			float sum = 0;
-			foreach (RandomForces particle in particles)
+			foreach (DiffusingParticle particle in particles)
 			{
-				particle.CalculateDisplacement();
 				sum += Mathf.Pow( particle.displacement, 2f );
 			}
-			meanSquaredDisplacement = sum / n;
+			meanSquaredDisplacement = sum / particles.Length;
 		}
 
 		void LogMSD ()
@@ -79,11 +67,6 @@ namespace AICS.Kinesin
 				data += t + "," + meanSquaredDisplacement + "\n";
 				lastDataTime = t;
 			}
-		}
-
-		void OnDrawGizmos ()
-		{
-			Gizmos.DrawWireCube( transform.position, size );
 		}
 
 		void OnApplicationQuit ()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AICS.Diffusion;
 
 namespace AICS.Kinesin
 {
@@ -53,13 +54,13 @@ namespace AICS.Kinesin
 			}
 		}
 
-		RandomForces _randomForces;
-		RandomForces randomForces
+		DiffusingParticle _randomForces;
+		DiffusingParticle randomForces
 		{
 			get {
 				if (_randomForces == null)
 				{
-					_randomForces = GetComponent<RandomForces>();
+					_randomForces = GetComponent<DiffusingParticle>();
 				}
 				return _randomForces;
 			}

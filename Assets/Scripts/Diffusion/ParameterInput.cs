@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AICS.Kinesin
+namespace AICS.Diffusion
 {
 	public enum ParameterFormat
 	{
@@ -112,15 +112,15 @@ namespace AICS.Kinesin
 		public float angularVelocityMultiplier = 1f;
 		public float simulationTimePassed;
 
-		static ParameterInput _instance;
+		static ParameterInput _Instance;
 		public static ParameterInput Instance
 		{
 			get {
-				if (_instance == null)
+				if (_Instance == null)
 				{
-					_instance = GameObject.FindObjectOfType<ParameterInput>();
+					_Instance = GameObject.FindObjectOfType<ParameterInput>();
 				}
-				return _instance;
+				return _Instance;
 			}
 		}
 

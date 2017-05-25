@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Kinesin
+namespace AICS.Diffusion
 {
-	[RequireComponent( typeof(Rigidbody) )]
-	public class RandomForces : MonoBehaviour 
+	[RequireComponent( typeof(Rigidbody), typeof(Collider) )]
+	public class DiffusingParticle : MonoBehaviour 
 	{
-		public Vector2 clockTimeBetweenImpulses;
-		public float displacement;
+		public Vector2 clockTimeBetweenImpulses = new Vector2( 0.1f, 0.5f );
 
 		float lastTime = -1f;
 		float timeInterval;
@@ -42,7 +41,6 @@ namespace AICS.Kinesin
 				body.angularVelocity = Helpers.GetRandomVector( angularVelocityMagnitude );
 
 				lastTime = Time.time;
-				CalculateDisplacement();
 			}
 		}
 
@@ -67,16 +65,11 @@ namespace AICS.Kinesin
 			}
 		}
 
-		float dTimePS // time interval in picoseconds
+		public float displacement
 		{
 			get {
-				return timeInterval * ParameterInput.Instance.dTime.value;
+				return Vector3.Distance( startPosition, transform.position );
 			}
-		}
-
-		public void CalculateDisplacement ()
-		{
-			displacement = Vector3.Distance( startPosition, transform.position );
 		}
 
 		void SetTimeInterval ()

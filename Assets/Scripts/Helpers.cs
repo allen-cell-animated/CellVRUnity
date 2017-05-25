@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Kinesin
+namespace AICS
 {
 	public static class Helpers 
 	{
 		public static Vector3 GetRandomVector (float magnitude)
 		{
-			Vector3 random = new Vector3( Random.Range( -1f, 1f ), Random.Range( -1f, 1f ), Random.Range( -1f, 1f ) );
-			return magnitude * Vector3.Normalize( random );
+//			Vector3 random = new Vector3( Random.Range( -1f, 1f ), Random.Range( -1f, 1f ), Random.Range( -1f, 1f ) );
+			return magnitude * Random.onUnitSphere;
 		}
 	}
 }
