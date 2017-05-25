@@ -107,10 +107,8 @@ namespace AICS.Diffusion
 	{
 		public Parameter dTime; // = 100f, 100 ps --> 1 us
 		public Parameter diffusionCoefficient; // = 0.005f, 0.0002 --> 0.0140 A2/ps
-		public Text meanSquaredDisplacementDisplay;
 		public float velocityMultiplier = 7.5f;
 		public float angularVelocityMultiplier = 1f;
-		public float simulationTimePassed;
 
 		static ParameterInput _Instance;
 		public static ParameterInput Instance
@@ -132,18 +130,6 @@ namespace AICS.Diffusion
 		public void SetDiffusionCoefficient (float _sliderValue)
 		{
 			diffusionCoefficient.Set( _sliderValue );
-		}
-
-		void Update ()
-		{
-			simulationTimePassed += dTime.value;
-			CalculateMeanSquaredDisplacement();
-		}
-
-		void CalculateMeanSquaredDisplacement ()
-		{
-			float msd = 6f * 0.01f * diffusionCoefficient.value * simulationTimePassed;
-			meanSquaredDisplacementDisplay.text = "msd = " + Mathf.Round( msd ).ToString(); 
 		}
 	}
 }

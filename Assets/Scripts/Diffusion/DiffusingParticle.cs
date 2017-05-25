@@ -26,6 +26,18 @@ namespace AICS.Diffusion
 			}
 		}
 
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer
+		{
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
 		void Start ()
 		{
 			SetTimeInterval();
