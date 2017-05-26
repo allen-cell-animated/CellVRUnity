@@ -19,12 +19,13 @@ namespace AICS.Diffusion
 
 		public void ParticleCollided (DiffusingParticle particle)
 		{
-			Vector3 particleToCenter = transform.position - particle.transform.position;
+			Vector3 particleToCenter = Vector3.Normalize( transform.position - particle.transform.position );
 			RaycastHit hit;
-			if (Physics.Raycast( transform.position, particleToCenter, out hit ))
+			if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, gameObject.layer )) // TODO: debug
 			{
+				Debug.Log("move particle");
 				particle.transform.position = transform.position 
-					+ (hit.distance - particle.transform.localScale.x) * Vector3.Normalize( particleToCenter );
+					+ (hit.distance - 2f * particle.transform.localScale.x) * particleToCenter;
 			}
 		}
 

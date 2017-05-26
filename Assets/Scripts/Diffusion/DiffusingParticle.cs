@@ -8,8 +8,9 @@ namespace AICS.Diffusion
 	public class DiffusingParticle : MonoBehaviour 
 	{
 		public Vector2 clockTimeBetweenImpulses = new Vector2( 0.1f, 0.5f );
+		public float normalizedDisplacement;
 
-		float lastTime = -1f;
+		public float lastTime = -1f;
 		float timeInterval;
 		Vector3 startPosition;
 		int samples;
@@ -87,6 +88,12 @@ namespace AICS.Diffusion
 		void SetTimeInterval ()
 		{
 			timeInterval = Random.Range( clockTimeBetweenImpulses.x, clockTimeBetweenImpulses.y );
+		}
+
+		public void SetDisplacementColor (float minDisplacement, float maxDisplacement)
+		{
+			normalizedDisplacement = (displacement - minDisplacement) / (maxDisplacement - minDisplacement);
+			meshRenderer.material.color = Color.HSVToRGB( normalizedDisplacement, 1f, 1f );
 		}
 	}
 }

@@ -22,12 +22,13 @@ namespace AICS.Diffusion
 		void Start ()
 		{
 			Collider collider = GetComponent<Collider>();
-			collider.isTrigger = true;
+			collider.isTrigger = false;
 		}
 
-		void OnTriggerEnter (Collider other)
+		void OnCollisionEnter (Collision collision)
 		{
-			DiffusingParticle particle = other.GetComponent<DiffusingParticle>();
+			Debug.Log("collision");
+			DiffusingParticle particle = collision.collider.GetComponent<DiffusingParticle>();
 			if (particle != null)
 			{
 				container.ParticleCollided( particle );
