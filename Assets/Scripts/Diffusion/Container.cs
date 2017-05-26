@@ -24,7 +24,7 @@ namespace AICS.Diffusion
 			if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, 1 << gameObject.layer ))
 			{
 				particle.transform.position = transform.position 
-					+ (hit.distance - 2f * particle.transform.localScale.x) * particleToCenter;
+					+ (hit.distance - particle.transform.localScale.x) * particleToCenter;
 			}
 		}
 
