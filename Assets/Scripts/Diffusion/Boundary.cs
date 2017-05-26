@@ -27,7 +27,6 @@ namespace AICS.Diffusion
 
 		void OnCollisionEnter (Collision collision)
 		{
-			Debug.Log("collision");
 			DiffusingParticle particle = collision.collider.GetComponent<DiffusingParticle>();
 			if (particle != null)
 			{

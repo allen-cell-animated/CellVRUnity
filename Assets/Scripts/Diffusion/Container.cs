@@ -21,9 +21,8 @@ namespace AICS.Diffusion
 		{
 			Vector3 particleToCenter = Vector3.Normalize( transform.position - particle.transform.position );
 			RaycastHit hit;
-			if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, gameObject.layer )) // TODO: debug
+			if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, 1 << gameObject.layer ))
 			{
-				Debug.Log("move particle");
 				particle.transform.position = transform.position 
 					+ (hit.distance - 2f * particle.transform.localScale.x) * particleToCenter;
 			}
