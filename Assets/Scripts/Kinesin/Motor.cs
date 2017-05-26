@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Diffusion;
 
 namespace AICS.Kinesin
 {
@@ -12,6 +11,7 @@ namespace AICS.Kinesin
 		Strong
 	}
 
+	[RequireComponent( typeof(Rigidbody), typeof(RandomForces) )]
 	public class Motor : MonoBehaviour 
 	{
 		public MotorState state = MotorState.Free;
@@ -54,13 +54,13 @@ namespace AICS.Kinesin
 			}
 		}
 
-		DiffusingParticle _randomForces;
-		DiffusingParticle randomForces
+		RandomForces _randomForces;
+		RandomForces randomForces
 		{
 			get {
 				if (_randomForces == null)
 				{
-					_randomForces = GetComponent<DiffusingParticle>();
+					_randomForces = GetComponent<RandomForces>();
 				}
 				return _randomForces;
 			}
@@ -159,7 +159,7 @@ namespace AICS.Kinesin
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
 				body.isKinematic = true;
-				randomForces.enabled = false;
+				randomForces.addForces = false;
 				mover.MoveToWithSpeed( tubulin.transform.TransformPoint( bindingPosition ), 15f, FinishBinding );
 				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
 				binding = true;
@@ -183,7 +183,7 @@ namespace AICS.Kinesin
 			mover.moving = rotator.rotating = false;
 			state = MotorState.Free;
 			body.isKinematic = false;
-			randomForces.enabled = true;
+			randomForces.addForces = true;
 			binding = false;
 		}
 

@@ -131,7 +131,7 @@ namespace AICS.Kinesin
 
 		void SimulateATP ()
 		{
-			if (motor.shouldATPBind && Vector3.Distance( motor.transform.TransformPoint( bindingPosition ), transform.position ) < 2f)
+			if (motor.shouldATPBind && Vector3.Distance( motor.transform.TransformPoint( bindingPosition ), transform.position ) < 10f)
 			{
 				simulating = false;
 				BindATP();

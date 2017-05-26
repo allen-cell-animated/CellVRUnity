@@ -1,53 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Diffusion;
 
 namespace AICS.Kinesin
 {
-	public class Link
-	{
-		public Transform transform;
-		public Rigidbody body;
-		public DiffusingParticle randomForces;
-		public Vector3 dockedPosition;
-		public Quaternion dockedRotation;
-
-		public Link (Rigidbody link)
-		{
-			transform = link.transform;
-			body = link;
-			randomForces = link.GetComponent<DiffusingParticle>();
-		}
-
-		public void SetDockedPosition (Vector3 _dockedPosition, Quaternion _dockedRotation)
-		{
-			dockedPosition = _dockedPosition;
-			dockedRotation = _dockedRotation;
-		}
-
-		public void ToggleRandomForces (bool enable)
-		{
-			if (randomForces != null)
-			{
-				randomForces.enabled = enable;
-			}
-		}
-
-		public void ToggleFreeze (bool freeze)
-		{
-			Debug.Log( transform.name );
-			body.isKinematic = freeze; 
-			if (freeze)
-			{
-				transform.localRotation = dockedRotation;
-			}
-		}
-	}
-
 	public class Necklinker : MonoBehaviour 
 	{
 		public bool startDocked;
+		public bool snapping;
+
 		float[] linkerTensionExtents = new float[]{1f, 8f};
 		float startingLength;
 
@@ -57,19 +18,14 @@ namespace AICS.Kinesin
 			get {
 				if (_links == null)
 				{
-					Rigidbody[] linkBodies = GetComponentsInChildren<Rigidbody>();
-					_links = new Link[linkBodies.Length];
-					for (int i = 0; i < _links.Length; i++)
-					{
-						_links[i] = new Link( linkBodies[i] );
-					}
+					_links = GetComponentsInChildren<Link>();
 				}
 				return _links;
 			}
 		}
 
 		Motor _motor;
-		Motor motor
+		public Motor motor
 		{
 			get {
 				if (_motor == null)
@@ -121,7 +77,7 @@ namespace AICS.Kinesin
 		{
 			for (int i = 0; i < links.Length; i++)
 			{
-				links[i].SetDockedPosition( dockedPositions[i], dockedRotations[i] );
+				links[i].SetDockedTransform( dockedPositions[i], dockedRotations[i] );
 			}
 		}
 
@@ -130,14 +86,10 @@ namespace AICS.Kinesin
 			startingLength = length;
 		}
 
-		bool snapping;
-		public int currentLink;
-
 		public void StartSnapping ()
 		{
 			snapping = true;
-			links[0].ToggleRandomForces( false );
-			FinishSnappingLink( 0 );
+			links[0].StartSnapping();
 		}
 
 		public void StopSnapping ()
@@ -146,56 +98,8 @@ namespace AICS.Kinesin
 			{
 				foreach (Link link in links)
 				{
-					link.ToggleRandomForces( true );
-					link.ToggleFreeze( false );
+					link.Release();
 				}
-				snapping = false;
-			}
-		}
-
-		void Update ()
-		{
-			if (snapping)
-			{
-				SimulateSnapping();
-			}
-		}
-
-		void StartSnappingLink (int index)
-		{
-			currentLink = index;
-			links[currentLink].ToggleRandomForces( false );
-		}
-
-		public float distanceToGoal; //testing
-
-		void SimulateSnapping ()
-		{
-			Vector3 toGoal = motor.transform.TransformPoint( links[currentLink].dockedPosition ) - links[currentLink].transform.position;
-			distanceToGoal = Vector3.Magnitude( toGoal );
-			if (Vector3.Magnitude( toGoal ) > 1f)
-			{
-				links[currentLink].body.AddForce( motor.kinesin.neckLinkerSnappingForce * toGoal );
-			}
-			else
-			{
-				FinishSnappingLink( currentLink );
-			}
-		}
-
-		void FinishSnappingLink (int index)
-		{
-			if (index > 0) 
-			{ 
-				links[index - 1].ToggleFreeze( true );
-			}
-
-			if (index < links.Length - 1)
-			{
-				StartSnappingLink( index + 1 );
-			}
-			else
-			{
 				snapping = false;
 			}
 		}
