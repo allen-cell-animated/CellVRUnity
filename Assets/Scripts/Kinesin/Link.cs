@@ -71,7 +71,6 @@ namespace AICS.Kinesin
 
 		Vector3 dockedPosition;
 		Quaternion dockedRotation;
-		float snappingTime;
 
 		public void SetDockedTransform (Vector3 _dockedPosition, Quaternion _dockedRotation)
 		{
@@ -81,14 +80,12 @@ namespace AICS.Kinesin
 
 		public void StartSnapping ()
 		{
-			randomForces.addForces = false;
-			snappingTime = Time.time;
 			snapping = true;
 		}
 
 		void Update ()
 		{
-			if (snapping && Time.time - snappingTime > 1f)
+			if (snapping)
 			{
 				SimulateSnapping();
 			}
@@ -125,21 +122,19 @@ namespace AICS.Kinesin
 			else
 			{
 				Freeze();
-				neckLinker.snapping = false;
+				neckLinker.FinishSnapping();
 			}
 		}
 
 		public void Freeze ()
 		{
-			Debug.Log( name );
 			body.isKinematic = true; 
-//			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
-//			transform.localRotation = dockedRotation;
+			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
+			transform.localRotation = dockedRotation;
 		}
 
 		public void Release ()
 		{
-			randomForces.addForces = true;
 			snapping = false;
 			body.isKinematic = false; 
 		}

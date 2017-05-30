@@ -286,13 +286,14 @@ namespace AICS.Kinesin
 		public bool shouldATPBind 
 		{
 			get {
-				float probability = 0.5f;
-				if (!neckLinker.tensionIsForward)
-				{
-					probability -= neckLinker.tension / kinesin.maxTension;
-				}
-				float random = Random.Range(0, 1f);
-				return random < probability;
+				return true;
+//				float probability = 0.5f;
+//				if (!neckLinker.tensionIsForward)
+//				{
+//					probability -= neckLinker.tension / kinesin.maxTension;
+//				}
+//				float random = Random.Range(0, 1f);
+//				return random < probability;
 			}
 		}
 

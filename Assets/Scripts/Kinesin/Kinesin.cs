@@ -30,6 +30,18 @@ namespace AICS.Kinesin
 			}
 		}
 
+		RandomForces[] _randomForces;
+		RandomForces[] randomForces
+		{
+			get {
+				if (_randomForces == null)
+				{
+					_randomForces = GetComponentsInChildren<RandomForces>();
+				}
+				return _randomForces;
+			}
+		}
+
 		public float tensionToRemoveWeaklyBoundMotor = 0.6f;
 		public float maxTension = 0.8f;
 		public float ATPHydrolysisTime = 1f;
@@ -63,6 +75,14 @@ namespace AICS.Kinesin
 			foreach (Necklinker necklinker in necklinkers)
 			{
 				necklinker.SetDockedLocations( dockedLinkPositions, dockedLinkRotations );
+			}
+		}
+
+		public void ToggleRandomForces (bool enabled)
+		{
+			foreach (RandomForces forces in randomForces)
+			{
+				forces.addForces = enabled;
 			}
 		}
 	}

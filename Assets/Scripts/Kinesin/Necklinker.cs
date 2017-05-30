@@ -89,7 +89,14 @@ namespace AICS.Kinesin
 		public void StartSnapping ()
 		{
 			snapping = true;
+			motor.kinesin.ToggleRandomForces( false );
 			links[0].StartSnapping();
+		}
+
+		public void FinishSnapping ()
+		{
+			snapping = false;
+			motor.kinesin.ToggleRandomForces( true );
 		}
 
 		public void StopSnapping ()
@@ -100,7 +107,7 @@ namespace AICS.Kinesin
 				{
 					link.Release();
 				}
-				snapping = false;
+				FinishSnapping();
 			}
 		}
 	}
