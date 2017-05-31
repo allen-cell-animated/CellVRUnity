@@ -26,7 +26,7 @@ namespace AICS.Kinesin
 		bool bound
 		{
 			get {
-				return state != MotorState.Free;
+				return state != MotorState.Free && !releasing;
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			if (!releasing && bound)
+			if (bound)
 			{
 				Debug.Log(name + " start release");
 				mover.moving = rotator.rotating = false;
@@ -225,7 +225,7 @@ namespace AICS.Kinesin
 		}
 
 		public bool releasing;
-		float releaseTime = 0.5f;
+		float releaseTime = 0.1f;
 		float releaseStartTime = -1f;
 		float releasingForce = 1000f;
 
@@ -250,22 +250,22 @@ namespace AICS.Kinesin
 
 		void CheckRelease ()
 		{
-			if (bound)
+			if (releasing)
 			{
-				if (releasing)
-				{
-					EaseRelease();
-				}
-				else if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
-				{
-					Debug.Log(name + " released b/c physically impossible");
-					Release();
-				}
-				else if (!binding)
+				EaseRelease();
+			}
+			else if (bound)
+			{
+//				if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
+//				{
+//					Debug.Log(name + " released b/c physically impossible");
+//					Release();
+//				} else
+				if (!binding)
 				{
 					if (shouldRelease)
 					{
-						Debug.Log(name + " released w/ probability");
+						Debug.Log(name + " released w/ probability " + state.ToString());
 						Release();
 					}
 				}
@@ -280,7 +280,7 @@ namespace AICS.Kinesin
 				if (Time.time - lastCheckReleaseTime > 1f) // only check once per second
 				{
 					lastCheckReleaseTime = Time.time;
-					float probability = 0.1f;
+					float probability = 0;
 					if (neckLinker.tensionIsForward) // this is the back motor
 					{
 						probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
@@ -344,7 +344,7 @@ namespace AICS.Kinesin
 		public bool shouldATPBind 
 		{
 			get {
-				if (state != MotorState.Weak)
+				if (state != MotorState.Weak || releasing)
 				{
 					return false;
 				}
@@ -365,17 +365,23 @@ namespace AICS.Kinesin
 		public void BindATP ()
 		{
 			Debug.Log(name + " Bind ATP");
-			state = MotorState.Strong;
 			atpBindingTime = Time.time;
-			neckLinker.StartSnapping();
+			if (bound)
+			{
+				state = MotorState.Strong;
+				neckLinker.StartSnapping();
+			}
 		}
 
 		void HydrolyzeATP ()
 		{
 			Debug.Log(name + " Hydrolyze");
 			nucleotide.Hydrolyze();
-			state = MotorState.Weak;
 			neckLinker.StopSnapping();
+			if (bound)
+			{
+				state = MotorState.Weak;
+			}
 		}
 
 		float atpBindingTime = -1f;
