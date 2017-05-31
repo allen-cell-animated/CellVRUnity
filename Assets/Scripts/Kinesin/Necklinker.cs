@@ -36,6 +36,13 @@ namespace AICS.Kinesin
 			}
 		}
 
+		public bool bindIsPhysicallyImpossible
+		{
+			get {
+				return tension > motor.kinesin.maxTension || stretched;
+			}
+		}
+
 		public bool tensionIsForward
 		{
 			get {
@@ -56,7 +63,7 @@ namespace AICS.Kinesin
 		public bool stretched
 		{
 			get {
-				return length > 1.2f * startingLength;
+				return length > 1.1f * startingLength;
 			}
 		}
 
@@ -109,6 +116,19 @@ namespace AICS.Kinesin
 				}
 				FinishSnapping();
 			}
+		}
+
+		// --------------------------------- Testing
+
+		public bool forwardTension;
+		public float stretchFactor;
+		public float _tension;
+
+		void Update ()
+		{
+			forwardTension = tensionIsForward;
+			stretchFactor = length / startingLength;
+			_tension = tension;
 		}
 	}
 }

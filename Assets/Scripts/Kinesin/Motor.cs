@@ -132,13 +132,17 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (neckLinker.tensionIsForward)
+			if (state == MotorState.Free)
 			{
-				GetComponent<MeshRenderer>().material.color = Color.red;
+				GetComponent<MeshRenderer>().material.color = color;
+			}
+			else if (state == MotorState.Weak)
+			{
+				GetComponent<MeshRenderer>().material.color = Color.yellow;
 			}
 			else
 			{
-				GetComponent<MeshRenderer>().material.color = color;
+				GetComponent<MeshRenderer>().material.color = Color.red;
 			}
 
 			if (!pause)
@@ -152,9 +156,8 @@ namespace AICS.Kinesin
 
 		public void BindToMT (Tubulin _tubulin)
 		{
-			if (!bindIsPhysicallyImpossible && !pause)
+			if (!neckLinker.bindIsPhysicallyImpossible && !pause)
 			{
-				Debug.Log( name + " bind MT" );
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
@@ -176,11 +179,11 @@ namespace AICS.Kinesin
 			binding = false;
 		}
 
-		void Release ()
+		public void Release ()
 		{
-			Debug.Log( name + " unbind" );
 			tubulin.hasMotorBound = false;
 			mover.moving = rotator.rotating = false;
+			neckLinker.StopSnapping();
 			state = MotorState.Free;
 			body.isKinematic = false;
 			randomForces.addForces = true;
@@ -193,24 +196,19 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				if (bindIsPhysicallyImpossible)
+				if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
 				{
+					Debug.Log(name + " released b/c physically impossible");
 					Release();
 				}
 				else if (!binding)
 				{
 					if (shouldRelease)
 					{
-//						Release();
+						Debug.Log(name + " released w/ probability");
+						Release();
 					}
 				}
-			}
-		}
-
-		bool bindIsPhysicallyImpossible
-		{
-			get {
-				return neckLinker.tension > kinesin.maxTension || neckLinker.stretched;
 			}
 		}
 
@@ -241,7 +239,7 @@ namespace AICS.Kinesin
 
 		float ProbabilityOfEjectionFromStrong ()
 		{
-			return 0.1f;
+			return 0;
 		}
 
 		// ---------------------------------------------- Nucleotide
@@ -286,7 +284,14 @@ namespace AICS.Kinesin
 		public bool shouldATPBind 
 		{
 			get {
-				return true;
+				if (state != MotorState.Weak)
+				{
+					return false;
+				}
+				else 
+				{
+					return true;
+				}
 //				float probability = 0.5f;
 //				if (!neckLinker.tensionIsForward)
 //				{
@@ -302,7 +307,6 @@ namespace AICS.Kinesin
 			state = MotorState.Strong;
 			atpBindingTime = Time.time;
 			neckLinker.StartSnapping();
-			pause = true;
 		}
 
 		void HydrolyzeATP ()

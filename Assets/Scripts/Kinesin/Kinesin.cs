@@ -85,5 +85,17 @@ namespace AICS.Kinesin
 				forces.addForces = enabled;
 			}
 		}
+
+		public void RandomlyReleaseStrongMotor ()
+		{
+			foreach (Motor motor in motors)
+			{
+				if (motor.state != MotorState.Strong)
+				{
+					return;
+				}
+			}
+			motors[Random.Range(0, 2)].Release();
+		}
 	}
 }

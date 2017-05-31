@@ -58,7 +58,6 @@ namespace AICS.Kinesin
 
 		public void StartATPBinding ()
 		{
-			Debug.Log(motor.name + " Start ATP binding");
 			isATP = true;
 			transform.position = motor.transform.position + randomPosition;
 			goalPosition = motor.transform.TransformPoint( bindingPosition );
@@ -80,7 +79,6 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				Debug.Log(motor.name + " Release ADP");
 				bound = false;
 				AddRigidbody();
 				transform.SetParent( null );

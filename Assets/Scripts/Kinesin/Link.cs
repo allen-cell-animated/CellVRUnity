@@ -85,7 +85,7 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (snapping)
+			if (snapping && !neckLinker.bindIsPhysicallyImpossible)
 			{
 				SimulateSnapping();
 			}
