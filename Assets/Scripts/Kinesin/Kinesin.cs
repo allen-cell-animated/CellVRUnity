@@ -6,6 +6,10 @@ namespace AICS.Kinesin
 {
 	public class Kinesin : MonoBehaviour 
 	{
+		public float tensionToRemoveWeaklyBoundMotor = 0.2f;
+		public float maxTension = 0.8f;
+		public float neckLinkerSnappingForce = 25f;
+
 		Hips _hips;
 		public Hips hips
 		{
@@ -17,37 +21,6 @@ namespace AICS.Kinesin
 				return _hips;
 			}
 		}
-
-		Motor[] _motors;
-		public Motor[] motors
-		{
-			get {
-				if (_motors == null)
-				{
-					_motors = GetComponentsInChildren<Motor>();
-				}
-				return _motors;
-			}
-		}
-
-		RandomForces[] _randomForces;
-		RandomForces[] randomForces
-		{
-			get {
-				if (_randomForces == null)
-				{
-					_randomForces = GetComponentsInChildren<RandomForces>();
-				}
-				return _randomForces;
-			}
-		}
-
-		public float tensionToRemoveWeaklyBoundMotor = 0.6f;
-		public float maxTension = 0.8f;
-		public float ATPHydrolysisTime = 1f;
-		public Color ATPColor;
-		public Color ADPColor;
-		public float neckLinkerSnappingForce = 200;
 
 		void Start ()
 		{
@@ -76,26 +49,6 @@ namespace AICS.Kinesin
 			{
 				necklinker.SetDockedLocations( dockedLinkPositions, dockedLinkRotations );
 			}
-		}
-
-		public void ToggleRandomForces (bool enabled)
-		{
-			foreach (RandomForces forces in randomForces)
-			{
-				forces.addForces = enabled;
-			}
-		}
-
-		public void RandomlyReleaseStrongMotor ()
-		{
-			foreach (Motor motor in motors)
-			{
-				if (motor.state != MotorState.Strong)
-				{
-					return;
-				}
-			}
-			motors[Random.Range(0, 2)].Release();
 		}
 	}
 }

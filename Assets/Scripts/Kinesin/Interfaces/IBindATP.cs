@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	public abstract class Molecule : MonoBehaviour
+	public interface IBindATP 
 	{
-		public bool isBusy;
-		public bool shouldDestroy;
+		void BindATP();
+
+		void HydrolyzeATP();
 	}
 }

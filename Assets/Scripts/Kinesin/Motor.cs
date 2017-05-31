@@ -11,16 +11,16 @@ namespace AICS.Kinesin
 		Strong
 	}
 
-	[RequireComponent( typeof(Rigidbody), typeof(RandomForces) )]
-	public class Motor : MonoBehaviour 
+	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
+	public class Motor : MonoBehaviour, IBindATP
 	{
 		public MotorState state = MotorState.Free;
-		public Nucleotide nucleotidePrefab;
+		public bool pause;
 
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
-		Nucleotide nucleotide;
+		Color color;
 
 		bool binding;
 		bool bound
@@ -138,24 +138,9 @@ namespace AICS.Kinesin
 			}
 		}
 
-		Color color;
-
 		void Start ()
 		{
 			color = meshRenderer.material.color;
-			CreateNucleotide();
-		}
-
-		void CreateNucleotide ()
-		{
-			if (nucleotidePrefab == null)
-			{
-				Debug.LogWarning("Nucleotide prefab is missing!");
-				return;
-			}
-
-			nucleotide = Instantiate<Nucleotide>( nucleotidePrefab, kinesin.transform );
-			nucleotide.Init( this );
 		}
 
 		void Update ()
@@ -176,7 +161,7 @@ namespace AICS.Kinesin
 			if (!pause)
 			{
 				CheckRelease();
-				UpdateNucleotide();
+				UpdateNucleotideProbabilities();
 			}
 		}
 
@@ -304,68 +289,21 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Nucleotide
 
-		float lastUpdateNucleotideTime = -1f;
-		public bool pause;
-
-		void UpdateNucleotide ()
-		{
-			if (Time.time - lastUpdateNucleotideTime > 1f) // only check once per second
-			{
-				if (shouldReleaseADP)
-				{
-					nucleotide.ReleaseADP();
-					nucleotide.Invoke("StartATPBinding", 3f);
-				}
-				else if (shouldHydrolyzeATP)
-				{
-					HydrolyzeATP();
-				}
-				lastUpdateNucleotideTime = Time.time;
-			}
-		}
-
-		bool shouldReleaseADP
+		ATPBinder _atpBinder;
+		ATPBinder atpBinder
 		{
 			get {
-				if (nucleotide.bound && !nucleotide.isATP)
+				if (_atpBinder == null)
 				{
-					float probability = 0.5f;
-					if (neckLinker.tensionIsForward)
-					{
-						probability -= neckLinker.tension / kinesin.maxTension;
-					}
-					float random = Random.Range(0, 1f);
-					return random < probability;
+					_atpBinder = GetComponent<ATPBinder>();
 				}
-				return false;
-			}
-		}
-
-		public bool shouldATPBind 
-		{
-			get {
-				if (state != MotorState.Weak || releasing)
-				{
-					return false;
-				}
-				else 
-				{
-					return true;
-				}
-//				float probability = 0.5f;
-//				if (!neckLinker.tensionIsForward)
-//				{
-//					probability -= neckLinker.tension / kinesin.maxTension;
-//				}
-//				float random = Random.Range(0, 1f);
-//				return random < probability;
+				return _atpBinder;
 			}
 		}
 
 		public void BindATP ()
 		{
 			Debug.Log(name + " Bind ATP");
-			atpBindingTime = Time.time;
 			if (bound)
 			{
 				state = MotorState.Strong;
@@ -373,29 +311,47 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void HydrolyzeATP ()
+		void UpdateNucleotideProbabilities ()
+		{
+			UpdateATPBindingProbability();
+			UpdateADPReleaseProbability();
+		}
+
+		void UpdateATPBindingProbability ()
+		{
+			if (state != MotorState.Weak || releasing)
+			{
+				atpBinder.ATPBindingProbability = 0;
+			}
+			else 
+			{
+				atpBinder.ATPBindingProbability = 1f;
+			}
+//			float probability = 0.5f;
+//			if (!neckLinker.tensionIsForward)
+//			{
+//				probability -= neckLinker.tension / kinesin.maxTension;
+//			}
+//			atpBinder.ATPBindingProbability = probability;
+		}
+
+		void UpdateADPReleaseProbability ()
+		{
+			float probability = 0.5f;
+			if (neckLinker.tensionIsForward)
+			{
+				probability -= neckLinker.tension / kinesin.maxTension;
+			}
+			atpBinder.ADPReleaseProbability = probability;
+		}
+
+		public void HydrolyzeATP ()
 		{
 			Debug.Log(name + " Hydrolyze");
-			nucleotide.Hydrolyze();
 			neckLinker.StopSnapping();
 			if (bound)
 			{
 				state = MotorState.Weak;
-			}
-		}
-
-		float atpBindingTime = -1f;
-
-		bool shouldHydrolyzeATP
-		{
-			get {
-				if (nucleotide.bound && nucleotide.isATP)
-				{
-					float probability = (Time.time - atpBindingTime) / kinesin.ATPHydrolysisTime - 0.5f;
-					float random = Random.Range(0, 1f);
-					return random < probability;
-				}
-				return false;
 			}
 		}
 	}

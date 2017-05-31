@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	[RequireComponent( typeof(Rigidbody) )]
 	public class RandomForces : MonoBehaviour 
 	{
 		public bool addForces = true;
@@ -35,7 +34,7 @@ namespace AICS.Kinesin
 
 		void FixedUpdate () 
 		{
-			if (Time.time - lastTime > timeInterval)
+			if (body != null && Time.time - lastTime > timeInterval)
 			{
 				body.velocity = body.angularVelocity = Vector3.zero;
 				if (addForces)
