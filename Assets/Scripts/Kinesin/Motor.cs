@@ -110,11 +110,23 @@ namespace AICS.Kinesin
 			}
 		}
 
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer
+		{
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
 		Color color;
 
 		void Start ()
 		{
-			color = GetComponent<MeshRenderer>().material.color;
+			color = meshRenderer.material.color;
 			CreateNucleotide();
 		}
 
@@ -134,15 +146,15 @@ namespace AICS.Kinesin
 		{
 			if (state == MotorState.Free)
 			{
-				GetComponent<MeshRenderer>().material.color = color;
+				meshRenderer.material.color = color;
 			}
 			else if (state == MotorState.Weak)
 			{
-				GetComponent<MeshRenderer>().material.color = Color.yellow;
+				meshRenderer.material.color = Color.yellow;
 			}
 			else
 			{
-				GetComponent<MeshRenderer>().material.color = Color.red;
+				meshRenderer.material.color = Color.red;
 			}
 
 			if (!pause)

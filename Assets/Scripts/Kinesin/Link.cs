@@ -10,7 +10,7 @@ namespace AICS.Kinesin
 		public bool snapping;
 
 		Necklinker _necklinker;
-		Necklinker neckLinker
+		public Necklinker neckLinker
 		{
 			get {
 				if (_necklinker == null)
@@ -83,11 +83,58 @@ namespace AICS.Kinesin
 			snapping = true;
 		}
 
+		float startDistanceToAnchor;
+		public float distanceToAnchor;
+
+		CharacterJoint _joint;
+		public CharacterJoint joint
+		{
+			get {
+				if (_joint == null)
+				{
+					_joint = GetComponent<CharacterJoint>();
+				}
+				return _joint;
+			}
+		}
+
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer
+		{
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
+		void Start ()
+		{
+			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
+		}
+
 		void Update ()
 		{
 			if (snapping && !neckLinker.bindIsPhysicallyImpossible)
 			{
 				SimulateSnapping();
+			}
+
+			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
+			if (distanceToAnchor < 1f)
+			{
+				meshRenderer.material.color = Color.green;
+			}
+			else if (distanceToAnchor < 1.1f)
+			{
+				meshRenderer.material.color = Color.yellow;
+			}
+			else
+			{
+				meshRenderer.material.color = Color.red;
+				neckLinker.motor.Release();
 			}
 		}
 
