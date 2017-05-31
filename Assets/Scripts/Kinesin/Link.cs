@@ -134,6 +134,7 @@ namespace AICS.Kinesin
 			else
 			{
 				meshRenderer.material.color = Color.red;
+				if (!neckLinker.motor.releasing) { Debug.Log("link released " + neckLinker.motor.name); }
 				neckLinker.motor.Release();
 			}
 		}

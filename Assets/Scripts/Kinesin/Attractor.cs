@@ -9,7 +9,7 @@ namespace AICS.Kinesin
 	{
 		public Transform target;
 		public float attractiveForce = 30f;
-		public float timeInterval = 0.5f;
+		public float timeInterval = -1f;
 
 		float lastTime = -1f;
 
@@ -27,7 +27,7 @@ namespace AICS.Kinesin
 
 		void Update () 
 		{
-			if (target != null && Time.time - lastTime > timeInterval)
+			if (target != null && (timeInterval < 0 || Time.time - lastTime > timeInterval))
 			{
 				ApplyAttractiveForce();
 				lastTime = Time.time;

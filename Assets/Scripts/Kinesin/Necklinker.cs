@@ -108,14 +108,11 @@ namespace AICS.Kinesin
 
 		public void StopSnapping ()
 		{
-			if (snapping)
+			foreach (Link link in links)
 			{
-				foreach (Link link in links)
-				{
-					link.Release();
-				}
-				FinishSnapping();
+				link.Release();
 			}
+			FinishSnapping();
 		}
 
 		// --------------------------------- Testing

@@ -56,6 +56,7 @@ namespace AICS.Kinesin
 				if (distanceToAnchor[i] > 1.1f)
 				{
 					meshRenderer.material.color = Color.red;
+					if (!links[i].neckLinker.motor.releasing) { Debug.Log("hips released " + links[i].neckLinker.motor.name); }
 					links[i].neckLinker.motor.Release();
 				}
 			}

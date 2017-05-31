@@ -98,6 +98,22 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Attractor _attractor;
+		Attractor attractor
+		{
+			get {
+				if (_attractor == null)
+				{
+					_attractor = GetComponent<Attractor>();
+					if (_attractor == null)
+					{
+						_attractor = gameObject.AddComponent<Attractor>();
+					}
+				}
+				return _attractor;
+			}
+		}
+
 		Rigidbody _body;
 		Rigidbody body
 		{
@@ -168,8 +184,9 @@ namespace AICS.Kinesin
 
 		public void BindToMT (Tubulin _tubulin)
 		{
-			if (!neckLinker.bindIsPhysicallyImpossible && !pause)
+			if (!neckLinker.bindIsPhysicallyImpossible && !bound && !pause)
 			{
+				Debug.Log(name + " bind");
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
@@ -193,13 +210,40 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			tubulin.hasMotorBound = false;
-			mover.moving = rotator.rotating = false;
-			neckLinker.StopSnapping();
-			state = MotorState.Free;
-			body.isKinematic = false;
-			randomForces.addForces = true;
-			binding = false;
+			if (!releasing && bound)
+			{
+				Debug.Log(name + " start release");
+				mover.moving = rotator.rotating = false;
+				neckLinker.StopSnapping();
+				binding = false;
+				releasing = true;
+				body.isKinematic = false;
+				attractor.target = tubulin.transform;
+				attractor.attractiveForce = releasingForce;
+				releaseStartTime = Time.time;
+			}
+		}
+
+		public bool releasing;
+		float releaseTime = 0.5f;
+		float releaseStartTime = -1f;
+		float releasingForce = 1000f;
+
+		void EaseRelease ()
+		{
+			if (Time.time - releaseStartTime < releaseTime)
+			{
+				attractor.attractiveForce = releasingForce * (1f - (Time.time - releaseStartTime) / releaseTime);
+			}
+			else
+			{
+				Debug.Log(name + " finish release");
+				attractor.target = null;
+				tubulin.hasMotorBound = false;
+				state = MotorState.Free;
+				randomForces.addForces = true;
+				releasing = false;
+			}
 		}
 
 		// ---------------------------------------------- State Management
@@ -208,7 +252,11 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
+				if (releasing)
+				{
+					EaseRelease();
+				}
+				else if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
 				{
 					Debug.Log(name + " released b/c physically impossible");
 					Release();
@@ -316,6 +364,7 @@ namespace AICS.Kinesin
 
 		public void BindATP ()
 		{
+			Debug.Log(name + " Bind ATP");
 			state = MotorState.Strong;
 			atpBindingTime = Time.time;
 			neckLinker.StartSnapping();
@@ -323,6 +372,7 @@ namespace AICS.Kinesin
 
 		void HydrolyzeATP ()
 		{
+			Debug.Log(name + " Hydrolyze");
 			nucleotide.Hydrolyze();
 			state = MotorState.Weak;
 			neckLinker.StopSnapping();

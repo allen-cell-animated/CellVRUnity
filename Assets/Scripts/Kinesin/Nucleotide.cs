@@ -103,7 +103,6 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				Debug.Log(motor.name + " Hydrolyze");
 				meshRenderer.material.color = adpColor;
 				isATP = false;
 			}
