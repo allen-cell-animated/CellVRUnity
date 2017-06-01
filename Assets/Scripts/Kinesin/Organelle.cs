@@ -6,15 +6,18 @@ namespace AICS.Kinesin
 {
 	public class Organelle : MonoBehaviour 
 	{
+		public float distanceMoved;
 
-		// Use this for initialization
-		void Start () {
-			
+		Vector3 startPosition;
+
+		void Start () 
+		{
+			startPosition = transform.position;
 		}
-		
-		// Update is called once per frame
-		void Update () {
-			
+
+		void Update () 
+		{
+			distanceMoved = Vector3.Distance( startPosition, transform.position );
 		}
 	}
 }

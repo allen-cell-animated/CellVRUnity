@@ -156,7 +156,7 @@ namespace AICS.Kinesin
 			}
 			else if (state == MotorState.Weak)
 			{
-				meshRenderer.material.color = Color.yellow;
+				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
 			}
 			else
 			{
@@ -196,6 +196,10 @@ namespace AICS.Kinesin
 		void FinishBinding ()
 		{
 			binding = false;
+			if (atpBinder.nucleotide != null && atpBinder.nucleotide.isATP)
+			{
+				BindATP();
+			}
 		}
 
 		// ---------------------------------------------- Releasing

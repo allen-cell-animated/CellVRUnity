@@ -11,8 +11,8 @@ namespace AICS.Kinesin
 		public float ATPBindingProbability = 1f;
 		public float ADPReleaseProbability = 1f;
 		public float hydrolysisTime = 5f;
+		public Nucleotide nucleotide;
 
-		Nucleotide nucleotide;
 		float lastTime = -1f;
 		float bindingTime = -1f;
 

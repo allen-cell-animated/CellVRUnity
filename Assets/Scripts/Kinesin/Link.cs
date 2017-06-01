@@ -98,18 +98,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer
-		{
-			get {
-				if (_meshRenderer == null)
-				{
-					_meshRenderer = GetComponent<MeshRenderer>();
-				}
-				return _meshRenderer;
-			}
-		}
-
 		void Start ()
 		{
 			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
@@ -123,17 +111,8 @@ namespace AICS.Kinesin
 			}
 
 			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
-			if (distanceToAnchor < 1f)
+			if (distanceToAnchor > 1.1f)
 			{
-				meshRenderer.material.color = Color.green;
-			}
-			else if (distanceToAnchor < 1.1f)
-			{
-				meshRenderer.material.color = Color.yellow;
-			}
-			else
-			{
-				meshRenderer.material.color = Color.red;
 				if (!neckLinker.motor.releasing) { Debug.Log("link released " + neckLinker.motor.name); }
 				neckLinker.motor.Release();
 			}
