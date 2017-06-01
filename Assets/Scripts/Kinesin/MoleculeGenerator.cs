@@ -36,15 +36,14 @@ namespace AICS.Kinesin
 		{
 			for (int i = 0; i < molecules.Count; i++)
 			{
-				if (molecules[i] != null)
+				if (molecules[i] != null && !molecules[i].shouldHide && !molecules[i].hidden)
 				{
 					if (Vector3.Distance( molecules[i].transform.position, transform.position ) > generationRadius)
 					{
-						molecules[i].shouldDestroy = true;
+						molecules[i].shouldHide = true;
 					}
 				}
 			}
-			molecules.RemoveAll( molecule => molecule.shouldDestroy );
 		}
 
 		void CheckConcentration ()
@@ -55,7 +54,7 @@ namespace AICS.Kinesin
 				return;
 			}
 
-			int n = molecules.Count;
+			int n = molecules.FindAll( m => !m.hidden && !m.shouldHide ).Count;
 			while (n < number)
 			{
 				AddMolecule();
@@ -66,8 +65,19 @@ namespace AICS.Kinesin
 		void AddMolecule ()
 		{
 			Vector3 position = transform.position + generationRadius * Random.insideUnitSphere;
-			Molecule molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Molecule;
-			molecules.Add( molecule );
+
+			List<Molecule> hiddenMolecules = molecules.FindAll( m => m.hidden );
+			if (hiddenMolecules.Count > 0)
+			{
+				hiddenMolecules[0].transform.position = position;
+				hiddenMolecules[0].transform.rotation = Random.rotation;
+				hiddenMolecules[0].Regenerate();
+			}
+			else
+			{
+				Molecule molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Molecule;
+				molecules.Add( molecule );
+			}
 		}
 
 		void OnDrawGizmos ()

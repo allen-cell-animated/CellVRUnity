@@ -7,6 +7,42 @@ namespace AICS.Kinesin
 	public abstract class Molecule : MonoBehaviour
 	{
 		public bool isBusy;
-		public bool shouldDestroy;
+		public bool shouldHide;
+		public bool hidden;
+
+		void Update ()
+		{
+			if (!isBusy && shouldHide)
+			{
+				shouldHide = false;
+				hidden = true;
+				ToggleHidden( true );
+			}
+		}
+
+		void ToggleHidden (bool hide)
+		{
+			if (hide)
+			{
+				Hide();
+			}
+			else
+			{
+				Show();
+			}
+			hidden = hide;
+		}
+
+		protected abstract void Hide ();
+
+		protected abstract void Show ();
+
+		public void Regenerate ()
+		{
+			Reset();
+			ToggleHidden( false );
+		}
+
+		protected abstract void Reset ();
 	}
 }
