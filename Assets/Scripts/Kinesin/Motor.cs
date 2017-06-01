@@ -16,13 +16,18 @@ namespace AICS.Kinesin
 	{
 		public MotorState state = MotorState.Free;
 		public bool pause;
+		public bool releasing;
 
+		float releaseTime = 0.1f;
+		float releaseStartTime = -1f;
+		float lastCheckReleaseTime = -1f;
+		float releasingForce = 1000f;
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
 		Color color;
-
 		bool binding;
+
 		bool bound
 		{
 			get {
@@ -127,7 +132,7 @@ namespace AICS.Kinesin
 		}
 
 		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer
+		MeshRenderer meshRenderer // testing
 		{
 			get {
 				if (_meshRenderer == null)
@@ -160,7 +165,7 @@ namespace AICS.Kinesin
 
 			if (!pause)
 			{
-				CheckRelease();
+				UpdateRelease();
 				UpdateNucleotideProbabilities();
 			}
 		}
@@ -193,6 +198,56 @@ namespace AICS.Kinesin
 			binding = false;
 		}
 
+		// ---------------------------------------------- Releasing
+
+		void UpdateRelease ()
+		{
+			if (releasing)
+			{
+				EaseRelease();
+			}
+			else if (bound && !binding)
+			{
+				if (shouldRelease)
+				{
+					Debug.Log(name + " released w/ probability in state " + state.ToString());
+					Release();
+				}
+			}
+		}
+
+		bool shouldRelease
+		{
+			get {
+				if (Time.time - lastCheckReleaseTime > 0.3f)
+				{
+					lastCheckReleaseTime = Time.time;
+					float probability = 0.05f;
+					if (neckLinker.tensionIsForward) // this is the back motor
+					{
+						probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
+					}
+					float random = Random.Range(0, 1f);
+					return random <= probability;
+				}
+				return false;
+			}
+		}
+
+		float probabilityOfEjectionFromWeak
+		{
+			get {
+				return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
+			}
+		}
+
+		float probabilityOfEjectionFromStrong
+		{
+			get {
+				return 0;
+			}
+		}
+
 		public void Release ()
 		{
 			if (bound)
@@ -209,11 +264,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public bool releasing;
-		float releaseTime = 0.1f;
-		float releaseStartTime = -1f;
-		float releasingForce = 1000f;
-
 		void EaseRelease ()
 		{
 			if (Time.time - releaseStartTime < releaseTime)
@@ -229,62 +279,6 @@ namespace AICS.Kinesin
 				randomForces.addForces = true;
 				releasing = false;
 			}
-		}
-
-		// ---------------------------------------------- State Management
-
-		void CheckRelease ()
-		{
-			if (releasing)
-			{
-				EaseRelease();
-			}
-			else if (bound)
-			{
-//				if (neckLinker.bindIsPhysicallyImpossible && state != MotorState.Strong)
-//				{
-//					Debug.Log(name + " released b/c physically impossible");
-//					Release();
-//				} else
-				if (!binding)
-				{
-					if (shouldRelease)
-					{
-						Debug.Log(name + " released w/ probability " + state.ToString());
-						Release();
-					}
-				}
-			}
-		}
-
-		float lastCheckReleaseTime = -1f;
-
-		bool shouldRelease
-		{
-			get {
-				if (Time.time - lastCheckReleaseTime > 1f) // only check once per second
-				{
-					lastCheckReleaseTime = Time.time;
-					float probability = 0;
-					if (neckLinker.tensionIsForward) // this is the back motor
-					{
-						probability = (state == MotorState.Weak) ? ProbabilityOfEjectionFromWeak() : ProbabilityOfEjectionFromStrong();
-					}
-					float random = Random.Range(0, 1f);
-					return random < probability;
-				}
-				return false;
-			}
-		}
-
-		float ProbabilityOfEjectionFromWeak ()
-		{
-			return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
-		}
-
-		float ProbabilityOfEjectionFromStrong ()
-		{
-			return 0;
 		}
 
 		// ---------------------------------------------- Nucleotide
@@ -319,28 +313,20 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			if (state != MotorState.Weak || releasing)
+			float probability = 0.1f;
+			if (!neckLinker.tensionIsForward) // this is the front motor
 			{
-				atpBinder.ATPBindingProbability = 0;
+				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
 			}
-			else 
-			{
-				atpBinder.ATPBindingProbability = 1f;
-			}
-//			float probability = 0.5f;
-//			if (!neckLinker.tensionIsForward)
-//			{
-//				probability -= neckLinker.tension / kinesin.maxTension;
-//			}
-//			atpBinder.ATPBindingProbability = probability;
+			atpBinder.ATPBindingProbability = probability;
 		}
 
 		void UpdateADPReleaseProbability ()
 		{
-			float probability = 0.5f;
-			if (neckLinker.tensionIsForward)
+			float probability = 0.1f;
+			if (neckLinker.tensionIsForward) // this is the back motor
 			{
-				probability -= neckLinker.tension / kinesin.maxTension;
+				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f);  // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}

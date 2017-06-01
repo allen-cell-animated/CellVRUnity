@@ -39,7 +39,7 @@ namespace AICS.Kinesin
 
 		bool ShouldATPBind (Nucleotide _nucleotide)
 		{
-			if (_nucleotide != null && _nucleotide.isATP)
+			if (nucleotide == null && _nucleotide != null && _nucleotide.isATP)
 			{
 				float random = Random.Range(0, 1f);
 				return random <= ATPBindingProbability;
@@ -64,7 +64,7 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (Time.time - lastTime > 1f)
+			if (Time.time - lastTime > 0.3f)
 			{
 				if (shouldReleaseADP)
 				{
