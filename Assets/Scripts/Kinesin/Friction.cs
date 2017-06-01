@@ -8,7 +8,7 @@ namespace AICS.Kinesin
 	public class Friction : MonoBehaviour 
 	{
 		public float magnitude = -20f;
-		public float timeInterval = 0.5f;
+		public float timeInterval = 0.1f;
 
 		float lastTime = -1f;
 

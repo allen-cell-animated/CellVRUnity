@@ -106,9 +106,9 @@ namespace AICS.Diffusion
 	public class ParameterInput : MonoBehaviour 
 	{
 		public Parameter dTime; // = 100f, 100 ps --> 1 us
-		public Parameter diffusionCoefficient; // = 0.005f, 0.0002 --> 0.0140 A2/ps
-		public float velocityMultiplier = 7.5f;
-		public float angularVelocityMultiplier = 1f;
+		public Parameter diffusionCoefficient; // = 0.005f, 0.0002 --> 0.0140 A^2/ps
+		public float forceMultiplier = 2100f;
+		public float torqueMultiplier = 1500f;
 
 		static ParameterInput _Instance;
 		public static ParameterInput Instance

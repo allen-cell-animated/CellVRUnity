@@ -109,7 +109,7 @@ namespace AICS.Diffusion
 			if (saveDataToFile)
 			{
 				string fileName = "msd" 
-					+ "_vm" + ParameterInput.Instance.velocityMultiplier + "sqrt"
+					+ "_vm" + ParameterInput.Instance.forceMultiplier + "sqrt"
 					+ "_n" + particles.Length 
 					+ "_t" + ParameterInput.Instance.dTime.value 
 					+ "_dc" + ParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[1]

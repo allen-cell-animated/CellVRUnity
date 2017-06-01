@@ -39,11 +39,26 @@ namespace AICS.Kinesin
 				body.velocity = body.angularVelocity = Vector3.zero;
 				if (addForces)
 				{
-					body.AddForce( Helpers.GetRandomVector( Random.Range( minForceMagnitude, maxForceMagnitude ) ) );
+					body.AddForce( Helpers.GetRandomVector( forceMagnitude ) );
+					body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 				}
 
 				SetTimeInterval();
 				lastTime = Time.time;
+			}
+		}
+
+		float forceMagnitude
+		{
+			get {
+				return body.mass * timeInterval * 2100f * 0.005f * 1000f; // mass * time interval * multiplier * diffusion coefficient * time step (ps)
+			}
+		}
+
+		float torqueMagnitude
+		{
+			get {
+				return body.mass * timeInterval * 1500f * 0.005f * 1000f; // mass * time interval * multiplier * diffusion coefficient * time step (ps)
 			}
 		}
 

@@ -50,8 +50,10 @@ namespace AICS.Diffusion
 			{
 				SetTimeInterval();
 
-				body.velocity = Helpers.GetRandomVector( velocityMagnitude );
-				body.angularVelocity = Helpers.GetRandomVector( angularVelocityMagnitude );
+				body.velocity = body.angularVelocity = Vector3.zero;
+
+				body.AddForce( Helpers.GetRandomVector( forceMagnitude ) );
+				body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 
 				lastTime = Time.time;
 			}
@@ -62,18 +64,18 @@ namespace AICS.Diffusion
 			startPosition = transform.position;
 		}
 
-		float velocityMagnitude
+		float forceMagnitude
 		{
 			get {
-				return timeInterval * ParameterInput.Instance.velocityMultiplier 
+				return body.mass * timeInterval * ParameterInput.Instance.forceMultiplier 
 					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
 			}
 		}
 
-		float angularVelocityMagnitude
+		float torqueMagnitude
 		{
 			get {
-				return timeInterval * ParameterInput.Instance.angularVelocityMultiplier 
+				return body.mass * timeInterval * ParameterInput.Instance.torqueMultiplier 
 					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
 			}
 		}

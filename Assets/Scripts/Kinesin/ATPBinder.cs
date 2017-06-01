@@ -50,16 +50,16 @@ namespace AICS.Kinesin
 		void BindATP (Nucleotide _nucleotide)
 		{
 			bindingTime = Time.time;
-			nucleotide = _nucleotide;
-			nucleotide.isBusy = true;
-			Rigidbody body = nucleotide.GetComponent<Rigidbody>();
+			_nucleotide.isBusy = true;
+			Rigidbody body = _nucleotide.GetComponent<Rigidbody>();
 			if (body != null) 
 			{
 				Destroy( body );
 			}
-			nucleotide.transform.SetParent( transform );
-			nucleotide.transform.position = transform.TransformPoint( ATPBindingPosition );
+			_nucleotide.transform.SetParent( transform );
+			_nucleotide.transform.position = transform.TransformPoint( ATPBindingPosition );
 			binder.BindATP();
+			nucleotide = _nucleotide;
 		}
 
 		void Update ()
@@ -81,7 +81,7 @@ namespace AICS.Kinesin
 		bool shouldReleaseADP
 		{
 			get {
-				if (nucleotide != null && !nucleotide.isATP)
+				if (nucleotide != null && !nucleotide.isATP && Time.time - bindingTime > 0.5f)
 				{
 					float random = Random.Range(0, 1f);
 					return random <= ADPReleaseProbability;
@@ -92,13 +92,17 @@ namespace AICS.Kinesin
 
 		void ReleaseADP ()
 		{
-			Rigidbody body = nucleotide.gameObject.AddComponent<Rigidbody>();
-			body.useGravity = false;
-			body.mass = 0.1f;
-			body.drag = 5f;
-			nucleotide.transform.SetParent( null );
-			nucleotide.isBusy = false;
+			Nucleotide _nucleotide = nucleotide;
 			nucleotide = null;
+			if (!_nucleotide.GetComponent<Rigidbody>())
+			{
+				Rigidbody body = _nucleotide.gameObject.AddComponent<Rigidbody>();
+				body.useGravity = false;
+				body.mass = 0.1f;
+				body.drag = 5f;
+			}
+			_nucleotide.transform.SetParent( null );
+			_nucleotide.isBusy = false;
 		}
 
 		bool shouldHydrolyzeATP

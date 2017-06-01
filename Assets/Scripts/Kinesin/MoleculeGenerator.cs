@@ -13,6 +13,7 @@ namespace AICS.Kinesin
 		public Molecule moleculePrefab;
 
 		List<Molecule> molecules = new List<Molecule>();
+		float n;
 
 		int _number = -1;
 		int number
@@ -76,6 +77,8 @@ namespace AICS.Kinesin
 			else
 			{
 				Molecule molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Molecule;
+				molecule.name = moleculePrefab.name + n;
+				n++;
 				molecules.Add( molecule );
 			}
 		}
