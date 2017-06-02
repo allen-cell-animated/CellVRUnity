@@ -16,22 +16,28 @@ namespace AICS.Kinesin
 			get {
 				if (_length == 0)
 				{
-					SetLength();
+					_length = GetLength( 0, 1f, renderSegments );
 				}
 				return _length;
 			}
 		}
 
-		void SetLength ()
+		public float GetLength (float startT, float endT, int resolution)
 		{
-			_length = 0;
-			float t = 0;
-			float inc = 1f / (float)renderSegments;
-			for (int i = 0; i < renderSegments; i++)
+			float length = 0;
+			float t = startT;
+			float inc = (endT - startT) / resolution;
+			for (int i = 0; i < resolution; i++)
 			{
-				_length += GetSegmentLength( t, t + inc );
+				length += GetSegmentLength( t, t + inc );
 				t += inc;
 			}
+			return length;
+		}
+
+		float GetSegmentLength (float startT, float endT)
+		{
+			return Vector3.Distance( GetPoint( startT ), GetPoint( endT ) );
 		}
 
 		public void MakeCurve (Vector3[] _points, bool draw)
@@ -64,11 +70,6 @@ namespace AICS.Kinesin
 			lineRenderer.SetPosition( 0, start );
 			lineRenderer.SetPosition( 1, end );
 			lineRenderer.transform.SetParent( transform );
-		}
-
-		float GetSegmentLength (float startT, float endT)
-		{
-			return Vector3.Distance( GetPoint( startT ), GetPoint( endT ) );
 		}
 
 		public Vector3 GetPoint (float t)

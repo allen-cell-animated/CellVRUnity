@@ -12,8 +12,8 @@ namespace AICS.Kinesin
 		public GameObject[] tubulinPrefabs = new GameObject[2];
 		public bool renderSpline = true;
 		public float[] drawTubulinRange = new float[2];
+		public BezierSpline spline;
 
-		BezierSpline spline;
 		List<Tubulin> tubulins;
 		Transform tubulinParent;
 
