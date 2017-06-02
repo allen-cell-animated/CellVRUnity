@@ -51,14 +51,18 @@ namespace AICS.Kinesin
 		float forceMagnitude
 		{
 			get {
-				return body.mass * timeInterval * 2100f * 0.005f * 1000f; // mass * time interval * multiplier * diffusion coefficient * time step (ps)
+				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
+				float meanForce = body.mass * timeInterval * 2100f * Mathf.Sqrt( 0.005f * 1000f ); 
+				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce); // random exponential distribution
 			}
 		}
 
 		float torqueMagnitude
 		{
 			get {
-				return body.mass * timeInterval * 1500f * 0.005f * 1000f; // mass * time interval * multiplier * diffusion coefficient * time step (ps)
+				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
+				float meanTorque = body.mass * timeInterval * 1500f * Mathf.Sqrt( 0.005f * 1000f );
+				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanTorque); // random exponential distribution
 			}
 		}
 
