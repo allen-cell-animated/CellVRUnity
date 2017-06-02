@@ -5,6 +5,7 @@ using System.IO;
 
 namespace AICS.Diffusion
 {
+	[RequireComponent( typeof(ParticleFactory) )]
 	public class MSDCalculator : MonoBehaviour 
 	{
 		public bool saveDataToFile;
@@ -16,18 +17,16 @@ namespace AICS.Diffusion
 		string data = "time,theoretical msd,simulated msd\n";
 		float lastDataTime = -1000000f;
 		bool startedLogging;
-		float minDisplacement;
-		float maxDisplacement;
 
-		DiffusingParticle[] _particles;
-		DiffusingParticle[] particles
+		ParticleFactory _particleFactory;
+		ParticleFactory particleFactory
 		{
 			get {
-				if (_particles == null)
+				if (_particleFactory == null)
 				{
-					_particles = ParticleFactory.Instance.particles;
+					_particleFactory = GetComponent<ParticleFactory>();
 				}
-				return _particles;
+				return _particleFactory;
 			}
 		}
 
@@ -50,7 +49,7 @@ namespace AICS.Diffusion
 
 		void StartLogging ()
 		{
-			foreach (DiffusingParticle particle in particles)
+			foreach (DiffusingParticle particle in particleFactory.particles)
 			{
 				particle.SetStartPosition();
 			}
@@ -60,33 +59,11 @@ namespace AICS.Diffusion
 		void CalculateSimulatedMSD ()
 		{
 			float sum = 0;
-			foreach (DiffusingParticle particle in particles)
+			foreach (DiffusingParticle particle in particleFactory.particles)
 			{
-				sum += Mathf.Pow( GetParticleDisplacement( particle ), 2f );
+				sum += Mathf.Pow( particle.displacement, 2f );
 			}
-			simulatedMSD = sum / particles.Length;
-		}
-
-		float GetParticleDisplacement (DiffusingParticle particle)
-		{
-			float displacement = particle.displacement;
-
-			SetDisplacementBounds( displacement );
-			particle.SetDisplacementColor( minDisplacement, maxDisplacement );
-
-			return displacement;
-		}
-
-		void SetDisplacementBounds (float displacement)
-		{
-			if (displacement < minDisplacement)
-			{
-				minDisplacement = displacement;
-			}
-			if (displacement > maxDisplacement)
-			{
-				maxDisplacement = displacement;
-			}
+			simulatedMSD = sum / particleFactory.particles.Length;
 		}
 
 		void CalculateTheoreticalMSD ()
@@ -110,10 +87,10 @@ namespace AICS.Diffusion
 			{
 				string fileName = "msd" 
 					+ "_vm" + ParameterInput.Instance.forceMultiplier + "sqrt"
-					+ "_n" + particles.Length 
+					+ "_n" + particleFactory.particles.Length 
 					+ "_t" + ParameterInput.Instance.dTime.value 
 					+ "_dc" + ParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[1]
-					+ "_drag" + particles[0].GetComponent<Rigidbody>().drag.ToString().Split('.')[0] + ".csv";
+					+ "_drag" + particleFactory.particles[0].GetComponent<Rigidbody>().drag.ToString().Split('.')[0] + ".csv";
 				File.WriteAllText( filePath + fileName, data );
 			}
 		}

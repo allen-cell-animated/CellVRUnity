@@ -39,6 +39,18 @@ namespace AICS.Diffusion
 			}
 		}
 
+		ParticleFactory _factory;
+		ParticleFactory factory
+		{
+			get {
+				if (_factory == null)
+				{
+					_factory = GetComponentInParent<ParticleFactory>();
+				}
+				return _factory;
+			}
+		}
+
 		void Start ()
 		{
 			SetTimeInterval();
@@ -92,9 +104,9 @@ namespace AICS.Diffusion
 			timeInterval = Random.Range( clockTimeBetweenImpulses.x, clockTimeBetweenImpulses.y );
 		}
 
-		public void SetDisplacementColor (float minDisplacement, float maxDisplacement)
+		public void SetDisplacementColor ()
 		{
-			normalizedDisplacement = (displacement - minDisplacement) / (maxDisplacement - minDisplacement);
+			normalizedDisplacement = (displacement - factory.minDisplacement) / (factory.maxDisplacement - factory.minDisplacement);
 			meshRenderer.material.color = Color.HSVToRGB( normalizedDisplacement, 1f, 1f );
 		}
 	}

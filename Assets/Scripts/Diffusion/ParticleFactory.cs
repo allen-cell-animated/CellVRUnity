@@ -10,18 +10,8 @@ namespace AICS.Diffusion
 		public GameObject particlePrefab;
 		public Container container;
 		public DiffusingParticle[] particles;
-
-		static ParticleFactory _Instance;
-		public static ParticleFactory Instance
-		{
-			get {
-				if (_Instance == null)
-				{
-					_Instance = GameObject.FindObjectOfType<ParticleFactory>();
-				}
-				return _Instance;
-			}
-		}
+		public float minDisplacement;
+		public float maxDisplacement;
 
 		void Start ()
 		{
@@ -31,6 +21,27 @@ namespace AICS.Diffusion
 				particles[i] = Instantiate( particlePrefab, transform.position + container.randomPositionInBounds, 
 					Random.rotation ).GetComponent<DiffusingParticle>();
 				particles[i].transform.SetParent( transform );
+			}
+		}
+
+		void Update ()
+		{
+			foreach (DiffusingParticle particle in particles)
+			{
+				SetDisplacementBounds( particle.displacement );
+				particle.SetDisplacementColor();
+			}
+		}
+
+		void SetDisplacementBounds (float displacement)
+		{
+			if (displacement < minDisplacement)
+			{
+				minDisplacement = displacement;
+			}
+			if (displacement > maxDisplacement)
+			{
+				maxDisplacement = displacement;
 			}
 		}
 	}
