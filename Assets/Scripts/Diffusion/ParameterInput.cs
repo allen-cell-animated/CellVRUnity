@@ -8,7 +8,7 @@ namespace AICS.Diffusion
 	public enum ParameterFormat
 	{
 		Time,
-		RoundTo4Digits
+		Round
 	}
 
 	public enum SliderMapping
@@ -64,8 +64,8 @@ namespace AICS.Diffusion
 			{
 				case ParameterFormat.Time :
 					return FormatTime();
-				case ParameterFormat.RoundTo4Digits :
-					return FormatRoundTo4Digits();
+				case ParameterFormat.Round :
+					return FormatRound();
 				default :
 					return "";
 			}
@@ -77,7 +77,7 @@ namespace AICS.Diffusion
 			if (value >= 1000000f)
 			{
 				n = Mathf.Round( value / 1000000f ).ToString();
-				units = '\u03BC' + "s";
+				units = "μs";
 			}
 			else if (value >= 1000f)
 			{
@@ -92,21 +92,16 @@ namespace AICS.Diffusion
 			return n + " " + units;
 		}
 
-		string FormatRoundTo4Digits ()
+		string FormatRound ()
 		{
-			string n = (Mathf.Round( 10000f * value ) / 10000f).ToString();
-			while (n.Length < 6)
-			{
-				n += "0";
-			}
-			return n + " " + units;
+			return Mathf.Round( value ) + " " + units;
 		}
 	}
 
 	public class ParameterInput : MonoBehaviour 
 	{
-		public Parameter dTime; // = 100f, 100 ps --> 1 us
-		public Parameter diffusionCoefficient; // = 0.005f, 0.0002 --> 0.0140 A^2/ps
+		public Parameter dTime; // = 100, 100 ps --> 1 μs
+		public Parameter diffusionCoefficient; // = 20, 2 --> 80 μm²/s
 		public float forceMultiplier = 2100f;
 		public float torqueMultiplier = 1500f;
 

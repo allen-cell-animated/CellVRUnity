@@ -83,7 +83,7 @@ namespace AICS.Diffusion
 		{
 			get {
 				float meanForce = body.mass * timeInterval * ParameterInput.Instance.forceMultiplier 
-					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
+					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * ParameterInput.Instance.dTime.value );
 				float force = Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce);
 //				data += meanForce + "," + force + "\n";
 				return force;
@@ -94,7 +94,7 @@ namespace AICS.Diffusion
 		{
 			get {
 				float meanForce = body.mass * timeInterval * ParameterInput.Instance.torqueMultiplier 
-					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * ParameterInput.Instance.dTime.value );
+					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * ParameterInput.Instance.dTime.value );
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce);
 			}
 		}
