@@ -12,14 +12,18 @@ namespace AICS.Diffusion
 		public DiffusingParticle[] particles;
 		public float minDisplacement;
 		public float maxDisplacement;
+		[Tooltip( "particles per clock second")]
+		public float escapeRate;
+
+		float lastTime;
+		float numberEscaped;
 
 		void Start ()
 		{
 			particles = new DiffusingParticle[n];
 			for (int i = 0; i < n; i++)
 			{
-				particles[i] = Instantiate( particlePrefab, transform.position + container.randomPositionInBounds, 
-					Random.rotation ).GetComponent<DiffusingParticle>();
+				particles[i] = Instantiate( particlePrefab, container.randomPositionInBounds, Random.rotation ).GetComponent<DiffusingParticle>();
 				particles[i].transform.SetParent( transform );
 			}
 		}
@@ -28,8 +32,25 @@ namespace AICS.Diffusion
 		{
 			foreach (DiffusingParticle particle in particles)
 			{
+				KeepInBounds( particle.transform );
 				SetDisplacementBounds( particle.displacement );
 				particle.SetDisplacementColor();
+			}
+
+			if (Time.time - lastTime > 0.5f)
+			{
+				escapeRate = numberEscaped / (Time.time - lastTime);
+				numberEscaped = 0;
+				lastTime = Time.time;
+			}
+		}
+
+		void KeepInBounds (Transform particle)
+		{
+			if (!container.PositionIsInBounds( particle.position ))
+			{
+				particle.position = container.randomPositionInBounds;
+				numberEscaped++;
 			}
 		}
 

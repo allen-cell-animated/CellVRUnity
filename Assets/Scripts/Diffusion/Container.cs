@@ -11,9 +11,8 @@ namespace AICS.Diffusion
 		public Vector3 randomPositionInBounds
 		{
 			get {
-				return new Vector3( Random.Range( -size.x / 2f, size.x / 2f ),
-					Random.Range( -size.y / 2f, size.y / 2f ),
-					Random.Range( -size.z / 2f, size.z / 2f ) );
+				return transform.position + new Vector3( Random.Range( -size.x / 2f, size.x / 2f ),
+					Random.Range( -size.y / 2f, size.y / 2f ), Random.Range( -size.z / 2f, size.z / 2f ) );
 			}
 		}
 
@@ -26,6 +25,13 @@ namespace AICS.Diffusion
 				particle.transform.position = transform.position 
 					+ (hit.distance - particle.transform.localScale.x) * particleToCenter;
 			}
+		}
+
+		public bool PositionIsInBounds (Vector3 position)
+		{
+			return (position.x >= transform.position.x - size.x / 2f && position.x <= transform.position.x + size.x / 2f
+				&& position.y >= transform.position.y - size.y / 2f && position.y <= transform.position.y + size.y / 2f
+				&& position.z >= transform.position.z - size.z / 2f && position.z <= transform.position.z + size.z / 2f);
 		}
 
 		void OnDrawGizmos ()
