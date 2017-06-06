@@ -68,7 +68,7 @@ namespace AICS.Diffusion
 
 		void CalculateTheoreticalMSD ()
 		{
-			theoreticalMSD = 6f * 0.01f * ParameterInput.Instance.diffusionCoefficient.value * simulationTimePassed;
+			theoreticalMSD = 6f * 0.01f * ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * simulationTimePassed;
 		}
 
 		void LogMSD ()
@@ -89,7 +89,7 @@ namespace AICS.Diffusion
 					+ "_vm" + ParameterInput.Instance.forceMultiplier + "sqrt"
 					+ "_n" + particleFactory.particles.Length 
 					+ "_t" + ParameterInput.Instance.dTime.value 
-					+ "_dc" + ParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[1]
+					+ "_dc" + ParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[0]
 					+ "_drag" + particleFactory.particles[0].GetComponent<Rigidbody>().drag.ToString().Split('.')[0] + ".csv";
 				File.WriteAllText( filePath + fileName, data );
 			}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using System.IO;
 
 namespace AICS.Diffusion
 {
@@ -17,6 +18,8 @@ namespace AICS.Diffusion
 
 		float lastTime;
 		float numberEscaped;
+
+//		string data = "mean,sample\n";
 
 		void Start ()
 		{
@@ -65,5 +68,15 @@ namespace AICS.Diffusion
 				maxDisplacement = displacement;
 			}
 		}
+
+//		public void RecordData (float meanForce, float force)
+//		{
+//			data += meanForce + "," + force + "\n";
+//		}
+//
+//		void OnApplicationQuit ()
+//		{
+//			File.WriteAllText( "/Users/blairl/Dropbox/AICS/MotorProteins/cytoplasmSimulations/MSDData/Auto/forces.csv", data );
+//		}
 	}
 }

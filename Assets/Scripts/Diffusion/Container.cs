@@ -6,6 +6,7 @@ namespace AICS.Diffusion
 {
 	public class Container : MonoBehaviour 
 	{
+		public bool periodicBoundary;
 		public Vector3 size;
 		
 		public Vector3 randomPositionInBounds
@@ -18,12 +19,15 @@ namespace AICS.Diffusion
 
 		public void ParticleCollided (DiffusingParticle particle)
 		{
-			Vector3 particleToCenter = Vector3.Normalize( transform.position - particle.transform.position );
-			RaycastHit hit;
-			if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, 1 << gameObject.layer ))
+			if (periodicBoundary)
 			{
-				particle.transform.position = transform.position 
-					+ (hit.distance - particle.transform.localScale.x) * particleToCenter;
+				Vector3 particleToCenter = Vector3.Normalize( transform.position - particle.transform.position );
+				RaycastHit hit;
+				if (Physics.Raycast( transform.position, particleToCenter, out hit, Mathf.Infinity, 1 << gameObject.layer ))
+				{
+					particle.transform.position = transform.position 
+						+ (hit.distance - particle.transform.localScale.x) * particleToCenter;
+				}
 			}
 		}
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 
 namespace AICS.Diffusion
 {
@@ -15,8 +14,6 @@ namespace AICS.Diffusion
 		float timeInterval;
 		Vector3 startPosition;
 		int samples;
-
-//		string data = "mean,sample\n";
 
 		Rigidbody _rigidbody;
 		Rigidbody body
@@ -85,7 +82,7 @@ namespace AICS.Diffusion
 				float meanForce = body.mass * timeInterval * ParameterInput.Instance.forceMultiplier 
 					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * ParameterInput.Instance.dTime.value );
 				float force = Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce);
-//				data += meanForce + "," + force + "\n";
+//				factory.RecordData( meanForce, force );
 				return force;
 			}
 		}
@@ -116,10 +113,5 @@ namespace AICS.Diffusion
 			normalizedDisplacement = (displacement - factory.minDisplacement) / (factory.maxDisplacement - factory.minDisplacement);
 			meshRenderer.material.color = Color.HSVToRGB( normalizedDisplacement, 1f, 1f );
 		}
-
-//		void OnApplicationQuit ()
-//		{
-//			File.WriteAllText( "/Users/blairl/Dropbox/AICS/MotorProteins/cytoplasmSimulations/MSDData/Auto/forces.csv", data );
-//		}
 	}
 }
