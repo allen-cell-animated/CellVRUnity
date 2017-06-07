@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 public class JointTest : MonoBehaviour 
 {
@@ -51,7 +51,7 @@ public class JointTest : MonoBehaviour
 		else
 		{
 			meshRenderer.material.color = Color.red;
-			EditorApplication.isPaused = true;
+//			EditorApplication.isPaused = true;
 		}
 	}
 }

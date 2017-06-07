@@ -150,18 +150,18 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (state == MotorState.Free)
-			{
-				meshRenderer.material.color = color;
-			}
-			else if (state == MotorState.Weak)
-			{
-				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-			}
-			else
-			{
-				meshRenderer.material.color = Color.red;
-			}
+//			if (state == MotorState.Free)
+//			{
+//				meshRenderer.material.color = color;
+//			}
+//			else if (state == MotorState.Weak)
+//			{
+//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+//			}
+//			else
+//			{
+//				meshRenderer.material.color = Color.red;
+//			}
 
 			if (!pause)
 			{
@@ -241,7 +241,7 @@ namespace AICS.Kinesin
 		float probabilityOfEjectionFromWeak
 		{
 			get {
-				return 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
+				return 0.001f * 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
 			}
 		}
 

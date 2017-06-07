@@ -9,18 +9,14 @@ namespace AICS.Kinesin
 		public Microtubule microtubule;
 		public float distanceMoved;
 
-		float startT;
-
-		void Start () 
-		{
-			if (microtubule != null)
-			{
-				startT = microtubule.spline.GetTForClosestPoint( transform.position );
-			}
-		}
+		float startT = -1f;
 
 		void Update () 
 		{
+			if (microtubule != null && startT < 0)
+			{
+				startT = microtubule.spline.GetTForClosestPoint( transform.position );
+			}
 			CalculateDistanceMovedAlongMT();
 		}
 
