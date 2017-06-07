@@ -35,7 +35,10 @@ namespace AICS.Diffusion
 		{
 			foreach (DiffusingParticle particle in particles)
 			{
-				KeepInBounds( particle.transform );
+				if (container.gameObject.activeSelf)
+				{
+					KeepInBounds( particle.transform );
+				}
 				SetDisplacementBounds( particle.displacement );
 				particle.SetDisplacementColor();
 			}

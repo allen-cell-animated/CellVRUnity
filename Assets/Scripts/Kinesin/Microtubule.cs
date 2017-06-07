@@ -11,27 +11,30 @@ namespace AICS.Kinesin
 		public Vector3[] points = new Vector3[4];
 		public GameObject[] tubulinPrefabs = new GameObject[2];
 		public bool renderSpline = true;
-		public float[] drawTubulinRange = new float[2];
 		public BezierSpline spline;
 
 		List<Tubulin> tubulins;
 		Transform tubulinParent;
+		float turns;
 
 		void Start () 
 		{
 			MakeSpline();
-			AddTubulins();
+			MakeTubulins();
 		}
 
 		void MakeSpline ()
 		{
-			spline = new GameObject( "spline", new System.Type[]{ typeof(BezierSpline) } ).GetComponent<BezierSpline>();
-			spline.transform.position = transform.position;
-			spline.transform.SetParent( transform );
-			spline.MakeCurve( points, renderSpline );
+			if (spline == null)
+			{
+				spline = new GameObject( "spline", new System.Type[]{ typeof(BezierSpline) } ).GetComponent<BezierSpline>();
+				spline.transform.position = transform.position;
+				spline.transform.SetParent( transform );
+				spline.MakeCurve( points, renderSpline );
+			}
 		}
 
-		void AddTubulins ()
+		void MakeTubulins ()
 		{
 			if (tubulinPrefabs[0] == null)
 			{
@@ -46,45 +49,62 @@ namespace AICS.Kinesin
 			tubulinParent = new GameObject( "tubulins" ).transform;
 			tubulinParent.SetParent( transform );
 
-			float length = spline.length;
+			turns = spline.length / 4f;
+			for (int i = 0; i < turns * tubulinsPerTurn; i++)
+			{
+				int type = (i % 2 == 1) ? 0 : 1;
+				tubulins.Add( MakeTubulin( i, type ) );
+			}
+
+			PlaceTubulins();
+		}
+
+		Tubulin MakeTubulin (int index, int type)
+		{
+			GameObject t = Instantiate( tubulinPrefabs[type], tubulinParent ) as GameObject;
+			Tubulin tubulin = t.GetComponent<Tubulin>();
+			tubulin.name = "tubulin" + index;
+
+			return tubulin;
+		}
+
+		void PlaceTubulins ()
+		{
 			float t = 0;
-			float inc = 4f / length;
-			float turns = 1f / inc;
+			float inc = (4f * turns / spline.length) * 4f / spline.length;
 			Vector3 normal = spline.GetNormal( 0 );
 			for (int i = 0; i < turns; i++)
 			{
-				if (t > drawTubulinRange[0] && t < drawTubulinRange[1])
+				Vector3 axisPosition = spline.GetPoint( t );
+				Vector3 toNextAxisPosition = spline.GetPoint( t + 2f * inc ) - axisPosition;
+
+				for (int j = 0; j < tubulinsPerTurn; j++)
 				{
-					Vector3 axisPosition = spline.GetPoint( t );
-					Vector3 toNextAxisPosition = spline.GetPoint( t + 2f * inc ) - axisPosition; 
-					int type = (i % 2 == 1) ? 0 : 1;
-
-					for (int j = 0; j < tubulinsPerTurn; j++)
+					int index = i * tubulinsPerTurn + j;
+					if (index >= tubulins.Count)
 					{
-						float axialOffset = (float)j / (float)tubulinsPerTurn;
-						Vector3 position = axisPosition + axialOffset * toNextAxisPosition + radius * normal;
-						Vector3 tangent = spline.GetTangent( t + 2f * axialOffset * inc );
-						Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
-						var n = i * j + j;
-
-						tubulins.Add( MakeTubulin( n, position, lookDirection, normal, type ) );
-
-						normal = Quaternion.AngleAxis( 360f / (float)tubulinsPerTurn, tangent ) * normal;
+						return;
 					}
+
+					float axialOffset = (float)j / (float)tubulinsPerTurn;
+					Vector3 position = axisPosition + axialOffset * toNextAxisPosition + radius * normal;
+					Vector3 tangent = spline.GetTangent( t + 2f * axialOffset * inc );
+					Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
+
+					tubulins[index].Place( position, lookDirection, normal );
+
+					normal = Quaternion.AngleAxis( 360f / (float)tubulinsPerTurn, tangent ) * normal;
 				}
 				t += inc;
 			}
 		}
 
-		Tubulin MakeTubulin (int index, Vector3 position, Vector3 lookDirection, Vector3 normal, int type)
+		void Update ()
 		{
-			GameObject t = Instantiate( tubulinPrefabs[type], tubulinParent ) as GameObject;
-			Tubulin tubulin = t.GetComponent<Tubulin>();
-			tubulin.name = "tubulin" + index;
-			tubulin.transform.localPosition = position;
-			tubulin.transform.LookAt( tubulin.transform.position + lookDirection, normal );
-
-			return tubulin;
+			if (spline.pointsChanged)
+			{
+				PlaceTubulins();
+			}
 		}
 	}
 }

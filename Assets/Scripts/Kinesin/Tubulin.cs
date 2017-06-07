@@ -25,5 +25,11 @@ namespace AICS.Kinesin
 				motor.BindToMT( this );
 			}
 		}
+
+		public void Place (Vector3 position, Vector3 lookDirection, Vector3 normal)
+		{
+			transform.localPosition = position;
+			transform.LookAt( transform.position + lookDirection, normal );
+		}
 	}
 }

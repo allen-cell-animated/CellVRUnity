@@ -6,17 +6,49 @@ namespace AICS.Kinesin
 {
 	public class BezierSpline : MonoBehaviour 
 	{
-		public Vector3[] points = new Vector3[4];
+		public Transform[] points;
 		public Color lineColor;
 		public int renderSegments = 15;
 
+		Vector3[] lastPointPositions;
+
+		void Start ()
+		{
+			if (points != null && points.Length >= 4)
+			{
+				lastPointPositions = new Vector3[4];
+				for (int i = 0; i < points.Length; i++)
+				{
+					lastPointPositions[i] = points[i].position;
+				}
+			}
+		}
+
+		public bool pointsChanged
+		{
+			get {
+				bool changed = false;
+				for (int i = 0; i < points.Length; i++)
+				{
+					if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > 1f)
+					{
+						changed = true;
+						lastPointPositions[i] = points[i].position;
+					}
+				}
+				return changed;
+			}
+		}
+
+		float lastLengthTime = -1f;
 		float _length;
 		public float length
 		{
 			get {
-				if (_length == 0)
+				if (Time.time - lastLengthTime > 0.1f)
 				{
 					_length = GetLength( 0, 1f, renderSegments );
+					lastLengthTime = Time.time;
 				}
 				return _length;
 			}
@@ -42,11 +74,23 @@ namespace AICS.Kinesin
 
 		public void MakeCurve (Vector3[] _points, bool draw)
 		{
-			points = _points;
+			MakePoints( _points );
 			if (draw) 
 			{ 
 				DrawCurve(); 
 			}
+		}
+
+		void MakePoints (Vector3[] _points)
+		{
+			points = new Transform[4];
+			for (int i = 0; i < 4; i++)
+			{
+				points[i] = new GameObject( "point" + i ).transform;
+				points[i].SetParent( transform );
+				points[i].localPosition = _points[i];
+			}
+			lastPointPositions = _points;
 		}
 
 		void DrawCurve ()
@@ -55,7 +99,7 @@ namespace AICS.Kinesin
 			float inc = 1f / renderSegments;
 			for (int i = 0; i < renderSegments; i++)
 			{
-				DrawLine(i, GetPoint( t ), GetPoint( t + inc ));
+				DrawLine(i, transform.TransformPoint( GetPoint( t ) ), transform.TransformPoint( GetPoint( t + inc ) ) );
 				t += inc;
 			}
 		}
@@ -75,9 +119,9 @@ namespace AICS.Kinesin
 		public Vector3 GetPoint (float t)
 		{
 			return new Vector3(
-				CubicBezier( t, points[0].x, points[1].x, points[2].x, points[3].x ),
-				CubicBezier( t, points[0].y, points[1].y, points[2].y, points[3].y ),
-				CubicBezier( t, points[0].z, points[1].z, points[2].z, points[3].z )
+				CubicBezier( t, points[0].localPosition.x, points[1].localPosition.x, points[2].localPosition.x, points[3].localPosition.x ),
+				CubicBezier( t, points[0].localPosition.y, points[1].localPosition.y, points[2].localPosition.y, points[3].localPosition.y ),
+				CubicBezier( t, points[0].localPosition.z, points[1].localPosition.z, points[2].localPosition.z, points[3].localPosition.z )
 			);
 		}
 
@@ -116,7 +160,8 @@ namespace AICS.Kinesin
 
 		float FindClosest (Vector3 point, float t1, float t2, int iterations)
 		{
-			float[] distance = new float[]{ Vector3.Distance( point, GetPoint( t1 ) ), Vector3.Distance( point, GetPoint( t2 ) ) };
+			float[] distance = new float[]{ Vector3.Distance( point, transform.TransformPoint( GetPoint( t1 ) ) ), 
+				Vector3.Distance( point, transform.TransformPoint( GetPoint( t2 ) ) ) };
 			float middle = (t1 + t2) / 2f;
 			if (distance[0] > distance[1])
 			{
@@ -155,9 +200,9 @@ namespace AICS.Kinesin
 		public Vector3 GetTangent (float t)
 		{
 			return Vector3.Normalize( new Vector3(
-				CubicBezierTangent( t, points[0].x, points[1].x, points[2].x, points[3].x ),
-				CubicBezierTangent( t, points[0].y, points[1].y, points[2].y, points[3].y ),
-				CubicBezierTangent( t, points[0].z, points[1].z, points[2].z, points[3].z )
+				CubicBezierTangent( t, points[0].localPosition.x, points[1].localPosition.x, points[2].localPosition.x, points[3].localPosition.x ),
+				CubicBezierTangent( t, points[0].localPosition.y, points[1].localPosition.y, points[2].localPosition.y, points[3].localPosition.y ),
+				CubicBezierTangent( t, points[0].localPosition.z, points[1].localPosition.z, points[2].localPosition.z, points[3].localPosition.z )
 			));
 		}
 

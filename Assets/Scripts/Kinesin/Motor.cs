@@ -25,7 +25,7 @@ namespace AICS.Kinesin
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
-		Color color;
+//		Color color;
 		bool binding;
 
 		bool bound
@@ -145,7 +145,7 @@ namespace AICS.Kinesin
 
 		void Start ()
 		{
-			color = meshRenderer.material.color;
+//			color = meshRenderer.material.color;
 		}
 
 		void Update ()
