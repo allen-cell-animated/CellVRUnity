@@ -25,10 +25,10 @@ namespace AICS.Kinesin
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
 		Tubulin tubulin;
-//		Color color;
+		Color color;
 		bool binding;
 
-		bool bound
+		public bool bound
 		{
 			get {
 				return state != MotorState.Free && !releasing;
@@ -145,23 +145,23 @@ namespace AICS.Kinesin
 
 		void Start ()
 		{
-//			color = meshRenderer.material.color;
+			color = meshRenderer.material.color;
 		}
 
 		void Update ()
 		{
-//			if (state == MotorState.Free)
-//			{
-//				meshRenderer.material.color = color;
-//			}
-//			else if (state == MotorState.Weak)
-//			{
-//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-//			}
-//			else
-//			{
-//				meshRenderer.material.color = Color.red;
-//			}
+			if (state == MotorState.Free)
+			{
+				meshRenderer.material.color = color;
+			}
+			else if (state == MotorState.Weak)
+			{
+				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+			}
+			else
+			{
+				meshRenderer.material.color = Color.red;
+			}
 
 			if (!pause)
 			{
@@ -181,7 +181,7 @@ namespace AICS.Kinesin
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
 				body.isKinematic = true;
-				randomForces.addForces = false;
+				randomForces.addForce = false;
 				mover.MoveToWithSpeed( tubulin.transform.TransformPoint( bindingPosition ), 15f, FinishBinding );
 				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
 				binding = true;
@@ -226,10 +226,10 @@ namespace AICS.Kinesin
 				if (Time.time - lastCheckReleaseTime > 0.3f)
 				{
 					lastCheckReleaseTime = Time.time;
-					float probability = 0.05f;
-					if (neckLinker.tensionIsForward) // this is the back motor
+					float probability = probabilityOfEjectionFromStrong;
+					if (state == MotorState.Weak) 
 					{
-						probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
+						probability = (neckLinker.tensionIsForward) ? probabilityOfEjectionFromWeak : 0.05f; // this is the back motor
 					}
 					float random = Random.Range(0, 1f);
 					return random <= probability;
@@ -254,9 +254,8 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			if (bound)
+			if (state == MotorState.Weak)
 			{
-				Debug.Log(name + " start release");
 				mover.moving = rotator.rotating = false;
 				neckLinker.StopSnapping();
 				binding = false;
@@ -276,11 +275,10 @@ namespace AICS.Kinesin
 			}
 			else
 			{
-				Debug.Log(name + " finish release");
 				attractor.target = null;
 				tubulin.hasMotorBound = false;
 				state = MotorState.Free;
-				randomForces.addForces = true;
+				randomForces.addForce = true;
 				releasing = false;
 			}
 		}

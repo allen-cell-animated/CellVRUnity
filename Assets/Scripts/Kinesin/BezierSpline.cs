@@ -9,6 +9,7 @@ namespace AICS.Kinesin
 		public Transform[] points;
 		public Color lineColor;
 		public int renderSegments = 15;
+		public float updateTolerance = 0.1f;
 
 		Vector3[] lastPointPositions;
 
@@ -30,7 +31,7 @@ namespace AICS.Kinesin
 				bool changed = false;
 				for (int i = 0; i < points.Length; i++)
 				{
-					if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > 1f)
+					if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > updateTolerance)
 					{
 						changed = true;
 						lastPointPositions[i] = points[i].position;

@@ -6,9 +6,8 @@ namespace AICS.Kinesin
 {
 	public class RandomForces : MonoBehaviour 
 	{
-		public bool addForces = true;
-		public float minForceMagnitude = 50f;
-		public float maxForceMagnitude = 100f;
+		public bool addForce = true;
+		public bool addTorque = true;
 		public float minTimeBetweenImpulses = 0.1f;
 		public float maxTimeBetweenImpulses = 0.5f;
 
@@ -37,9 +36,12 @@ namespace AICS.Kinesin
 			if (body != null && Time.time - lastTime > timeInterval)
 			{
 				body.velocity = body.angularVelocity = Vector3.zero;
-				if (addForces)
+				if (addForce)
 				{
 					body.AddForce( Helpers.GetRandomVector( forceMagnitude ) );
+				}
+				if (addTorque)
+				{
 					body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 				}
 

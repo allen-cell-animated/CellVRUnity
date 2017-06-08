@@ -15,7 +15,7 @@ namespace AICS.Kinesin
 
 		List<Tubulin> tubulins;
 		Transform tubulinParent;
-		float turns;
+		public float turns;
 
 		void Start () 
 		{
@@ -76,7 +76,7 @@ namespace AICS.Kinesin
 			for (int i = 0; i < turns; i++)
 			{
 				Vector3 axisPosition = spline.GetPoint( t );
-				Vector3 toNextAxisPosition = spline.GetPoint( t + 2f * inc ) - axisPosition;
+				Vector3 nextAxisPosition = spline.GetPoint( t + 2 * inc );
 
 				for (int j = 0; j < tubulinsPerTurn; j++)
 				{
@@ -87,7 +87,7 @@ namespace AICS.Kinesin
 					}
 
 					float axialOffset = (float)j / (float)tubulinsPerTurn;
-					Vector3 position = axisPosition + axialOffset * toNextAxisPosition + radius * normal;
+					Vector3 position = axisPosition + axialOffset * (nextAxisPosition - axisPosition) + radius * normal;
 					Vector3 tangent = spline.GetTangent( t + 2f * axialOffset * inc );
 					Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
 

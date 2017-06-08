@@ -113,7 +113,7 @@ namespace AICS.Kinesin
 			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
 			if (distanceToAnchor > 1.1f)
 			{
-				if (!neckLinker.motor.releasing) { Debug.Log("link released " + neckLinker.motor.name); }
+				if (!neckLinker.motor.releasing && neckLinker.motor.bound) { Debug.Log("link released " + neckLinker.motor.name); }
 				neckLinker.motor.Release();
 			}
 		}
