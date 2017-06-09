@@ -173,16 +173,28 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Binding
 
-		public void BindToMT (Tubulin _tubulin)
+		void OnCollisionEnter (Collision collision)
 		{
-			if (!neckLinker.bindIsPhysicallyImpossible && !bound && !pause)
+			if (state == MotorState.Free)
+			{
+				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
+				if (_tubulin != null && !_tubulin.hasMotorBound)
+				{
+					BindToMT( _tubulin );
+				}
+			}
+		}
+
+		void BindToMT (Tubulin _tubulin)
+		{
+			if (!neckLinker.bindIsPhysicallyImpossible && !pause)
 			{
 				Debug.Log(name + " bind");
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
 				body.isKinematic = true;
-				randomForces.addForce = false;
+				randomForces.addForce = randomForces.addTorque = false;
 				mover.MoveToWithSpeed( tubulin.transform.TransformPoint( bindingPosition ), 15f, FinishBinding );
 				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
 				binding = true;
@@ -295,7 +307,7 @@ namespace AICS.Kinesin
 				attractor.target = null;
 				tubulin.hasMotorBound = false;
 				state = MotorState.Free;
-				randomForces.addForce = true;
+				randomForces.addForce = randomForces.addTorque = true;
 				releasing = false;
 			}
 		}

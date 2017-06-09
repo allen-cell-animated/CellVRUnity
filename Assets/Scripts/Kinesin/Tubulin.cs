@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	public class Tubulin : MonoBehaviour, ICompoundStaticColliderParent
+	public class Tubulin : MonoBehaviour
 	{
 		public int type;
 		public bool hasMotorBound;
@@ -18,20 +18,6 @@ namespace AICS.Kinesin
 				{
 					collider.enabled = false;
 				}
-			}
-		}
-
-		void OnCollisionEnter (Collision collision)
-		{
-			Collided( collision );
-		}
-
-		public void Collided (Collision collision)
-		{
-			Motor motor = collision.collider.GetComponentInParent<Motor>();
-			if (!hasMotorBound && motor != null && motor.state == MotorState.Free)
-			{
-				motor.BindToMT( this );
 			}
 		}
 
