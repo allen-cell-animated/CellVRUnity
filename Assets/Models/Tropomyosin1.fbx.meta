@@ -1,29 +1,33 @@
 fileFormatVersion: 2
-guid: 8cf6ca2e3d05b43d685acb92dac25c01
-timeCreated: 1497029886
+guid: b578b7dc3b93d43b8837f1d03e42a23b
+timeCreated: 1494361802
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: CINEMA_4D_Editor
-    100002: Joint_0
+    100002: Joint
     100004: Joint_1
     100006: Joint_2
     100008: Joint_3
-    100010: Root
-    100012: //RootNode
-    100014: tropomyosin_2x2EFR
+    100010: Joint_4
+    100012: Joint_5
+    100014: Root
+    100016: //RootNode
+    100018: Tropomyosin
     400000: CINEMA_4D_Editor
-    400002: Joint_0
+    400002: Joint
     400004: Joint_1
     400006: Joint_2
     400008: Joint_3
-    400010: Root
-    400012: //RootNode
-    400014: tropomyosin_2x2EFR
-    4300000: tropomyosin_2x2EFR
+    400010: Joint_4
+    400012: Joint_5
+    400014: Root
+    400016: Tropomyosin
+    400018: //RootNode
+    4300000: Tropomyosin
     9500000: //RootNode
-    13700000: tropomyosin_2x2EFR
+    13700000: Tropomyosin
   materials:
     importMaterials: 1
     materialName: 0
