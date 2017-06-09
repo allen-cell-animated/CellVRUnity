@@ -16,11 +16,16 @@ namespace AICS.Kinesin
 				if (_links == null)
 				{
 					CharacterJoint[] joints = GetComponents<CharacterJoint>();
-					_links = new Link[joints.Length];
+					List<Link> linkList = new List<Link>();
 					for (int i = 0; i < joints.Length; i++)
 					{
-						_links[i] = joints[i].connectedBody.GetComponent<Link>();
+						Link link = joints[i].connectedBody.GetComponent<Link>();
+						if (link != null)
+						{
+							linkList.Add( link );
+						}
 					}
+					_links = linkList.ToArray();
 				}
 				return _links;
 			}

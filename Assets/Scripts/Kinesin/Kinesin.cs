@@ -22,6 +22,18 @@ namespace AICS.Kinesin
 			}
 		}
 
+		List<Motor> _motors;
+		public List<Motor> motors
+		{
+			get {
+				if (_motors == null)
+				{
+					_motors = new List<Motor>( GetComponentsInChildren<Motor>() );
+				}
+				return _motors;
+			}
+		}
+
 		void Start ()
 		{
 			StoreDockedNecklinkPositions();
@@ -49,6 +61,11 @@ namespace AICS.Kinesin
 			{
 				necklinker.SetDockedLocations( dockedLinkPositions, dockedLinkRotations );
 			}
+		}
+
+		public Motor OtherMotor (Motor motor)
+		{
+			return motors.Find( m => m != motor );
 		}
 	}
 }

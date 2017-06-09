@@ -254,7 +254,11 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			if (state == MotorState.Weak)
+			if (state == MotorState.Strong)
+			{
+				Debug.Log(neckLinker.tension);
+			}
+			if (state == MotorState.Weak || (state == MotorState.Strong && neckLinker.tension > 1f))
 			{
 				mover.moving = rotator.rotating = false;
 				neckLinker.StopSnapping();
