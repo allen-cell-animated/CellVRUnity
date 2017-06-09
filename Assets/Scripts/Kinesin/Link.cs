@@ -8,6 +8,11 @@ namespace AICS.Kinesin
 	public class Link : MonoBehaviour 
 	{
 		public bool snapping;
+		public float distanceToAnchor;
+
+		float startDistanceToAnchor;
+		Vector3 dockedPosition;
+		Quaternion dockedRotation;
 
 		Necklinker _necklinker;
 		public Necklinker neckLinker
@@ -69,23 +74,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		Vector3 dockedPosition;
-		Quaternion dockedRotation;
-
-		public void SetDockedTransform (Vector3 _dockedPosition, Quaternion _dockedRotation)
-		{
-			dockedPosition = _dockedPosition;
-			dockedRotation = _dockedRotation;
-		}
-
-		public void StartSnapping ()
-		{
-			snapping = true;
-		}
-
-		float startDistanceToAnchor;
-		public float distanceToAnchor;
-
 		CharacterJoint _joint;
 		public CharacterJoint joint
 		{
@@ -103,6 +91,17 @@ namespace AICS.Kinesin
 			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
 		}
 
+		public void SetDockedTransform (Vector3 _dockedPosition, Quaternion _dockedRotation)
+		{
+			dockedPosition = _dockedPosition;
+			dockedRotation = _dockedRotation;
+		}
+
+		public void StartSnapping ()
+		{
+			snapping = true;
+		}
+
 		void Update ()
 		{
 			if (snapping && !neckLinker.bindIsPhysicallyImpossible)
@@ -117,12 +116,9 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public float distanceToGoal;
-
 		void SimulateSnapping ()
 		{
 			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
-			distanceToGoal = Vector3.Magnitude( toGoal );
 			if (Vector3.Magnitude( toGoal ) > 0.5f)
 			{
 				body.AddForce( neckLinker.motor.kinesin.neckLinkerSnappingForce * Vector3.Normalize( toGoal ) );
@@ -148,15 +144,20 @@ namespace AICS.Kinesin
 			else
 			{
 				Freeze();
-				neckLinker.FinishSnapping();
+				neckLinker.snapping = false;
 			}
 		}
 
-		public void Freeze ()
+		void Freeze ()
 		{
 			body.isKinematic = true; 
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
 			transform.localRotation = dockedRotation;
+		}
+
+		public void StopSnapping ()
+		{
+			snapping = false;
 		}
 
 		public void Release ()

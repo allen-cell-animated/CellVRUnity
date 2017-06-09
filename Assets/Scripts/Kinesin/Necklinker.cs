@@ -99,31 +99,22 @@ namespace AICS.Kinesin
 			links[0].StartSnapping();
 		}
 
-		public void FinishSnapping ()
+		public void StopSnapping ()
 		{
+			foreach (Link link in links)
+			{
+				link.StopSnapping();
+			}
 			snapping = false;
 		}
 
-		public void StopSnapping ()
+		public void Release ()
 		{
 			foreach (Link link in links)
 			{
 				link.Release();
 			}
-			FinishSnapping();
-		}
-
-		// --------------------------------- Testing
-
-		public bool forwardTension;
-		public float stretchFactor;
-		public float _tension;
-
-		void Update ()
-		{
-			forwardTension = tensionIsForward;
-			stretchFactor = length / startingLength;
-			_tension = tension;
+			snapping = false;
 		}
 	}
 }

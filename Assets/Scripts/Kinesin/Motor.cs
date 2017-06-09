@@ -17,6 +17,7 @@ namespace AICS.Kinesin
 		public MotorState state = MotorState.Free;
 		public bool pause;
 		public bool releasing;
+		public bool shouldReleaseNecklinker;
 
 		float releaseTime = 0.1f;
 		float releaseStartTime = -1f;
@@ -206,6 +207,12 @@ namespace AICS.Kinesin
 
 		void UpdateRelease ()
 		{
+			if (state != MotorState.Strong && shouldReleaseNecklinker)
+			{
+				neckLinker.Release();
+				shouldReleaseNecklinker = false;
+			}
+
 			if (releasing)
 			{
 				EaseRelease();
@@ -268,7 +275,7 @@ namespace AICS.Kinesin
 		void Release ()
 		{
 			mover.moving = rotator.rotating = false;
-			neckLinker.StopSnapping();
+			neckLinker.Release();
 			binding = false;
 			releasing = true;
 			body.isKinematic = false;
@@ -313,6 +320,7 @@ namespace AICS.Kinesin
 			if (bound)
 			{
 				state = MotorState.Strong;
+				kinesin.OtherMotor( this ).shouldReleaseNecklinker = true;
 				neckLinker.StartSnapping();
 			}
 		}
@@ -346,6 +354,7 @@ namespace AICS.Kinesin
 		public void HydrolyzeATP ()
 		{
 			Debug.Log(name + " Hydrolyze");
+			neckLinker.StopSnapping();
 			if (bound)
 			{
 				state = MotorState.Weak;
