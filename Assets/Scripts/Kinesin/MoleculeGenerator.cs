@@ -14,6 +14,7 @@ namespace AICS.Kinesin
 
 		List<Molecule> molecules = new List<Molecule>();
 		float n;
+		Transform moleculeParent;
 
 		int _number = -1;
 		int number
@@ -25,6 +26,19 @@ namespace AICS.Kinesin
 				}
 				return _number;
 			}
+		}
+
+		void Start ()
+		{
+			if (moleculePrefab == null)
+			{
+				Debug.LogWarning( name + "'s MoleculeGenerator prefab is missing!" );
+				enabled = false;
+				return;
+			}
+
+			moleculeParent = new GameObject( moleculePrefab.name + "Parent" ).transform;
+			moleculeParent.position = Vector3.zero;
 		}
 
 		void Update ()
@@ -49,12 +63,6 @@ namespace AICS.Kinesin
 
 		void CheckConcentration ()
 		{
-			if (moleculePrefab == null)
-			{
-				Debug.LogWarning("Molecule prefab is missing!");
-				return;
-			}
-
 			int n = molecules.FindAll( m => !m.hidden && !m.shouldHide ).Count;
 			while (n < number)
 			{
@@ -77,6 +85,8 @@ namespace AICS.Kinesin
 			else
 			{
 				Molecule molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Molecule;
+				molecule.parent = moleculeParent;
+				molecule.transform.SetParent( moleculeParent );
 				molecule.name = moleculePrefab.name + n;
 				n++;
 				molecules.Add( molecule );

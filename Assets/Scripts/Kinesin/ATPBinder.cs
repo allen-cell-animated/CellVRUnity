@@ -101,7 +101,7 @@ namespace AICS.Kinesin
 				body.mass = 0.1f;
 				body.drag = 5f;
 			}
-			_nucleotide.transform.SetParent( null );
+			_nucleotide.transform.SetParent( _nucleotide.parent );
 			_nucleotide.isBusy = false;
 		}
 

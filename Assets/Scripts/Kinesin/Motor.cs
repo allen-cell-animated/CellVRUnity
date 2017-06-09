@@ -252,7 +252,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void Release ()
+		public void ReleaseFromTension (string releaserName)
 		{
 			if (state == MotorState.Strong)
 			{
@@ -260,15 +260,21 @@ namespace AICS.Kinesin
 			}
 			if (state == MotorState.Weak || (state == MotorState.Strong && neckLinker.tension > 1f))
 			{
-				mover.moving = rotator.rotating = false;
-				neckLinker.StopSnapping();
-				binding = false;
-				releasing = true;
-				body.isKinematic = false;
-				attractor.target = tubulin.transform;
-				attractor.attractiveForce = releasingForce;
-				releaseStartTime = Time.time;
+				Debug.Log( releaserName + " released " + name );
+				Release();
 			}
+		}
+
+		void Release ()
+		{
+			mover.moving = rotator.rotating = false;
+			neckLinker.StopSnapping();
+			binding = false;
+			releasing = true;
+			body.isKinematic = false;
+			attractor.target = tubulin.transform;
+			attractor.attractiveForce = releasingForce;
+			releaseStartTime = Time.time;
 		}
 
 		void EaseRelease ()
@@ -340,7 +346,6 @@ namespace AICS.Kinesin
 		public void HydrolyzeATP ()
 		{
 			Debug.Log(name + " Hydrolyze");
-			neckLinker.StopSnapping();
 			if (bound)
 			{
 				state = MotorState.Weak;

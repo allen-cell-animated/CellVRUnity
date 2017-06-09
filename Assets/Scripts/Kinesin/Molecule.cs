@@ -9,6 +9,7 @@ namespace AICS.Kinesin
 		public bool isBusy;
 		public bool shouldHide;
 		public bool hidden;
+		public Transform parent;
 
 		void Update ()
 		{
