@@ -14,20 +14,23 @@ namespace AICS.Kinesin
 	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
 	public class Motor : MonoBehaviour, IBindATP
 	{
+		public bool checkBindingOrientation = true;
 		public MotorState state = MotorState.Free;
-		public bool pause;
-		public bool releasing;
+		public bool pause; // for testing
+		public bool binding; // public for testing
+		public bool releasing; // public for testing
 		public bool shouldReleaseNecklinker;
+		public bool inFront; // for testing
 
-		float releaseTime = 0.1f;
-		float releaseStartTime = -1f;
+		float bindTime = 0.7f;
+		float bindStartTime = -1f;
+		float bindingForce = 100f;
 		float lastCheckReleaseTime = -1f;
-		float releasingForce = 1000f;
 		Vector3 bindingPosition = new Vector3( -0.38f, 4.16f, -0.6f );
 		Vector3 bindingRotation = new Vector3( -3f, -177f, 0.86f );
+		Vector3 bindingRotationTolerance = new Vector3( 30f, 30f, 20f );
 		Tubulin tubulin;
 		Color color;
-		bool binding;
 
 		public bool bound
 		{
@@ -69,22 +72,6 @@ namespace AICS.Kinesin
 					_randomForces = GetComponent<RandomForces>();
 				}
 				return _randomForces;
-			}
-		}
-
-		Mover _mover;
-		Mover mover
-		{
-			get {
-				if (_mover == null)
-				{
-					_mover = GetComponent<Mover>();
-					if (_mover == null)
-					{
-						_mover = gameObject.AddComponent<Mover>();
-					}
-				}
-				return _mover;
 			}
 		}
 
@@ -164,8 +151,11 @@ namespace AICS.Kinesin
 				meshRenderer.material.color = Color.red;
 			}
 
+			inFront = !neckLinker.tensionIsForward;
+
 			if (!pause)
 			{
+				UpdateBinding();
 				UpdateRelease();
 				UpdateNucleotideProbabilities();
 			}
@@ -187,32 +177,84 @@ namespace AICS.Kinesin
 
 		void BindToMT (Tubulin _tubulin)
 		{
-			if (!neckLinker.bindIsPhysicallyImpossible && !pause)
+			if (!neckLinker.bindIsPhysicallyImpossible && closeToBindingOrientation( _tubulin ) && !pause)
 			{
 				Debug.Log(name + " bind");
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
-				body.isKinematic = true;
 				randomForces.addForce = randomForces.addTorque = false;
-				mover.MoveToWithSpeed( tubulin.transform.TransformPoint( bindingPosition ), 15f, FinishBinding );
-				rotator.RotateToWithSpeed( GetBindingRotation(), 5f );
+				attractor.attractiveForce = 0;
+				attractor.target = tubulin.transform;
+				rotator.RotateToOverDuration( GetBindingRotation(), bindTime );
+				bindStartTime = Time.time;
 				binding = true;
+			}
+		}
+
+		bool closeToBindingOrientation (Tubulin _tubulin)
+		{
+			if (!checkBindingOrientation || kinesin.OtherMotor( this ).bound)
+			{
+				return true;
+			}
+			else 
+			{
+				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance.x )
+					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance.y )
+					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance.z );
+			}
+		}
+
+		void UpdateBinding ()
+		{
+			if (binding || releasing)
+			{
+				EaseBind();
+			}
+		}
+
+		void EaseBind ()
+		{
+			if (Time.time - bindStartTime < bindTime)
+			{
+				if (binding)
+				{
+					attractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
+				}
+				else if (releasing)
+				{
+					attractor.attractiveForce = bindingForce * (1f - (Time.time - bindStartTime) / bindTime);
+				}
+			}
+			else
+			{
+				attractor.target = null;
+				if (binding)
+				{
+					rotator.SnapToGoal();
+					body.isKinematic = true;
+					transform.position = tubulin.transform.TransformPoint( bindingPosition );
+					if (atpBinder.nucleotide != null && atpBinder.nucleotide.isATP)
+					{
+						BindATP();
+					}
+					binding = false;
+				}
+				else if (releasing)
+				{
+					tubulin.hasMotorBound = false;
+					state = MotorState.Free;
+					randomForces.addForce = randomForces.addTorque = true;
+					releasing = false;
+				}
 			}
 		}
 
 		Quaternion GetBindingRotation ()
 		{
 			return tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
-		}
-
-		void FinishBinding ()
-		{
-			binding = false;
-			if (atpBinder.nucleotide != null && atpBinder.nucleotide.isATP)
-			{
-				BindATP();
-			}
 		}
 
 		// ---------------------------------------------- Releasing
@@ -225,11 +267,7 @@ namespace AICS.Kinesin
 				shouldReleaseNecklinker = false;
 			}
 
-			if (releasing)
-			{
-				EaseRelease();
-			}
-			else if (bound && !binding)
+			if (bound && !binding && !releasing)
 			{
 				if (shouldRelease)
 				{
@@ -286,30 +324,14 @@ namespace AICS.Kinesin
 
 		void Release ()
 		{
-			mover.moving = rotator.rotating = false;
+			rotator.rotating = false;
 			neckLinker.Release();
 			binding = false;
 			releasing = true;
 			body.isKinematic = false;
+			attractor.attractiveForce = bindingForce;
 			attractor.target = tubulin.transform;
-			attractor.attractiveForce = releasingForce;
-			releaseStartTime = Time.time;
-		}
-
-		void EaseRelease ()
-		{
-			if (Time.time - releaseStartTime < releaseTime)
-			{
-				attractor.attractiveForce = releasingForce * (1f - (Time.time - releaseStartTime) / releaseTime);
-			}
-			else
-			{
-				attractor.target = null;
-				tubulin.hasMotorBound = false;
-				state = MotorState.Free;
-				randomForces.addForce = randomForces.addTorque = true;
-				releasing = false;
-			}
+			bindStartTime = Time.time;
 		}
 
 		// ---------------------------------------------- Nucleotide
@@ -345,7 +367,7 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			float probability = 0.1f;
+			float probability = 0.001f;
 			if (!neckLinker.tensionIsForward) // this is the front motor
 			{
 				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)

@@ -50,5 +50,11 @@ namespace AICS.Kinesin
 				transform.rotation = Quaternion.Slerp( startRotation, goalRotation, t );
 			}
 		}
+
+		public void SnapToGoal ()
+		{
+			rotating = false;
+			transform.rotation = goalRotation;
+		}
 	}
 }
