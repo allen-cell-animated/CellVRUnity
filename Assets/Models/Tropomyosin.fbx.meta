@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8cf6ca2e3d05b43d685acb92dac25c01
-timeCreated: 1497029886
+guid: 55b131b64481a4e5cb71ae6c6c0cb721
+timeCreated: 1497393987
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -12,7 +12,8 @@ ModelImporter:
     100008: Joint_3
     100010: Root
     100012: //RootNode
-    100014: tropomyosin_2x2EFR
+    100014: tropomyosin_highRes
+    100016: tropomyosin_lowRes
     400000: CINEMA_4D_Editor
     400002: Joint_0
     400004: Joint_1
@@ -20,10 +21,13 @@ ModelImporter:
     400008: Joint_3
     400010: Root
     400012: //RootNode
-    400014: tropomyosin_2x2EFR
-    4300000: tropomyosin_2x2EFR
+    400014: tropomyosin_highRes
+    400016: tropomyosin_lowRes
+    4300000: tropomyosin_highRes
+    4300002: tropomyosin_lowRes
     9500000: //RootNode
-    13700000: tropomyosin_2x2EFR
+    13700000: tropomyosin_highRes
+    13700002: tropomyosin_lowRes
   materials:
     importMaterials: 1
     materialName: 0
