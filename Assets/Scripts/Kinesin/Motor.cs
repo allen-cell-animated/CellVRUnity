@@ -25,12 +25,12 @@ namespace AICS.Kinesin
 
 		float bindTime = 0.7f;
 		float bindStartTime = -1f;
-		float bindingForce = 100f;
+		float bindingForce = 500f;
 		float lastCheckReleaseTime = -1f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
-		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.22f );
+		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
 		Vector3 bindingRotationTolerance = new Vector3( 30f, 30f, 20f );
-		Tubulin tubulin;
+		public Tubulin tubulin;
 		Color color;
 
 		public bool bound
@@ -218,6 +218,7 @@ namespace AICS.Kinesin
 				randomForces.addForce = randomForces.addTorque = false;
 				attractor.attractiveForce = 0;
 				attractor.target = tubulin.transform;
+				body.constraints = RigidbodyConstraints.FreezeRotation;
 				rotator.RotateToOverDuration( GetBindingRotation(), bindTime );
 				bindStartTime = Time.time;
 				binding = true;
@@ -226,17 +227,18 @@ namespace AICS.Kinesin
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			if (!checkBindingOrientation || kinesin.OtherMotor( this ).bound)
-			{
-				return true;
-			}
-			else 
-			{
-				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance.x )
-					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance.y )
-					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance.z );
-			}
+			return true;
+//			if (!checkBindingOrientation || kinesin.OtherMotor( this ).bound)
+//			{
+//				return true;
+//			}
+//			else 
+//			{
+//				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+//				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance.x )
+//					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance.y )
+//					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance.z );
+//			}
 		}
 
 		void UpdateBinding ()
@@ -274,8 +276,9 @@ namespace AICS.Kinesin
 					}
 					binding = false;
 				}
-				else if (releasing)
+				if (releasing)
 				{
+					Debug.Log( "finish release" );
 					tubulin.hasMotorBound = false;
 					state = MotorState.Free;
 					randomForces.addForce = randomForces.addTorque = true;
@@ -343,13 +346,9 @@ namespace AICS.Kinesin
 
 		public void ReleaseFromTension (string releaserName)
 		{
-			if (state == MotorState.Strong)
+			if (!releasing && (state == MotorState.Weak || (state == MotorState.Strong && neckLinker.tension > 1f)))
 			{
-				Debug.Log(neckLinker.tension);
-			}
-			if (state == MotorState.Weak || (state == MotorState.Strong && neckLinker.tension > 1f))
-			{
-				Debug.Log( releaserName + " released " + name );
+				Debug.Log( releaserName + " released " + name + " in state " + state);
 				Release();
 			}
 		}
@@ -360,6 +359,7 @@ namespace AICS.Kinesin
 			neckLinker.Release();
 			binding = false;
 			releasing = true;
+			body.constraints = RigidbodyConstraints.None;
 			body.isKinematic = false;
 			attractor.attractiveForce = bindingForce;
 			attractor.target = tubulin.transform;
