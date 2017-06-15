@@ -6,6 +6,17 @@ namespace AICS.Kinesin
 {
 	public class BezierSpline : Spline 
 	{
+		protected override void Draw ()
+		{
+			float t = 0;
+			float inc = 1f / renderSegments;
+			for (int i = 0; i < renderSegments; i++)
+			{
+				DrawSegment(i, transform.TransformPoint( GetPoint( t ) ), transform.TransformPoint( GetPoint( t + inc ) ) );
+				t += inc;
+			}
+		}
+
 		public override Vector3 GetPoint (float t)
 		{
 			return new Vector3(

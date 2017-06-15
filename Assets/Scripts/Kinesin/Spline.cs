@@ -12,13 +12,21 @@ namespace AICS.Kinesin
 		public float updateTolerance = 0.1f;
 		public bool drawCurve;
 
+		protected bool pointsAreSet
+		{
+			get {
+				return points != null && points.Length > 1;
+			}
+		}
+
 		void Start ()
 		{
-			if (points != null && points.Length > 1)
+			if (pointsAreSet)
 			{
 				CachePointStartPositions();
 				if (drawCurve) 
 				{ 
+					lines = new LineRenderer[renderSegments + 1];
 					Draw(); 
 				}
 			}
@@ -61,7 +69,7 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Point Positions
 
-		Vector3[] lastPointPositions;
+		public Vector3[] lastPointPositions;
 
 		void CachePointStartPositions ()
 		{
@@ -90,27 +98,23 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Drawing
 
-		void Draw ()
-		{
-			float t = 0;
-			float inc = 1f / renderSegments;
-			for (int i = 0; i < renderSegments; i++)
-			{
-				DrawSegment(i, transform.TransformPoint( GetPoint( t ) ), transform.TransformPoint( GetPoint( t + inc ) ) );
-				t += inc;
-			}
-		}
+		LineRenderer[] lines;
 
-		void DrawSegment (int index, Vector3 start, Vector3 end)
+		protected abstract void Draw ();
+
+		protected void DrawSegment (int index, Vector3 start, Vector3 end)
 		{
-			LineRenderer lineRenderer = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
-			lineRenderer.transform.position = start;
-			lineRenderer.material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
-			lineRenderer.startColor = lineRenderer.endColor = lineColor;
-			lineRenderer.startWidth = lineRenderer.endWidth = 0.1f;
-			lineRenderer.SetPosition( 0, start );
-			lineRenderer.SetPosition( 1, end );
-			lineRenderer.transform.SetParent( transform );
+			if (lines[index] == null)
+			{
+				lines[index] = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
+				lines[index].material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
+				lines[index].startColor = lines[index].endColor = lineColor;
+				lines[index].startWidth = lines[index].endWidth = 1f;
+				lines[index].transform.SetParent( transform );
+			}
+			lines[index].transform.position = start;
+			lines[index].SetPosition( 0, start );
+			lines[index].SetPosition( 1, end );
 		}
 
 		// ---------------------------------------------- Calculation
