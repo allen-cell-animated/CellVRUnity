@@ -4,120 +4,9 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	public class BezierSpline : MonoBehaviour 
+	public class BezierSpline : Spline 
 	{
-		public Transform[] points;
-		public Color lineColor;
-		public int renderSegments = 15;
-		public float updateTolerance = 0.1f;
-
-		Vector3[] lastPointPositions;
-
-		void Start ()
-		{
-			if (points != null && points.Length >= 4)
-			{
-				lastPointPositions = new Vector3[4];
-				for (int i = 0; i < points.Length; i++)
-				{
-					lastPointPositions[i] = points[i].position;
-				}
-			}
-		}
-
-		public bool pointsChanged
-		{
-			get {
-				bool changed = false;
-				for (int i = 0; i < points.Length; i++)
-				{
-					if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > updateTolerance)
-					{
-						changed = true;
-						lastPointPositions[i] = points[i].position;
-					}
-				}
-				return changed;
-			}
-		}
-
-		float lastLengthTime = -1f;
-		float _length;
-		public float length
-		{
-			get {
-				if (Time.time - lastLengthTime > 0.1f)
-				{
-					_length = GetLength( 0, 1f, renderSegments );
-					lastLengthTime = Time.time;
-				}
-				return _length;
-			}
-		}
-
-		public float GetLength (float startT, float endT, int resolution)
-		{
-			float length = 0;
-			float t = startT;
-			float inc = (endT - startT) / resolution;
-			for (int i = 0; i < resolution; i++)
-			{
-				length += GetSegmentLength( t, t + inc );
-				t += inc;
-			}
-			return length;
-		}
-
-		float GetSegmentLength (float startT, float endT)
-		{
-			return Vector3.Distance( GetPoint( startT ), GetPoint( endT ) );
-		}
-
-		public void MakeCurve (Vector3[] _points, bool draw)
-		{
-			MakePoints( _points );
-			if (draw) 
-			{ 
-				DrawCurve(); 
-			}
-		}
-
-		void MakePoints (Vector3[] _points)
-		{
-			points = new Transform[4];
-			for (int i = 0; i < 4; i++)
-			{
-				points[i] = new GameObject( "point" + i ).transform;
-				points[i].SetParent( transform );
-				points[i].localPosition = _points[i];
-			}
-			lastPointPositions = _points;
-		}
-
-		void DrawCurve ()
-		{
-			float t = 0;
-			float inc = 1f / renderSegments;
-			for (int i = 0; i < renderSegments; i++)
-			{
-				DrawLine(i, transform.TransformPoint( GetPoint( t ) ), transform.TransformPoint( GetPoint( t + inc ) ) );
-				t += inc;
-			}
-		}
-
-		void DrawLine (int index, Vector3 start, Vector3 end)
-		{
-			LineRenderer lineRenderer = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
-			lineRenderer.transform.position = start;
-			lineRenderer.material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
-			lineRenderer.startColor = lineRenderer.endColor = lineColor;
-			lineRenderer.startWidth = lineRenderer.endWidth = 0.1f;
-			lineRenderer.SetPosition( 0, start );
-			lineRenderer.SetPosition( 1, end );
-			lineRenderer.transform.SetParent( transform );
-		}
-
-		public Vector3 GetPoint (float t)
+		public override Vector3 GetPoint (float t)
 		{
 			return new Vector3(
 				CubicBezier( t, points[0].localPosition.x, points[1].localPosition.x, points[2].localPosition.x, points[3].localPosition.x ),
@@ -154,7 +43,7 @@ namespace AICS.Kinesin
 			return t * t * t * point3;
 		}
 
-		public float GetTForClosestPoint (Vector3 point) 
+		public override float GetTForClosestPoint (Vector3 point) 
 		{
 			return FindClosest( point, 0f, 1f, 10 );
 		}
@@ -182,7 +71,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public Vector3 GetNormal (float t)
+		public override Vector3 GetNormal (float t)
 		{
 			float inc = 0.001f;
 			if (t >= 1f)
@@ -198,7 +87,7 @@ namespace AICS.Kinesin
 			return Vector3.Normalize( Vector3.Cross( tangent, tangentInc ) );
 		}
 
-		public Vector3 GetTangent (float t)
+		public override Vector3 GetTangent (float t)
 		{
 			return Vector3.Normalize( new Vector3(
 				CubicBezierTangent( t, points[0].localPosition.x, points[1].localPosition.x, points[2].localPosition.x, points[3].localPosition.x ),

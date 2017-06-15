@@ -8,9 +8,7 @@ namespace AICS.Kinesin
 	{
 		public float radius = 7.5f;
 		public int tubulinsPerTurn = 13;
-		public Vector3[] points = new Vector3[4];
 		public GameObject[] tubulinPrefabs = new GameObject[2];
-		public bool renderSpline = true;
 		public BezierSpline spline;
 
 		List<Tubulin> tubulins;
@@ -19,24 +17,12 @@ namespace AICS.Kinesin
 
 		void Start () 
 		{
-			MakeSpline();
 			MakeTubulins();
-		}
-
-		void MakeSpline ()
-		{
-			if (spline == null)
-			{
-				spline = new GameObject( "spline", new System.Type[]{ typeof(BezierSpline) } ).GetComponent<BezierSpline>();
-				spline.transform.position = transform.position;
-				spline.transform.SetParent( transform );
-				spline.MakeCurve( points, renderSpline );
-			}
 		}
 
 		void MakeTubulins ()
 		{
-			if (tubulinPrefabs[0] == null)
+			if (tubulinPrefabs[0] == null || spline == null)
 			{
 				return;
 			}
@@ -101,7 +87,7 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (spline.pointsChanged)
+			if (spline != null && spline.pointsChanged)
 			{
 				PlaceTubulins();
 			}
