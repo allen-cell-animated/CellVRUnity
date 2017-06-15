@@ -20,7 +20,7 @@ public class ResolutionManager : MonoBehaviour
 
 	void Update () 
 	{
-		if (Time.time - lastTime > maxUpdateInterval * lastDistance / 20f)
+		if (Time.time - lastTime > maxUpdateInterval * lastDistance / 20f) // should be more frequent when near a LOD boundary instead of when near the camera
 		{
 			CheckLOD();
 			lastTime = Time.time;

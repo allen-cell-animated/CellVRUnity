@@ -24,6 +24,13 @@ namespace AICS.Kinesin
 			}
 		}
 
+		public Rigidbody lastLink
+		{
+			get {
+				return links[links.Length - 1].GetComponent<Rigidbody>();
+			}
+		}
+
 		Motor _motor;
 		public Motor motor
 		{
@@ -80,37 +87,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void StoreDockedNecklinkPositions ()
-		{
-			Necklinker[] necklinkers = GetComponentsInChildren<Necklinker>();
-			Vector3[] dockedLinkPositions = new Vector3[necklinkers[0].links.Length];
-			Quaternion[] dockedLinkRotations = new Quaternion[necklinkers[0].links.Length];
-			foreach (Necklinker necklinker in necklinkers)
-			{
-				if (necklinker.startDocked)
-				{
-					Motor motor = necklinker.GetComponentInParent<Motor>();
-					for (int i = 0; i < necklinker.links.Length; i++)
-					{
-						dockedLinkPositions[i] = motor.transform.InverseTransformPoint( necklinker.links[i].transform.position );
-						dockedLinkRotations[i] = necklinker.links[i].transform.localRotation;
-					}
-				}
-			}
-
-			foreach (Necklinker necklinker in necklinkers)
-			{
-				necklinker.SetDockedLocations( dockedLinkPositions, dockedLinkRotations );
-			}
-
-			Link[] dockedLinks = dockedLinksRoot.GetComponentsInChildren<Link>();
-			foreach (Link link in links)
-			{
-				link.SetDockedTransform( motor.transform.InverseTransformPoint( link.transform.position ) );
-			}
-		}
-
-		public void SetDockedLocations (Vector3[] dockedPositions, Quaternion[] dockedRotations)
+		public void SetDockedTransforms (Vector3[] dockedPositions, Quaternion[] dockedRotations)
 		{
 			for (int i = 0; i < links.Length; i++)
 			{

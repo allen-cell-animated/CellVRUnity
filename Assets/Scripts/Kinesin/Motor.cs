@@ -16,6 +16,7 @@ namespace AICS.Kinesin
 	{
 		public bool checkBindingOrientation = true;
 		public MotorState state = MotorState.Free;
+		public bool startWithDockedNecklinker;
 		public bool pause; // for testing
 		public bool binding; // public for testing
 		public bool releasing; // public for testing
@@ -52,14 +53,45 @@ namespace AICS.Kinesin
 		}
 
 		Necklinker _neckLinker;
-		Necklinker neckLinker
+		public Necklinker neckLinker
 		{
 			get {
 				if (_neckLinker == null)
 				{
-					_neckLinker = GetComponentInChildren<Necklinker>();
+					SetupNecklinkers();
 				}
 				return _neckLinker;
+			}
+		}
+
+		void SetupNecklinkers ()
+		{
+			Necklinker[] neckLinkers = GetComponentsInChildren<Necklinker>();
+			Vector3[] dockedLinkPositions = new Vector3[neckLinkers[0].links.Length];
+			Quaternion[] dockedLinkRotations = new Quaternion[neckLinkers[0].links.Length];
+			foreach (Necklinker nL in neckLinkers)
+			{
+				if (nL.startDocked)
+				{
+					for (int i = 0; i < nL.links.Length; i++)
+					{
+						dockedLinkPositions[i] = transform.InverseTransformPoint( nL.links[i].transform.position );
+						dockedLinkRotations[i] = nL.links[i].transform.localRotation;
+					}
+				}
+			}
+
+			foreach (Necklinker nL in neckLinkers)
+			{
+				if ((nL.startDocked && startWithDockedNecklinker) || (!nL.startDocked && !startWithDockedNecklinker))
+				{
+					_neckLinker = nL;
+					_neckLinker.SetDockedTransforms( dockedLinkPositions, dockedLinkRotations );
+				}
+				else
+				{
+					nL.gameObject.SetActive( false );
+				}
 			}
 		}
 
@@ -125,7 +157,7 @@ namespace AICS.Kinesin
 			get {
 				if (_meshRenderer == null)
 				{
-					_meshRenderer = GetComponent<MeshRenderer>();
+					_meshRenderer = GetComponent<ResolutionManager>().lods[0].geometry.GetComponent<MeshRenderer>();
 				}
 				return _meshRenderer;
 			}

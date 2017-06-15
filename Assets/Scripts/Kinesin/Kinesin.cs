@@ -38,5 +38,20 @@ namespace AICS.Kinesin
 		{
 			return motors.Find( m => m != motor );
 		}
+
+		void Start ()
+		{
+			AttachHipsToMotors();
+		}
+
+		void AttachHipsToMotors ()
+		{
+			Rigidbody[] lastLinks = new Rigidbody[motors.Count];
+			for (int i = 0; i < motors.Count; i++)
+			{
+				lastLinks[i] = motors[i].neckLinker.lastLink;
+			}
+			hips.AttachToMotors( lastLinks );
+		}
 	}
 }
