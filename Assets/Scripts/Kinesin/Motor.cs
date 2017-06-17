@@ -29,7 +29,7 @@ namespace AICS.Kinesin
 		float lastCheckReleaseTime = -1f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
-		Vector3 bindingRotationTolerance = new Vector3( 30f, 30f, 20f );
+//		Vector3 bindingRotationTolerance = new Vector3( 30f, 30f, 20f );
 		public Tubulin tubulin;
 		Color color;
 

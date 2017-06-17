@@ -82,6 +82,11 @@ namespace AICS.Kinesin
 			}
 		}
 
+		void EquispaceSegments ()
+		{
+
+		}
+
 		public override Vector3 GetPoint (float t)
 		{
 			CheckCalculateCurve();

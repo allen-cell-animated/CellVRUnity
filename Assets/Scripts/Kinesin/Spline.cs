@@ -30,6 +30,17 @@ namespace AICS.Kinesin
 					Draw(); 
 				}
 			}
+
+//			ArbitraryMatrix matrix = new ArbitraryMatrix( 2, 2 );
+//			matrix[0] = new float[]{4, 7};
+//			matrix[1] = new float[]{2, 6};
+//			Debug.Log(matrix.inverse.ToString());
+
+			ArbitraryMatrix matrix = new ArbitraryMatrix( 3, 3 );
+			matrix[0] = new float[]{2, 4, 3};
+			matrix[1] = new float[]{5, -6, 1};
+			matrix[2] = new float[]{7, 5, 4};
+			Debug.Log(matrix.inverse.ToString());
 		}
 
 		// ---------------------------------------------- Length
