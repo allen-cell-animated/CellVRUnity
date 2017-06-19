@@ -18,15 +18,26 @@ namespace AICS.Kinesin
 		public Vector3[] segmentPositions;
 		public Vector3[] tangents;
 
-		Matrix4x4 coefficientMatrix
+		ArbitraryMatrix coefficientMatrix
 		{
-			get {
-				Matrix4x4 a = new Matrix4x4();
-				a.SetRow( 0, new Vector4( 1f, 1f, 0f, 0f ) );
-				a.SetRow( 1, new Vector4( 1f, 4f, 1f, 0f ) );
-				a.SetRow( 2, new Vector4( 0f, 1f, 4f, 1f ) );
-				a.SetRow( 3, new Vector4( 0f, 0f, 1f, 1f ) );
+			get 
+			{
+				ArbitraryMatrix a = new ArbitraryMatrix( n, n );
+				for (int r = 1; r < n - 1; r++)
+				{
+					a[r][r] = 4f;
+					a[r][r-1] = a[r][r+1] = 1f;
+				}
+				a[0][0] = a[n-1][n-1] = 1;
 				return a;
+			}
+		}
+
+		int n 
+		{
+			get
+			{
+				return points.Length;
 			}
 		}
 
@@ -49,22 +60,22 @@ namespace AICS.Kinesin
 
 		void CalculateCurve ()
 		{
-			int divisions = Mathf.FloorToInt( (float) renderSegments / (float) points.Length );
-			segmentPositions = new Vector3[divisions * (points.Length - 1) + points.Length];
+			int divisions = Mathf.FloorToInt( (float) renderSegments / (float) n );
+			segmentPositions = new Vector3[divisions * (n - 1) + n];
 			tangents = new Vector3[segmentPositions.Length];
 			for (int axis = 0; axis < 3; axis++)
 			{
-				Vector4 b = Vector4.zero;
-				for (int i = 1; i < points.Length - 1; i++)
+				float[] b = new float[n];
+				for (int i = 1; i < n - 1; i++)
 				{
 					b[i] = points[i + 1].position[axis] - 2f * points[i].position[axis] + points[i - 1].position[axis];
 				}
-				Vector4 z = coefficientMatrix.inverse * b;
+				float[] z = coefficientMatrix.inverse * b;
 
 				int k = 0;
-				for (int i = 0; i < points.Length - 1; i++)
+				for (int i = 0; i < n - 1; i++)
 				{
-					int segments = (i < points.Length - 2 ? divisions + 1 : divisions + 2);
+					int segments = (i < n - 2 ? divisions + 1 : divisions + 2);
 					for (int s = 0; s < segments; s++)
 					{
 						float t = s / (divisions + 1f);
