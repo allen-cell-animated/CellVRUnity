@@ -64,7 +64,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public string ToString ()
+		public override string ToString ()
 		{
 			string s = "[ ";
 			for (int r = 0; r < rows; r++)
@@ -76,6 +76,30 @@ namespace AICS.Kinesin
 				if (r < rows - 1) { s += ", "; }
 			}
 			return s + "]";
+		}
+
+		public static ArbitraryMatrix operator * (ArbitraryMatrix matrix1, ArbitraryMatrix matrix2)
+		{
+			if (matrix1.rows != matrix2.rows || matrix1.columns != matrix2.columns)
+			{
+				Debug.LogWarning( "Cannot multiply matrices: matrices must have same dimensions" );
+				return matrix1;
+			}
+
+			ArbitraryMatrix solution = new ArbitraryMatrix( matrix1.rows, matrix2.columns );
+			for (int r = 0; r < solution.rows; r++)
+			{
+				for (int c = 0; c < solution.columns; c++)
+				{
+					float sum = 0;
+					for (int k = 0; k < solution.rows; k++)
+					{
+						sum += matrix1[r][k] * matrix2[k][c];
+					}
+					solution[r][c] = sum;
+				}
+			}
+			return solution;
 		}
 
 		public static float[] operator * (ArbitraryMatrix _matrix, float[] vector)
@@ -179,7 +203,7 @@ namespace AICS.Kinesin
 
 				for (int r = 0; r < rows; r++)
 				{
-					for (int c = 0; c < r; c++)
+					for (int c = 0; c < columns; c++)
 					{
 						cf[r][c] = Mathf.Pow( -1f, (float)(r + c) ) * SubMatrix( r, c ).determinant;
 					}
@@ -229,7 +253,7 @@ namespace AICS.Kinesin
 
 				for (int r = 0; r < rows; r++)
 				{
-					for (int c = 0; c < r; c++)
+					for (int c = 0; c < columns; c++)
 					{
 						t[r][c] = matrix[c][r];
 						t[c][r] = matrix[r][c];
