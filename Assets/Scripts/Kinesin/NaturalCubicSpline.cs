@@ -6,17 +6,45 @@ namespace AICS.Kinesin
 {
 	public class NaturalCubicSpline : Spline 
 	{
+		public float segmentLength;
+		public Vector3[] tangents;
+
+		float[][] linearSystemSolution;
+
+		// ---------------------------------------------- Length
+
+		public override float GetLength ()
+		{
+			float l = 0;
+			for (int i = 0; i < segmentPositions.Length - 1; i++)
+			{
+				l += SegmentLength( i );
+			}
+			return l;
+		}
+
+		float SegmentLength (int index)
+		{
+			return Vector3.Distance( segmentPositions[index], segmentPositions[index + 1] );
+		}
+
+		// ---------------------------------------------- Drawing
+
+		protected override void UpdateCurve ()
+		{
+			CalculateCurve();
+			EquispaceSegments();
+		}
+
 		protected override void Draw ()
 		{
-			CheckCalculateCurve();
 			for (int i = 0; i < segmentPositions.Length - 1; i++)
 			{
 				DrawSegment( i, segmentPositions[i], segmentPositions[i + 1] );
 			}
 		}
 
-		public Vector3[] segmentPositions;
-		public Vector3[] tangents;
+		// ---------------------------------------------- Calculation
 
 		ArbitraryMatrix coefficientMatrix
 		{
@@ -41,28 +69,12 @@ namespace AICS.Kinesin
 			}
 		}
 
-		bool needToCalculateCurve
-		{
-			get {
-				return pointsAreSet && (segmentPositions == null || segmentPositions.Length < 2 || pointsChanged);
-			}
-		}
-
-		bool CheckCalculateCurve ()
-		{
-			if (needToCalculateCurve)
-			{
-				CalculateCurve();
-				return true;
-			}
-			return false;
-		}
-
 		void CalculateCurve ()
 		{
-			int divisions = Mathf.FloorToInt( (float) renderSegments / (float) n );
+			int divisions = Mathf.FloorToInt( (float) resolution / (float) n );
 			segmentPositions = new Vector3[divisions * (n - 1) + n];
 			tangents = new Vector3[segmentPositions.Length];
+			linearSystemSolution = new float[3][];
 			for (int axis = 0; axis < 3; axis++)
 			{
 				float[] b = new float[n];
@@ -70,7 +82,7 @@ namespace AICS.Kinesin
 				{
 					b[i] = points[i + 1].position[axis] - 2f * points[i].position[axis] + points[i - 1].position[axis];
 				}
-				float[] z = coefficientMatrix.inverse * b;
+				linearSystemSolution[axis] = coefficientMatrix.inverse * b;
 
 				int k = 0;
 				for (int i = 0; i < n - 1; i++)
@@ -79,10 +91,12 @@ namespace AICS.Kinesin
 					for (int s = 0; s < segments; s++)
 					{
 						float t = s / (divisions + 1f);
-						float ct = points[i + 1].position[axis] - z[i + 1];
-						float c1t = points[i].position[axis] - z[i];
-						segmentPositions[k][axis] = z[i + 1] * Mathf.Pow( t, 3f ) + z[i] * Mathf.Pow( 1f - t, 3f ) + ct * t + c1t * (1f - t);
-						tangents[k][axis] = 3f * z[i + 1] * Mathf.Pow( t, 2f ) - 3f * z[i] * Mathf.Pow( 1f - t, 2f ) + ct - c1t;
+						float ct = points[i + 1].position[axis] - linearSystemSolution[axis][i + 1];
+						float c1t = points[i].position[axis] - linearSystemSolution[axis][i];
+						segmentPositions[k][axis] = linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 3f ) + linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 3f ) 
+							+ ct * t + c1t * (1f - t);
+						tangents[k][axis] = 3f * linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 2f ) - 3f * linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 2f ) 
+							+ ct - c1t;
 						k++;
 					}
 				}
@@ -95,39 +109,65 @@ namespace AICS.Kinesin
 
 		void EquispaceSegments ()
 		{
+			EquispaceSegments( segmentLength );
+		}
 
+		void EquispaceSegments (float spacing)
+		{
+			segmentLength = spacing;
+			List<Vector3> newSegmentPositions = new List<Vector3>();
+			float leftoverDistance = segmentLength;
+			for (int i = 0; i < segmentPositions.Length - 1; i++)
+			{
+				float l = SegmentLength( i );
+				float tInc = segmentLength / l;
+				float t = (segmentLength - leftoverDistance) / l;
+				while (t < 1f)
+				{
+					newSegmentPositions.Add( GetPointOnSegment( i, t ) );
+					t += tInc;
+				}
+				leftoverDistance = (1 - (t - tInc)) * l;
+			}
+			segmentPositions = newSegmentPositions.ToArray();
+		}
+
+		Vector3 GetPointOnSegment (int index, float t)
+		{
+			return Vector3.Lerp( segmentPositions[index], segmentPositions[index + 1], t );
 		}
 
 		public override Vector3 GetPoint (float t)
 		{
-			CheckCalculateCurve();
+			UpdateCurve();
 			return Vector3.zero;
 		}
 
 		public override float GetTForClosestPoint (Vector3 point) 
 		{
-			CheckCalculateCurve();
+			UpdateCurve();
 			return 0;
 		}
 
 		public override Vector3 GetNormal (float t)
 		{
-			CheckCalculateCurve();
+			UpdateCurve();
 			return Vector3.zero;
 		}
 
 		public override Vector3 GetTangent (float t)
 		{
-			CheckCalculateCurve();
+			UpdateCurve();
 			return Vector3.zero;
 		}
 
-		void Update ()
+		public override Vector3[] GetIncrementalPoints (float spacing)
 		{
-			if (CheckCalculateCurve())
+			if (segmentLength < spacing - 1f || segmentLength > spacing + 1f)
 			{
-				Draw();
+				EquispaceSegments( spacing );
 			}
+			return segmentPositions;
 		}
 	}
 }

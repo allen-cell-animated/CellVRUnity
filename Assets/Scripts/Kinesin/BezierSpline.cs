@@ -6,16 +6,59 @@ namespace AICS.Kinesin
 {
 	public class BezierSpline : Spline 
 	{
-		protected override void Draw ()
+		// ---------------------------------------------- Length
+
+		public override float GetLength ()
+		{
+			return GetPartialLength( 0, 1f, resolution );
+		}
+
+		public float GetPartialLength (float startT, float endT, int resolution)
+		{
+			float l = 0;
+			float t = startT;
+			float inc = (endT - startT) / resolution;
+			for (int i = 0; i < resolution; i++)
+			{
+				l += GetSegmentLength( t, t + inc );
+				t += inc;
+			}
+			return l;
+		}
+
+		float GetSegmentLength (float startT, float endT)
+		{
+			return Vector3.Distance( GetPoint( startT ), GetPoint( endT ) );
+		}
+
+		// ---------------------------------------------- Drawing
+
+		protected override void UpdateCurve ()
+		{
+			CacheSegments();
+		}
+
+		void CacheSegments ()
 		{
 			float t = 0;
-			float inc = 1f / renderSegments;
-			for (int i = 0; i < renderSegments; i++)
+			float inc = 1f / resolution;
+			segmentPositions = new Vector3[resolution + 1];
+			for (int i = 0; i <= resolution; i++)
 			{
-				DrawSegment(i, transform.TransformPoint( GetPoint( t ) ), transform.TransformPoint( GetPoint( t + inc ) ) );
+				segmentPositions[i] = transform.TransformPoint( GetPoint( t ) );
 				t += inc;
 			}
 		}
+
+		protected override void Draw ()
+		{
+			for (int i = 0; i < segmentPositions.Length - 1; i++)
+			{
+				DrawSegment(i, segmentPositions[i], segmentPositions[i + 1] );
+			}
+		}
+
+		// ---------------------------------------------- Calculation
 
 		public override Vector3 GetPoint (float t)
 		{
@@ -127,6 +170,20 @@ namespace AICS.Kinesin
 		float CubicBezierTangent_Point2_to_Point3 (float t, float point2, float point3)
 		{
 			return 3f * t * t * (point3 - point2);
+		}
+
+		public override Vector3[] GetIncrementalPoints (float distanceIncrement)
+		{
+			float t = 0;
+			float tInc = distanceIncrement / length;
+			int n = Mathf.FloorToInt( 1f / tInc );
+			Vector3[] p = new Vector3[n];
+			for (int i = 0; i < n; i++)
+			{
+				p[i] = GetPoint( t );
+				t += tInc;
+			}
+			return p;
 		}
 	}
 }

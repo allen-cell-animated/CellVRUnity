@@ -24,8 +24,8 @@ namespace AICS.Kinesin
 		{
 			if (microtubule != null)
 			{
-				float currentT = microtubule.spline.GetTForClosestPoint( transform.position );
-				distanceMoved = microtubule.spline.GetLength( startT, currentT, 10 );
+//				float currentT = microtubule.spline.GetTForClosestPoint( transform.position );
+//				distanceMoved = microtubule.spline.GetLength( startT, currentT, 10 );
 			}
 		}
 	}

@@ -6,11 +6,12 @@ namespace AICS.Kinesin
 {
 	public abstract class Spline : MonoBehaviour 
 	{
-		public Transform[] points;
-		public Color lineColor = new Color( 1f, 0, 1f );
-		public int renderSegments = 15;
+		public int resolution = 15;
 		public float updateTolerance = 0.1f;
 		public bool drawCurve;
+		public Color lineColor = new Color( 1f, 0, 1f );
+		public Transform[] points;
+		public Vector3[] segmentPositions;
 
 		protected bool pointsAreSet
 		{
@@ -23,12 +24,7 @@ namespace AICS.Kinesin
 		{
 			if (pointsAreSet)
 			{
-				CachePointStartPositions();
-				if (drawCurve) 
-				{ 
-					lines = new LineRenderer[renderSegments + 1];
-					Draw(); 
-				}
+				lastPointPositions = new Vector3[points.Length];
 			}
 		}
 
@@ -36,49 +32,23 @@ namespace AICS.Kinesin
 
 		float lastLengthTime = -1f;
 		float _length;
-
 		public float length
 		{
 			get {
 				if (Time.time - lastLengthTime > 0.1f)
 				{
-					_length = GetLength( 0, 1f, renderSegments );
+					_length = GetLength();
 					lastLengthTime = Time.time;
 				}
 				return _length;
 			}
 		}
 
-		public float GetLength (float startT, float endT, int resolution)
-		{
-			float l = 0;
-			float t = startT;
-			float inc = (endT - startT) / resolution;
-			for (int i = 0; i < resolution; i++)
-			{
-				l += GetSegmentLength( t, t + inc );
-				t += inc;
-			}
-			return l;
-		}
-
-		float GetSegmentLength (float startT, float endT)
-		{
-			return Vector3.Distance( GetPoint( startT ), GetPoint( endT ) );
-		}
+		public abstract float GetLength ();
 
 		// ---------------------------------------------- Point Positions
 
 		public Vector3[] lastPointPositions;
-
-		void CachePointStartPositions ()
-		{
-			lastPointPositions = new Vector3[points.Length];
-			for (int i = 0; i < points.Length; i++)
-			{
-				lastPointPositions[i] = points[i].position;
-			}
-		}
 
 		public bool pointsChanged
 		{
@@ -98,12 +68,41 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Drawing
 
-		LineRenderer[] lines;
+		protected List<LineRenderer> lines = new List<LineRenderer>();
+
+		void Update ()
+		{
+			if (drawCurve && pointsAreSet && pointsChanged)
+			{
+				UpdateCurve();
+				ClearExtraLines();
+				Draw();
+			}
+		}
+
+		protected abstract void UpdateCurve ();
 
 		protected abstract void Draw ();
 
+		protected void ClearExtraLines ()
+		{
+			if (lines.Count > segmentPositions.Length) 
+			{ 
+				int currentN = lines.Count;
+				for (int i = segmentPositions.Length; i < currentN; i++)
+				{
+					Destroy( lines[i].gameObject );
+				}
+				lines.RemoveRange( segmentPositions.Length, lines.Count - segmentPositions.Length );
+			}
+		}
+
 		protected void DrawSegment (int index, Vector3 start, Vector3 end)
 		{
+			if (index >= lines.Count)
+			{
+				lines.Add( null );
+			}
 			if (lines[index] == null)
 			{
 				lines[index] = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
@@ -126,5 +125,7 @@ namespace AICS.Kinesin
 		public abstract Vector3 GetNormal (float t);
 
 		public abstract Vector3 GetTangent (float t);
+
+		public abstract Vector3[] GetIncrementalPoints (float distanceIncrement);
 	}
 }
