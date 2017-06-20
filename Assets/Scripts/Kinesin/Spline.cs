@@ -62,6 +62,7 @@ namespace AICS.Kinesin
 						lastPointPositions[i] = points[i].position;
 					}
 				}
+				if (changed) { UpdateCurve(); }
 				return changed;
 			}
 		}
@@ -72,14 +73,10 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (pointsAreSet && pointsChanged)
+			if (pointsAreSet && pointsChanged && drawCurve)
 			{
-				UpdateCurve();
-				if (drawCurve)
-				{
-					ClearExtraLines();
-					Draw();
-				}
+				ClearExtraLines();
+				Draw();
 			}
 		}
 

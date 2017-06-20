@@ -404,7 +404,7 @@ namespace AICS.Kinesin
 			{
 				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
 			}
-			atpBinder.ATPBindingProbability = probability;
+			atpBinder.ATPBindingProbability = 1;// probability;
 		}
 
 		void UpdateADPReleaseProbability ()
