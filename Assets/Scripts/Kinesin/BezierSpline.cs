@@ -125,22 +125,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public override Vector3 GetNormal (float t)
-		{
-			float inc = 0.001f;
-			if (t >= 1f)
-			{
-				inc *= -1f;
-			}
-
-			Vector3 tangent = GetTangent( t );
-
-			Vector3 tangentInc = GetTangent( t + inc );
-			tangentInc -= GetPoint( t ) - GetPoint( t + inc );
-
-			return Vector3.Normalize( Vector3.Cross( tangent, tangentInc ) );
-		}
-
 		public override Vector3 GetTangent (float t)
 		{
 			return Vector3.Normalize( new Vector3(

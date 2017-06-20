@@ -24,6 +24,10 @@ namespace AICS.Kinesin
 
 		public override float GetLength ()
 		{
+			if (haveNotCalculated)
+			{
+				CalculateCurve();
+			}
 			float l = 0;
 			for (int i = 1; i < n; i++)
 			{
@@ -48,6 +52,14 @@ namespace AICS.Kinesin
 		}
 
 		// ---------------------------------------------- Calculation
+
+		bool haveNotCalculated 
+		{
+			get
+			{
+				return segmentPositions == null || segmentPositions.Length == 0;
+			}
+		}
 
 		float[][] linearSystemSolution;
 
@@ -169,18 +181,6 @@ namespace AICS.Kinesin
 		public override float GetTForClosestPoint (Vector3 point) 
 		{
 			return 0;
-		}
-
-		public override Vector3 GetNormal (float t)
-		{
-			float inc = 0.001f;
-			if (t >= 1)
-			{
-				inc *= -1;
-			}
-			Vector3 tangent = GetTangent( t );
-			Vector3 incTangent = GetTangent( t + inc ) - (GetPoint( t ) - GetPoint( t + inc ));
-			return Vector3.Cross( tangent, incTangent );
 		}
 
 		public override Vector3 GetTangent (float t)

@@ -13,23 +13,18 @@ public class SplineTester : MonoBehaviour
 {
 	public SpecialVector lookDirection;
 	public Spline spline;
-	public float speed = 1f;
+	public float speed = 0.1f;
 
 	float t = 0;
-	float lastTime = -1;
 
 	void Update () 
 	{
-		if (Time.time - lastTime > 0.1f)
+		t += speed * Time.deltaTime;
+		if (t > 1f)
 		{
-			t += speed / 100f;
-			if (t > 1f)
-			{
-				t = 0;
-			}
-			PositionAlongSpline();
-			lastTime = Time.time;
+			t = 0;
 		}
+		PositionAlongSpline();
 	}
 
 	void PositionAlongSpline ()
@@ -41,7 +36,7 @@ public class SplineTester : MonoBehaviour
 		}
 		else if (lookDirection == SpecialVector.normal)
 		{
-			transform.LookAt( transform.position + spline.GetNormal( t ) );
+			transform.LookAt( transform.position + spline.GetNormal( t ), spline.GetTangent( t ) );
 		}
 	}
 }

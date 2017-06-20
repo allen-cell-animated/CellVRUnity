@@ -16,7 +16,7 @@ namespace AICS.Kinesin
 		protected bool pointsAreSet
 		{
 			get {
-				return points != null && points.Length > 1;
+				return points != null && points.Length > 0;
 			}
 		}
 
@@ -125,7 +125,26 @@ namespace AICS.Kinesin
 
 		public abstract float GetTForClosestPoint (Vector3 point);
 
-		public abstract Vector3 GetNormal (float t);
+		Transform _normalTransform;
+		Transform normalTransform
+		{
+			get
+			{
+				if (_normalTransform == null)
+				{
+					_normalTransform = new GameObject( "Normal" ).transform;
+					_normalTransform.SetParent( transform );
+					_normalTransform.localPosition = Vector3.zero;
+				}
+				return _normalTransform;
+			}
+		}
+
+		public Vector3 GetNormal (float t)
+		{
+			normalTransform.LookAt( transform.position + GetTangent( t ) );
+			return normalTransform.up;
+		}
 
 		public abstract Vector3 GetTangent (float t);
 	}
