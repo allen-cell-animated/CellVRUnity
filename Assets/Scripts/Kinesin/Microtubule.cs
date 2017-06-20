@@ -6,14 +6,14 @@ namespace AICS.Kinesin
 {
 	public class Microtubule : MonoBehaviour 
 	{
-		public float radius = 7.5f;
+		public float radius = 9f;
 		public int tubulinsPerTurn = 13;
 		public GameObject[] tubulinPrefabs = new GameObject[2];
-		public BezierSpline spline;
+		public Spline spline;
 
 		List<Tubulin> tubulins;
 		Transform tubulinParent;
-		public float turns;
+		float turns;
 
 		void Start () 
 		{
@@ -36,9 +36,17 @@ namespace AICS.Kinesin
 			tubulinParent.SetParent( transform );
 
 			turns = spline.length / 4f;
+			int type = 0;
 			for (int i = 0; i < turns * tubulinsPerTurn; i++)
 			{
-				int type = (i % 2 == 1) ? 0 : 1;
+				if (i % tubulinsPerTurn == 0)
+				{
+					type++;
+					if (type > 1)
+					{
+						type = 0;
+					}
+				}
 				tubulins.Add( MakeTubulin( i, type ) );
 			}
 
@@ -58,7 +66,9 @@ namespace AICS.Kinesin
 		{
 			float t = 0;
 			float inc = (4f * turns / spline.length) * 4f / spline.length;
-			Vector3 normal = spline.GetNormal( 0 );
+			float rotationPerTubulin = 360f / (float)tubulinsPerTurn;
+			float normalRotation = 0;
+			bool place = true;
 			for (int i = 0; i < turns; i++)
 			{
 				Vector3 axisPosition = spline.GetPoint( t );
@@ -72,14 +82,27 @@ namespace AICS.Kinesin
 						return;
 					}
 
-					float axialOffset = (float)j / (float)tubulinsPerTurn;
-					Vector3 position = axisPosition + axialOffset * (nextAxisPosition - axisPosition) + radius * normal;
-					Vector3 tangent = spline.GetTangent( t + 2f * axialOffset * inc );
-					Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
+					if (place)
+					{
+						float axialOffset = 1.5f * (float)j / (float)tubulinsPerTurn;
+						float turnT = t + 2f * axialOffset * inc;
+						if (turnT > 1)
+						{
+							place = false;
+						}
+						Vector3 tangent = spline.GetTangent( turnT );
+						Vector3 normal = Quaternion.AngleAxis( normalRotation, tangent ) * spline.GetNormal( turnT );
+						Vector3 position = axisPosition + axialOffset * (nextAxisPosition - axisPosition) + radius * normal;
+						Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
 
-					tubulins[index].Place( position, lookDirection, normal );
+						tubulins[index].Place( position, lookDirection, normal );
 
-					normal = Quaternion.AngleAxis( 360f / (float)tubulinsPerTurn, tangent ) * normal;
+						normalRotation += rotationPerTubulin;
+					}
+					else
+					{
+						tubulins[index].gameObject.SetActive( false );
+					}
 				}
 				t += inc;
 			}
