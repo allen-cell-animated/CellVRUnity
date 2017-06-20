@@ -171,19 +171,5 @@ namespace AICS.Kinesin
 		{
 			return 3f * t * t * (point3 - point2);
 		}
-
-		public override Vector3[] GetIncrementalPoints (float distanceIncrement)
-		{
-			float t = 0;
-			float tInc = distanceIncrement / length;
-			int n = Mathf.FloorToInt( 1f / tInc );
-			Vector3[] p = new Vector3[n];
-			for (int i = 0; i < n; i++)
-			{
-				p[i] = GetPoint( t );
-				t += tInc;
-			}
-			return p;
-		}
 	}
 }

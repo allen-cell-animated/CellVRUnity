@@ -10,8 +10,8 @@ namespace AICS.Kinesin
 		public float updateTolerance = 0.1f;
 		public bool drawCurve;
 		public Color lineColor = new Color( 1f, 0, 1f );
-		public Transform[] points;
 		public Vector3[] segmentPositions;
+		public Transform[] points;
 
 		protected bool pointsAreSet
 		{
@@ -72,11 +72,14 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (drawCurve && pointsAreSet && pointsChanged)
+			if (pointsAreSet && pointsChanged)
 			{
 				UpdateCurve();
-				ClearExtraLines();
-				Draw();
+				if (drawCurve)
+				{
+					ClearExtraLines();
+					Draw();
+				}
 			}
 		}
 
@@ -125,7 +128,5 @@ namespace AICS.Kinesin
 		public abstract Vector3 GetNormal (float t);
 
 		public abstract Vector3 GetTangent (float t);
-
-		public abstract Vector3[] GetIncrementalPoints (float distanceIncrement);
 	}
 }

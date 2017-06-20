@@ -4,42 +4,32 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	[System.Serializable]
 	public class CubicSplinePosition
 	{
-		public int segmentIndex;
-		public float segmentT;
-		public float arcLength;
+		public int pointIndex;
+		public float sectionT;
 
-		public CubicSplinePosition (int _segmentIndex, float _segmentT)
+		public CubicSplinePosition (int _pointIndex, float _sectionT)
 		{
-			segmentIndex = _segmentIndex;
-			segmentT = _segmentT;
+			pointIndex = _pointIndex;
+			sectionT = _sectionT;
 		}
 	}
 
 	public class NaturalCubicSpline : Spline 
 	{
-		public float segmentLength;
-		public Vector3[] tangents;
-
-		float[][] linearSystemSolution;
+		public float[] arcLengths;
 
 		// ---------------------------------------------- Length
 
 		public override float GetLength ()
 		{
 			float l = 0;
-			for (int i = 0; i < segmentPositions.Length - 1; i++)
+			for (int i = 1; i < n; i++)
 			{
-				l += SegmentLength( i );
+				l += arcLengths[i];
 			}
 			return l;
-		}
-
-		float SegmentLength (int index)
-		{
-			return Vector3.Distance( segmentPositions[index], segmentPositions[index + 1] );
 		}
 
 		// ---------------------------------------------- Drawing
@@ -47,7 +37,6 @@ namespace AICS.Kinesin
 		protected override void UpdateCurve ()
 		{
 			CalculateCurve();
-//			EquispaceSegments();
 		}
 
 		protected override void Draw ()
@@ -59,6 +48,8 @@ namespace AICS.Kinesin
 		}
 
 		// ---------------------------------------------- Calculation
+
+		float[][] linearSystemSolution;
 
 		ArbitraryMatrix coefficientMatrix
 		{
@@ -83,15 +74,39 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public CubicSplinePosition[] pointPositions;
-
 		void CalculateCurve ()
 		{
+			linearSystemSolution = SolveLinearSystem();
+
 			int divisions = Mathf.FloorToInt( (float) resolution / (float) n );
 			segmentPositions = new Vector3[divisions * (n - 1) + n];
-			tangents = new Vector3[segmentPositions.Length];
-			pointPositions = new CubicSplinePosition[n];
-			linearSystemSolution = new float[3][];
+			arcLengths = new float[n];
+			int k = 0;
+			float arcLength = 0;
+			for (int section = 0; section < n - 1; section++)
+			{
+				int segments = (section < n - 2 ? divisions + 1 : divisions + 2);
+				for (int s = 0; s < segments; s++)
+				{
+					segmentPositions[k] = CalculatePosition( section, s / (divisions + 1f) );
+					if (k > 0)
+					{
+						arcLength += Vector3.Distance( segmentPositions[k], segmentPositions[k - 1] );
+						if (s == 0)
+						{
+							arcLengths[section] = arcLength;
+							arcLength = 0;
+						}
+					}
+					k++;
+				}
+			}
+			arcLengths[n - 1] = arcLength;
+		}
+
+		float[][] SolveLinearSystem ()
+		{
+			float[][] solution = new float[3][];
 			for (int axis = 0; axis < 3; axis++)
 			{
 				float[] b = new float[n];
@@ -99,115 +114,79 @@ namespace AICS.Kinesin
 				{
 					b[i] = points[i + 1].position[axis] - 2f * points[i].position[axis] + points[i - 1].position[axis];
 				}
-				linearSystemSolution[axis] = coefficientMatrix.inverse * b;
-
-				int k = 0;
-				for (int i = 0; i < n - 1; i++)
-				{
-					int segments = (i < n - 2 ? divisions + 1 : divisions + 2);
-					if (axis == 0) { pointPositions[i] = new CubicSplinePosition( k, 0 ); }
-					for (int s = 0; s < segments; s++)
-					{
-						float t = s / (divisions + 1f);
-						float ct = points[i + 1].position[axis] - linearSystemSolution[axis][i + 1];
-						float c1t = points[i].position[axis] - linearSystemSolution[axis][i];
-						segmentPositions[k][axis] = linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 3f ) + linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 3f ) 
-							+ ct * t + c1t * (1f - t);
-						tangents[k][axis] = 3f * linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 2f ) - 3f * linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 2f ) 
-							+ ct - c1t;
-						k++;
-					}
-				}
+				solution[axis] = coefficientMatrix.inverse * b;
 			}
-			for (int i = 0; i < tangents.Length; i++)
-			{
-				tangents[i] = Vector3.Normalize( tangents[i] );
-			}
+			return solution;
 		}
 
-		void EquispaceSegments ()
+		Vector3 CalculatePosition (int pointIndex, float sectionT)
 		{
-			List<Vector3> newSegmentPositions = new List<Vector3>();
-			List<Vector3> newTangents = new List<Vector3>();
-			float leftoverDistance = segmentLength;
-			int currentPoint = 0;
-			int k = 0;
-			for (int i = 0; i < segmentPositions.Length - 1; i++)
+			Vector3 position = Vector3.zero;
+			for (int axis = 0; axis < 3; axis++)
 			{
-				if (i == 0)
-				{
-					pointPositions[currentPoint] = new CubicSplinePosition( 0, 0 );
-					currentPoint++;
-				}
-				else if (currentPoint != n - 1 && i == pointPositions[currentPoint].segmentIndex)
-				{
-					pointPositions[currentPoint] = new CubicSplinePosition( k - 1, leftoverDistance / segmentLength );
-					currentPoint++;
-				}
-
-				float l = SegmentLength( i );
-				float tInc = segmentLength / l;
-				float t = (segmentLength - leftoverDistance) / l;
-				while (t < 1f)
-				{
-					newSegmentPositions.Add( Vector3.Lerp( segmentPositions[i], segmentPositions[i + 1], t ) );
-					newTangents.Add( Vector3.Lerp( tangents[i], tangents[i + 1], t ) );
-					k++;
-					t += tInc;
-				}
-				leftoverDistance = (1 - (t - tInc)) * l;
-
-				if (i == segmentPositions.Length - 2)
-				{
-					pointPositions[currentPoint] = new CubicSplinePosition( k - 1, leftoverDistance / segmentLength );
-				}
+				float ct = points[pointIndex + 1].position[axis] - linearSystemSolution[axis][pointIndex + 1];
+				float c1t = points[pointIndex].position[axis] - linearSystemSolution[axis][pointIndex];
+				position[axis] = linearSystemSolution[axis][pointIndex + 1] * Mathf.Pow( sectionT, 3f ) 
+					+ linearSystemSolution[axis][pointIndex] * Mathf.Pow( 1f - sectionT, 3f ) + ct * sectionT + c1t * (1f - sectionT);
 			}
-			segmentPositions = newSegmentPositions.ToArray();
-			tangents = newTangents.ToArray();
+			return position;
+		}
+
+		Vector3 CalculateTangent (int pointIndex, float sectionT)
+		{
+			Vector3 tangent = Vector3.zero;
+			for (int axis = 0; axis < 3; axis++)
+			{
+				float ct = points[pointIndex + 1].position[axis] - linearSystemSolution[axis][pointIndex + 1];
+				float c1t = points[pointIndex].position[axis] - linearSystemSolution[axis][pointIndex];
+				tangent[axis] = 3f * linearSystemSolution[axis][pointIndex + 1] * Mathf.Pow( sectionT, 2f ) 
+					- 3f * linearSystemSolution[axis][pointIndex] * Mathf.Pow( 1f - sectionT, 2f ) + ct - c1t;
+			}
+			return Vector3.Normalize( tangent );
 		}
 
 		CubicSplinePosition GetSplinePositionForT (float t)
 		{
-			
+			float tLength = t * length;
+			float currentLength = 0;
+			for (int i = 1; i < arcLengths.Length; i++)
+			{
+				if (tLength < currentLength + arcLengths[i])
+				{
+					return new CubicSplinePosition( i - 1, (tLength - currentLength) / arcLengths[i] );
+				}
+				currentLength += arcLengths[i];
+			}
+			return new CubicSplinePosition( n - 2, 1f );
 		}
 
 		public override Vector3 GetPoint (float t)
 		{
-			UpdateCurve();
-			return Vector3.zero;
+			CubicSplinePosition position = GetSplinePositionForT( t );
+			return CalculatePosition( position.pointIndex, position.sectionT );
 		}
 
 		public override float GetTForClosestPoint (Vector3 point) 
 		{
-			UpdateCurve();
 			return 0;
 		}
 
 		public override Vector3 GetNormal (float t)
 		{
-			UpdateCurve();
-			return Vector3.zero;
+			float inc = 0.001f;
+			if (t >= 1)
+			{
+				inc *= -1;
+			}
+			Vector3 tangent = GetTangent( t );
+			Vector3 incTangent = GetTangent( t + inc ) - (GetPoint( t ) - GetPoint( t + inc ));
+			return Vector3.Cross( tangent, incTangent );
 		}
 
 		public override Vector3 GetTangent (float t)
 		{
-			UpdateCurve();
-//			float ct = points[i + 1].position[axis] - linearSystemSolution[axis][i + 1];
-//			float c1t = points[i].position[axis] - linearSystemSolution[axis][i];
-//			Vector3 position = linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 3f ) + linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 3f ) 
-//				+ ct * t + c1t * (1f - t);
-//			Vector3 tangent = 3f * linearSystemSolution[axis][i + 1] * Mathf.Pow( t, 2f ) - 3f * linearSystemSolution[axis][i] * Mathf.Pow( 1f - t, 2f ) 
-//				+ ct - c1t;
-			return Vector3.zero;
-		}
-
-		public override Vector3[] GetIncrementalPoints (float spacing)
-		{
-//			if (segmentLength < spacing - 1f || segmentLength > spacing + 1f)
-//			{
-//				EquispaceSegments( spacing );
-//			}
-			return segmentPositions;
+			CubicSplinePosition position = GetSplinePositionForT( t );
+			return CalculateTangent( position.pointIndex, position.sectionT );
 		}
 	}
 }
