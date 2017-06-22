@@ -180,26 +180,9 @@ namespace AICS.Kinesin
 
 		Quaternion CalculateNormal (int pointIndex, Vector3 tangent)
 		{
-			Vector3 t0;
-			if (pointIndex == 0)
-			{
-				t0 = Vector3.forward;
-				tangent = CalculateTangent( pointIndex, 0 );
-			}
-			else
-			{
-				t0 = CalculateTangent( pointIndex - 1, 0 );
-				tangent = CalculateTangent( pointIndex - 1, 1f );
-			}
-			Quaternion rotation = Quaternion.AngleAxis( 180f * Mathf.Acos( Vector3.Dot( normalTransform.forward, tangent ) ) / Mathf.PI, 
-				Vector3.Normalize( Vector3.Cross( normalTransform.forward, tangent ) ) );
-			normalTransform.rotation *= rotation;
-			Transform test = new GameObject( "normal" + pointIndex ).transform;
-			test.position = points[pointIndex].position;
-			test.rotation = normalTransform.rotation;
-			Transform test1 = new GameObject( "tangent" + pointIndex ).transform;
-			test1.position = points[pointIndex].position;
-			test1.LookAt( test1.position + tangent );
+			float angle = 180f * Mathf.Acos( Vector3.Dot( normalTransform.forward, tangent ) ) / Mathf.PI;
+			Vector3 axis = Vector3.Normalize( Vector3.Cross( normalTransform.forward, tangent ) );
+			normalTransform.RotateAround( points[pointIndex].position, axis, angle );
 			return normalTransform.rotation;
 		}
 
