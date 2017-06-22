@@ -4,6 +4,23 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
+	[System.Serializable]
+	public class CubicSplinePoint
+	{
+		public Vector3 position;
+		public Vector3 tangent;
+		public Quaternion normal;
+		public float arcLength;
+
+		public CubicSplinePoint (Vector3 _position, Vector3 _tangent, Quaternion _normal, float _arcLength)
+		{
+			position = _position;
+			tangent = _tangent;
+			normal = _normal;
+			arcLength = _arcLength;
+		}
+	}
+
 	public class CubicSplinePosition
 	{
 		public int pointIndex;
@@ -18,7 +35,7 @@ namespace AICS.Kinesin
 
 	public class NaturalCubicSpline : Spline 
 	{
-		public float[] arcLengths;
+		public CubicSplinePoint[] calculatedPoints;
 
 		// ---------------------------------------------- Length
 
@@ -31,7 +48,7 @@ namespace AICS.Kinesin
 			float l = 0;
 			for (int i = 1; i < n; i++)
 			{
-				l += arcLengths[i];
+				l += calculatedPoints[i].arcLength;
 			}
 			return l;
 		}
@@ -57,7 +74,7 @@ namespace AICS.Kinesin
 		{
 			get
 			{
-				return segmentPositions == null || segmentPositions.Length == 0;
+				return calculatedPoints == null || calculatedPoints.Length == 0;
 			}
 		}
 
@@ -92,8 +109,10 @@ namespace AICS.Kinesin
 
 			int divisions = Mathf.FloorToInt( (float) resolution / (float) n );
 			segmentPositions = new Vector3[divisions * (n - 1) + n];
-			arcLengths = new float[n];
+			calculatedPoints = new CubicSplinePoint[n];
 			int k = 0;
+			Vector3 tangent;
+			normalTransform.rotation = Quaternion.identity;
 			float arcLength = 0;
 			for (int section = 0; section < n - 1; section++)
 			{
@@ -104,16 +123,18 @@ namespace AICS.Kinesin
 					if (k > 0)
 					{
 						arcLength += Vector3.Distance( segmentPositions[k], segmentPositions[k - 1] );
-						if (s == 0)
-						{
-							arcLengths[section] = arcLength;
-							arcLength = 0;
-						}
+					}
+					if (s == 0)
+					{
+						tangent = CalculateTangent( section, 0 );
+						calculatedPoints[section] = new CubicSplinePoint( points[section].position, tangent, CalculateNormal( section, tangent ), arcLength );
+						arcLength = 0;
 					}
 					k++;
 				}
 			}
-			arcLengths[n - 1] = arcLength;
+			tangent = CalculateTangent( n - 2, 1f );
+			calculatedPoints[n - 1] = new CubicSplinePoint( points[n - 1].position, tangent, CalculateNormal( n - 1, tangent ), arcLength );
 		}
 
 		float[][] SolveLinearSystem ()
@@ -157,17 +178,43 @@ namespace AICS.Kinesin
 			return Vector3.Normalize( tangent );
 		}
 
+		Quaternion CalculateNormal (int pointIndex, Vector3 tangent)
+		{
+			Vector3 t0;
+			if (pointIndex == 0)
+			{
+				t0 = Vector3.forward;
+				tangent = CalculateTangent( pointIndex, 0 );
+			}
+			else
+			{
+				t0 = CalculateTangent( pointIndex - 1, 0 );
+				tangent = CalculateTangent( pointIndex - 1, 1f );
+			}
+			Quaternion rotation = Quaternion.AngleAxis( 180f * Mathf.Acos( Vector3.Dot( normalTransform.forward, tangent ) ) / Mathf.PI, 
+				Vector3.Normalize( Vector3.Cross( normalTransform.forward, tangent ) ) );
+			normalTransform.rotation *= rotation;
+			Transform test = new GameObject( "normal" + pointIndex ).transform;
+			test.position = points[pointIndex].position;
+			test.rotation = normalTransform.rotation;
+			Transform test1 = new GameObject( "tangent" + pointIndex ).transform;
+			test1.position = points[pointIndex].position;
+			test1.LookAt( test1.position + tangent );
+			return normalTransform.rotation;
+		}
+
 		CubicSplinePosition GetSplinePositionForT (float t)
 		{
 			float tLength = t * length;
 			float currentLength = 0;
-			for (int i = 1; i < arcLengths.Length; i++)
+			for (int i = 1; i < calculatedPoints.Length; i++)
 			{
-				if (tLength < currentLength + arcLengths[i])
+				float arcLength = calculatedPoints[i].arcLength;
+				if (tLength < currentLength + arcLength)
 				{
-					return new CubicSplinePosition( i - 1, (tLength - currentLength) / arcLengths[i] );
+					return new CubicSplinePosition( i - 1, (tLength - currentLength) / arcLength );
 				}
-				currentLength += arcLengths[i];
+				currentLength += arcLength;
 			}
 			return new CubicSplinePosition( n - 2, 1f );
 		}
@@ -187,6 +234,20 @@ namespace AICS.Kinesin
 		{
 			CubicSplinePosition position = GetSplinePositionForT( t );
 			return CalculateTangent( position.pointIndex, position.sectionT );
+
+//			CubicSplinePosition position = GetSplinePositionForT( t );
+//			Vector3 startTangent = calculatedPoints[position.pointIndex].tangent;
+//			Vector3 endTangent = calculatedPoints[position.pointIndex + 1].tangent;
+//			return Vector3.Lerp( startTangent, endTangent, position.sectionT );
+		}
+
+		public override Vector3 GetNormal (float t)
+		{
+			CubicSplinePosition position = GetSplinePositionForT( t );
+			Quaternion startNormal = calculatedPoints[position.pointIndex].normal;
+			Quaternion endNormal = calculatedPoints[position.pointIndex + 1].normal;
+			normalTransform.rotation = Quaternion.Slerp( startNormal, endNormal, position.sectionT );
+			return normalTransform.up;
 		}
 	}
 }

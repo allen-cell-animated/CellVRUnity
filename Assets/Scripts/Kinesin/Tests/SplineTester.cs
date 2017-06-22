@@ -19,12 +19,15 @@ public class SplineTester : MonoBehaviour
 
 	void Update () 
 	{
-		t += speed * Time.deltaTime;
-		if (t > 1f)
-		{
-			t = 0;
-		}
-		PositionAlongSpline();
+		transform.position = spline.transform.position;
+		transform.rotation = spline.transform.rotation;
+
+//		t += speed * Time.deltaTime;
+//		if (t > 1f)
+//		{
+//			t = 0;
+//		}
+//		PositionAlongSpline();
 	}
 
 	void PositionAlongSpline ()
@@ -32,7 +35,7 @@ public class SplineTester : MonoBehaviour
 		transform.position = spline.GetPoint( t );
 		if (lookDirection == SpecialVector.tangent)
 		{
-			transform.LookAt( transform.position + spline.GetTangent( t ) );
+			transform.LookAt( transform.position + spline.GetTangent( t ), spline.GetNormal( t ) );
 		}
 		else if (lookDirection == SpecialVector.normal)
 		{

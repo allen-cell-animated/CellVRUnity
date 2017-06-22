@@ -399,11 +399,11 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			float probability = 0.001f;
-			if (!neckLinker.tensionIsForward) // this is the front motor
-			{
-				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
-			}
+//			float probability = 0.001f;
+//			if (!neckLinker.tensionIsForward) // this is the front motor
+//			{
+//				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
+//			}
 			atpBinder.ATPBindingProbability = 1;// probability;
 		}
 

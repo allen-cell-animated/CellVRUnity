@@ -123,7 +123,7 @@ namespace AICS.Kinesin
 		public abstract float GetTForClosestPoint (Vector3 point);
 
 		Transform _normalTransform;
-		Transform normalTransform
+		protected Transform normalTransform
 		{
 			get
 			{
@@ -137,11 +137,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public Vector3 GetNormal (float t)
-		{
-			normalTransform.LookAt( transform.position + GetTangent( t ) );
-			return normalTransform.up;
-		}
+		public abstract Vector3 GetNormal (float t);
 
 		public abstract Vector3 GetTangent (float t);
 	}
