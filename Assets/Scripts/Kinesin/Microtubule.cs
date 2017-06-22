@@ -11,110 +11,116 @@ namespace AICS.Kinesin
 		public GameObject[] tubulinPrefabs = new GameObject[2];
 		public Spline spline;
 
-		List<Tubulin> tubulins;
 		Transform tubulinParent;
-		float turns;
-
-		void Start () 
+		List<Tubulin> _tubulins;
+		List<Tubulin> tubulins
 		{
-			MakeTubulins();
-		}
-
-		void MakeTubulins ()
-		{
-			if (tubulinPrefabs[0] == null || spline == null)
+			get
 			{
-				return;
-			}
-			if (tubulinPrefabs[1] == null)
-			{
-				tubulinPrefabs[1] = tubulinPrefabs[0];
-			}
-
-			tubulins = new List<Tubulin>();
-			tubulinParent = new GameObject( "tubulins" ).transform;
-			tubulinParent.SetParent( transform );
-
-			turns = spline.length / 4f;
-			int type = 0;
-			for (int i = 0; i < turns * tubulinsPerTurn; i++)
-			{
-				if (i % tubulinsPerTurn == 0)
+				if (_tubulins == null)
 				{
-					type++;
-					if (type > 1)
-					{
-						type = 0;
-					}
+					_tubulins = new List<Tubulin>();
+					tubulinParent = new GameObject( "tubulins" ).transform;
+					tubulinParent.SetParent( transform );
+					tubulinParent.localPosition = Vector3.zero;
 				}
-				tubulins.Add( MakeTubulin( i, type ) );
+				return _tubulins;
 			}
-
-			PlaceTubulins();
 		}
 
-		Tubulin MakeTubulin (int index, int type)
+		bool canMakeTubulins
 		{
-			GameObject t = Instantiate( tubulinPrefabs[type], tubulinParent ) as GameObject;
-			Tubulin tubulin = t.GetComponent<Tubulin>();
-			tubulin.name = "tubulin" + index;
-
-			return tubulin;
-		}
-
-		void PlaceTubulins ()
-		{
-			float t = 0;
-			float inc = (4f * turns / spline.length) * 4f / spline.length;
-			float rotationPerTubulin = 360f / (float)tubulinsPerTurn;
-			float normalRotation = 0;
-			bool place = true;
-			for (int i = 0; i < turns; i++)
+			get 
 			{
-				Vector3 axisPosition = spline.GetPosition( t );
-				Vector3 nextAxisPosition = spline.GetPosition( t + 2 * inc );
-
-				for (int j = 0; j < tubulinsPerTurn; j++)
+				bool make = true;
+				if ((tubulinPrefabs[0] == null && tubulinPrefabs[1] == null) || spline == null)
 				{
-					int index = i * tubulinsPerTurn + j;
-					if (index >= tubulins.Count)
-					{
-						return;
-					}
-
-					if (place)
-					{
-						float axialOffset = 1.5f * (float)j / (float)tubulinsPerTurn;
-						float turnT = t + 2f * axialOffset * inc;
-						if (turnT > 1)
-						{
-							place = false;
-						}
-						Vector3 tangent = spline.GetTangent( turnT );
-						Vector3 normal = Quaternion.AngleAxis( normalRotation, tangent ) * spline.GetNormal( turnT );
-						Vector3 position = axisPosition + axialOffset * (nextAxisPosition - axisPosition) + radius * normal;
-						Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
-
-						tubulins[index].Place( position, lookDirection, normal );
-
-						normalRotation += rotationPerTubulin;
-					}
-					else
-					{
-						tubulins[index].gameObject.SetActive( false );
-					}
+					make = false;
 				}
-				t += inc;
+				else if (tubulinPrefabs[0] == null)
+				{
+					tubulinPrefabs[0] = tubulinPrefabs[1];
+				}
+				else if (tubulinPrefabs[1] == null)
+				{
+					tubulinPrefabs[1] = tubulinPrefabs[0];
+				}
+				return make;
 			}
 		}
 
 		void Update ()
 		{
-			if (spline != null)
+			if (spline != null && spline.UpdateSpline())
 			{
-				spline.UpdateSpline();
 				PlaceTubulins();
 			}
+		}
+
+		void PlaceTubulins ()
+		{
+			Debug.Log("Place " + Mathf.Round( Time.time ));
+			float t = 0, turns = spline.length / 4f, inc = 1f / turns, rotationPerTubulin = 360f / (float)tubulinsPerTurn, normalRotation = 0;
+			bool reachedEndOfSpline = false;
+			int k = 0;
+			for (int i = 0; i < turns; i++)
+			{
+				Vector3 turnPosition = spline.GetPosition( t );
+				Vector3 nextTurnPosition = spline.GetPosition( t + 2 * inc );
+
+				for (int j = 0; j < tubulinsPerTurn; j++)
+				{
+					if (k >= tubulins.Count)
+					{
+						tubulins.Add( MakeTubulin( k ) );
+					}
+
+					if (tubulins[k] != null)
+					{
+						if (!reachedEndOfSpline)
+						{
+							float axialOffset = 1.5f * j / (float)tubulinsPerTurn;
+							float turnT = t + 2f * axialOffset * inc;
+							if (turnT > 1f)
+							{
+								reachedEndOfSpline = true;
+							}
+							Vector3 tangent = spline.GetTangent( turnT );
+							Vector3 normal = Quaternion.AngleAxis( normalRotation, tangent ) * spline.GetNormal( turnT );
+							Vector3 position = turnPosition + axialOffset * (nextTurnPosition - turnPosition) + radius * normal;
+							Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
+
+							tubulins[k].gameObject.SetActive( true );
+							tubulins[k].Place( position, lookDirection, normal );
+
+							normalRotation += rotationPerTubulin;
+						}
+						else
+						{
+							tubulins[k].gameObject.SetActive( false );
+						}
+					}
+					k++;
+				}
+				t += inc;
+			}
+			for (int i = k; i < tubulins.Count; i++)
+			{
+				tubulins[i].gameObject.SetActive( false );
+			}
+		}
+
+		Tubulin MakeTubulin (int index)
+		{
+			if (canMakeTubulins)
+			{
+				int type = (index % (2f * tubulinsPerTurn) < tubulinsPerTurn ? 0 : 1);
+				GameObject tubulin = Instantiate( tubulinPrefabs[type], tubulinParent ) as GameObject;
+				tubulin.name = tubulinPrefabs[type].name + "_" + index;
+
+				return tubulin.GetComponent<Tubulin>();
+			}
+			return null;
 		}
 	}
 }

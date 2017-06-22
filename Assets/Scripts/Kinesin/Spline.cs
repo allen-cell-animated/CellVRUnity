@@ -35,13 +35,15 @@ namespace AICS.Kinesin
 			UpdateSpline();
 		}
 
-		public void UpdateSpline ()
+		public bool UpdateSpline ()
 		{
 			if (needToUpdate)
 			{
 				CalculateCurve();
 				UpdateDraw();
+				return true;
 			}
+			return false;
 		}
 
 		// ---------------------------------------------- Length
