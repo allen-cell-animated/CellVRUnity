@@ -71,8 +71,8 @@ namespace AICS.Kinesin
 			bool place = true;
 			for (int i = 0; i < turns; i++)
 			{
-				Vector3 axisPosition = spline.GetPoint( t );
-				Vector3 nextAxisPosition = spline.GetPoint( t + 2 * inc );
+				Vector3 axisPosition = spline.GetPosition( t );
+				Vector3 nextAxisPosition = spline.GetPosition( t + 2 * inc );
 
 				for (int j = 0; j < tubulinsPerTurn; j++)
 				{
@@ -110,8 +110,9 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (spline != null && spline.pointsChanged)
+			if (spline != null)
 			{
+				spline.UpdateSpline();
 				PlaceTubulins();
 			}
 		}

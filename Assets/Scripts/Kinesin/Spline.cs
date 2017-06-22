@@ -4,27 +4,43 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
+	[System.Serializable]
+	public class SplinePoint
+	{
+		public Vector3 position;
+		public Vector3 tangent;
+		public Quaternion rotation;
+		public float arcLength;
+
+		public SplinePoint (Vector3 _position, Vector3 _tangent, Quaternion _rotation, float _arcLength)
+		{
+			position = _position;
+			tangent = _tangent;
+			rotation = _rotation;
+			arcLength = _arcLength;
+		}
+	}
+
 	public abstract class Spline : MonoBehaviour 
 	{
-		public int resolution = 15;
+		public int resolutionPerPoint = 15;
 		public float updateTolerance = 0.1f;
 		public bool drawCurve;
 		public Color lineColor = new Color( 1f, 0, 1f );
-		public Vector3[] segmentPositions;
 		public Transform[] points;
+		public SplinePoint[] calculatedPoints;
 
-		protected bool pointsAreSet
+		void Update ()
 		{
-			get {
-				return points != null && points.Length > 0;
-			}
+			UpdateSpline();
 		}
 
-		void Start ()
+		public void UpdateSpline ()
 		{
-			if (pointsAreSet)
+			if (needToUpdate)
 			{
-				lastPointPositions = new Vector3[points.Length];
+				CalculateCurve();
+				UpdateDraw();
 			}
 		}
 
@@ -44,26 +60,52 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public abstract float GetLength ();
+		public float GetLength ()
+		{
+			if (haveNotCalculated)
+			{
+				CalculateCurve();
+			}
+			float l = 0;
+			for (int i = 1; i < calculatedPoints.Length; i++)
+			{
+				l += calculatedPoints[i].arcLength;
+			}
+			return l;
+		}
 
 		// ---------------------------------------------- Point Positions
 
-		public Vector3[] lastPointPositions;
+		Vector3[] lastPointPositions;
 
-		public bool pointsChanged
+		protected bool pointsAreSet
 		{
 			get {
-				bool changed = false;
-				for (int i = 0; i < points.Length; i++)
+				return points != null && points.Length > 0;
+			}
+		}
+
+		public bool needToUpdate
+		{
+			get {
+				if (pointsAreSet)
 				{
-					if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > updateTolerance)
+					bool changed = false;
+					if (lastPointPositions == null)
 					{
-						changed = true;
-						lastPointPositions[i] = points[i].position;
+						lastPointPositions = new Vector3[points.Length];
 					}
+					for (int i = 0; i < points.Length; i++)
+					{
+						if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > updateTolerance)
+						{
+							changed = true;
+							lastPointPositions[i] = points[i].position;
+						}
+					}
+					return changed;
 				}
-				if (changed) { UpdateCurve(); }
-				return changed;
+				return false;
 			}
 		}
 
@@ -71,29 +113,33 @@ namespace AICS.Kinesin
 
 		protected List<LineRenderer> lines = new List<LineRenderer>();
 
-		void Update ()
+		void UpdateDraw ()
 		{
-			if (pointsAreSet && pointsChanged && drawCurve)
+			if (drawCurve)
 			{
 				ClearExtraLines();
 				Draw();
 			}
 		}
 
-		protected abstract void UpdateCurve ();
-
-		protected abstract void Draw ();
+		void Draw ()
+		{
+			for (int i = 0; i < calculatedPoints.Length - 1; i++)
+			{
+				DrawSegment( i, calculatedPoints[i].position, calculatedPoints[i + 1].position );
+			}
+		}
 
 		protected void ClearExtraLines ()
 		{
-			if (lines.Count > segmentPositions.Length) 
+			if (lines.Count > calculatedPoints.Length) 
 			{ 
 				int currentN = lines.Count;
-				for (int i = segmentPositions.Length; i < currentN; i++)
+				for (int i = calculatedPoints.Length; i < currentN; i++)
 				{
 					Destroy( lines[i].gameObject );
 				}
-				lines.RemoveRange( segmentPositions.Length, lines.Count - segmentPositions.Length );
+				lines.RemoveRange( calculatedPoints.Length, lines.Count - calculatedPoints.Length );
 			}
 		}
 
@@ -118,9 +164,53 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Calculation
 
-		public abstract Vector3 GetPoint (float t);
+		public abstract int n 
+		{
+			get;
+		}
 
-		public abstract float GetTForClosestPoint (Vector3 point);
+		bool haveNotCalculated 
+		{
+			get
+			{
+				return calculatedPoints == null || calculatedPoints.Length == 0;
+			}
+		}
+
+		protected abstract void PreCalculateCurve ();
+
+		void CalculateCurve ()
+		{
+			PreCalculateCurve();
+
+			calculatedPoints = new SplinePoint[resolutionPerPoint * (n - 1) + 1];
+			int k = 0, segments;
+			Vector3 position, tangent;
+			normalTransform.rotation = Quaternion.identity;
+			float arcLength = 0, t = 0;
+			for (int section = 0; section < n - 1; section++)
+			{
+				segments = (section < n - 2 ? resolutionPerPoint : resolutionPerPoint + 1);
+				for (int s = 0; s < segments; s++)
+				{
+					t = GetTForCalculation( section, s );
+					position = CalculatePosition( section, t );
+					tangent = CalculateTangent( section, t );
+					if (k > 0)
+					{
+						arcLength = Vector3.Distance( position, calculatedPoints[k - 1].position );
+					}
+					calculatedPoints[k] = new SplinePoint( position, tangent, CalculateRotation( position, tangent ), arcLength );
+					k++;
+				}
+			}
+		}
+
+		protected abstract float GetTForCalculation (int section, int segment);
+
+		protected abstract Vector3 CalculatePosition (int pointIndex, float sectionT);
+
+		protected abstract Vector3 CalculateTangent (int pointIndex, float sectionT);
 
 		Transform _normalTransform;
 		protected Transform normalTransform
@@ -137,8 +227,55 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public abstract Vector3 GetNormal (float t);
+		Quaternion CalculateRotation (Vector3 position, Vector3 tangent)
+		{
+			float angle = 180f * Mathf.Acos( Vector3.Dot( normalTransform.forward, tangent ) ) / Mathf.PI;
+			Vector3 axis = Vector3.Normalize( Vector3.Cross( normalTransform.forward, tangent ) );
+			normalTransform.RotateAround( position, axis, angle );
+			return normalTransform.rotation;
+		}
 
-		public abstract Vector3 GetTangent (float t);
+		// ---------------------------------------------- 
+
+		CubicSplinePosition GetSplinePositionForT (float t)
+		{
+			float tLength = t * length;
+			float currentLength = 0;
+			for (int i = 1; i < calculatedPoints.Length; i++)
+			{
+				float arcLength = calculatedPoints[i].arcLength;
+				if (tLength < currentLength + arcLength)
+				{
+					return new CubicSplinePosition( i - 1, (tLength - currentLength) / arcLength );
+				}
+				currentLength += arcLength;
+			}
+			return new CubicSplinePosition( calculatedPoints.Length - 2, 1f );
+		}
+
+		public Vector3 GetPosition (float t)
+		{
+			CubicSplinePosition splinePosition = GetSplinePositionForT( t );
+			Vector3 startPosition = calculatedPoints[splinePosition.pointIndex].position;
+			Vector3 endPosition = calculatedPoints[splinePosition.pointIndex + 1].position;
+			return Vector3.Lerp( startPosition, endPosition, splinePosition.sectionT );
+		}
+
+		public Vector3 GetTangent (float t)
+		{
+			CubicSplinePosition splinePosition = GetSplinePositionForT( t );
+			Vector3 startTangent = calculatedPoints[splinePosition.pointIndex].tangent;
+			Vector3 endTangent = calculatedPoints[splinePosition.pointIndex + 1].tangent;
+			return Vector3.Lerp( startTangent, endTangent, splinePosition.sectionT );
+		}
+
+		public Vector3 GetNormal (float t)
+		{
+			CubicSplinePosition splinePosition = GetSplinePositionForT( t );
+			Quaternion startRotation = calculatedPoints[splinePosition.pointIndex].rotation;
+			Quaternion endRotation = calculatedPoints[splinePosition.pointIndex + 1].rotation;
+			normalTransform.rotation = Quaternion.Slerp( startRotation, endRotation, splinePosition.sectionT );
+			return normalTransform.up;
+		}
 	}
 }
