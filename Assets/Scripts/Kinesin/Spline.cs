@@ -30,6 +30,11 @@ namespace AICS.Kinesin
 		public Transform[] points;
 		public SplinePoint[] calculatedPoints;
 
+		void Start ()
+		{
+			lastPointPositions = null;
+		}
+
 		void Update ()
 		{
 			UpdateSpline();
@@ -83,7 +88,7 @@ namespace AICS.Kinesin
 		protected bool pointsAreSet
 		{
 			get {
-				return points != null && points.Length > 0;
+				return points != null && n > 0;
 			}
 		}
 
@@ -93,11 +98,15 @@ namespace AICS.Kinesin
 				if (pointsAreSet)
 				{
 					bool changed = false;
-					if (lastPointPositions == null)
+					if (lastPointPositions == null || lastPointPositions.Length < n)
 					{
-						lastPointPositions = new Vector3[points.Length];
+						lastPointPositions = new Vector3[n];
+						for (int i = 0; i < n; i++)
+						{
+							lastPointPositions[i] = Vector3.zero;
+						}
 					}
-					for (int i = 0; i < points.Length; i++)
+					for (int i = 0; i < n; i++)
 					{
 						if (Vector3.Distance( points[i].position, lastPointPositions[i] ) > updateTolerance)
 						{
@@ -162,6 +171,23 @@ namespace AICS.Kinesin
 			lines[index].transform.position = start;
 			lines[index].SetPosition( 0, start );
 			lines[index].SetPosition( 1, end );
+		}
+
+		void OnDrawGizmos ()
+		{
+			if (needToUpdate)
+			{
+				CalculateCurve();
+			}
+			DrawGizmo();
+		}
+
+		void DrawGizmo ()
+		{
+			for (int i = 0; i < calculatedPoints.Length - 1; i++)
+			{
+				Gizmos.DrawLine( calculatedPoints[i].position, calculatedPoints[i + 1].position );
+			}
 		}
 
 		// ---------------------------------------------- Calculation
