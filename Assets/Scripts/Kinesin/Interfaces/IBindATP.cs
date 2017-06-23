@@ -6,6 +6,8 @@ namespace AICS.Kinesin
 {
 	public interface IBindATP 
 	{
+		void CollideWithATP();
+
 		void BindATP();
 
 		void HydrolyzeATP();

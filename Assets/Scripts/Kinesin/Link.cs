@@ -104,15 +104,15 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (snapping && !neckLinker.bindIsPhysicallyImpossible)
+			if (snapping && !neckLinker.stretched)
 			{
 				SimulateSnapping();
 			}
 
 			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
-			if (distanceToAnchor > 1.3f)
+			if (distanceToAnchor > 5f)
 			{
-				Debug.Log( distanceToAnchor );
+				if (neckLinker.motor.bound) { Debug.Log( "link released " + neckLinker.motor.name + " from tension " + distanceToAnchor); }
 				neckLinker.motor.ReleaseFromTension( name );
 			}
 		}

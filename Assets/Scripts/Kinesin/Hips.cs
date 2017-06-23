@@ -59,8 +59,9 @@ namespace AICS.Kinesin
 
 			for (int i = 0; i < links.Length; i++)
 			{
-				if (distanceToAnchor[i] > 1.1f)
+				if (distanceToAnchor[i] > 5f)
 				{
+					if (links[i].neckLinker.motor.bound) { Debug.Log( "hips released " + links[i].neckLinker.motor.name + " from tension " + distanceToAnchor[i]); }
 					links[i].neckLinker.motor.ReleaseFromTension( name );
 				}
 			}

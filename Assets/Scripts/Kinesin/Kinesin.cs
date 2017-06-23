@@ -6,9 +6,14 @@ namespace AICS.Kinesin
 {
 	public class Kinesin : MonoBehaviour 
 	{
-		public float tensionToRemoveWeaklyBoundMotor = 0.2f;
-		public float maxTension = 0.8f;
-		public float neckLinkerSnappingForce = 25f;
+		public float neckLinkerSnappingForce = 30f;
+		public float bindingRotationTolerance = 30f;
+		public float motorReleaseProbabilityMax = 0.9f;
+		public float motorReleaseProbabilityMin = 0.01f;
+		public float ATPBindProbabilityMax = 0.9f;
+		public float ATPBindProbabilityMin = 0.01f;
+		public float ADPReleaseProbabilityMax = 0.9f;
+		public float ADPReleaseProbabilityMin = 0.01f;
 
 		Hips _hips;
 		public Hips hips

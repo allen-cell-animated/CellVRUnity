@@ -43,7 +43,7 @@ namespace AICS.Diffusion
 				CalculateTheoreticalMSD();
 				LogMSD();
 
-				simulationTimePassed += ParameterInput.Instance.dTime.value;
+				simulationTimePassed += DiffusionParameterInput.Instance.dTime.value;
 			}
 		}
 
@@ -68,13 +68,13 @@ namespace AICS.Diffusion
 
 		void CalculateTheoreticalMSD ()
 		{
-			theoreticalMSD = 6f * 0.01f * ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * simulationTimePassed;
+			theoreticalMSD = 6f * 0.01f * DiffusionParameterInput.Instance.diffusionCoefficient.value * 1E-4f * simulationTimePassed;
 		}
 
 		void LogMSD ()
 		{
 			float t = simulationTimePassed;
-			if (t - lastDataTime >= ParameterInput.Instance.dTime.value)
+			if (t - lastDataTime >= DiffusionParameterInput.Instance.dTime.value)
 			{
 				data += t + "," + theoreticalMSD + "," + simulatedMSD + "\n";
 				lastDataTime = t;
@@ -86,10 +86,10 @@ namespace AICS.Diffusion
 			if (saveDataToFile)
 			{
 				string fileName = "msd" 
-					+ "_vm" + ParameterInput.Instance.forceMultiplier + "sqrt"
+					+ "_vm" + DiffusionParameterInput.Instance.forceMultiplier + "sqrt"
 					+ "_n" + particleFactory.particles.Length 
-					+ "_t" + ParameterInput.Instance.dTime.value 
-					+ "_dc" + ParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[0]
+					+ "_t" + DiffusionParameterInput.Instance.dTime.value 
+					+ "_dc" + DiffusionParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[0]
 					+ "_drag" + particleFactory.particles[0].GetComponent<Rigidbody>().drag.ToString().Split('.')[0] + ".csv";
 				File.WriteAllText( filePath + fileName, data );
 			}

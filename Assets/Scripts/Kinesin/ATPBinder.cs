@@ -13,7 +13,6 @@ namespace AICS.Kinesin
 		public float hydrolysisTime = 5f;
 		public Nucleotide nucleotide;
 
-		float lastTime = -1f;
 		float bindingTime = -1f;
 
 		IBindATP _binder;
@@ -41,6 +40,7 @@ namespace AICS.Kinesin
 		{
 			if (nucleotide == null && _nucleotide != null && _nucleotide.isATP)
 			{
+				binder.CollideWithATP();
 				float random = Random.Range(0, 1f);
 				return random <= ATPBindingProbability;
 			}
@@ -64,17 +64,13 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (Time.time - lastTime > 0.3f)
+			if (shouldReleaseADP)
 			{
-				if (shouldReleaseADP)
-				{
-					ReleaseADP();
-				}
-				else if (shouldHydrolyzeATP)
-				{
-					HydrolyzeATP();
-				}
-				lastTime = Time.time;
+				ReleaseADP();
+			}
+			else if (shouldHydrolyzeATP)
+			{
+				HydrolyzeATP();
 			}
 		}
 
@@ -84,7 +80,7 @@ namespace AICS.Kinesin
 				if (nucleotide != null && !nucleotide.isATP && Time.time - bindingTime > 0.5f)
 				{
 					float random = Random.Range(0, 1f);
-					return random <= ADPReleaseProbability;
+					return random <= Time.deltaTime * ADPReleaseProbability;
 				}
 				return false;
 			}

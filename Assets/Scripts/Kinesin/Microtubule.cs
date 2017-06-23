@@ -11,6 +11,8 @@ namespace AICS.Kinesin
 		public GameObject[] tubulinPrefabs = new GameObject[2];
 		public Spline spline;
 
+		bool placedTubulins;
+
 		Transform[] _tubulinParents;
 		Transform GetTubulinParent (int index)
 		{
@@ -64,7 +66,7 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (spline != null && spline.UpdateSpline())
+			if (spline != null && (!placedTubulins || spline.UpdateSpline()))
 			{
 				PlaceTubulins();
 			}
@@ -74,6 +76,7 @@ namespace AICS.Kinesin
 		{
 			float middleT = PlaceHalfOfTubulins( -1, 0.5f );
 			PlaceHalfOfTubulins( 1, middleT );
+			placedTubulins = true;
 		}
 
 		float PlaceHalfOfTubulins (int direction, float startT)

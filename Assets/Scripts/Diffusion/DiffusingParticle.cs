@@ -79,8 +79,8 @@ namespace AICS.Diffusion
 		float forceMagnitude
 		{
 			get {
-				float meanForce = body.mass * timeInterval * ParameterInput.Instance.forceMultiplier 
-					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * ParameterInput.Instance.dTime.value );
+				float meanForce = body.mass * timeInterval * DiffusionParameterInput.Instance.forceMultiplier 
+					* Mathf.Sqrt( DiffusionParameterInput.Instance.diffusionCoefficient.value * 1E-4f * DiffusionParameterInput.Instance.dTime.value );
 				float force = Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce);
 //				factory.RecordData( meanForce, force );
 				return force;
@@ -90,8 +90,8 @@ namespace AICS.Diffusion
 		float torqueMagnitude
 		{
 			get {
-				float meanForce = body.mass * timeInterval * ParameterInput.Instance.torqueMultiplier 
-					* Mathf.Sqrt( ParameterInput.Instance.diffusionCoefficient.value * 1E-4f * ParameterInput.Instance.dTime.value );
+				float meanForce = body.mass * timeInterval * DiffusionParameterInput.Instance.torqueMultiplier 
+					* Mathf.Sqrt( DiffusionParameterInput.Instance.diffusionCoefficient.value * 1E-4f * DiffusionParameterInput.Instance.dTime.value );
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce);
 			}
 		}

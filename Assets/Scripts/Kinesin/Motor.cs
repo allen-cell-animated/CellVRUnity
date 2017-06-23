@@ -14,7 +14,7 @@ namespace AICS.Kinesin
 	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
 	public class Motor : MonoBehaviour, IBindATP
 	{
-		public bool checkBindingOrientation = true;
+		public bool checkBindingOrientation = true; //for testing
 		public MotorState state = MotorState.Free;
 		public bool startWithDockedNecklinker;
 		public bool pause; // for testing
@@ -29,7 +29,6 @@ namespace AICS.Kinesin
 		float lastCheckReleaseTime = -1f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
-//		Vector3 bindingRotationTolerance = new Vector3( 30f, 30f, 20f );
 		public Tubulin tubulin;
 		Color color;
 
@@ -170,7 +169,11 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (state == MotorState.Free)
+			if (Time.time - lastATPTime < 0.2f)
+			{
+				meshRenderer.material.color = new Color( 1f, 0, 1f );
+			}
+			else if (state == MotorState.Free)
 			{
 				meshRenderer.material.color = color;
 			}
@@ -209,7 +212,7 @@ namespace AICS.Kinesin
 
 		void BindToMT (Tubulin _tubulin)
 		{
-			if (!neckLinker.bindIsPhysicallyImpossible && closeToBindingOrientation( _tubulin ) && !pause)
+			if (!neckLinker.stretched && closeToBindingOrientation( _tubulin ) && !pause)
 			{
 				Debug.Log(name + " bind");
 				tubulin = _tubulin;
@@ -227,18 +230,17 @@ namespace AICS.Kinesin
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			return true;
-//			if (!checkBindingOrientation || kinesin.OtherMotor( this ).bound)
-//			{
-//				return true;
-//			}
-//			else 
-//			{
-//				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-//				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance.x )
-//					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance.y )
-//					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance.z );
-//			}
+			if (!checkBindingOrientation) // || kinesin.OtherMotor( this ).bound
+			{
+				return true;
+			}
+			else 
+			{
+				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.bindingRotationTolerance )
+					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.bindingRotationTolerance )
+					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.bindingRotationTolerance );
+			}
 		}
 
 		void UpdateBinding ()
@@ -278,7 +280,6 @@ namespace AICS.Kinesin
 				}
 				if (releasing)
 				{
-					Debug.Log( "finish release" );
 					tubulin.hasMotorBound = false;
 					state = MotorState.Free;
 					randomForces.addForce = randomForces.addTorque = true;
@@ -318,13 +319,8 @@ namespace AICS.Kinesin
 				if (Time.time - lastCheckReleaseTime > 0.3f)
 				{
 					lastCheckReleaseTime = Time.time;
-					float probability = probabilityOfEjectionFromStrong;
-					if (state == MotorState.Weak) 
-					{
-						probability = (neckLinker.tensionIsForward) ? probabilityOfEjectionFromWeak : 0.05f; // this is the back motor
-					}
-					float random = Random.Range(0, 1f);
-					return random <= probability;
+					float probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
+					return Random.Range(0, 1f) <= Time.deltaTime * probability;
 				}
 				return false;
 			}
@@ -333,7 +329,20 @@ namespace AICS.Kinesin
 		float probabilityOfEjectionFromWeak
 		{
 			get {
-				return 0.001f * 0.9f / (1f + Mathf.Exp( -10f * (neckLinker.tension - kinesin.tensionToRemoveWeaklyBoundMotor) ));
+				float probability = kinesin.motorReleaseProbabilityMin;
+				if (neckLinker.tensionIsForward) // this is back motor
+				{
+					if (neckLinker.bound)
+					{
+						probability = (kinesin.OtherMotor( this ).bound) ? kinesin.motorReleaseProbabilityMax : kinesin.motorReleaseProbabilityMin;
+					}
+					else
+					{
+						// tension ~= 0.68 when necklinker is bound, p ~= 0 when tension < 0.5, p ~= max when tension > 0.8
+						probability = kinesin.motorReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) ));
+					}
+				}
+				return probability;
 			}
 		}
 
@@ -346,9 +355,8 @@ namespace AICS.Kinesin
 
 		public void ReleaseFromTension (string releaserName)
 		{
-			if (!releasing && (state == MotorState.Weak || (state == MotorState.Strong && neckLinker.tension > 1f)))
+			if (bound)
 			{
-				Debug.Log( releaserName + " released " + name + " in state " + state);
 				Release();
 			}
 		}
@@ -380,9 +388,15 @@ namespace AICS.Kinesin
 			}
 		}
 
+		float lastATPTime = -1f;
+
+		public void CollideWithATP ()
+		{
+			lastATPTime = Time.time;
+		}
+
 		public void BindATP ()
 		{
-			Debug.Log(name + " Bind ATP");
 			if (bound)
 			{
 				state = MotorState.Strong;
@@ -399,27 +413,28 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-//			float probability = 0.001f;
-//			if (!neckLinker.tensionIsForward) // this is the front motor
-//			{
-//				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f); // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
-//			}
-			atpBinder.ATPBindingProbability = 1;// probability;
+			float probability = kinesin.ATPBindProbabilityMin;
+			if (!neckLinker.tensionIsForward) // this is the front motor
+			{
+				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
+				probability = kinesin.ATPBindProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.6f) ));  
+			}
+			atpBinder.ATPBindingProbability = probability;
 		}
 
 		void UpdateADPReleaseProbability ()
 		{
-			float probability = 0.1f;
+			float probability = kinesin.ATPBindProbabilityMin;
 			if (neckLinker.tensionIsForward) // this is the back motor
 			{
-				probability = 1f - 2.5f * (neckLinker.tension / kinesin.maxTension - 0.4f);  // p = 0 at high tension (0.8), p = 1 at low tension (0.4)
+				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
+				probability = kinesin.ADPReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.6f) ));  
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}
 
 		public void HydrolyzeATP ()
 		{
-			Debug.Log(name + " Hydrolyze");
 			neckLinker.StopSnapping();
 			if (bound)
 			{

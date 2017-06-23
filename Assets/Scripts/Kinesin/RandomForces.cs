@@ -8,9 +8,9 @@ namespace AICS.Kinesin
 	{
 		public bool addForce = true;
 		public bool addTorque = true;
-		public float minTimeBetweenImpulses = 0.1f;
-		public float maxTimeBetweenImpulses = 0.5f;
 
+		float minTimeBetweenImpulses = 0.1f;
+		float maxTimeBetweenImpulses = 1f;
 		float lastTime = -1f;
 		float timeInterval;
 
@@ -54,7 +54,8 @@ namespace AICS.Kinesin
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanForce = body.mass * timeInterval * 2100f * Mathf.Sqrt( 0.002f * 1000f ); 
+				float meanForce = body.mass * timeInterval * 2100f 
+					* Mathf.Sqrt( KinesinParameterInput.Instance.diffusionCoefficient.value * 1E-4f * KinesinParameterInput.Instance.dTime.value ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce); // random exponential distribution
 			}
 		}
@@ -63,7 +64,8 @@ namespace AICS.Kinesin
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanTorque = body.mass * timeInterval * 1500f * Mathf.Sqrt( 0.002f * 1000f );
+				float meanTorque = body.mass * timeInterval * 1500f 
+					* Mathf.Sqrt( KinesinParameterInput.Instance.diffusionCoefficient.value * 1E-4f * KinesinParameterInput.Instance.dTime.value ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanTorque); // random exponential distribution
 			}
 		}

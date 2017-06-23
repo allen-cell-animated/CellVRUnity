@@ -8,6 +8,7 @@ namespace AICS.Kinesin
 	{
 		public bool startDocked;
 		public bool snapping;
+		public bool bound;
 
 		float[] linkerTensionExtents = new float[]{1f, 8f};
 		float startingLength;
@@ -40,13 +41,6 @@ namespace AICS.Kinesin
 					_motor = GetComponentInParent<Motor>();
 				}
 				return _motor;
-			}
-		}
-
-		public bool bindIsPhysicallyImpossible
-		{
-			get {
-				return tension > motor.kinesin.maxTension || stretched;
 			}
 		}
 
@@ -102,7 +96,7 @@ namespace AICS.Kinesin
 
 		public void StartSnapping ()
 		{
-			snapping = true;
+			snapping = bound = true;
 			links[0].StartSnapping();
 		}
 
@@ -121,7 +115,7 @@ namespace AICS.Kinesin
 			{
 				link.Release();
 			}
-			snapping = false;
+			snapping = bound = false;
 		}
 	}
 }
