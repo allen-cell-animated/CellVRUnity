@@ -247,9 +247,13 @@ namespace AICS.Kinesin
 			{
 				if (_normalTransform == null)
 				{
-					_normalTransform = new GameObject( "Normal" ).transform;
-					_normalTransform.SetParent( transform );
-					_normalTransform.localPosition = Vector3.zero;
+					_normalTransform = transform.FindChild( "Normal" );
+					if (_normalTransform == null)
+					{
+						_normalTransform = new GameObject( "Normal" ).transform;
+						_normalTransform.SetParent( transform );
+						_normalTransform.localPosition = Vector3.zero;
+					}
 				}
 				return _normalTransform;
 			}
