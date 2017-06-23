@@ -357,7 +357,7 @@ namespace AICS.Kinesin
 		{
 			if (bound)
 			{
-				Release();
+//				Release();
 			}
 		}
 

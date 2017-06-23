@@ -117,9 +117,12 @@ namespace AICS.Kinesin
 			}
 		}
 
+		public float distanceToGoal; //for testing
+
 		void SimulateSnapping ()
 		{
 			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
+			distanceToGoal = Vector3.Magnitude( toGoal );
 			if (Vector3.Magnitude( toGoal ) > 0.5f)
 			{
 				body.AddForce( neckLinker.motor.kinesin.neckLinkerSnappingForce * Vector3.Normalize( toGoal ) );
