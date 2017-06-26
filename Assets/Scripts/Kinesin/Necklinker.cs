@@ -9,6 +9,7 @@ namespace AICS.Kinesin
 		public bool startDocked;
 		public bool snapping;
 		public bool bound;
+		public float snappingForce = 100f;
 
 		float[] linkerTensionExtents = new float[]{1f, 8f};
 		float startingLength;
@@ -76,7 +77,7 @@ namespace AICS.Kinesin
 				{
 					length += Vector3.Distance( links[i].transform.position, links[i - 1].transform.position );
 				}
-				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
+//				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
 				return length;
 			}
 		}
@@ -92,6 +93,14 @@ namespace AICS.Kinesin
 		void Start ()
 		{
 			startingLength = length;
+		}
+
+		void Update ()
+		{
+			if (Time.time > 1f && !snapping)
+			{
+				StartSnapping();
+			}
 		}
 
 		public void StartSnapping ()

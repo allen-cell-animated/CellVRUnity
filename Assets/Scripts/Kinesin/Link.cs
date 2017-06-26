@@ -11,7 +11,7 @@ namespace AICS.Kinesin
 		public float distanceToAnchor;
 
 		float startDistanceToAnchor;
-		Vector3 dockedPosition;
+		public Vector3 dockedPosition;
 		Quaternion dockedRotation;
 
 		Necklinker _necklinker;
@@ -86,6 +86,18 @@ namespace AICS.Kinesin
 			}
 		}
 
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer // testing
+		{
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = transform.FindChild( "Sphere" ).GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
 		void Start ()
 		{
 			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
@@ -99,21 +111,38 @@ namespace AICS.Kinesin
 
 		public void StartSnapping ()
 		{
-			snapping = true;
+			snapping = startedSnapping = true;
 		}
-
+		bool startedSnapping;
 		void Update ()
 		{
-			if (snapping && !neckLinker.stretched)
+			if (snapping) // && !neckLinker.stretched)
 			{
 				SimulateSnapping();
 			}
 
 			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
-			if (distanceToAnchor > 5f)
+//			if (distanceToAnchor > 5f)
+//			{
+//				if (neckLinker.motor.bound) { Debug.Log( "link released " + neckLinker.motor.name + " from tension " + distanceToAnchor); }
+//				neckLinker.motor.ReleaseFromTension( name );
+//			}
+
+			if (snapping)
 			{
-				if (neckLinker.motor.bound) { Debug.Log( "link released " + neckLinker.motor.name + " from tension " + distanceToAnchor); }
-				neckLinker.motor.ReleaseFromTension( name );
+				meshRenderer.material.color = Color.green;
+			}
+			else if (body.isKinematic)
+			{
+				meshRenderer.material.color = Color.blue;
+			}
+			else if (startedSnapping)
+			{
+				meshRenderer.material.color = Color.cyan;
+			}
+			else
+			{
+				meshRenderer.material.color = Color.white;
 			}
 		}
 
@@ -122,10 +151,10 @@ namespace AICS.Kinesin
 		void SimulateSnapping ()
 		{
 			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
-			distanceToGoal = Vector3.Magnitude( toGoal );
-			if (Vector3.Magnitude( toGoal ) > 0.5f)
+			distanceToGoal = Vector3.Magnitude( neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position );
+			if (distanceToGoal > 0.5f)
 			{
-				body.AddForce( neckLinker.motor.kinesin.neckLinkerSnappingForce * Vector3.Normalize( toGoal ) );
+				body.AddForce( neckLinker.snappingForce * toGoal );
 			}
 			else
 			{
@@ -136,6 +165,9 @@ namespace AICS.Kinesin
 		void FinishSnapping ()
 		{
 			snapping = false;
+			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
+			body.constraints = RigidbodyConstraints.FreezePosition;
+			distanceToGoal = Vector3.Magnitude( neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position );
 			if (previousLink != null) 
 			{
 				previousLink.Freeze();
@@ -156,7 +188,7 @@ namespace AICS.Kinesin
 		{
 			body.isKinematic = true; 
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
-			transform.localRotation = dockedRotation;
+//			transform.localRotation = dockedRotation;
 		}
 
 		public void StopSnapping ()

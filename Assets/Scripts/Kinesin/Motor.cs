@@ -70,6 +70,7 @@ namespace AICS.Kinesin
 			Quaternion[] dockedLinkRotations = new Quaternion[neckLinkers[0].links.Length];
 			foreach (Necklinker nL in neckLinkers)
 			{
+				Debug.Log( nL.startDocked );
 				if (nL.startDocked)
 				{
 					for (int i = 0; i < nL.links.Length; i++)
@@ -164,51 +165,52 @@ namespace AICS.Kinesin
 
 		void Start ()
 		{
-			color = meshRenderer.material.color;
+			SetupNecklinkers();
+//			color = meshRenderer.material.color;
 		}
 
-		void Update ()
-		{
-			if (Time.time - lastATPTime < 0.2f)
-			{
-				meshRenderer.material.color = new Color( 1f, 0, 1f );
-			}
-			else if (state == MotorState.Free)
-			{
-				meshRenderer.material.color = color;
-			}
-			else if (state == MotorState.Weak)
-			{
-				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-			}
-			else
-			{
-				meshRenderer.material.color = Color.red;
-			}
-
-			inFront = !neckLinker.tensionIsForward;
-
-			if (!pause)
-			{
-				UpdateBinding();
-				UpdateRelease();
-				UpdateNucleotideProbabilities();
-			}
-		}
+//		void Update ()
+//		{
+//			if (Time.time - lastATPTime < 0.2f)
+//			{
+//				meshRenderer.material.color = new Color( 1f, 0, 1f );
+//			}
+//			else if (state == MotorState.Free)
+//			{
+//				meshRenderer.material.color = color;
+//			}
+//			else if (state == MotorState.Weak)
+//			{
+//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+//			}
+//			else
+//			{
+//				meshRenderer.material.color = Color.red;
+//			}
+//
+//			inFront = !neckLinker.tensionIsForward;
+//
+//			if (!pause)
+//			{
+//				UpdateBinding();
+//				UpdateRelease();
+//				UpdateNucleotideProbabilities();
+//			}
+//		}
 
 		// ---------------------------------------------- Binding
 
-		void OnCollisionEnter (Collision collision)
-		{
-			if (state == MotorState.Free)
-			{
-				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
-				if (_tubulin != null && !_tubulin.hasMotorBound)
-				{
-					BindToMT( _tubulin );
-				}
-			}
-		}
+//		void OnCollisionEnter (Collision collision)
+//		{
+//			if (state == MotorState.Free)
+//			{
+//				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
+//				if (_tubulin != null && !_tubulin.hasMotorBound)
+//				{
+//					BindToMT( _tubulin );
+//				}
+//			}
+//		}
 
 		void BindToMT (Tubulin _tubulin)
 		{
