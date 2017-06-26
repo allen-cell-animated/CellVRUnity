@@ -10,6 +10,8 @@ namespace AICS.Kinesin
 		public bool snapping;
 		public bool bound;
 
+		float lastTime = -10f;
+
 		LinkTest[] _links;
 		public LinkTest[] links
 		{
@@ -44,9 +46,17 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (Time.time > 1f && !snapping)
+			if (!snapping)
 			{
-				StartSnapping();
+				if (bound && Time.time - lastTime > 1f)
+				{
+					Release();
+					lastTime = Time.time;
+				}
+				else if (Time.time - lastTime > 10f)
+				{
+					StartSnapping();
+				}
 			}
 		}
 
@@ -54,6 +64,12 @@ namespace AICS.Kinesin
 		{
 			snapping = bound = true;
 			links[0].StartSnapping();
+		}
+
+		public void FinishSnapping ()
+		{
+			snapping = false;
+			lastTime = Time.time;
 		}
 
 		public void StopSnapping ()

@@ -99,6 +99,7 @@ namespace AICS.Kinesin
 		public void StartSnapping ()
 		{
 			snapping = startedSnapping = true;
+			randomForces.addForce = randomForces.addTorque = false;
 		}
 
 		void Update ()
@@ -139,8 +140,9 @@ namespace AICS.Kinesin
 			distanceToGoal = Vector3.Magnitude( toGoal );
 			if (distanceToGoal > 0.3f)
 			{
-				Debug.Log(neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) )));
-				body.AddForce( neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) )) * Vector3.Normalize( toGoal ) );
+				neckLinker.motor.currentSnappingForce = neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
+				body.AddForce( neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) )) * Vector3.Normalize( toGoal ) 
+					+ Helpers.GetRandomVector( neckLinker.motor.randomSnappingForce ));
 			}
 			else
 			{
@@ -168,7 +170,7 @@ namespace AICS.Kinesin
 			else
 			{
 				Freeze();
-				neckLinker.snapping = false;
+				neckLinker.FinishSnapping();
 			}
 		}
 
@@ -185,8 +187,10 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			snapping = false;
+			snapping = startedSnapping = false;
 			body.isKinematic = false; 
+			body.constraints = RigidbodyConstraints.None;
+			randomForces.addForce = randomForces.addTorque = true;
 		}
 	}
 }
