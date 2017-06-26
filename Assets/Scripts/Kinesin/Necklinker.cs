@@ -82,11 +82,11 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void SetDockedTransforms (Vector3[] dockedPositions, Quaternion[] dockedRotations)
+		public void SetDockedPositions (Vector3[] dockedPositions)
 		{
 			for (int i = 0; i < links.Length; i++)
 			{
-				links[i].SetDockedTransform( dockedPositions[i], dockedRotations[i] );
+				links[i].dockedPosition = dockedPositions[i];
 			}
 		}
 

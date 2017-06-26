@@ -67,7 +67,6 @@ namespace AICS.Kinesin
 		{
 			Necklinker[] neckLinkers = GetComponentsInChildren<Necklinker>();
 			Vector3[] dockedLinkPositions = new Vector3[neckLinkers[0].links.Length];
-			Quaternion[] dockedLinkRotations = new Quaternion[neckLinkers[0].links.Length];
 			foreach (Necklinker nL in neckLinkers)
 			{
 				Debug.Log( nL.startDocked );
@@ -76,7 +75,6 @@ namespace AICS.Kinesin
 					for (int i = 0; i < nL.links.Length; i++)
 					{
 						dockedLinkPositions[i] = transform.InverseTransformPoint( nL.links[i].transform.position );
-						dockedLinkRotations[i] = nL.links[i].transform.localRotation;
 					}
 				}
 			}
@@ -86,7 +84,7 @@ namespace AICS.Kinesin
 				if ((nL.startDocked && startWithDockedNecklinker) || (!nL.startDocked && !startWithDockedNecklinker))
 				{
 					_neckLinker = nL;
-					_neckLinker.SetDockedTransforms( dockedLinkPositions, dockedLinkRotations );
+					_neckLinker.SetDockedPositions( dockedLinkPositions );
 				}
 				else
 				{
