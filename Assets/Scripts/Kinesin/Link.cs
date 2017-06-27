@@ -85,18 +85,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer // testing
-		{
-			get {
-				if (_meshRenderer == null)
-				{
-					_meshRenderer = transform.FindChild( "Sphere" ).GetComponent<MeshRenderer>();
-				}
-				return _meshRenderer;
-			}
-		}
-
 		void Start ()
 		{
 			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
@@ -120,23 +108,6 @@ namespace AICS.Kinesin
 //				if (neckLinker.motor.bound) { Debug.Log( "link released " + neckLinker.motor.name + " from tension " + distanceToAnchor); }
 //				neckLinker.motor.ReleaseFromTension( name );
 //			}
-
-			if (snapping)
-			{
-				meshRenderer.material.color = Color.green;
-			}
-			else if (body.isKinematic)
-			{
-				meshRenderer.material.color = Color.blue;
-			}
-			else if (startedSnapping)
-			{
-				meshRenderer.material.color = Color.cyan;
-			}
-			else
-			{
-				meshRenderer.material.color = Color.white;
-			}
 		}
 
 		public float distanceToGoal; //for testing

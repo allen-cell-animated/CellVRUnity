@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	[RequireComponent( typeof(Rigidbody), typeof(RandomForces) )]
+	[RequireComponent( typeof(Rigidbody), typeof(RandomForcesNecklinker) )]
 	public class LinkTest : MonoBehaviour 
 	{
 		public bool snapping;
 		public Vector3 dockedPosition;
 
 		bool startedSnapping;
+		Transform startTransform;
 
 		NecklinkerTest _necklinker;
 		public NecklinkerTest neckLinker
@@ -60,13 +61,13 @@ namespace AICS.Kinesin
 			}
 		}
 
-		RandomForces _randomForces;
-		RandomForces randomForces
+		RandomForcesNecklinker _randomForces;
+		RandomForcesNecklinker randomForces
 		{
 			get {
 				if (_randomForces == null)
 				{
-					_randomForces = GetComponent<RandomForces>();
+					_randomForces = GetComponent<RandomForcesNecklinker>();
 				}
 				return _randomForces;
 			}
@@ -84,8 +85,24 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Attractor _attractor;
+		Attractor attractor
+		{
+			get {
+				if (_attractor == null)
+				{
+					_attractor = GetComponent<Attractor>();
+					if (_attractor == null)
+					{
+						_attractor = gameObject.AddComponent<Attractor>();
+					}
+				}
+				return _attractor;
+			}
+		}
+
 		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer // testing
+		MeshRenderer meshRenderer
 		{
 			get {
 				if (_meshRenderer == null)
@@ -96,8 +113,15 @@ namespace AICS.Kinesin
 			}
 		}
 
+		void Start ()
+		{
+			startTransform = new GameObject( "start_" + name ).transform;
+			startTransform.position = transform.position;
+		}
+
 		public void StartSnapping ()
 		{
+			attractor.target = null;
 			snapping = startedSnapping = true;
 			randomForces.addForce = randomForces.addTorque = false;
 		}
@@ -187,10 +211,21 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
+			attractor.target = null;
 			snapping = startedSnapping = false;
 			body.isKinematic = false; 
 			body.constraints = RigidbodyConstraints.None;
 			randomForces.addForce = randomForces.addTorque = true;
+		}
+
+		public void ResetPosition ()
+		{
+			if (startedSnapping)
+			{
+				Release();
+			}
+			attractor.target = startTransform;
+			attractor.attractiveForce = 10f;
 		}
 	}
 }

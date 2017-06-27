@@ -28,6 +28,7 @@ namespace AICS
 		public Text displayValue;
 		public string units;
 		public ParameterFormat format;
+		public int decimalPoints;
 
 		public void Set (float _sliderValue) // slider goes from 0 --> 10
 		{
@@ -94,7 +95,8 @@ namespace AICS
 
 		string FormatRound ()
 		{
-			return Mathf.Round( value ) + " " + units;
+			float multiplier = Mathf.Pow( 10f, decimalPoints );
+			return (Mathf.Round( value * multiplier ) / multiplier) + " " + units;
 		}
 	}
 }

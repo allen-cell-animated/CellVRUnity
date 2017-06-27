@@ -4,15 +4,12 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	public class RandomForces : MonoBehaviour 
+	public class RandomForcesNecklinker : MonoBehaviour 
 	{
 		public bool addForce = true;
 		public bool addTorque = true;
 
-		float minTimeBetweenImpulses = 0.1f;
-		float maxTimeBetweenImpulses = 1f;
 		float lastTime = -1f;
-		float timeInterval;
 
 		Rigidbody _rigidbody;
 		Rigidbody body
@@ -26,14 +23,9 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void Start ()
-		{
-			SetTimeInterval();
-		}
-
 		void FixedUpdate () 
 		{
-			if (body != null && Time.time - lastTime > timeInterval)
+			if (body != null && Time.time - lastTime > (1f / NecklinkerParameterInput.Instance.forceFrequency.value))
 			{
 				body.velocity = body.angularVelocity = Vector3.zero;
 				if (addForce)
@@ -45,7 +37,6 @@ namespace AICS.Kinesin
 					body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 				}
 
-				SetTimeInterval();
 				lastTime = Time.time;
 			}
 		}
@@ -54,8 +45,8 @@ namespace AICS.Kinesin
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanForce = body.mass * timeInterval * 2100f 
-					* Mathf.Sqrt( 20f * 1E-4f * KinesinParameterInput.Instance.dTime.value ); 
+				float meanForce = body.mass * (1f / NecklinkerParameterInput.Instance.forceFrequency.value) * 2100f 
+					* Mathf.Sqrt( 20f * 1E-4f * NecklinkerParameterInput.Instance.dTime.value ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce); // random exponential distribution
 			}
 		}
@@ -64,15 +55,10 @@ namespace AICS.Kinesin
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanTorque = body.mass * timeInterval * 1500f 
-					* Mathf.Sqrt( 20f * 1E-4f * KinesinParameterInput.Instance.dTime.value ); 
+				float meanTorque = body.mass * (1f / NecklinkerParameterInput.Instance.forceFrequency.value) * 1500f 
+					* Mathf.Sqrt( 20f * 1E-4f * NecklinkerParameterInput.Instance.dTime.value ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanTorque); // random exponential distribution
 			}
-		}
-
-		void SetTimeInterval ()
-		{
-			timeInterval = Random.Range( minTimeBetweenImpulses, maxTimeBetweenImpulses );
 		}
 	}
 }
