@@ -15,15 +15,17 @@ namespace AICS.Kinesin
 	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
 	public class Motor : MonoBehaviour, IBindATP
 	{
-		public bool checkBindingOrientation = true; //for testing
 		public MotorState state = MotorState.Free;
 		public bool startWithDockedNecklinker;
-		public bool pause; // for testing
-		public bool binding; // public for testing
-		public bool releasing; // public for testing
 		public bool shouldReleaseNecklinker;
-		public bool inFront; // for testing
+		public float bindingRotationTolerance = 30f;
 
+		//for testing
+		public bool checkBindingOrientation = true; 
+		public bool pause; 
+
+		public bool binding; 
+		public bool releasing;
 		float bindTime = 0.7f;
 		float bindStartTime = -1f;
 		float bindingForce = 500f;
@@ -70,7 +72,6 @@ namespace AICS.Kinesin
 			Vector3[] dockedLinkPositions = new Vector3[neckLinkers[0].links.Length];
 			foreach (Necklinker nL in neckLinkers)
 			{
-				Debug.Log( nL.startDocked );
 				if (nL.startDocked)
 				{
 					for (int i = 0; i < nL.links.Length; i++)
@@ -165,51 +166,55 @@ namespace AICS.Kinesin
 		void Start ()
 		{
 			SetupNecklinkers();
-//			color = meshRenderer.material.color;
+			color = meshRenderer.material.color;
 		}
 
-//		void Update ()
-//		{
-//			if (Time.time - lastATPTime < 0.2f)
-//			{
-//				meshRenderer.material.color = new Color( 1f, 0, 1f );
-//			}
-//			else if (state == MotorState.Free)
-//			{
-//				meshRenderer.material.color = color;
-//			}
-//			else if (state == MotorState.Weak)
-//			{
-//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-//			}
-//			else
-//			{
-//				meshRenderer.material.color = Color.red;
-//			}
-//
-//			inFront = !neckLinker.tensionIsForward;
-//
-//			if (!pause)
-//			{
-//				UpdateBinding();
-//				UpdateRelease();
-//				UpdateNucleotideProbabilities();
-//			}
-//		}
+		void Update ()
+		{
+			if (!pause)
+			{
+				UpdateBindingAnimation();
+				UpdateCheckRelease();
+				UpdateCheckNecklinker();
+				UpdateNucleotideProbabilities();
+			}
+
+			SetColor();
+		}
+
+		void SetColor ()
+		{
+			if (Time.time - lastATPTime < 0.2f)
+			{
+				meshRenderer.material.color = new Color( 1f, 0, 1f );
+			}
+			else if (state == MotorState.Free)
+			{
+				meshRenderer.material.color = color;
+			}
+			else if (state == MotorState.Weak)
+			{
+				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+			}
+			else
+			{
+				meshRenderer.material.color = Color.red;
+			}
+		}
 
 		// ---------------------------------------------- Binding
 
-//		void OnCollisionEnter (Collision collision)
-//		{
-//			if (state == MotorState.Free)
-//			{
-//				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
-//				if (_tubulin != null && !_tubulin.hasMotorBound)
-//				{
-//					BindToMT( _tubulin );
-//				}
-//			}
-//		}
+		void OnCollisionEnter (Collision collision)
+		{
+			if (state == MotorState.Free)
+			{
+				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
+				if (_tubulin != null && !_tubulin.hasMotorBound)
+				{
+					BindToMT( _tubulin );
+				}
+			}
+		}
 
 		void BindToMT (Tubulin _tubulin)
 		{
@@ -238,13 +243,13 @@ namespace AICS.Kinesin
 			else 
 			{
 				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.bindingRotationTolerance )
-					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.bindingRotationTolerance )
-					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.bindingRotationTolerance );
+				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance )
+					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance )
+					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance );
 			}
 		}
 
-		void UpdateBinding ()
+		void UpdateBindingAnimation ()
 		{
 			if (binding || releasing)
 			{
@@ -296,14 +301,8 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Releasing
 
-		void UpdateRelease ()
+		void UpdateCheckRelease ()
 		{
-			if (state != MotorState.Strong && shouldReleaseNecklinker)
-			{
-				neckLinker.Release();
-				shouldReleaseNecklinker = false;
-			}
-
 			if (bound && !binding && !releasing)
 			{
 				if (shouldRelease)
@@ -311,6 +310,16 @@ namespace AICS.Kinesin
 					Debug.Log(name + " released w/ probability in state " + state.ToString());
 					Release();
 				}
+			}
+		}
+
+		void UpdateCheckNecklinker ()
+		{
+			if (shouldReleaseNecklinker && state != MotorState.Strong)
+			{
+				neckLinker.Release();
+				shouldReleaseNecklinker = false;
+				return;
 			}
 		}
 
@@ -354,15 +363,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void ReleaseFromTension (string releaserName)
-		{
-			if (bound)
-			{
-//				Release();
-			}
-		}
-
-		void Release ()
+		public void Release ()
 		{
 			rotator.rotating = false;
 			neckLinker.Release();
@@ -398,7 +399,7 @@ namespace AICS.Kinesin
 
 		public void BindATP ()
 		{
-			if (bound)
+			if (state == MotorState.Weak && !binding && !releasing)
 			{
 				state = MotorState.Strong;
 				kinesin.OtherMotor( this ).shouldReleaseNecklinker = true;

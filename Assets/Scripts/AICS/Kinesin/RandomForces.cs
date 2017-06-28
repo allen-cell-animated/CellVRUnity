@@ -9,8 +9,8 @@ namespace AICS.Kinesin
 		public bool addForce = true;
 		public bool addTorque = true;
 
-		float minTimeBetweenImpulses = 0.1f;
-		float maxTimeBetweenImpulses = 1f;
+		float minTimeBetweenImpulses = 0.03f;
+		float maxTimeBetweenImpulses = 0.05f;
 		float lastTime = -1f;
 		float timeInterval;
 

@@ -8,10 +8,9 @@ namespace AICS.Kinesin
 	public class Link : MonoBehaviour 
 	{
 		public bool snapping;
-		public float distanceToAnchor;
-
-		float startDistanceToAnchor;
 		public Vector3 dockedPosition;
+
+		float startSnappingTime;
 
 		Necklinker _necklinker;
 		public Necklinker neckLinker
@@ -85,40 +84,33 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void Start ()
-		{
-			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
-		}
-
 		public void StartSnapping ()
 		{
-			snapping = startedSnapping = true;
+			snapping = true;
+			randomForces.addForce = randomForces.addTorque = false;
+			startSnappingTime = Time.time;
 		}
-		bool startedSnapping;
+
 		void Update ()
 		{
-			if (snapping) // && !neckLinker.stretched)
+			if (snapping)
 			{
 				SimulateSnapping();
 			}
-
-			distanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
-//			if (distanceToAnchor > 5f)
-//			{
-//				if (neckLinker.motor.bound) { Debug.Log( "link released " + neckLinker.motor.name + " from tension " + distanceToAnchor); }
-//				neckLinker.motor.ReleaseFromTension( name );
-//			}
 		}
-
-		public float distanceToGoal; //for testing
 
 		void SimulateSnapping ()
 		{
-			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
-			distanceToGoal = Vector3.Magnitude( neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position );
-			if (distanceToGoal > 0.15f)
+			if (Time.time - startSnappingTime > 2f)
 			{
-				body.AddForce( neckLinker.snappingForce * toGoal );
+				neckLinker.RetrySnapping();
+			}
+			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
+			float distanceToGoal = Vector3.Magnitude( toGoal );
+			if (distanceToGoal > 0.3f)
+			{
+				float snappingForce = KinesinParameterInput.Instance.dTime.value * neckLinker.snappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
+				body.AddForce( snappingForce * Vector3.Normalize( toGoal ) );
 			}
 			else
 			{
@@ -129,9 +121,10 @@ namespace AICS.Kinesin
 		void FinishSnapping ()
 		{
 			snapping = false;
+
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
 			body.constraints = RigidbodyConstraints.FreezePosition;
-			distanceToGoal = Vector3.Magnitude( neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position );
+
 			if (previousLink != null) 
 			{
 				previousLink.Freeze();
@@ -144,7 +137,7 @@ namespace AICS.Kinesin
 			else
 			{
 				Freeze();
-				neckLinker.snapping = false;
+				neckLinker.FinishSnapping();
 			}
 		}
 
@@ -163,6 +156,8 @@ namespace AICS.Kinesin
 		{
 			snapping = false;
 			body.isKinematic = false; 
+			body.constraints = RigidbodyConstraints.None;
+			randomForces.addForce = randomForces.addTorque = true;
 		}
 	}
 }

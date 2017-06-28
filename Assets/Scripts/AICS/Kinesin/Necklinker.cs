@@ -9,9 +9,8 @@ namespace AICS.Kinesin
 		public bool startDocked;
 		public bool snapping;
 		public bool bound;
-		public float snappingForce = 100f;
+		public float snappingForce = 0.1f;
 
-		float[] linkerTensionExtents = new float[]{1f, 8f};
 		float startingLength;
 
 		Link[] _links;
@@ -26,7 +25,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public Rigidbody lastLink
+		public Rigidbody lastLink // used to setup hips
 		{
 			get {
 				return links[links.Length - 1].GetComponent<Rigidbody>();
@@ -54,18 +53,17 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public float tension
-		{
-			get {
-				float linkerLength = Vector3.Distance( transform.position, motor.kinesin.hips.transform.position );
-				return (linkerLength - linkerTensionExtents[0]) / (linkerTensionExtents[1] - linkerTensionExtents[0]);
-			}
-		}
-
 		public bool stretched
 		{
 			get {
-				return length > 1.1f * startingLength;
+				return tension > 1.3f;
+			}
+		}
+
+		public float tension
+		{
+			get {
+				return length / startingLength;
 			}
 		}
 
@@ -77,7 +75,7 @@ namespace AICS.Kinesin
 				{
 					length += Vector3.Distance( links[i].transform.position, links[i - 1].transform.position );
 				}
-//				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
+				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
 				return length;
 			}
 		}
@@ -95,18 +93,18 @@ namespace AICS.Kinesin
 			startingLength = length;
 		}
 
-		void Update ()
+		public void StartSnapping ()
 		{
-			if (Time.time > 1f && !snapping)
+			if (!snapping)
 			{
-				StartSnapping();
+				snapping = bound = true;
+				links[0].StartSnapping();
 			}
 		}
 
-		public void StartSnapping ()
+		public void FinishSnapping ()
 		{
-			snapping = bound = true;
-			links[0].StartSnapping();
+			snapping = false;
 		}
 
 		public void StopSnapping ()
@@ -125,6 +123,21 @@ namespace AICS.Kinesin
 				link.Release();
 			}
 			snapping = bound = false;
+		}
+
+		public void RetrySnapping ()
+		{
+			Release();
+			Invoke( "StartSnapping", 0.2f );
+		}
+
+		//for testing
+		public float currentTension;
+		public bool currentTensionIsForward;
+		void Update ()
+		{
+			currentTension = tension;
+			currentTensionIsForward = tensionIsForward;
 		}
 	}
 }

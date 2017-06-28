@@ -6,8 +6,6 @@ namespace AICS.Kinesin
 {
 	public class Kinesin : MonoBehaviour 
 	{
-		public float neckLinkerSnappingForce = 30f;
-		public float bindingRotationTolerance = 30f;
 		public float motorReleaseProbabilityMax = 0.9f;
 		public float motorReleaseProbabilityMin = 0.01f;
 		public float ATPBindProbabilityMax = 0.9f;
@@ -57,6 +55,36 @@ namespace AICS.Kinesin
 				lastLinks[i] = motors[i].neckLinker.lastLink;
 			}
 			hips.AttachToMotors( lastLinks );
+		}
+
+		void Update ()
+		{
+			if (motors[0].neckLinker.stretched || motors[1].neckLinker.stretched)
+			{
+				if (motors[0].state == MotorState.Strong && motors[1].state == MotorState.Strong)
+				{
+					if (!motors[0].neckLinker.tensionIsForward)
+					{
+						Debug.Log( "kinesin release motor1 necklinker" );
+						motors[0].neckLinker.Release();
+					}
+					else if (!motors[1].neckLinker.tensionIsForward)
+					{
+						Debug.Log( "kinesin release motor2 necklinker" );
+						motors[1].neckLinker.Release();
+					}
+				}
+				else if (motors[0].state == MotorState.Strong)
+				{
+					Debug.Log( "kinesin release motor2" );
+					motors[1].Release();
+				}
+				else if (motors[1].state == MotorState.Strong)
+				{
+					Debug.Log( "kinesin release motor1" );
+					motors[0].Release();
+				}
+			}
 		}
 	}
 }
