@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AICS.Kinesin
 {
@@ -10,7 +11,13 @@ namespace AICS.Kinesin
 		public Parameter hipsMass; // = 0.1, 0.01 --> 1
 
 		public Rigidbody hips;
+		public float linkMass = 0.03f;
 		public NecklinkerTest necklinker;
+		public Text fps;
+
+		float lastTime = -1f;
+		float deltaTime;
+		float frames;
 
 		public void SetForceFrequency (float _sliderValue)
 		{
@@ -20,7 +27,7 @@ namespace AICS.Kinesin
 		public void SetHipsMass (float _sliderValue)
 		{
 			hipsMass.Set( _sliderValue );
-			hips.mass = hipsMass.value;
+			hips.mass = linkMass * hipsMass.value;
 		}
 
 		public void Dock ()
@@ -36,6 +43,18 @@ namespace AICS.Kinesin
 		public void Reset ()
 		{
 			necklinker.Reset();
+		}
+
+		void Update ()
+		{
+			deltaTime += Time.deltaTime;
+			frames++;
+			if (Time.time - lastTime > 0.5f)
+			{
+				fps.text = Mathf.Round( frames / deltaTime ) + " fps";
+				lastTime = Time.time;
+				deltaTime = frames = 0;
+			}
 		}
 	}
 }
