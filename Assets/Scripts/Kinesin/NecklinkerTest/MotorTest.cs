@@ -7,8 +7,6 @@ namespace AICS.Kinesin
 	public class MotorTest : MonoBehaviour
 	{
 		public float necklinkerSnappingForce = 5f;
-		public float randomSnappingForce = 5f;
-		public float currentSnappingForce;
 
 		void Start ()
 		{

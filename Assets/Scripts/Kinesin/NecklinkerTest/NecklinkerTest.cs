@@ -113,5 +113,12 @@ namespace AICS.Kinesin
 			lastTime = Time.time;
 			resetting = true;
 		}
+
+		public void RetrySnapping ()
+		{
+			Debug.Log( "Retry" );
+			Release();
+			Invoke( "StartSnapping", 0.2f );
+		}
 	}
 }

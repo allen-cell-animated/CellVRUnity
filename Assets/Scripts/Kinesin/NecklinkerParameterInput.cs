@@ -8,7 +8,8 @@ namespace AICS.Kinesin
 	public class NecklinkerParameterInput : ParameterInput<NecklinkerParameterInput>  
 	{
 		public Parameter forceFrequency; // = 5, 1 s⁻¹ --> 30 s⁻¹
-		public Parameter hipsMass; // = 0.1, 0.01 --> 1
+		public Parameter hipsMass; // = 1, 0.1 --> 10
+		public Parameter snappingForce; // = 0.1, 0.01 --> 1
 
 		public Rigidbody hips;
 		public float linkMass = 0.03f;
@@ -28,6 +29,12 @@ namespace AICS.Kinesin
 		{
 			hipsMass.Set( _sliderValue );
 			hips.mass = linkMass * hipsMass.value;
+		}
+
+		public void SetSnappingForce (float _sliderValue)
+		{
+			snappingForce.Set( _sliderValue );
+			necklinker.motor.necklinkerSnappingForce = snappingForce.value;
 		}
 
 		public void Dock ()

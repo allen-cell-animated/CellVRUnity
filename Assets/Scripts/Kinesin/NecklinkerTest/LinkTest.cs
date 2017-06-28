@@ -12,6 +12,7 @@ namespace AICS.Kinesin
 
 		bool startedSnapping;
 		Transform startTransform;
+		float startSnappingTime;
 
 		NecklinkerTest _necklinker;
 		public NecklinkerTest neckLinker
@@ -124,6 +125,7 @@ namespace AICS.Kinesin
 			attractor.target = null;
 			snapping = startedSnapping = true;
 			randomForces.addForce = randomForces.addTorque = false;
+			startSnappingTime = Time.time;
 		}
 
 		void Update ()
@@ -157,16 +159,20 @@ namespace AICS.Kinesin
 		}
 
 		public float distanceToGoal; //for testing
+		public float snappingForce;
 
 		void SimulateSnapping ()
 		{
+			if (Time.time - startSnappingTime > 2f)
+			{
+				neckLinker.RetrySnapping();
+			}
 			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
 			distanceToGoal = Vector3.Magnitude( toGoal );
 			if (distanceToGoal > 0.3f)
 			{
-				neckLinker.motor.currentSnappingForce = neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
-				body.AddForce( neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) )) * Vector3.Normalize( toGoal ) 
-					+ Helpers.GetRandomVector( neckLinker.motor.randomSnappingForce ));
+				snappingForce = NecklinkerParameterInput.Instance.dTime.value * neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
+				body.AddForce( snappingForce * Vector3.Normalize( toGoal ) );
 			}
 			else
 			{
