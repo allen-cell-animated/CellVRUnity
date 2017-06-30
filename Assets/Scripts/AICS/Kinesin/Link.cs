@@ -72,18 +72,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		CharacterJoint _joint;
-		public CharacterJoint joint
-		{
-			get {
-				if (_joint == null)
-				{
-					_joint = GetComponent<CharacterJoint>();
-				}
-				return _joint;
-			}
-		}
-
 		public void StartSnapping ()
 		{
 			snapping = true;

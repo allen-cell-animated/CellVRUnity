@@ -54,7 +54,7 @@ namespace AICS
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanForce = body.mass * timeInterval * 2100f * Mathf.Sqrt( 20f * 1E-4f * 1000f ); 
+				float meanForce = body.mass * timeInterval * 2100f * Mathf.Sqrt( 20f * 1E-4f * 100f ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce); // random exponential distribution
 			}
 		}
@@ -63,7 +63,7 @@ namespace AICS
 		{
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
-				float meanTorque = body.mass * timeInterval * 1500f * Mathf.Sqrt( 20f * 1E-4f * 1000f ); 
+				float meanTorque = body.mass * timeInterval * 1500f * Mathf.Sqrt( 20f * 1E-4f * 100f ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanTorque); // random exponential distribution
 			}
 		}

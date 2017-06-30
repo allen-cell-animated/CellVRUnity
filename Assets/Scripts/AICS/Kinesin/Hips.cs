@@ -8,7 +8,7 @@ namespace AICS.Kinesin
 	{
 		public void AttachToMotors (Rigidbody[] motorLastLinks)
 		{
-			CharacterJoint[] joints = GetComponents<CharacterJoint>();
+			Joint[] joints = GetComponents<Joint>();
 			int m = 0;
 			for (int i = 0; i < joints.Length; i++)
 			{
