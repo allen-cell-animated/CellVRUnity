@@ -150,8 +150,13 @@ namespace AICS.Kinesin
 
 		void SetColor ()
 		{
-			float t = 0.4f + (tensionIsForward ? -1 : 1) * 0.4f * normalizedTension;
-			Color color = Color.HSVToRGB( t, 1f, 1f );
+			Color color = Color.white;
+			if (!snapping)
+			{
+				float t = 0.4f + (tensionIsForward ? -1 : 1) * 0.4f * normalizedTension;
+				color = Color.HSVToRGB( t, 1f, 1f );
+			}
+
 			foreach (Link link in links)
 			{
 				link.SetColor( color );

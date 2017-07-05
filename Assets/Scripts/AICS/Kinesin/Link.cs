@@ -106,7 +106,7 @@ namespace AICS.Kinesin
 
 		void SimulateSnapping ()
 		{
-			if (Time.time - startSnappingTime > 2f)
+			if (Time.time - startSnappingTime > 1f)
 			{
 				neckLinker.RetrySnapping();
 			}

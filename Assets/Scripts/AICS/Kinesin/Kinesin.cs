@@ -13,6 +13,8 @@ namespace AICS.Kinesin
 		public float ADPReleaseProbabilityMax = 0.9f;
 		public float ADPReleaseProbabilityMin = 0.01f;
 
+		float maxDepenetrationVelocity = 10f;
+
 		Hips _hips;
 		public Hips hips
 		{
@@ -45,6 +47,7 @@ namespace AICS.Kinesin
 		void Start ()
 		{
 			AttachHipsToMotors();
+			SetRigidbodyDepenetrationVelocity();
 		}
 
 		void AttachHipsToMotors ()
@@ -57,6 +60,15 @@ namespace AICS.Kinesin
 			hips.AttachToMotors( lastLinks );
 		}
 
+		void SetRigidbodyDepenetrationVelocity ()
+		{
+			Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+			foreach (Rigidbody body in bodies)
+			{
+				body.maxDepenetrationVelocity = maxDepenetrationVelocity;
+			}
+		}
+
 		void Update ()
 		{
 			if (motors[0].neckLinker.stretched || motors[1].neckLinker.stretched)
@@ -66,23 +78,23 @@ namespace AICS.Kinesin
 					// release the front motor's necklinker
 					if (!motors[0].neckLinker.tensionIsForward)
 					{
-						Debug.Log( "kinesin release motor1 necklinker" );
+						if (motors[0].printEvents) { Debug.Log( "kinesin release motor1 necklinker" ); }
 						motors[0].neckLinker.Release();
 					}
 					else if (!motors[1].neckLinker.tensionIsForward) 
 					{
-						Debug.Log( "kinesin release motor2 necklinker" );
+						if (motors[1].printEvents) { Debug.Log( "kinesin release motor2 necklinker" ); }
 						motors[1].neckLinker.Release();
 					}
 				}
 				else if (motors[0].state == MotorState.Strong)
 				{
-					Debug.Log( "kinesin release motor2" );
+					if (motors[1].printEvents) { Debug.Log( "kinesin release motor2" ); }
 					motors[1].Release();
 				}
 				else if (motors[1].state == MotorState.Strong)
 				{
-					Debug.Log( "kinesin release motor1" );
+					if (motors[0].printEvents) { Debug.Log( "kinesin release motor1" ); }
 					motors[0].Release();
 				}
 			}

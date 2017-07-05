@@ -15,6 +15,7 @@ namespace AICS.Kinesin
 	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
 	public class Motor : MonoBehaviour, IBindATP
 	{
+		public bool printEvents;
 		public MotorState state = MotorState.Free;
 		public bool startWithDockedNecklinker;
 		public bool shouldReleaseNecklinker;
@@ -28,7 +29,7 @@ namespace AICS.Kinesin
 		public bool releasing;
 		float bindTime = 0.7f;
 		float bindStartTime = -1f;
-		float bindingForce = 500f;
+		float bindingForce = 800f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
 		public Tubulin tubulin;
@@ -228,7 +229,7 @@ namespace AICS.Kinesin
 
 		void OnCollisionEnter (Collision collision)
 		{
-			if (state == MotorState.Free && !kinesin.OtherMotor( this ).neckLinker.snapping)
+			if (state == MotorState.Free && kinesin.OtherMotor( this ).state != MotorState.Strong)
 			{
 				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
 				if (_tubulin != null && !_tubulin.hasMotorBound)
@@ -242,7 +243,7 @@ namespace AICS.Kinesin
 		{
 			if (!neckLinker.stretched && closeToBindingOrientation( _tubulin ) && !pause)
 			{
-				Debug.Log(name + " bind");
+				if (printEvents) { Debug.Log( name + " bind" ); }
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
@@ -287,7 +288,7 @@ namespace AICS.Kinesin
 				{
 					if (neckLinker.stretched)
 					{
-						Debug.Log( name + " release while binding" );
+						if (printEvents) { Debug.Log( name + " release while binding" ); }
 						Release();
 					}
 					attractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
@@ -304,7 +305,7 @@ namespace AICS.Kinesin
 				{
 					rotator.SnapToGoal();
 					body.isKinematic = true;
-					transform.position = tubulin.transform.TransformPoint( bindingPosition );
+					body.position = tubulin.transform.TransformPoint( bindingPosition );
 					if (atpBinder.nucleotide != null && atpBinder.nucleotide.isATP)
 					{
 						BindATP();
@@ -334,7 +335,7 @@ namespace AICS.Kinesin
 			{
 				if (shouldRelease)
 				{
-					Debug.Log(name + " released w/ probability in state " + state.ToString());
+					if (printEvents) { Debug.Log(name + " released w/ probability in state " + state.ToString()); }
 					Release();
 				}
 			}
@@ -423,6 +424,7 @@ namespace AICS.Kinesin
 		{
 			if (state == MotorState.Weak && !binding && !releasing)
 			{
+				if (printEvents) { Debug.Log( name + " SNAP" ); }
 				state = MotorState.Strong;
 				kinesin.OtherMotor( this ).shouldReleaseNecklinker = true;
 				neckLinker.StartSnapping();
