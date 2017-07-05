@@ -162,6 +162,18 @@ namespace AICS.Kinesin
 			}
 		}
 
+		MeshRenderer[] _colliderRenderers;
+		MeshRenderer[] colliderRenderers // testing
+		{
+			get {
+				if (_colliderRenderers == null)
+				{
+					_colliderRenderers = transform.FindChild( "Collider" ).GetComponentsInChildren<MeshRenderer>();
+				}
+				return _colliderRenderers;
+			}
+		}
+
 		void Start ()
 		{
 			color = meshRenderer.material.color;
@@ -184,19 +196,31 @@ namespace AICS.Kinesin
 		{
 			if (Time.time - lastATPTime < 0.2f)
 			{
-				meshRenderer.material.color = new Color( 1f, 0, 1f );
+//				meshRenderer.material.color = new Color( 1f, 0, 1f );
+				SetColliderColor( new Color( 1f, 0, 1f ) );
 			}
 			else if (state == MotorState.Free)
 			{
-				meshRenderer.material.color = color;
+//				meshRenderer.material.color = color;
+				SetColliderColor( color );
 			}
 			else if (state == MotorState.Weak)
 			{
-				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+				SetColliderColor( new Color( 1f, 0.5f, 0 ) );
 			}
 			else
 			{
-				meshRenderer.material.color = Color.red;
+//				meshRenderer.material.color = Color.red;
+				SetColliderColor( Color.red );
+			}
+		}
+
+		void SetColliderColor (Color _color)
+		{
+			foreach (MeshRenderer renderer in colliderRenderers)
+			{
+				renderer.material.color = _color;
 			}
 		}
 
