@@ -84,7 +84,6 @@ namespace AICS.Kinesin
 			{
 				if ((nL.startDocked && startWithDockedNecklinker) || (!nL.startDocked && !startWithDockedNecklinker))
 				{
-					Debug.Log( nL.name );
 					_neckLinker = nL;
 					_neckLinker.SetDockedPositions( dockedLinkPositions );
 				}
@@ -205,7 +204,7 @@ namespace AICS.Kinesin
 
 		void OnCollisionEnter (Collision collision)
 		{
-			if (state == MotorState.Free)
+			if (state == MotorState.Free && !kinesin.OtherMotor( this ).neckLinker.snapping)
 			{
 				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
 				if (_tubulin != null && !_tubulin.hasMotorBound)
@@ -262,6 +261,11 @@ namespace AICS.Kinesin
 			{
 				if (binding)
 				{
+					if (neckLinker.stretched)
+					{
+						Debug.Log( name + " release while binding" );
+						Release();
+					}
 					attractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
 				}
 				else if (releasing)

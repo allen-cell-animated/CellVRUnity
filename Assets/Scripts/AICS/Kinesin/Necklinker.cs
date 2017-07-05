@@ -56,7 +56,7 @@ namespace AICS.Kinesin
 		public bool stretched
 		{
 			get {
-				return tension > 1.3f;
+				return tension > 1.2f;
 			}
 		}
 
