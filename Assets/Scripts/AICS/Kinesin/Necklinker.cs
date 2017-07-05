@@ -47,8 +47,8 @@ namespace AICS.Kinesin
 		public bool tensionIsForward
 		{
 			get {
-				Vector3 motorToHips = Vector3.Normalize( motor.kinesin.hips.transform.position - motor.transform.position );
-				float angle = Mathf.Acos( Vector3.Dot( motorToHips, -motor.transform.right ) );
+				Vector3 motorToHips = Vector3.Normalize( motor.kinesin.hips.transform.position - links[0].transform.position );
+				float angle = Mathf.Acos( Vector3.Dot( motorToHips, motor.transform.forward ) );
 				return angle < Mathf.PI / 2f;
 			}
 		}
@@ -57,6 +57,13 @@ namespace AICS.Kinesin
 		{
 			get {
 				return tension > 1.3f;
+			}
+		}
+
+		public float normalizedTension
+		{
+			get {
+				return Mathf.Clamp( (tension - 0.9f) / 0.2f, 0, 1f );
 			}
 		}
 
@@ -138,6 +145,17 @@ namespace AICS.Kinesin
 		{
 			currentTension = tension;
 			currentTensionIsForward = tensionIsForward;
+			SetColor();
+		}
+
+		void SetColor ()
+		{
+			float t = 0.4f + (tensionIsForward ? -1 : 1) * 0.4f * normalizedTension;
+			Color color = Color.HSVToRGB( t, 1f, 1f );
+			foreach (Link link in links)
+			{
+				link.SetColor( color );
+			}
 		}
 	}
 }

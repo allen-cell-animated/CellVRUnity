@@ -29,7 +29,6 @@ namespace AICS.Kinesin
 		float bindTime = 0.7f;
 		float bindStartTime = -1f;
 		float bindingForce = 500f;
-		float lastCheckReleaseTime = -1f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
 		public Tubulin tubulin;
@@ -85,6 +84,7 @@ namespace AICS.Kinesin
 			{
 				if ((nL.startDocked && startWithDockedNecklinker) || (!nL.startDocked && !startWithDockedNecklinker))
 				{
+					Debug.Log( nL.name );
 					_neckLinker = nL;
 					_neckLinker.SetDockedPositions( dockedLinkPositions );
 				}
@@ -165,7 +165,6 @@ namespace AICS.Kinesin
 
 		void Start ()
 		{
-			SetupNecklinkers();
 			color = meshRenderer.material.color;
 		}
 
@@ -326,13 +325,8 @@ namespace AICS.Kinesin
 		bool shouldRelease
 		{
 			get {
-				if (Time.time - lastCheckReleaseTime > 0.3f)
-				{
-					lastCheckReleaseTime = Time.time;
-					float probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
-					return Random.Range(0, 1f) <= Time.deltaTime * probability;
-				}
-				return false;
+				float probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
+				return Random.Range(0, 1f) <= Time.deltaTime * probability;
 			}
 		}
 
@@ -348,7 +342,7 @@ namespace AICS.Kinesin
 					}
 					else
 					{
-						// tension ~= 0.68 when necklinker is bound, p ~= 0 when tension < 0.5, p ~= max when tension > 0.8
+						// p ~= 0 when tension < 0.5, p ~= max when tension > 0.8
 						probability = kinesin.motorReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) ));
 					}
 				}

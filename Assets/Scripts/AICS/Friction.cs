@@ -7,35 +7,23 @@ namespace AICS
 	[RequireComponent( typeof(Rigidbody) )]
 	public class Friction : MonoBehaviour 
 	{
-		public float magnitude = -20f;
-		public float timeInterval = 0.1f;
+		public float magnitude = 0.5f;
 
-		float lastTime = -1f;
-
-		Rigidbody _rigidbody;
+		Rigidbody _body;
 		Rigidbody body
 		{
 			get {
-				if (_rigidbody == null)
+				if (_body == null)
 				{
-					_rigidbody = GetComponent<Rigidbody>();
+					_body = GetComponent<Rigidbody>();
 				}
-				return _rigidbody;
+				return _body;
 			}
 		}
 
 		void Update () 
 		{
-			if (Time.time - lastTime > timeInterval)
-			{
-				ApplyFriction();
-				lastTime = Time.time;
-			}
-		}
-
-		void ApplyFriction ()
-		{
-			body.AddForce( magnitude * body.velocity );
+			body.AddForce( magnitude * -body.velocity );
 		}
 	}
 }

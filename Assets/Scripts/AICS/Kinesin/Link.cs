@@ -72,6 +72,23 @@ namespace AICS.Kinesin
 			}
 		}
 
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer // testing
+		{
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = transform.GetChild( 1 ).GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
+		public void SetColor (Color _color)
+		{
+			meshRenderer.material.color = _color;
+		}
+
 		public void StartSnapping ()
 		{
 			snapping = true;
