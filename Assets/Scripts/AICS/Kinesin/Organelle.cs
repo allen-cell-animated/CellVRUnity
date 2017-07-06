@@ -23,7 +23,7 @@ namespace AICS.Kinesin
 
 		void Update () 
 		{
-			body.AddForce( Mathf.Min( 1E8f, Mathf.Exp( multiplier * body.velocity.magnitude ) ) * Vector3.Normalize( -body.velocity ) );
+			body.AddForce( Mathf.Min( 1E28f, Mathf.Exp( multiplier * body.velocity.magnitude ) ) * Vector3.Normalize( -body.velocity ) );
 		}
 	}
 }

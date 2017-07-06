@@ -372,7 +372,7 @@ namespace AICS.Kinesin
 					else
 					{
 						// p ~= 0 when tension < 0.5, p ~= max when tension > 0.8
-						probability = kinesin.motorReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) ));
+						probability = kinesin.motorReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.65f) ));
 					}
 				}
 				return probability;
@@ -443,7 +443,7 @@ namespace AICS.Kinesin
 			if (!neckLinker.tensionIsForward) // this is the front motor
 			{
 				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
-				probability = kinesin.ATPBindProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.6f) ));  
+				probability = kinesin.ATPBindProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.6f) ));  
 			}
 			atpBinder.ATPBindingProbability = probability;
 		}
@@ -454,7 +454,7 @@ namespace AICS.Kinesin
 			if (neckLinker.tensionIsForward) // this is the back motor
 			{
 				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
-				probability = kinesin.ADPReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.6f) ));  
+				probability = kinesin.ADPReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.6f) ));  
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}
