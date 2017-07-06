@@ -395,7 +395,7 @@ namespace AICS.Kinesin
 			body.constraints = RigidbodyConstraints.None;
 			body.isKinematic = false;
 			attractor.attractiveForce = bindingForce;
-			attractor.target = tubulin.transform;
+			if (tubulin != null) { attractor.target = tubulin.transform; }
 			bindStartTime = Time.time;
 		}
 
