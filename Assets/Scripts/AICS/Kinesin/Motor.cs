@@ -42,6 +42,13 @@ namespace AICS.Kinesin
 			}
 		}
 
+		public bool inFront
+		{
+			get {
+				return !neckLinker.tensionIsForward;
+			}
+		}
+
 		Kinesin _kinesin;
 		public Kinesin kinesin
 		{
@@ -195,7 +202,7 @@ namespace AICS.Kinesin
 
 		void SetColor ()
 		{
-			if (Time.time - lastATPTime < 0.2f)
+			if (Time.time - lastATPTime < 0.05f)
 			{
 //				meshRenderer.material.color = new Color( 1f, 0, 1f );
 				SetColliderColor( new Color( 1f, 0, 1f ) );
@@ -363,7 +370,7 @@ namespace AICS.Kinesin
 		{
 			get {
 				float probability = kinesin.motorReleaseProbabilityMin;
-				if (neckLinker.tensionIsForward) // this is back motor
+				if (!inFront) // this is back motor
 				{
 					if (neckLinker.bound)
 					{
@@ -371,8 +378,9 @@ namespace AICS.Kinesin
 					}
 					else
 					{
-						// p ~= 0 when tension < 0.5, p ~= max when tension > 0.8
-						probability = kinesin.motorReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.65f) ));
+						// p ~= min when tension < 0.5, p ~= max when tension > 0.8
+						probability = kinesin.motorReleaseProbabilityMin + (kinesin.motorReleaseProbabilityMax - kinesin.motorReleaseProbabilityMin) 
+							/ (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) ));
 					}
 				}
 				return probability;
@@ -439,22 +447,24 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			float probability = kinesin.ATPBindProbabilityMin;
-			if (!neckLinker.tensionIsForward) // this is the front motor
+			float probability = kinesin.ATPBindProbabilityMax;
+			if (inFront) // this is the front motor
 			{
-				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
-				probability = kinesin.ATPBindProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.6f) ));  
+				// p ~= min when tension > 0.8, p ~= max when tension < 0.5
+				probability = kinesin.ATPBindProbabilityMin + (kinesin.ATPBindProbabilityMax - kinesin.ATPBindProbabilityMin) 
+					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) )));
 			}
 			atpBinder.ATPBindingProbability = probability;
 		}
 
 		void UpdateADPReleaseProbability ()
 		{
-			float probability = kinesin.ATPBindProbabilityMin;
-			if (neckLinker.tensionIsForward) // this is the back motor
+			float probability = kinesin.ADPReleaseProbabilityMax;
+			if (!inFront) // this is the back motor
 			{
-				// p ~= 0 at high tension (0.75), p ~= max at low tension (0.45)
-				probability = kinesin.ADPReleaseProbabilityMax / (1f + Mathf.Exp( -30f * (neckLinker.normalizedTension - 0.6f) ));  
+				// p ~= min when tension > 0.8, p ~= max when tension < 0.5
+				probability = kinesin.ADPReleaseProbabilityMin + (kinesin.ADPReleaseProbabilityMax - kinesin.ADPReleaseProbabilityMin) 
+					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) )));
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}

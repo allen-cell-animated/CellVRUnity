@@ -53,24 +53,18 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public bool stretched
-		{
-			get {
-				return tension > 1.2f;
-			}
-		}
-
-		public float normalizedTension
-		{
-			get {
-				return Mathf.Clamp( (tension - 0.9f) / 0.2f, 0, 1f );
-			}
-		}
-
 		public float tension
 		{
 			get {
-				return length / startingLength;
+				float d = Vector3.Distance( links[0].transform.position, motor.kinesin.hips.transform.position );
+				return (d - 0.5f) / 7f; // normalize between 0.5 and 7.5
+			}
+		}
+
+		public bool stretched
+		{
+			get {
+				return length / startingLength > 1.2f;
 			}
 		}
 
@@ -140,20 +134,18 @@ namespace AICS.Kinesin
 
 		//for testing
 		public float currentTension;
-		public bool currentTensionIsForward;
 		void Update ()
 		{
 			currentTension = tension;
-			currentTensionIsForward = tensionIsForward;
 			SetColor();
 		}
 
 		void SetColor ()
 		{
-			Color color = Color.white;
+			Color color = Color.black;
 			if (!snapping)
 			{
-				float t = 0.4f + (tensionIsForward ? -1 : 1) * 0.4f * normalizedTension;
+				float t = 0.4f * (1f - tension);
 				color = Color.HSVToRGB( t, 1f, 1f );
 			}
 

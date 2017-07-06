@@ -30,6 +30,7 @@ namespace AICS.Kinesin
 		void OnCollisionEnter (Collision collision)
 		{
 			Nucleotide _nucleotide = collision.collider.GetComponent<Nucleotide>();
+			binder.CollideWithATP();
 			if (ShouldATPBind( _nucleotide ))
 			{
 				BindATP( _nucleotide );
@@ -40,7 +41,6 @@ namespace AICS.Kinesin
 		{
 			if (nucleotide == null && _nucleotide != null && _nucleotide.isATP)
 			{
-				binder.CollideWithATP();
 				float random = Random.Range(0, 1f);
 				return random <= ATPBindingProbability;
 			}
