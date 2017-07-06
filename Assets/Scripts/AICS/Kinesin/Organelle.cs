@@ -4,26 +4,36 @@ using UnityEngine;
 
 namespace AICS.Kinesin
 {
-	[RequireComponent( typeof(Rigidbody) )]
 	public class Organelle : MonoBehaviour 
 	{
-		float multiplier = 0.1f;
+		float startDistance;
 
-		Rigidbody _body;
-		Rigidbody body
+		Hips _hips;
+		public Hips hips
 		{
 			get {
-				if (_body == null)
+				if (_hips == null)
 				{
-					_body = GetComponent<Rigidbody>();
+					_hips = GameObject.FindObjectOfType<Hips>();
 				}
-				return _body;
+				return _hips;
 			}
 		}
 
+		void Start ()
+		{
+			startDistance = Vector3.Distance( hips.transform.position, transform.position );
+		}
+		
 		void Update () 
 		{
-			body.AddForce( Mathf.Min( 1E28f, Mathf.Exp( multiplier * body.velocity.magnitude ) ) * Vector3.Normalize( -body.velocity ) );
+			FollowHips();
+		}
+
+		void FollowHips ()
+		{
+			Vector3 hipsToOrganelle = transform.position - hips.transform.position;
+			transform.position = hips.transform.position + startDistance * Vector3.Normalize( hipsToOrganelle );
 		}
 	}
 }

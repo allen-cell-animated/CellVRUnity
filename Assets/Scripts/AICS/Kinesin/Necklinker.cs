@@ -12,6 +12,8 @@ namespace AICS.Kinesin
 		public float snappingForce = 0.1f;
 
 		float startingLength;
+		float retryTime;
+		float retryWait = 0.2f;
 
 		Link[] _links;
 		public Link[] links
@@ -110,6 +112,10 @@ namespace AICS.Kinesin
 
 		public void StopSnapping ()
 		{
+//			if (Time.time - retryTime <= retryWait)
+//			{
+//
+//			}
 			foreach (Link link in links)
 			{
 				link.StopSnapping();
@@ -128,8 +134,9 @@ namespace AICS.Kinesin
 
 		public void RetrySnapping ()
 		{
+//			retryTime = Time.time;
 			Release();
-			Invoke( "StartSnapping", 0.2f );
+			Invoke( "StartSnapping", retryWait );
 		}
 
 		//for testing

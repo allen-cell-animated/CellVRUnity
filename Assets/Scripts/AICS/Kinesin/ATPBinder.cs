@@ -30,7 +30,7 @@ namespace AICS.Kinesin
 		void OnCollisionEnter (Collision collision)
 		{
 			Nucleotide _nucleotide = collision.collider.GetComponent<Nucleotide>();
-			binder.CollideWithATP();
+			if (_nucleotide != null && _nucleotide.isATP) { binder.CollideWithATP(); } // for testing
 			if (ShouldATPBind( _nucleotide ))
 			{
 				BindATP( _nucleotide );

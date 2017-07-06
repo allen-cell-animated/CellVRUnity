@@ -313,11 +313,11 @@ namespace AICS.Kinesin
 					rotator.SnapToGoal();
 					body.isKinematic = true;
 					body.position = tubulin.transform.TransformPoint( bindingPosition );
+					binding = false;
 					if (atpBinder.nucleotide != null && atpBinder.nucleotide.isATP)
 					{
 						BindATP();
 					}
-					binding = false;
 				}
 				if (releasing)
 				{
@@ -450,9 +450,9 @@ namespace AICS.Kinesin
 			float probability = kinesin.ATPBindProbabilityMax;
 			if (inFront) // this is the front motor
 			{
-				// p ~= min when tension > 0.8, p ~= max when tension < 0.5
+				// p ~= min when tension > 0.9, p ~= max when tension < 0.6
 				probability = kinesin.ATPBindProbabilityMin + (kinesin.ATPBindProbabilityMax - kinesin.ATPBindProbabilityMin) 
-					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) )));
+					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
 			}
 			atpBinder.ATPBindingProbability = probability;
 		}
@@ -462,9 +462,9 @@ namespace AICS.Kinesin
 			float probability = kinesin.ADPReleaseProbabilityMax;
 			if (!inFront) // this is the back motor
 			{
-				// p ~= min when tension > 0.8, p ~= max when tension < 0.5
+				// p ~= min when tension > 0.9, p ~= max when tension < 0.6
 				probability = kinesin.ADPReleaseProbabilityMin + (kinesin.ADPReleaseProbabilityMax - kinesin.ADPReleaseProbabilityMin) 
-					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) )));
+					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}
