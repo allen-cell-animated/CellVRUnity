@@ -29,7 +29,7 @@ namespace AICS.Kinesin
 		public bool releasing;
 		float bindTime = 0.7f;
 		float bindStartTime = -1f;
-		float bindingForce = 800f;
+		float bindingForce = 200f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
 		public Tubulin tubulin;
@@ -143,19 +143,15 @@ namespace AICS.Kinesin
 			}
 		}
 
-		Attractor _attractor;
-		Attractor attractor
+		Attractor _bindingAttractor;
+		Attractor bindingAttractor
 		{
 			get {
-				if (_attractor == null)
+				if (_bindingAttractor == null)
 				{
-					_attractor = GetComponent<Attractor>();
-					if (_attractor == null)
-					{
-						_attractor = gameObject.AddComponent<Attractor>();
-					}
+					_bindingAttractor = gameObject.AddComponent<Attractor>();
 				}
-				return _attractor;
+				return _bindingAttractor;
 			}
 		}
 
@@ -207,6 +203,7 @@ namespace AICS.Kinesin
 				UpdateBindingAnimation();
 				UpdateCheckRelease();
 				UpdateCheckNecklinker();
+				UpdatePushForward();
 				UpdateNucleotideProbabilities();
 			}
 
@@ -217,23 +214,23 @@ namespace AICS.Kinesin
 		{
 			if (Time.time - lastATPTime < 0.05f)
 			{
-//				meshRenderer.material.color = new Color( 1f, 0, 1f );
-				SetColliderColor( new Color( 1f, 0, 1f ) );
+				meshRenderer.material.color = new Color( 1f, 0, 1f );
+//				SetColliderColor( new Color( 1f, 0, 1f ) );
 			}
 			else if (state == MotorState.Free)
 			{
-//				meshRenderer.material.color = color;
-				SetColliderColor( color );
+				meshRenderer.material.color = color;
+//				SetColliderColor( color );
 			}
 			else if (state == MotorState.Weak)
 			{
-//				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-				SetColliderColor( new Color( 1f, 0.5f, 0 ) );
+				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+//				SetColliderColor( new Color( 1f, 0.5f, 0 ) );
 			}
 			else
 			{
-//				meshRenderer.material.color = Color.red;
-				SetColliderColor( Color.red );
+				meshRenderer.material.color = Color.red;
+//				SetColliderColor( Color.red );
 			}
 		}
 
@@ -268,9 +265,9 @@ namespace AICS.Kinesin
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
 				randomForces.addForce = randomForces.addTorque = false;
-				attractor.GoToTransform( tubulin.transform, 0 );
+				bindingAttractor.GoToTransform( tubulin.transform, 0 );
 				body.constraints = RigidbodyConstraints.FreezeRotation;
-				rotator.RotateToOverDuration( GetBindingRotation(), bindTime );
+				rotator.RotateToOverDuration( GetBindingRotation(), bindTime / 2f );
 				bindStartTime = Time.time;
 				binding = true;
 			}
@@ -278,7 +275,7 @@ namespace AICS.Kinesin
 
 		bool necklinkerWillBeStretched (Tubulin _tubulin)
 		{
-			return Vector3.Distance( _tubulin.transform.TransformPoint( bindingPosition ), kinesin.hips.transform.position ) > 8f;
+			return Vector3.Distance( _tubulin.transform.TransformPoint( bindingPosition ), kinesin.hips.transform.position ) > 6f;
 		}
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
@@ -315,16 +312,16 @@ namespace AICS.Kinesin
 						if (printEvents) { Debug.Log( name + " release while binding" ); }
 						Release();
 					}
-					attractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
+					bindingAttractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
 				}
 				else if (releasing)
 				{
-					attractor.attractiveForce = bindingForce * (1f - (Time.time - bindStartTime) / bindTime);
+					bindingAttractor.attractiveForce = bindingForce * (1f - (Time.time - bindStartTime) / bindTime);
 				}
 			}
 			else
 			{
-				attractor.Stop();
+				bindingAttractor.Stop();
 				if (binding)
 				{
 					rotator.SnapToGoal();
@@ -355,22 +352,13 @@ namespace AICS.Kinesin
 
 		void UpdateCheckRelease ()
 		{
-			if (bound && !binding && !releasing)
+			if (bound && !binding)
 			{
 				if (shouldRelease)
 				{
 					if (printEvents) { Debug.Log(name + " released w/ probability in state " + state.ToString()); }
 					Release();
 				}
-			}
-		}
-
-		void UpdateCheckNecklinker ()
-		{
-			if (shouldReleaseNecklinker && state != MotorState.Strong)
-			{
-				neckLinker.Release();
-				shouldReleaseNecklinker = false;
 			}
 		}
 
@@ -412,41 +400,60 @@ namespace AICS.Kinesin
 
 		public void Release ()
 		{
-			rotator.rotating = false;
-			neckLinker.Release();
-			binding = false;
-			releasing = true;
-			body.constraints = RigidbodyConstraints.None;
-			body.isKinematic = false;
-			attractor.GoToTransform( tubulin.transform, bindingForce );
-			bindStartTime = Time.time;
+			if (bound)
+			{
+				rotator.rotating = false;
+				neckLinker.Release();
+				binding = false;
+				releasing = true;
+				body.constraints = RigidbodyConstraints.None;
+				body.isKinematic = false;
+				bindingAttractor.GoToTransform( tubulin.transform, bindingForce );
+				bindStartTime = Time.time;
+			}
+		}
+
+		void UpdateCheckNecklinker ()
+		{
+			if (shouldReleaseNecklinker && state != MotorState.Strong)
+			{
+				neckLinker.Release();
+				shouldReleaseNecklinker = false;
+			}
 		}
 
 		// ---------------------------------------------- Push Forward
 
 		float pushForwardTime;
-		bool pushingForward;
 
-		public void PushForward (Vector3 toPosition)
+		Attractor _pushingAttractor;
+		Attractor pushingAttractor
 		{
-			if (kinesin.pushOtherMotorForwardAfterSnap && !(binding || releasing))
+			get {
+				if (_pushingAttractor == null)
+				{
+					_pushingAttractor = gameObject.AddComponent<Attractor>();
+				}
+				return _pushingAttractor;
+			}
+		}
+
+		public void PushForward ()
+		{
+			if (kinesin.pushOtherMotorForwardAfterSnap)
 			{
 				if (printEvents) { Debug.Log( name + " push forward" ); }
-				attractor.GoToPosition( toPosition, 50f );
+				pushingAttractor.GoToPosition( kinesin.hips.transform.position + 6f * otherMotor.transform.forward, 50f );
 				pushForwardTime = Time.time;
-				pushingForward = true;
 			}
 		}
 
 		void UpdatePushForward ()
 		{
-			if (pushingForward && Time.time - pushForwardTime > 0.5f)
+			if (pushingAttractor.attracting && Time.time - pushForwardTime > 3f)
 			{
-				if (!(binding || releasing))
-				{
-					attractor.Stop();
-				}
-				pushingForward = false;
+				if (printEvents) { Debug.Log( name + " stop pushing" ); }
+				pushingAttractor.Stop();
 			}
 		}
 
@@ -490,14 +497,9 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			float probability = 0.4f * (kinesin.ATPBindProbabilityMax + kinesin.ATPBindProbabilityMin);
-			if (inFront) // this is the front motor
-			{
-				// p ~= min when tension > 0.9, p ~= max when tension < 0.6
-				probability = kinesin.ATPBindProbabilityMin + (kinesin.ATPBindProbabilityMax - kinesin.ATPBindProbabilityMin) 
-					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
-			}
-			atpBinder.ATPBindingProbability = probability;
+			// p ~= min when tension > 0.9, p ~= max when tension < 0.6
+			atpBinder.ATPBindingProbability = kinesin.ATPBindProbabilityMin + (kinesin.ATPBindProbabilityMax - kinesin.ATPBindProbabilityMin) 
+				* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
 		}
 
 		void UpdateADPReleaseProbability ()
@@ -515,7 +517,7 @@ namespace AICS.Kinesin
 		public void HydrolyzeATP ()
 		{
 			neckLinker.StopSnapping();
-			if (bound)
+			if (state == MotorState.Strong)
 			{
 				state = MotorState.Weak;
 			}

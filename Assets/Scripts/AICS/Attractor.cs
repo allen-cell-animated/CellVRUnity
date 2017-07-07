@@ -8,7 +8,7 @@ namespace AICS
 	public class Attractor : MonoBehaviour 
 	{
 		public Transform target;
-		public bool goToPosition;
+		public bool goToPosition = false;
 		public float attractiveForce = 30f;
 		public float timeInterval = -1f;
 
