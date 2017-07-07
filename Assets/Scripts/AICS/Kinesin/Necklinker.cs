@@ -27,10 +27,10 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public Rigidbody lastLink // used to setup hips
+		public Link lastLink
 		{
 			get {
-				return links[links.Length - 1].GetComponent<Rigidbody>();
+				return links[links.Length - 1];
 			}
 		}
 
@@ -108,14 +108,11 @@ namespace AICS.Kinesin
 		public void FinishSnapping ()
 		{
 			snapping = false;
+			motor.otherMotor.PushForward( motor.kinesin.hips.transform.position + 6f * motor.transform.forward );
 		}
 
 		public void StopSnapping ()
 		{
-//			if (Time.time - retryTime <= retryWait)
-//			{
-//
-//			}
 			foreach (Link link in links)
 			{
 				link.StopSnapping();
@@ -134,13 +131,13 @@ namespace AICS.Kinesin
 
 		public void RetrySnapping ()
 		{
-//			retryTime = Time.time;
 			Release();
 			Invoke( "StartSnapping", retryWait );
 		}
 
 		//for testing
 		public float currentTension;
+
 		void Update ()
 		{
 			currentTension = tension;

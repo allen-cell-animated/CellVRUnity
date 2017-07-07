@@ -122,7 +122,7 @@ namespace AICS.Necklinker
 
 		public void StartSnapping ()
 		{
-			attractor.target = null;
+			attractor.Stop();
 			snapping = startedSnapping = true;
 			randomForces.addForce = randomForces.addTorque = false;
 			startSnappingTime = Time.time;
@@ -217,7 +217,7 @@ namespace AICS.Necklinker
 
 		public void Release ()
 		{
-			attractor.target = null;
+			attractor.Stop();
 			snapping = startedSnapping = false;
 			body.isKinematic = false; 
 			body.constraints = RigidbodyConstraints.None;
@@ -230,8 +230,7 @@ namespace AICS.Necklinker
 			{
 				Release();
 			}
-			attractor.target = startTransform;
-			attractor.attractiveForce = 10f;
+			attractor.GoToTransform( startTransform, 10f );
 		}
 	}
 }

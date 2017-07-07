@@ -61,6 +61,19 @@ namespace AICS.Kinesin
 			}
 		}
 
+		Motor _otherMotor;
+		public Motor otherMotor
+		{
+			get
+			{
+				if (_otherMotor == null)
+				{
+					_otherMotor = kinesin.OtherMotor( this );
+				}
+				return _otherMotor;
+			}
+		}
+
 		Necklinker _neckLinker;
 		public Necklinker neckLinker
 		{
@@ -236,7 +249,7 @@ namespace AICS.Kinesin
 
 		void OnCollisionEnter (Collision collision)
 		{
-			if (state == MotorState.Free && kinesin.OtherMotor( this ).state != MotorState.Strong)
+			if (state == MotorState.Free && otherMotor.state != MotorState.Strong)
 			{
 				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
 				if (_tubulin != null && !_tubulin.hasMotorBound)
@@ -248,15 +261,14 @@ namespace AICS.Kinesin
 
 		void BindToMT (Tubulin _tubulin)
 		{
-			if (!neckLinker.stretched && closeToBindingOrientation( _tubulin ) && !pause)
+			if (!necklinkerWillBeStretched( _tubulin ) && closeToBindingOrientation( _tubulin ) && !pause)
 			{
 				if (printEvents) { Debug.Log( name + " bind" ); }
 				tubulin = _tubulin;
 				tubulin.hasMotorBound = true;
 				state = MotorState.Weak;
 				randomForces.addForce = randomForces.addTorque = false;
-				attractor.attractiveForce = 0;
-				attractor.target = tubulin.transform;
+				attractor.GoToTransform( tubulin.transform, 0 );
 				body.constraints = RigidbodyConstraints.FreezeRotation;
 				rotator.RotateToOverDuration( GetBindingRotation(), bindTime );
 				bindStartTime = Time.time;
@@ -264,9 +276,14 @@ namespace AICS.Kinesin
 			}
 		}
 
+		bool necklinkerWillBeStretched (Tubulin _tubulin)
+		{
+			return Vector3.Distance( _tubulin.transform.TransformPoint( bindingPosition ), kinesin.hips.transform.position ) > 8f;
+		}
+
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			if (!checkBindingOrientation) // || kinesin.OtherMotor( this ).bound
+			if (!checkBindingOrientation) // || otherMotor.bound
 			{
 				return true;
 			}
@@ -307,7 +324,7 @@ namespace AICS.Kinesin
 			}
 			else
 			{
-				attractor.target = null;
+				attractor.Stop();
 				if (binding)
 				{
 					rotator.SnapToGoal();
@@ -354,7 +371,6 @@ namespace AICS.Kinesin
 			{
 				neckLinker.Release();
 				shouldReleaseNecklinker = false;
-				return;
 			}
 		}
 
@@ -374,7 +390,7 @@ namespace AICS.Kinesin
 				{
 					if (neckLinker.bound)
 					{
-						probability = (kinesin.OtherMotor( this ).bound) ? kinesin.motorReleaseProbabilityMax : kinesin.motorReleaseProbabilityMin;
+						probability = (otherMotor.bound) ? kinesin.motorReleaseProbabilityMax : kinesin.motorReleaseProbabilityMin;
 					}
 					else
 					{
@@ -402,9 +418,36 @@ namespace AICS.Kinesin
 			releasing = true;
 			body.constraints = RigidbodyConstraints.None;
 			body.isKinematic = false;
-			attractor.attractiveForce = bindingForce;
-			if (tubulin != null) { attractor.target = tubulin.transform; }
+			attractor.GoToTransform( tubulin.transform, bindingForce );
 			bindStartTime = Time.time;
+		}
+
+		// ---------------------------------------------- Push Forward
+
+		float pushForwardTime;
+		bool pushingForward;
+
+		public void PushForward (Vector3 toPosition)
+		{
+			if (kinesin.pushOtherMotorForwardAfterSnap && !(binding || releasing))
+			{
+				if (printEvents) { Debug.Log( name + " push forward" ); }
+				attractor.GoToPosition( toPosition, 50f );
+				pushForwardTime = Time.time;
+				pushingForward = true;
+			}
+		}
+
+		void UpdatePushForward ()
+		{
+			if (pushingForward && Time.time - pushForwardTime > 0.5f)
+			{
+				if (!(binding || releasing))
+				{
+					attractor.Stop();
+				}
+				pushingForward = false;
+			}
 		}
 
 		// ---------------------------------------------- Nucleotide
@@ -434,7 +477,7 @@ namespace AICS.Kinesin
 			{
 				if (printEvents) { Debug.Log( name + " SNAP" ); }
 				state = MotorState.Strong;
-				kinesin.OtherMotor( this ).shouldReleaseNecklinker = true;
+				otherMotor.shouldReleaseNecklinker = true;
 				neckLinker.StartSnapping();
 			}
 		}
@@ -447,7 +490,7 @@ namespace AICS.Kinesin
 
 		void UpdateATPBindingProbability ()
 		{
-			float probability = kinesin.ATPBindProbabilityMax;
+			float probability = 0.4f * (kinesin.ATPBindProbabilityMax + kinesin.ATPBindProbabilityMin);
 			if (inFront) // this is the front motor
 			{
 				// p ~= min when tension > 0.9, p ~= max when tension < 0.6

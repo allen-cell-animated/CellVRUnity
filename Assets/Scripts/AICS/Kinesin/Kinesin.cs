@@ -12,6 +12,7 @@ namespace AICS.Kinesin
 		public float ATPBindProbabilityMin = 0.01f;
 		public float ADPReleaseProbabilityMax = 0.9f;
 		public float ADPReleaseProbabilityMin = 0.01f;
+		public bool pushOtherMotorForwardAfterSnap = true;
 
 		float maxDepenetrationVelocity = 10f;
 
@@ -55,7 +56,7 @@ namespace AICS.Kinesin
 			Rigidbody[] lastLinks = new Rigidbody[motors.Count];
 			for (int i = 0; i < motors.Count; i++)
 			{
-				lastLinks[i] = motors[i].neckLinker.lastLink;
+				lastLinks[i] = motors[i].neckLinker.lastLink.GetComponent<Rigidbody>();
 			}
 			hips.AttachToMotors( lastLinks );
 		}
@@ -75,13 +76,13 @@ namespace AICS.Kinesin
 			{
 				if (motors[0].state == MotorState.Strong && motors[1].state == MotorState.Strong)
 				{
-					// release the front motor's necklinker
-					if (!motors[0].neckLinker.tensionIsForward)
+					// release the back motor's necklinker
+					if (motors[0].neckLinker.tensionIsForward)
 					{
 						if (motors[0].printEvents) { Debug.Log( "kinesin release motor1 necklinker" ); }
 						motors[0].neckLinker.Release();
 					}
-					else if (!motors[1].neckLinker.tensionIsForward) 
+					else if (motors[1].neckLinker.tensionIsForward) 
 					{
 						if (motors[1].printEvents) { Debug.Log( "kinesin release motor2 necklinker" ); }
 						motors[1].neckLinker.Release();
