@@ -85,15 +85,25 @@ namespace AICS.Kinesin
 						}
 					}
 				}
-				else if (motors[0].state == MotorState.Strong && motors[1].bound)
+				else 
 				{
-					if (motors[1].printEvents) { Debug.Log( "kinesin released motor2" ); }
-					motors[1].Release();
-				}
-				else if (motors[1].state == MotorState.Strong && motors[0].bound)
-				{
-					if (motors[0].printEvents) { Debug.Log( "kinesin released motor1" ); }
-					motors[0].Release();
+					foreach (Motor motor in motors)
+					{
+						if (motor.state == MotorState.Strong && motor.otherMotor.bound)
+						{
+							if (motor.inFront)
+							{
+								if (motor.otherMotor.printEvents) { Debug.Log( "kinesin released " + motor.otherMotor.name ); }
+								motor.otherMotor.Release();
+							}
+							else if (motor.neckLinker.snapping || motor.neckLinker.bound)
+							{
+								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
+								motor.neckLinker.Release();
+							}
+
+						}
+					}
 				}
 			}
 		}

@@ -450,7 +450,7 @@ namespace AICS.Kinesin
 
 		void UpdatePushForward ()
 		{
-			if (pushingAttractor.attracting && Time.time - pushForwardTime > 3f)
+			if (pushingAttractor.attracting && Time.time - pushForwardTime > 5f)
 			{
 				if (printEvents) { Debug.Log( name + " stop pushing" ); }
 				pushingAttractor.Stop();
