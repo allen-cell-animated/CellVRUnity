@@ -19,10 +19,8 @@ namespace AICS.Kinesin
 		public MotorState state = MotorState.Free;
 		public bool startWithDockedNecklinker;
 		public bool shouldReleaseNecklinker;
-		public float bindingRotationTolerance = 30f;
 
 		//for testing
-		public bool checkBindingOrientation = true; 
 		public bool pause; 
 
 		public bool binding; 
@@ -280,17 +278,11 @@ namespace AICS.Kinesin
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			if (!checkBindingOrientation) // || otherMotor.bound
-			{
-				return true;
-			}
-			else 
-			{
-				Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-				return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance )
-					&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance )
-					&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance );
-			}
+			return true;
+//			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+//			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance )
+//				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance )
+//				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance );
 		}
 
 		void UpdateBindingAnimation ()
@@ -376,7 +368,7 @@ namespace AICS.Kinesin
 				float probability = kinesin.motorReleaseProbabilityMin;
 				if (!inFront) // this is back motor
 				{
-					if (neckLinker.bound)
+					if (kinesin.useNecklinkerLogicForMotorRelease && neckLinker.bound)
 					{
 						probability = (otherMotor.bound) ? kinesin.motorReleaseProbabilityMax : kinesin.motorReleaseProbabilityMin;
 					}
@@ -384,7 +376,7 @@ namespace AICS.Kinesin
 					{
 						// p ~= min when tension < 0.5, p ~= max when tension > 0.8
 						probability = kinesin.motorReleaseProbabilityMin + (kinesin.motorReleaseProbabilityMax - kinesin.motorReleaseProbabilityMin) 
-							/ (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.65f) ));
+							/ (1f + Mathf.Exp( -kinesin.motorReleaseK * (neckLinker.tension - kinesin.motorReleaseX0) ));
 					}
 				}
 				return probability;
@@ -499,7 +491,7 @@ namespace AICS.Kinesin
 		{
 			// p ~= min when tension > 0.9, p ~= max when tension < 0.6
 			atpBinder.ATPBindingProbability = kinesin.ATPBindProbabilityMin + (kinesin.ATPBindProbabilityMax - kinesin.ATPBindProbabilityMin) 
-				* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
+				* (1f - 1f / (1f + Mathf.Exp( -kinesin.ATPBindK * (neckLinker.tension - kinesin.ATPBindX0) )));
 		}
 
 		void UpdateADPReleaseProbability ()
@@ -509,7 +501,7 @@ namespace AICS.Kinesin
 			{
 				// p ~= min when tension > 0.9, p ~= max when tension < 0.6
 				probability = kinesin.ADPReleaseProbabilityMin + (kinesin.ADPReleaseProbabilityMax - kinesin.ADPReleaseProbabilityMin) 
-					* (1f - 1f / (1f + Mathf.Exp( -30f * (neckLinker.tension - 0.75f) )));
+					* (1f - 1f / (1f + Mathf.Exp( -kinesin.ADPReleaseK * (neckLinker.tension - kinesin.ADPReleaseX0) )));
 			}
 			atpBinder.ADPReleaseProbability = probability;
 		}
