@@ -7,11 +7,11 @@ namespace AICS.Kinesin
 	public class Kinesin : MonoBehaviour 
 	{
 		//referenced parameters
-		public float motorReleaseProbabilityMax = 0.9f;
-		public float motorReleaseProbabilityMin = 0.01f;
-		public float motorReleaseK = 30f;
-		public float motorReleaseX0 = 0.65f;
-		public bool useNecklinkerLogicForMotorRelease = true;
+		public float ejectionProbabilityMax = 0.9f;
+		public float ejectionProbabilityMin = 0.01f;
+		public float ejectionK = 30f;
+		public float ejectionX0 = 0.65f;
+		public bool useNecklinkerLogicForMotorEject = true;
 		public float ATPBindProbabilityMax = 0.9f;
 		public float ATPBindProbabilityMin = 0.01f;
 		public float ATPBindK = 30f;
@@ -70,7 +70,7 @@ namespace AICS.Kinesin
 
 		void SetParameters ()
 		{
-
+			//TODO (for parameter search)
 		}
 
 		void AttachHipsToMotors ()
@@ -94,6 +94,11 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
+			ReleaseWhenStretched();
+		}
+
+		void ReleaseWhenStretched ()
+		{
 			if (motors[0].neckLinker.stretched || motors[1].neckLinker.stretched)
 			{
 				if (motors[0].state == MotorState.Strong && motors[1].state == MotorState.Strong)
@@ -116,7 +121,7 @@ namespace AICS.Kinesin
 							if (motor.inFront)
 							{
 								if (motor.otherMotor.printEvents) { Debug.Log( "kinesin released " + motor.otherMotor.name ); }
-								motor.otherMotor.Release();
+								motor.otherMotor.Eject();
 							}
 							else if (motor.neckLinker.snapping || motor.neckLinker.bound)
 							{
@@ -127,6 +132,30 @@ namespace AICS.Kinesin
 						}
 					}
 				}
+			}
+		}
+
+		public void SetLinkRotationLimits (Vector3 limits)
+		{
+			foreach (Motor motor in motors)
+			{
+				motor.neckLinker.SetJointRotationLimits( limits );
+			}
+		}
+
+		public void SetMotorMass (float mass)
+		{
+			foreach (Motor motor in motors)
+			{
+				motor.body.mass = mass;
+			}
+		}
+
+		public void SetLinkMass (float mass)
+		{
+			foreach (Motor motor in motors)
+			{
+				motor.neckLinker.SetLinkMass( mass );
 			}
 		}
 	}

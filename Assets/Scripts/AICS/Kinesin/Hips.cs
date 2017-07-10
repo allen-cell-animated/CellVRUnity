@@ -6,6 +6,18 @@ namespace AICS.Kinesin
 {
 	public class Hips : MonoBehaviour 
 	{
+		Rigidbody _body;
+		public Rigidbody body
+		{
+			get {
+				if (_body == null)
+				{
+					_body = GetComponent<Rigidbody>();
+				}
+				return _body;
+			}
+		}
+
 		public void AttachToMotors (Rigidbody[] motorLastLinks)
 		{
 			Joint[] joints = GetComponents<Joint>();
@@ -18,6 +30,12 @@ namespace AICS.Kinesin
 					m++;
 				}
 			}
+		}
+
+		// Unchanged vector components should be < 0
+		public void SetJointRotationLimits (Vector3 limits)
+		{
+			//TODO
 		}
 	}
 }

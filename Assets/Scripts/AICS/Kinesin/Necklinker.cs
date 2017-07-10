@@ -96,6 +96,17 @@ namespace AICS.Kinesin
 			startingLength = length;
 		}
 
+		// Unchanged vector components should be < 0
+		public void SetJointRotationLimits (Vector3 limits)
+		{
+			//TODO
+		}
+
+		public void SetLinkMass (float mass)
+		{
+			//TODO
+		}
+
 		public void StartSnapping ()
 		{
 			if (!snapping)

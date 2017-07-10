@@ -20,6 +20,19 @@ namespace AICS
 			}
 		}
 
+		void Start ()
+		{
+			Init();
+		}
+
+		public void Init ()
+		{
+			dTime.InitSlider();
+			InitSliders();
+		}
+
+		public virtual void InitSliders () { }
+
 		public void SetDTime (float _sliderValue)
 		{
 			dTime.Set( _sliderValue );

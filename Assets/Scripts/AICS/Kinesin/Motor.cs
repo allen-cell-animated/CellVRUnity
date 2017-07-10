@@ -154,7 +154,7 @@ namespace AICS.Kinesin
 		}
 
 		Rigidbody _body;
-		Rigidbody body
+		public Rigidbody body
 		{
 			get {
 				if (_body == null)
@@ -199,7 +199,7 @@ namespace AICS.Kinesin
 			if (!pause)
 			{
 				UpdateBindingAnimation();
-				UpdateCheckRelease();
+				UpdateCheckEject();
 				UpdateCheckNecklinker();
 				UpdatePushForward();
 				UpdateNucleotideProbabilities();
@@ -301,8 +301,8 @@ namespace AICS.Kinesin
 				{
 					if (neckLinker.stretched)
 					{
-						if (printEvents) { Debug.Log( name + " release while binding" ); }
-						Release();
+						if (printEvents) { Debug.Log( name + " eject while binding" ); }
+						Eject();
 					}
 					bindingAttractor.attractiveForce = bindingForce * (Time.time - bindStartTime) / bindTime;
 				}
@@ -342,19 +342,19 @@ namespace AICS.Kinesin
 
 		// ---------------------------------------------- Releasing
 
-		void UpdateCheckRelease ()
+		void UpdateCheckEject ()
 		{
 			if (bound && !binding)
 			{
-				if (shouldRelease)
+				if (shouldEject)
 				{
-					if (printEvents) { Debug.Log(name + " released w/ probability in state " + state.ToString()); }
-					Release();
+					if (printEvents) { Debug.Log(name + " ejected w/ probability in state " + state.ToString()); }
+					Eject();
 				}
 			}
 		}
 
-		bool shouldRelease
+		bool shouldEject
 		{
 			get {
 				float probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
@@ -365,18 +365,18 @@ namespace AICS.Kinesin
 		float probabilityOfEjectionFromWeak
 		{
 			get {
-				float probability = kinesin.motorReleaseProbabilityMin;
+				float probability = kinesin.ejectionProbabilityMin;
 				if (!inFront) // this is back motor
 				{
-					if (kinesin.useNecklinkerLogicForMotorRelease && neckLinker.bound)
+					if (kinesin.useNecklinkerLogicForMotorEject && neckLinker.bound)
 					{
-						probability = (otherMotor.bound) ? kinesin.motorReleaseProbabilityMax : kinesin.motorReleaseProbabilityMin;
+						probability = (otherMotor.bound) ? kinesin.ejectionProbabilityMax : kinesin.ejectionProbabilityMin;
 					}
 					else
 					{
 						// p ~= min when tension < 0.5, p ~= max when tension > 0.8
-						probability = kinesin.motorReleaseProbabilityMin + (kinesin.motorReleaseProbabilityMax - kinesin.motorReleaseProbabilityMin) 
-							/ (1f + Mathf.Exp( -kinesin.motorReleaseK * (neckLinker.tension - kinesin.motorReleaseX0) ));
+						probability = kinesin.ejectionProbabilityMin + (kinesin.ejectionProbabilityMax - kinesin.ejectionProbabilityMin) 
+							/ (1f + Mathf.Exp( -kinesin.ejectionK * (neckLinker.tension - kinesin.ejectionX0) ));
 					}
 				}
 				return probability;
@@ -390,7 +390,7 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void Release ()
+		public void Eject ()
 		{
 			if (bound)
 			{

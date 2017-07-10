@@ -11,7 +11,7 @@ public class TwoSideSliderDemoUse : MonoBehaviour
 	
     public void ButtonClick()
     {
-        ResultText.text = string.Format("The lower value is {0} and the upper value is {1}",
-            Sliders.CurrentLowerValue, Sliders.CurrentUpperValue);
+//        ResultText.text = string.Format("The lower value is {0} and the upper value is {1}",
+//            Sliders.CurrentLowerValue, Sliders.CurrentUpperValue);
     }
 }

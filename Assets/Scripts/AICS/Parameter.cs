@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CustomUiElements;
 
 namespace AICS
 {
@@ -18,13 +19,46 @@ namespace AICS
 	}
 
 	[System.Serializable]
+	public class RangeParameter : Parameter
+	{
+		public float rangeValue;
+		public MinMaxSlider rangeSlider;
+
+		public override void InitSlider ()
+		{
+			if (rangeSlider != null)
+			{
+				rangeSlider.MinSlider.value = UnmapValue( value );
+				rangeSlider.MaxSlider.value = UnmapValue( rangeValue );
+			}
+		}
+
+		public void SetMin (float _sliderValue)
+		{
+			value = MapValue( _sliderValue );
+			SetDisplay();
+		}
+
+		public void SetMax (float _sliderValue)
+		{
+			rangeValue = MapValue( _sliderValue );
+			SetDisplay();
+		}
+
+		void SetDisplay ()
+		{
+			displayValue.text = FormatDisplay( value ) + " - " + FormatDisplay( rangeValue );
+		}
+	}
+
+	[System.Serializable]
 	public class Parameter
 	{
-		public string name;
 		public float value;
 		public float max;
 		public float min;
 		public SliderMapping mapping;
+		public Slider slider;
 		public Text displayValue;
 		public string units;
 		public ParameterFormat format;
@@ -33,10 +67,10 @@ namespace AICS
 		public void Set (float _sliderValue) // slider goes from 0 --> 10
 		{
 			value = MapValue( _sliderValue );
-			displayValue.text = FormatDisplay();
+			displayValue.text = FormatDisplay( value );
 		}
 
-		float MapValue (float _sliderValue)
+		protected float MapValue (float _sliderValue)
 		{
 			switch (mapping) 
 			{
@@ -59,44 +93,75 @@ namespace AICS
 			return Mathf.Pow( 10f, Mathf.Log10( min ) + _sliderValue / 10f * (Mathf.Log10( max ) - Mathf.Log10( min )) );
 		}
 
-		string FormatDisplay ()
+		public virtual void InitSlider ()
+		{
+			if (slider != null)
+			{
+				slider.value = UnmapValue( value );
+			}
+		}
+
+		protected float UnmapValue (float _value)
+		{
+			switch (mapping) 
+			{
+			case SliderMapping.Linear :
+				return UnmapValueLinear( _value );
+			case SliderMapping.Logarithmic :
+				return UnmapValueLogarithmic( _value );
+			default :
+				return 0;
+			}
+		}
+
+		float UnmapValueLinear (float _value)
+		{
+			return 10f * (_value - min) / (max - min);
+		}
+
+		float UnmapValueLogarithmic (float _value)
+		{
+			return 10f * (Mathf.Log10( _value ) - Mathf.Log10( min )) / (Mathf.Log10( max ) - Mathf.Log10( min ));
+		}
+
+		protected string FormatDisplay (float _value)
 		{
 			switch (format) 
 			{
 				case ParameterFormat.Time :
-					return FormatTime();
+					return FormatTime( _value );
 				case ParameterFormat.Round :
-					return FormatRound();
+					return FormatRound( _value );
 				default :
 					return "";
 			}
 		}
 
-		string FormatTime ()
+		string FormatTime (float _value)
 		{
-			string n = value.ToString();
-			if (value >= 1000000f)
+			string n = _value.ToString();
+			if (_value >= 1000000f)
 			{
-				n = Mathf.Round( value / 1000000f ).ToString();
+				n = Mathf.Round( _value / 1000000f ).ToString();
 				units = "μs";
 			}
-			else if (value >= 1000f)
+			else if (_value >= 1000f)
 			{
-				n = Mathf.Round( value / 1000f ).ToString();
+				n = Mathf.Round( _value / 1000f ).ToString();
 				units = "ns";
 			}
 			else
 			{
-				n = Mathf.Round( value ).ToString();
+				n = Mathf.Round( _value ).ToString();
 				units = "ps";
 			}
 			return n + " " + units;
 		}
 
-		string FormatRound ()
+		string FormatRound (float _value)
 		{
 			float multiplier = Mathf.Pow( 10f, decimalPoints );
-			return (Mathf.Round( value * multiplier ) / multiplier) + " " + units;
+			return (Mathf.Round( _value * multiplier ) / multiplier) + " " + units;
 		}
 	}
 }
