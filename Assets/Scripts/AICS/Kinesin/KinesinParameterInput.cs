@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AICS.Kinesin
 {
@@ -22,6 +23,12 @@ namespace AICS.Kinesin
 		public RangeParameter ATPBindProbability; // = (0.01, 0.9), 0.01 --> 0.99
 		public RangeParameter ADPReleaseProbability; // = (0.01, 0.9), 0.01 --> 0.99
 
+		public Parameter hipsMass; // = 0.1, 0.01 --> 1
+		public Parameter motorMass; // = 0.1, 0.01 --> 1
+		public Parameter linkMass; // = 0.03, 0.01 --> 1
+
+		public Toggle pushForwardToggle; // = true
+
 		public Parameter motorBindingRotationTolerance; // = 180, 0 --> 180
 
 		public Parameter hipRotationX; // = 0, 0 --> 180
@@ -32,16 +39,21 @@ namespace AICS.Kinesin
 		public Parameter linkRotationY; // = 0, 0 --> 180
 		public Parameter linkRotationZ; // = 5, 0 --> 180
 
-		public Parameter hipsMass; // = 0.1, 0.01 --> 1
-		public Parameter motorMass; // = 0.1, 0.01 --> 1
-		public Parameter linkMass; // = 0.03, 0.01 --> 1
-
 		public override void InitSliders () 
 		{
 			ejectionProbability.InitSlider();
 			ATPBindProbability.InitSlider();
 			ADPReleaseProbability.InitSlider();
-//			motorBindingRotationTolerance.InitSlider();
+			hipsMass.InitSlider();
+			motorMass.InitSlider();
+			linkMass.InitSlider();
+			motorBindingRotationTolerance.InitSlider();
+			hipRotationX.InitSlider();
+			hipRotationY.InitSlider();
+			hipRotationZ.InitSlider();
+			linkRotationX.InitSlider();
+			linkRotationY.InitSlider();
+			linkRotationZ.InitSlider();
 		}
 
 		public void SetEjectionProbabilityMin (float _sliderValue)
@@ -89,19 +101,19 @@ namespace AICS.Kinesin
 		public void SetHipRotationX (float _sliderValue)
 		{
 			hipRotationX.Set( _sliderValue );
-			kinesin.hips.SetJointRotationLimits( new Vector3( hipRotationX.value, -1f, -1f ) );
+			kinesin.SetHipsRotationLimits( new Vector3( hipRotationX.value, -1f, -1f ) );
 		}
 
 		public void SetHipRotationY (float _sliderValue)
 		{
 			hipRotationY.Set( _sliderValue );
-			kinesin.hips.SetJointRotationLimits( new Vector3( -1f, hipRotationY.value, -1f ) );
+			kinesin.SetHipsRotationLimits( new Vector3( -1f, hipRotationY.value, -1f ) );
 		}
 
 		public void SetHipRotationZ (float _sliderValue)
 		{
 			hipRotationZ.Set( _sliderValue );
-			kinesin.hips.SetJointRotationLimits( new Vector3( -1f, -1f, hipRotationZ.value ) );
+			kinesin.SetHipsRotationLimits( new Vector3( -1f, -1f, hipRotationZ.value ) );
 		}
 
 		public void SetLinkRotationX (float _sliderValue)
@@ -125,7 +137,7 @@ namespace AICS.Kinesin
 		public void SetHipsMass (float _sliderValue)
 		{
 			hipsMass.Set( _sliderValue );
-			kinesin.hips.body.mass = hipsMass.value;
+			kinesin.SetHipsMass( hipsMass.value );
 		}
 
 		public void SetMotorMass (float _sliderValue)
@@ -140,9 +152,9 @@ namespace AICS.Kinesin
 			kinesin.SetLinkMass( linkMass.value );
 		}
 
-		public void SetPushForward (bool push)
+		public void SetPushForward ()
 		{
-			kinesin.pushOtherMotorForwardAfterSnap = push;
+			kinesin.pushOtherMotorForwardAfterSnap = pushForwardToggle.isOn;
 		}
 	}
 }

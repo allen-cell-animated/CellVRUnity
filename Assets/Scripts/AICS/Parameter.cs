@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CustomUiElements;
+using AICS.UI;
 
 namespace AICS
 {
@@ -22,14 +23,14 @@ namespace AICS
 	public class RangeParameter : Parameter
 	{
 		public float rangeValue;
-		public MinMaxSlider rangeSlider;
+		public RangeSlider rangeSlider;
 
 		public override void InitSlider ()
 		{
 			if (rangeSlider != null)
 			{
-				rangeSlider.MinSlider.value = UnmapValue( value );
-				rangeSlider.MaxSlider.value = UnmapValue( rangeValue );
+				rangeSlider.minSlider.value = UnmapValue( value );
+				rangeSlider.maxSlider.value = UnmapValue( rangeValue );
 			}
 		}
 
@@ -63,6 +64,7 @@ namespace AICS
 		public string units;
 		public ParameterFormat format;
 		public int decimalPoints;
+		public bool spaceBeforeUnits = true;
 
 		public void Set (float _sliderValue) // slider goes from 0 --> 10
 		{
@@ -85,12 +87,12 @@ namespace AICS
 
 		float MapValueLinear (float _sliderValue)
 		{
-			return min + _sliderValue / 10f * (max - min);
+			return min + _sliderValue * (max - min);
 		}
 
 		float MapValueLogarithmic (float _sliderValue)
 		{
-			return Mathf.Pow( 10f, Mathf.Log10( min ) + _sliderValue / 10f * (Mathf.Log10( max ) - Mathf.Log10( min )) );
+			return Mathf.Pow( 10f, Mathf.Log10( min ) + _sliderValue * (Mathf.Log10( max ) - Mathf.Log10( min )) );
 		}
 
 		public virtual void InitSlider ()
@@ -116,12 +118,12 @@ namespace AICS
 
 		float UnmapValueLinear (float _value)
 		{
-			return 10f * (_value - min) / (max - min);
+			return (_value - min) / (max - min);
 		}
 
 		float UnmapValueLogarithmic (float _value)
 		{
-			return 10f * (Mathf.Log10( _value ) - Mathf.Log10( min )) / (Mathf.Log10( max ) - Mathf.Log10( min ));
+			return (Mathf.Log10( _value ) - Mathf.Log10( min )) / (Mathf.Log10( max ) - Mathf.Log10( min ));
 		}
 
 		protected string FormatDisplay (float _value)
@@ -134,6 +136,14 @@ namespace AICS
 					return FormatRound( _value );
 				default :
 					return "";
+			}
+		}
+
+		string space
+		{
+			get
+			{
+				return spaceBeforeUnits ? " " : "";
 			}
 		}
 
@@ -155,13 +165,13 @@ namespace AICS
 				n = Mathf.Round( _value ).ToString();
 				units = "ps";
 			}
-			return n + " " + units;
+			return n + space + units;
 		}
 
 		string FormatRound (float _value)
 		{
 			float multiplier = Mathf.Pow( 10f, decimalPoints );
-			return (Mathf.Round( _value * multiplier ) / multiplier) + " " + units;
+			return (Mathf.Round( _value * multiplier ) / multiplier) + space + units;
 		}
 	}
 }
