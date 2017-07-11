@@ -13,7 +13,7 @@ namespace AICS.Kinesin
 		float startSnappingTime;
 
 		Necklinker _necklinker;
-		public Necklinker neckLinker
+		Necklinker neckLinker
 		{
 			get {
 				if (_necklinker == null)
@@ -81,6 +81,18 @@ namespace AICS.Kinesin
 					_meshRenderer = transform.GetChild( 1 ).GetComponent<MeshRenderer>();
 				}
 				return _meshRenderer;
+			}
+		}
+
+		ConfigurableJoint _joint;
+		ConfigurableJoint joint
+		{
+			get {
+				if (_joint == null)
+				{
+					_joint = GetComponent<ConfigurableJoint>();
+				}
+				return _joint;
 			}
 		}
 
@@ -163,6 +175,16 @@ namespace AICS.Kinesin
 			body.isKinematic = false; 
 			body.constraints = RigidbodyConstraints.None;
 			randomForces.addForce = randomForces.addTorque = true;
+		}
+
+		public void SetMass (float mass)
+		{
+			body.mass = mass;
+		}
+
+		public void SetJointRotationLimits (Vector3 newLimits)
+		{
+			Helpers.SetJointRotationLimits( joint, newLimits );
 		}
 	}
 }

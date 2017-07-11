@@ -97,14 +97,20 @@ namespace AICS.Kinesin
 		}
 
 		// Unchanged vector components should be < 0
-		public void SetJointRotationLimits (Vector3 limits)
+		public void SetJointRotationLimits (Vector3 newLimits)
 		{
-			//TODO
+			foreach (Link link in links)
+			{
+				link.SetJointRotationLimits( newLimits );
+			}
 		}
 
 		public void SetLinkMass (float mass)
 		{
-			//TODO
+			foreach (Link link in links)
+			{
+				link.SetMass( mass );
+			}
 		}
 
 		public void StartSnapping ()

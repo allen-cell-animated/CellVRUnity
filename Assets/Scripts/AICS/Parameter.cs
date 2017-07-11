@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using CustomUiElements;
 using AICS.UI;
 
 namespace AICS

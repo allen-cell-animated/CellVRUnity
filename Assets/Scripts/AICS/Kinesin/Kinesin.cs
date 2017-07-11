@@ -23,13 +23,6 @@ namespace AICS.Kinesin
 		public float motorBindingRotationTolerance = 180f;
 		public bool pushOtherMotorForwardAfterSnap = true;
 
-		//need to set when updated
-		public Vector3 hipJointRotationLimits = new Vector3( 0, 0, 0 );
-		public Vector3 linkJointRotationLimits = new Vector3( 87f, 0, 5f );
-		public float hipsMass = 0.1f;
-		public float motorMass = 0.1f;
-		public float linkMass = 0.03f;
-
 		float maxDepenetrationVelocity = 20f;
 
 		Hips _hips;
@@ -137,13 +130,11 @@ namespace AICS.Kinesin
 
 		public void SetHipsRotationLimits (Vector3 limits)
 		{
-			Debug.Log( limits );
 			hips.SetJointRotationLimits( limits );
 		}
 
 		public void SetLinkRotationLimits (Vector3 limits)
 		{
-			Debug.Log( limits );
 			foreach (Motor motor in motors)
 			{
 				motor.neckLinker.SetJointRotationLimits( limits );
@@ -152,22 +143,19 @@ namespace AICS.Kinesin
 
 		public void SetHipsMass (float mass)
 		{
-			hipsMass = mass;
-			hips.body.mass = mass;
+			hips.SetMass( mass );
 		}
 
 		public void SetMotorMass (float mass)
 		{
-			motorMass = mass;
 			foreach (Motor motor in motors)
 			{
-				motor.body.mass = mass;
+				motor.SetMass( mass );
 			}
 		}
 
 		public void SetLinkMass (float mass)
 		{
-			linkMass = mass;
 			foreach (Motor motor in motors)
 			{
 				motor.neckLinker.SetLinkMass( mass );

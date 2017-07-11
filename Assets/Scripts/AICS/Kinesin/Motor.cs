@@ -154,7 +154,7 @@ namespace AICS.Kinesin
 		}
 
 		Rigidbody _body;
-		public Rigidbody body
+		Rigidbody body
 		{
 			get {
 				if (_body == null)
@@ -163,6 +163,11 @@ namespace AICS.Kinesin
 				}
 				return _body;
 			}
+		}
+
+		public void SetMass (float mass)
+		{
+			body.mass = mass;
 		}
 
 		MeshRenderer _meshRenderer;

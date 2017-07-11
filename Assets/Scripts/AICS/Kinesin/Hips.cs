@@ -7,7 +7,7 @@ namespace AICS.Kinesin
 	public class Hips : MonoBehaviour 
 	{
 		Rigidbody _body;
-		public Rigidbody body
+		Rigidbody body
 		{
 			get {
 				if (_body == null)
@@ -18,9 +18,20 @@ namespace AICS.Kinesin
 			}
 		}
 
+		ConfigurableJoint[] _joints;
+		ConfigurableJoint[] joints
+		{
+			get {
+				if (_joints == null)
+				{
+					_joints = GetComponents<ConfigurableJoint>();
+				}
+				return _joints;
+			}
+		}
+
 		public void AttachToMotors (Rigidbody[] motorLastLinks)
 		{
-			Joint[] joints = GetComponents<Joint>();
 			int m = 0;
 			for (int i = 0; i < joints.Length; i++)
 			{
@@ -32,10 +43,17 @@ namespace AICS.Kinesin
 			}
 		}
 
-		// Unchanged vector components should be < 0
-		public void SetJointRotationLimits (Vector3 limits)
+		public void SetMass (float mass)
 		{
-			//TODO
+			body.mass = mass;
+		}
+
+		public void SetJointRotationLimits (Vector3 newLimits)
+		{
+			foreach (ConfigurableJoint joint in joints)
+			{
+				Helpers.SetJointRotationLimits( joint, newLimits );
+			}
 		}
 	}
 }
