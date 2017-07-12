@@ -7,7 +7,9 @@ namespace AICS
 	[RequireComponent( typeof(Rigidbody) )]
 	public class Friction : MonoBehaviour 
 	{
-		public float magnitude = 0.5f;
+		public bool addForce = true;
+		public bool addTorque = true;
+		public float multiplier = 0.1f;
 
 		Rigidbody _body;
 		Rigidbody body
@@ -23,7 +25,8 @@ namespace AICS
 
 		void Update () 
 		{
-			body.AddForce( magnitude * -body.velocity );
+			if (addForce) { body.AddForce( Mathf.Min( 1E8f, Mathf.Exp( multiplier * body.velocity.magnitude ) ) * Vector3.Normalize( -body.velocity ) ); }
+			if (addTorque) { body.AddTorque( Mathf.Min( 1E8f, Mathf.Exp( multiplier * body.angularVelocity.magnitude ) ) * Vector3.Normalize( -body.angularVelocity ) ); }
 		}
 	}
 }
