@@ -284,10 +284,6 @@ namespace AICS.Kinesin
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
 			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-			Debug.Log( localRotation + " =? " + bindingRotation + " " + kinesin.motorBindingRotationTolerance );
-			Debug.Log( "X: " + Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance ) + " Y: " +
-				Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance ) + " Z: " +
-				Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance ) );
 			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance );

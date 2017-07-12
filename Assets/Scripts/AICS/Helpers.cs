@@ -24,12 +24,10 @@ namespace AICS
 			}
 			else if (min > max)
 			{
-				Debug.Log( "!(" + angle + " < " + min + " && " + angle + " > " + max + ")" );
 				return !(angle < min && angle > max);
 			}
 			else 
 			{
-				Debug.Log( angle + " >= " + min + " && " + angle + " <= " + max );
 				return angle >= min && angle <= max;
 			}
 		}
