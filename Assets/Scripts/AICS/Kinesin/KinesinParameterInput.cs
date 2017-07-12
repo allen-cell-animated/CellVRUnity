@@ -23,30 +23,36 @@ namespace AICS.Kinesin
 		public RangeParameter ATPBindProbability; // = (0.01, 0.9), 0.01 --> 0.99
 		public RangeParameter ADPReleaseProbability; // = (0.01, 0.9), 0.01 --> 0.99
 
-		public Parameter hipsMass; // = 0.1, 0.01 --> 1
-		public Parameter motorMass; // = 0.1, 0.01 --> 1
-		public Parameter linkMass; // = 0.03, 0.01 --> 1
+		public Parameter motorMass; // = 40 kDa, 1 --> 100
+		public Parameter linkMass; // = 0.15 kDa, 0.01 --> 5
+		public Parameter hipsMass; // = 10 kDa, 1 --> 100
+		public Parameter tropomyosinMass; // = 135 kDa, 10 --> 500
+		public Parameter cargoMass; // = 15,000 kDa, 100 --> 50,000
+		public Parameter ATPMass; // = 0.5 kDa, 0.01 --> 5
 
 		public Toggle pushForwardToggle; // = true
 
-		public Parameter motorBindingRotationTolerance; // = 180, 0 --> 180
+		public Parameter motorBindingRotationTolerance; // = 180 degrees, 0 --> 180
 
-		public Parameter hipRotationX; // = 0, 0 --> 180
-		public Parameter hipRotationY; // = 0, 0 --> 180
-		public Parameter hipRotationZ; // = 0, 0 --> 180
+		public Parameter hipRotationX; // = 0 degrees, 0 --> 180
+		public Parameter hipRotationY; // = 0 degrees, 0 --> 180
+		public Parameter hipRotationZ; // = 0 degrees, 0 --> 180
 
-		public Parameter linkRotationX; // = 87, 0 --> 180
-		public Parameter linkRotationY; // = 0, 0 --> 180
-		public Parameter linkRotationZ; // = 5, 0 --> 180
+		public Parameter linkRotationX; // = 87 degrees, 0 --> 180
+		public Parameter linkRotationY; // = 0 degrees, 0 --> 180
+		public Parameter linkRotationZ; // = 5 degrees, 0 --> 180
 
 		public override void InitSliders () 
 		{
 			ejectionProbability.InitSlider();
 			ATPBindProbability.InitSlider();
 			ADPReleaseProbability.InitSlider();
-			hipsMass.InitSlider();
 			motorMass.InitSlider();
 			linkMass.InitSlider();
+			hipsMass.InitSlider();
+			tropomyosinMass.InitSlider();
+			cargoMass.InitSlider();
+			ATPMass.InitSlider();
 			motorBindingRotationTolerance.InitSlider();
 			hipRotationX.InitSlider();
 			hipRotationY.InitSlider();
@@ -101,19 +107,19 @@ namespace AICS.Kinesin
 		public void SetHipRotationX (float _sliderValue)
 		{
 			hipRotationX.Set( _sliderValue );
-			kinesin.SetHipsRotationLimits( new Vector3( hipRotationX.value, -1f, -1f ) );
+			kinesin.hips.SetJointRotationLimits( new Vector3( hipRotationX.value, -1f, -1f ) );
 		}
 
 		public void SetHipRotationY (float _sliderValue)
 		{
 			hipRotationY.Set( _sliderValue );
-			kinesin.SetHipsRotationLimits( new Vector3( -1f, hipRotationY.value, -1f ) );
+			kinesin.hips.SetJointRotationLimits( new Vector3( -1f, hipRotationY.value, -1f ) );
 		}
 
 		public void SetHipRotationZ (float _sliderValue)
 		{
 			hipRotationZ.Set( _sliderValue );
-			kinesin.SetHipsRotationLimits( new Vector3( -1f, -1f, hipRotationZ.value ) );
+			kinesin.hips.SetJointRotationLimits( new Vector3( -1f, -1f, hipRotationZ.value ) );
 		}
 
 		public void SetLinkRotationX (float _sliderValue)
@@ -134,12 +140,6 @@ namespace AICS.Kinesin
 			kinesin.SetLinkRotationLimits( new Vector3( -1f, -1f, linkRotationZ.value ) );
 		}
 
-		public void SetHipsMass (float _sliderValue)
-		{
-			hipsMass.Set( _sliderValue );
-			kinesin.SetHipsMass( hipsMass.value );
-		}
-
 		public void SetMotorMass (float _sliderValue)
 		{
 			motorMass.Set( _sliderValue );
@@ -150,6 +150,30 @@ namespace AICS.Kinesin
 		{
 			linkMass.Set( _sliderValue );
 			kinesin.SetLinkMass( linkMass.value );
+		}
+
+		public void SetHipsMass (float _sliderValue)
+		{
+			hipsMass.Set( _sliderValue );
+			kinesin.hips.SetMass( hipsMass.value );
+		}
+
+		public void SetTropomyosinMass (float _sliderValue)
+		{
+			tropomyosinMass.Set( _sliderValue );
+			kinesin.hips.SetTropomyosinMass( tropomyosinMass.value );
+		}
+
+		public void SetCargoMass (float _sliderValue)
+		{
+			cargoMass.Set( _sliderValue );
+			kinesin.hips.SetCargoMass( cargoMass.value );
+		}
+
+		public void SetATPMass (float _sliderValue)
+		{
+			ATPMass.Set( _sliderValue );
+			kinesin.hips.SetATPMass( ATPMass.value );
 		}
 
 		public void SetPushForward ()

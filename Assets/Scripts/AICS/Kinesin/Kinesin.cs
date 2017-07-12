@@ -127,22 +127,12 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void SetHipsRotationLimits (Vector3 limits)
-		{
-			hips.SetJointRotationLimits( limits );
-		}
-
 		public void SetLinkRotationLimits (Vector3 limits)
 		{
 			foreach (Motor motor in motors)
 			{
 				motor.neckLinker.SetJointRotationLimits( limits );
 			}
-		}
-
-		public void SetHipsMass (float mass)
-		{
-			hips.SetMass( mass );
 		}
 
 		public void SetMotorMass (float mass)

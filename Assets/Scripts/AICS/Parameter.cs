@@ -170,7 +170,29 @@ namespace AICS
 		string FormatRound (float _value)
 		{
 			float multiplier = Mathf.Pow( 10f, decimalPoints );
-			return (Mathf.Round( _value * multiplier ) / multiplier) + space + units;
+			string n = (Mathf.Round( _value * multiplier ) / multiplier).ToString();
+			string[] splitN = n.Split('.');
+			string wholeN = splitN[0];
+			if (wholeN.Length > 3)
+			{
+				int d = wholeN.Length - 3;
+				string result = wholeN.Substring( d, 3 );
+				for (int i = wholeN.Length - 6; i > 0; i -= 3)
+				{
+					result = wholeN.Substring( i, 3 ) + "," + result;
+					d = i;
+				}
+				result = wholeN.Substring( 0, d ) + "," + result;
+				if (splitN.Length > 1)
+				{
+					n = result + "." + splitN[1];
+				}
+				else 
+				{
+					n = result;
+				}
+			}
+			return n + space + units;
 		}
 	}
 }

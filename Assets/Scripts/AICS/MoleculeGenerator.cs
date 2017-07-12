@@ -15,6 +15,7 @@ namespace AICS
 		List<Molecule> molecules = new List<Molecule>();
 		float n;
 		Transform moleculeParent;
+		float moleculeMass = -1f;
 
 		int _number = -1;
 		int number
@@ -39,6 +40,11 @@ namespace AICS
 
 			moleculeParent = new GameObject( moleculePrefab.name + "Parent" ).transform;
 			moleculeParent.position = Vector3.zero;
+
+			if (moleculePrefab.body != null)
+			{
+				moleculeMass = moleculePrefab.body.mass;
+			}
 		}
 
 		void Update ()
@@ -88,6 +94,7 @@ namespace AICS
 				molecule.parent = moleculeParent;
 				molecule.transform.SetParent( moleculeParent );
 				molecule.name = moleculePrefab.name + n;
+				molecule.mass = molecule.body.mass = moleculeMass;
 				n++;
 				molecules.Add( molecule );
 			}
@@ -96,6 +103,21 @@ namespace AICS
 		void OnDrawGizmos ()
 		{
 			Gizmos.DrawWireSphere( transform.position, generationRadius );
+		}
+
+		public void SetMoleculeMass (float mass)
+		{
+			if (moleculeMass >= 0 && (mass < moleculeMass - 0.1f || mass > moleculeMass + 0.1f))
+			{
+				moleculeMass = mass;
+				foreach (Molecule molecule in molecules)
+				{
+					if (molecule.body != null)
+					{
+						molecule.mass = molecule.body.mass = moleculeMass;
+					}
+				}
+			}
 		}
 	}
 }

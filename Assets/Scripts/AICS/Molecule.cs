@@ -10,6 +10,19 @@ namespace AICS
 		public bool shouldHide;
 		public bool hidden;
 		public Transform parent;
+		public float mass;
+
+		Rigidbody _body;
+		public Rigidbody body
+		{
+			get {
+				if (_body == null)
+				{
+					_body = GetComponent<Rigidbody>();
+				}
+				return _body;
+			}
+		}
 
 		void Update ()
 		{

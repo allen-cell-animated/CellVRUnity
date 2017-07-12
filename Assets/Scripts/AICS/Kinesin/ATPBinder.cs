@@ -94,7 +94,7 @@ namespace AICS.Kinesin
 			{
 				Rigidbody body = _nucleotide.gameObject.AddComponent<Rigidbody>();
 				body.useGravity = false;
-				body.mass = 0.1f;
+				body.mass = _nucleotide.mass;
 				body.drag = 5f;
 			}
 			_nucleotide.transform.SetParent( _nucleotide.parent );
