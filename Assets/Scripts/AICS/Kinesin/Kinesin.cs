@@ -121,7 +121,6 @@ namespace AICS.Kinesin
 								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
 								motor.neckLinker.Release();
 							}
-
 						}
 					}
 				}

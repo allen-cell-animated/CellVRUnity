@@ -18,12 +18,18 @@ namespace AICS
 			angle = ClampAngle( angle );
 			float min = ClampAngle( ClampAngle( goal ) - ClampAngle( tolerance ) );
 			float max = ClampAngle( ClampAngle( goal ) + ClampAngle( tolerance ) );
-			if (min > max)
+			if (min >= max - 1f && min <= max + 1)
 			{
+				return true; // min and max are equal so all angles are within tolerance
+			}
+			else if (min > max)
+			{
+				Debug.Log( "!(" + angle + " < " + min + " && " + angle + " > " + max + ")" );
 				return !(angle < min && angle > max);
 			}
 			else 
 			{
+				Debug.Log( angle + " >= " + min + " && " + angle + " <= " + max );
 				return angle >= min && angle <= max;
 			}
 		}

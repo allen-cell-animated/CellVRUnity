@@ -29,7 +29,7 @@ namespace AICS.Kinesin
 		float bindStartTime = -1f;
 		float bindingForce = 200f;
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
-		Vector3 bindingRotation = new Vector3( -2.27f, -90.52f, 180.221f );
+		Vector3 bindingRotation = new Vector3( 357.7f, 269.5f, 180.2f );
 		public Tubulin tubulin;
 		Color color;
 
@@ -283,11 +283,14 @@ namespace AICS.Kinesin
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			return true;
-//			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
-//			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance )
-//				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance )
-//				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance );
+			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+			Debug.Log( localRotation + " =? " + bindingRotation + " " + kinesin.motorBindingRotationTolerance );
+			Debug.Log( "X: " + Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance ) + " Y: " +
+				Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance ) + " Z: " +
+				Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance ) );
+			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, kinesin.motorBindingRotationTolerance )
+				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, kinesin.motorBindingRotationTolerance )
+				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, kinesin.motorBindingRotationTolerance );
 		}
 
 		void UpdateBindingAnimation ()
