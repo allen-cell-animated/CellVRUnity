@@ -11,6 +11,7 @@ namespace AICS.Kinesin
 		public bool bound;
 		public float snappingForce = 0.1f;
 		public float currentTension; // for testing
+		public bool isStretched; // for testing
 
 		Link[] _links;
 		public Link[] links
@@ -70,6 +71,10 @@ namespace AICS.Kinesin
 						return true;
 					}
 				}
+				if (lastLink.stretchToHips > 2f)
+				{
+					return true;
+				}
 				return false;
 			}
 		}
@@ -87,7 +92,7 @@ namespace AICS.Kinesin
 			if (!snapping)
 			{
 				snapping = bound = true;
-				links[0].StartSnapping();
+				links[0].StartSnapping( 0 );
 			}
 		}
 
@@ -124,6 +129,7 @@ namespace AICS.Kinesin
 				StopSnapping();
 			}
 			currentTension = tension;
+			isStretched = stretched;
 		}
 
 		// Unchanged vector components should be < 0

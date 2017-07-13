@@ -439,7 +439,7 @@ namespace AICS.Kinesin
 			if (kinesin.pushOtherMotorForwardAfterSnap)
 			{
 				if (printEvents) { Debug.Log( name + " push forward" ); }
-				pushingAttractor.GoToPosition( kinesin.hips.transform.position + 6f * otherMotor.transform.forward, 40f * body.mass );
+				pushingAttractor.GoToPosition( kinesin.hips.transform.position + 6f * otherMotor.transform.forward, 100f * body.mass );
 				pushForwardTime = Time.time;
 			}
 		}

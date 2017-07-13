@@ -10,14 +10,24 @@ namespace AICS.Kinesin
 		public bool snapping;
 		public Vector3 dockedPosition;
 
+		float startDistanceToHips;
 		float startSnappingTime;
 		float startDistanceToAnchor;
+		int retries = 0;
 
 		public float jointStretch 
 		{
 			get
 			{
 				return Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
+			}
+		}
+
+		public float stretchToHips
+		{
+			get
+			{
+				return Vector3.Distance( neckLinker.motor.kinesin.hips.transform.position, transform.position ) / startDistanceToHips;
 			}
 		}
 
@@ -108,6 +118,7 @@ namespace AICS.Kinesin
 		void Start ()
 		{
 			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
+			startDistanceToHips = Vector3.Distance( neckLinker.motor.kinesin.hips.transform.position, transform.position );
 		}
 
 		public void SetColor ()
@@ -120,13 +131,21 @@ namespace AICS.Kinesin
 			meshRenderer.material.color = color;
 		}
 
-		public void StartSnapping ()
+		public void StartSnapping (int _retries)
 		{
-			snapping = true;
-			randomForces.addForce = randomForces.addTorque = false;
-			startSnappingTime = Time.time;
+			if (_retries > 0 && previousLink != null)
+			{
+				Release();
+				previousLink.StartSnapping( _retries - 1 );
+			}
+			else 
+			{
+				snapping = true;
+				randomForces.addForce = randomForces.addTorque = false;
+				startSnappingTime = Time.time;
 
-			Unfreeze();
+				Unfreeze();
+			}
 		}
 
 		void Update ()
@@ -140,7 +159,7 @@ namespace AICS.Kinesin
 
 		void SimulateSnapping ()
 		{
-			if (previousLink != null && Time.time - startSnappingTime > 1f)
+			if (previousLink != null && Time.time - startSnappingTime > 0.5f)
 			{
 				Retry();
 			}
@@ -161,12 +180,13 @@ namespace AICS.Kinesin
 		void FinishSnapping ()
 		{
 			snapping = false;
+			retries = 0;
 
 			Freeze();
 
 			if (nextLink != null)
 			{
-				nextLink.StartSnapping();
+				nextLink.StartSnapping( 0 );
 			}
 			else
 			{
@@ -178,7 +198,8 @@ namespace AICS.Kinesin
 		void Retry ()
 		{
 			Release();
-			previousLink.StartSnapping();
+			previousLink.StartSnapping( retries );
+			retries++;
 		}
 
 		void Unfreeze ()

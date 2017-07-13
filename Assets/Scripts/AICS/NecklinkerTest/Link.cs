@@ -13,6 +13,7 @@ namespace AICS.Necklinker
 		bool startedSnapping;
 		Transform startTransform;
 		float startSnappingTime;
+		int retries = 0;
 
 		Necklinker _necklinker;
 		public Necklinker neckLinker
@@ -129,7 +130,6 @@ namespace AICS.Necklinker
 			}
 			else 
 			{
-				Debug.Log( "start " + name );
 				attractor.Stop();
 
 				snapping = true;
@@ -189,7 +189,6 @@ namespace AICS.Necklinker
 			}
 			else
 			{
-				Debug.Log( "finish " + name );
 				FinishSnapping();
 			}
 		}
@@ -213,11 +212,8 @@ namespace AICS.Necklinker
 			}
 		}
 
-		int retries = 0;
-
 		void Retry ()
 		{
-			Debug.Log( "retry " + name );
 			Release();
 			previousLink.StartSnapping( retries );
 			retries++;
@@ -225,7 +221,6 @@ namespace AICS.Necklinker
 
 		void Unfreeze ()
 		{
-//			Debug.Log( "unfreeze " + name );
 			body.constraints = RigidbodyConstraints.None;
 			if (previousLink != null) 
 			{
@@ -235,7 +230,6 @@ namespace AICS.Necklinker
 
 		void Freeze ()
 		{
-//			Debug.Log( "freeze " + name );
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
 			body.constraints = RigidbodyConstraints.FreezePosition;
 			if (previousLink != null) 
@@ -246,13 +240,11 @@ namespace AICS.Necklinker
 
 		void Unlock ()
 		{
-//			Debug.Log( "unlock " + name );
 			body.isKinematic = false; 
 		}
 
 		void Lock ()
 		{
-//			Debug.Log( "lock " + name );
 			body.isKinematic = true; 
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
 		}
