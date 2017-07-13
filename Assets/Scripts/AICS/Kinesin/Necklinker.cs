@@ -11,7 +11,7 @@ namespace AICS.Kinesin
 		public bool bound;
 		public float snappingForce = 0.1f;
 
-		float startingLength;
+//		float startingLength;
 		float retryTime;
 		float retryWait = 0.2f;
 
@@ -66,22 +66,30 @@ namespace AICS.Kinesin
 		public bool stretched
 		{
 			get {
-				return length / startingLength > 1.2f;
+//				return length / startingLength > 1.2f;
+				foreach (Link link in links)
+				{
+					if (link.jointStretch > 2f)
+					{
+						return true;
+					}
+				}
+				return false;
 			}
 		}
 
-		float length
-		{
-			get {
-				float length = 0;
-				for (int i = 1; i < links.Length; i++)
-				{
-					length += Vector3.Distance( links[i].transform.position, links[i - 1].transform.position );
-				}
-				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
-				return length;
-			}
-		}
+//		float length
+//		{
+//			get {
+//				float length = 0;
+//				for (int i = 1; i < links.Length; i++)
+//				{
+//					length += Vector3.Distance( links[i].transform.position, links[i - 1].transform.position );
+//				}
+//				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
+//				return length;
+//			}
+//		}
 
 		public void SetDockedPositions (Vector3[] dockedPositions)
 		{
@@ -91,10 +99,10 @@ namespace AICS.Kinesin
 			}
 		}
 
-		void Start ()
-		{
-			startingLength = length;
-		}
+//		void Start ()
+//		{
+//			startingLength = length;
+//		}
 
 		// Unchanged vector components should be < 0
 		public void SetJointRotationLimits (Vector3 newLimits)
@@ -164,22 +172,6 @@ namespace AICS.Kinesin
 				StopSnapping();
 			}
 			currentTension = tension;
-			SetColor();
-		}
-
-		void SetColor ()
-		{
-			Color color = Color.black;
-			if (!snapping)
-			{
-				float t = 0.4f * (1f - tension);
-				color = Color.HSVToRGB( t, 1f, 1f );
-			}
-
-			foreach (Link link in links)
-			{
-				link.SetColor( color );
-			}
 		}
 	}
 }

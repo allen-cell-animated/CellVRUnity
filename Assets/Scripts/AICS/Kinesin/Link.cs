@@ -12,6 +12,21 @@ namespace AICS.Kinesin
 
 		float startSnappingTime;
 
+		float startDistanceToAnchor;
+
+		void Start ()
+		{
+			startDistanceToAnchor = Vector3.Distance( joint.connectedBody.transform.position, transform.position );
+		}
+
+		public float jointStretch 
+		{
+			get
+			{
+				return Vector3.Distance( joint.connectedBody.transform.position, transform.position ) / startDistanceToAnchor;
+			}
+		}
+
 		Necklinker _necklinker;
 		Necklinker neckLinker
 		{
@@ -72,18 +87,6 @@ namespace AICS.Kinesin
 			}
 		}
 
-		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer // testing
-		{
-			get {
-				if (_meshRenderer == null)
-				{
-					_meshRenderer = transform.GetChild( 1 ).GetComponent<MeshRenderer>();
-				}
-				return _meshRenderer;
-			}
-		}
-
 		ConfigurableJoint _joint;
 		ConfigurableJoint joint
 		{
@@ -96,9 +99,26 @@ namespace AICS.Kinesin
 			}
 		}
 
-		public void SetColor (Color _color)
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer // testing
 		{
-			meshRenderer.material.color = _color;
+			get {
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = transform.GetChild( 1 ).GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
+		public void SetColor ()
+		{
+			Color color = Color.black;
+			if (!snapping)
+			{
+				color = Color.HSVToRGB( 0.4f * (1f - Mathf.Clamp( (jointStretch - 0.9f) / 1.1f, 0, 1f )), 1f, 1f );
+			}
+			meshRenderer.material.color = color;
 		}
 
 		public void StartSnapping ()
@@ -114,6 +134,7 @@ namespace AICS.Kinesin
 			{
 				SimulateSnapping();
 			}
+			SetColor();
 		}
 
 		void SimulateSnapping ()

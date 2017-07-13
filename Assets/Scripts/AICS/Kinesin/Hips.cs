@@ -68,7 +68,7 @@ namespace AICS.Kinesin
 
 		void SetTropomyosinAndCargo ()
 		{
-			Rigidbody b = null;
+			Rigidbody a = null, b = null;
 			for (int i = 0; i < joints.Length; i++)
 			{
 				if (joints[i].connectedBody != null && joints[i].connectedBody.GetComponent<Link>() == null)
@@ -79,13 +79,23 @@ namespace AICS.Kinesin
 			}
 
 			List<Rigidbody> segments = new List<Rigidbody>();
-			while (b != null && b.GetComponent<PhysicsOrganelle>() == null)
+			ConfigurableJoint j;
+			while (b != null)
 			{
-				segments.Add( b );
-				b = b.GetComponent<ConfigurableJoint>().connectedBody;
+				j = b.GetComponent<ConfigurableJoint>();
+				if (j != null) 
+				{ 
+					segments.Add( b );
+					b = j.connectedBody; 
+				}
+				else
+				{
+					a = b;
+					b = null;
+				}
 			}
 			_tropomyosinSegments = segments.Count > 0 ? segments.ToArray() : null;
-			_cargo = b;
+			_cargo = a;
 		}
 
 		public void AttachToMotors (Rigidbody[] motorLastLinks)

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Kinesin
+namespace AICS
 {
-	public class PhysicsOrganelle : MonoBehaviour 
+	public class LimitMotion : MonoBehaviour 
 	{
 		public float maxDisplacementPerSecond = 1f;
 
@@ -16,11 +16,6 @@ namespace AICS.Kinesin
 		}
 
 		void Update () 
-		{
-			LimitMotion();
-		}
-
-		void LimitMotion ()
 		{
 			Vector3 displacement = transform.position - lastPosition;
 			transform.position = lastPosition + maxDisplacementPerSecond * Time.deltaTime * Vector3.Normalize( displacement );
