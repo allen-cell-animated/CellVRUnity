@@ -120,12 +120,24 @@ namespace AICS.Necklinker
 			startTransform.position = transform.position;
 		}
 
-		public void StartSnapping ()
+		public void StartSnapping (int _retries)
 		{
-			attractor.Stop();
-			snapping = startedSnapping = true;
-			randomForces.addForce = randomForces.addTorque = false;
-			startSnappingTime = Time.time;
+			if (_retries > 0 && previousLink != null)
+			{
+				Release();
+				previousLink.StartSnapping( _retries - 1 );
+			}
+			else 
+			{
+				Debug.Log( "start " + name );
+				attractor.Stop();
+
+				snapping = true;
+				randomForces.addForce = randomForces.addTorque = false;
+				startSnappingTime = Time.time;
+
+				Unfreeze();
+			}
 		}
 
 		void Update ()
@@ -163,19 +175,21 @@ namespace AICS.Necklinker
 
 		void SimulateSnapping ()
 		{
-			if (Time.time - startSnappingTime > 2f)
+			if (previousLink != null && Time.time - startSnappingTime > 0.3f)
 			{
-				neckLinker.RetrySnapping();
+				Retry();
 			}
+
 			Vector3 toGoal = neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position;
-			distanceToGoal = Vector3.Magnitude( toGoal );
+			float distanceToGoal = Vector3.Magnitude( toGoal );
 			if (distanceToGoal > 0.3f)
 			{
-				snappingForce = NecklinkerParameterInput.Instance.dTime.value * neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
+				float snappingForce = NecklinkerParameterInput.Instance.dTime.value * neckLinker.motor.necklinkerSnappingForce / (1f + Mathf.Exp( -10f * (distanceToGoal - 0.5f) ));
 				body.AddForce( snappingForce * Vector3.Normalize( toGoal ) );
 			}
 			else
 			{
+				Debug.Log( "finish " + name );
 				FinishSnapping();
 			}
 		}
@@ -183,29 +197,62 @@ namespace AICS.Necklinker
 		void FinishSnapping ()
 		{
 			snapping = false;
-
-			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
-			body.constraints = RigidbodyConstraints.FreezePosition;
+			retries = 0;
 			distanceToGoal = Vector3.Magnitude( neckLinker.motor.transform.TransformPoint( dockedPosition ) - transform.position );
 
-			if (previousLink != null) 
-			{
-				previousLink.Freeze();
-			}
+			Freeze();
 
 			if (nextLink != null)
 			{
-				nextLink.StartSnapping();
+				nextLink.StartSnapping( 0 );
 			}
 			else
 			{
-				Freeze();
+				Lock();
 				neckLinker.FinishSnapping();
+			}
+		}
+
+		int retries = 0;
+
+		void Retry ()
+		{
+			Debug.Log( "retry " + name );
+			Release();
+			previousLink.StartSnapping( retries );
+			retries++;
+		}
+
+		void Unfreeze ()
+		{
+//			Debug.Log( "unfreeze " + name );
+			body.constraints = RigidbodyConstraints.None;
+			if (previousLink != null) 
+			{
+				previousLink.Unlock();
 			}
 		}
 
 		void Freeze ()
 		{
+//			Debug.Log( "freeze " + name );
+			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
+			body.constraints = RigidbodyConstraints.FreezePosition;
+			if (previousLink != null) 
+			{
+				previousLink.Lock();
+			}
+		}
+
+		void Unlock ()
+		{
+//			Debug.Log( "unlock " + name );
+			body.isKinematic = false; 
+		}
+
+		void Lock ()
+		{
+//			Debug.Log( "lock " + name );
 			body.isKinematic = true; 
 			transform.position = neckLinker.motor.transform.TransformPoint( dockedPosition );
 		}

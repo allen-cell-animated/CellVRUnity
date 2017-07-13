@@ -10,10 +10,7 @@ namespace AICS.Kinesin
 		public bool snapping;
 		public bool bound;
 		public float snappingForce = 0.1f;
-
-//		float startingLength;
-		float retryTime;
-		float retryWait = 0.2f;
+		public float currentTension; // for testing
 
 		Link[] _links;
 		public Link[] links
@@ -66,7 +63,6 @@ namespace AICS.Kinesin
 		public bool stretched
 		{
 			get {
-//				return length / startingLength > 1.2f;
 				foreach (Link link in links)
 				{
 					if (link.jointStretch > 2f)
@@ -78,46 +74,11 @@ namespace AICS.Kinesin
 			}
 		}
 
-//		float length
-//		{
-//			get {
-//				float length = 0;
-//				for (int i = 1; i < links.Length; i++)
-//				{
-//					length += Vector3.Distance( links[i].transform.position, links[i - 1].transform.position );
-//				}
-//				length += Vector3.Distance( links[links.Length - 1].transform.position, motor.kinesin.hips.transform.position );
-//				return length;
-//			}
-//		}
-
 		public void SetDockedPositions (Vector3[] dockedPositions)
 		{
 			for (int i = 0; i < links.Length; i++)
 			{
 				links[i].dockedPosition = dockedPositions[i];
-			}
-		}
-
-//		void Start ()
-//		{
-//			startingLength = length;
-//		}
-
-		// Unchanged vector components should be < 0
-		public void SetJointRotationLimits (Vector3 newLimits)
-		{
-			foreach (Link link in links)
-			{
-				link.SetJointRotationLimits( newLimits );
-			}
-		}
-
-		public void SetLinkMass (float mass)
-		{
-			foreach (Link link in links)
-			{
-				link.SetMass( mass );
 			}
 		}
 
@@ -155,15 +116,6 @@ namespace AICS.Kinesin
 			snapping = bound = false;
 		}
 
-		public void RetrySnapping ()
-		{
-			Release();
-			Invoke( "StartSnapping", retryWait );
-		}
-
-		//for testing
-		public float currentTension;
-
 		void Update ()
 		{
 			if (snapping && stretched)
@@ -172,6 +124,23 @@ namespace AICS.Kinesin
 				StopSnapping();
 			}
 			currentTension = tension;
+		}
+
+		// Unchanged vector components should be < 0
+		public void SetJointRotationLimits (Vector3 newLimits)
+		{
+			foreach (Link link in links)
+			{
+				link.SetJointRotationLimits( newLimits );
+			}
+		}
+
+		public void SetLinkMass (float mass)
+		{
+			foreach (Link link in links)
+			{
+				link.SetMass( mass );
+			}
 		}
 	}
 }

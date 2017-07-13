@@ -47,18 +47,6 @@ namespace AICS.Necklinker
 
 		void Update ()
 		{
-//			if (!snapping)
-//			{
-//				if (bound && Time.time - lastTime > 1f)
-//				{
-//					Release();
-//					lastTime = Time.time;
-//				}
-//				else if (Time.time - lastTime > 10f)
-//				{
-//					StartSnapping();
-//				}
-//			}
 			if (resetting && Time.time - lastTime > 1f)
 			{
 				Release();
@@ -75,14 +63,13 @@ namespace AICS.Necklinker
 			{
 				snapping = bound = true;
 				resetting = false;
-				links[0].StartSnapping();
+				links[0].StartSnapping( 0 );
 			}
 		}
 
 		public void FinishSnapping ()
 		{
 			snapping = false;
-//			lastTime = Time.time;
 		}
 
 		public void StopSnapping ()
@@ -112,13 +99,6 @@ namespace AICS.Necklinker
 			snapping = bound = false;
 			lastTime = Time.time;
 			resetting = true;
-		}
-
-		public void RetrySnapping ()
-		{
-			Debug.Log( "Retry" );
-			Release();
-			Invoke( "StartSnapping", 0.2f );
 		}
 	}
 }
