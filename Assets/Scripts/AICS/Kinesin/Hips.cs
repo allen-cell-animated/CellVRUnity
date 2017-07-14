@@ -126,9 +126,10 @@ namespace AICS.Kinesin
 
 		public void SetTropomyosinMass (float mass)
 		{
+			float n = tropomyosinSegments.Length;
 			foreach (Rigidbody segment in tropomyosinSegments)
 			{
-				segment.mass = mass;
+				segment.mass = mass / n;
 			}
 		}
 

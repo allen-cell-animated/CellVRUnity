@@ -123,11 +123,11 @@ namespace AICS.Kinesin
 
 		void Update ()
 		{
-			if (snapping && stretched)
-			{
-				if (motor.printEvents) { Debug.Log( motor.name + " stopped snapping because stretched" ); }
-				StopSnapping();
-			}
+//			if (snapping && stretched)
+//			{
+//				if (motor.printEvents) { Debug.Log( motor.name + " stopped snapping because stretched" ); }
+//				StopSnapping();
+//			}
 			currentTension = tension;
 			isStretched = stretched;
 		}

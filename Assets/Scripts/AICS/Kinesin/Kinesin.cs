@@ -105,7 +105,7 @@ namespace AICS.Kinesin
 						}
 					}
 				}
-				else 
+				else if (motors[0].state == MotorState.Strong || motors[1].state == MotorState.Strong)
 				{
 					foreach (Motor motor in motors)
 					{
@@ -121,6 +121,17 @@ namespace AICS.Kinesin
 								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
 								motor.neckLinker.Release();
 							}
+						}
+					}
+				}
+				else
+				{
+					foreach (Motor motor in motors)
+					{
+						if (motor.neckLinker.stretched && motor.state != MotorState.Free)
+						{
+							if (motor.printEvents) { Debug.Log( "kinesin released " + motor.name ); }
+							motor.Eject();
 						}
 					}
 				}
