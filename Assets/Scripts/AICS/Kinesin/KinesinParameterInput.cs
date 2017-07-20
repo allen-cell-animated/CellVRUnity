@@ -180,5 +180,17 @@ namespace AICS.Kinesin
 		{
 			kinesin.pushOtherMotorForwardAfterSnap = pushForwardToggle.isOn;
 		}
+
+		public Text fpsDisplay;
+		float lastTime = -1f;
+
+		void Update ()
+		{
+			if (Time.time - lastTime > 0.3f)
+			{
+				fpsDisplay.text = Mathf.Round(1f / Time.deltaTime).ToString() + " fps";
+				lastTime = Time.time;
+			}
+		}
 	}
 }
