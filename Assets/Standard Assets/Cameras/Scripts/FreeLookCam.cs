@@ -67,7 +67,7 @@ namespace UnityStandardAssets.Cameras
         }
 
 
-        private void HandleRotationMovement()
+		protected void HandleRotationMovement()
         {
 			if(Time.timeScale < float.Epsilon)
 			return;

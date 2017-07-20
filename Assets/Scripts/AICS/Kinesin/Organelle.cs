@@ -26,12 +26,7 @@ namespace AICS.Kinesin
 			Tubulin tubulin = other.GetComponentInParent<Tubulin>();
 			if (tubulin != null)
 			{
-				Debug.Log( other.name + " apply force" );
 				body.AddForce( avoidMTForce * tubulin.transform.up );
-			}
-			else
-			{
-				Debug.Log( other.name );
 			}
 		}
 	}
