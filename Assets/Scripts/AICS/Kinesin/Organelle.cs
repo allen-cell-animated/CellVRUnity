@@ -1,39 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AICS.Microtubule;
 
 namespace AICS.Kinesin
 {
 	public class Organelle : MonoBehaviour 
 	{
-		float startDistance;
+		public float avoidMTForce = 100f;
 
-		Hips _hips;
-		public Hips hips
+		Rigidbody _body;
+		Rigidbody body
 		{
 			get {
-				if (_hips == null)
+				if (_body == null)
 				{
-					_hips = GameObject.FindObjectOfType<Hips>();
+					_body = GetComponent<Rigidbody>();
 				}
-				return _hips;
+				return _body;
 			}
 		}
 
-		void Start ()
+		void OnTriggerStay (Collider other)
 		{
-			startDistance = Vector3.Distance( hips.transform.position, transform.position );
-		}
-		
-		void Update () 
-		{
-			FollowHips();
-		}
-
-		void FollowHips ()
-		{
-			Vector3 hipsToOrganelle = transform.position - hips.transform.position;
-			transform.position = hips.transform.position + startDistance * Vector3.Normalize( hipsToOrganelle );
+			Tubulin tubulin = other.GetComponentInParent<Tubulin>();
+			if (tubulin != null)
+			{
+				Debug.Log( other.name + " apply force" );
+				body.AddForce( avoidMTForce * tubulin.transform.up );
+			}
+			else
+			{
+				Debug.Log( other.name );
+			}
 		}
 	}
 }
