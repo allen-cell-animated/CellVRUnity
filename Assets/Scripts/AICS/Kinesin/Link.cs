@@ -154,7 +154,7 @@ namespace AICS.Kinesin
 			{
 				SimulateSnapping();
 			}
-			SetColor();
+//			SetColor();
 		}
 
 		void SimulateSnapping ()

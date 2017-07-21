@@ -209,8 +209,7 @@ namespace AICS.Kinesin
 				UpdatePushForward();
 				UpdateNucleotideProbabilities();
 			}
-
-			SetColor();
+//			SetColor();
 		}
 
 		void SetColor ()

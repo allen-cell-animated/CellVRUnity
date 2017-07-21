@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Cameras;
+using UnityEngine.EventSystems;
 
 public class DragLookZoomCamera : FreeLookCam 
 {
@@ -18,7 +19,7 @@ public class DragLookZoomCamera : FreeLookCam
 
 	void DragToLook ()
 	{
-		if (CrossPlatformInputManager.GetButton( "Fire1" ))
+		if (CrossPlatformInputManager.GetButton( "Fire1" ) && !EventSystem.current.IsPointerOverGameObject())
 		{
 			HandleRotationMovement();
 		}
