@@ -249,10 +249,10 @@ namespace AICS.Kinesin
 
 		void OnCollisionEnter (Collision collision)
 		{
-			if (state == MotorState.Free && otherMotor.state != MotorState.Strong)
+			if (state == MotorState.Free)
 			{
 				Tubulin _tubulin = collision.collider.GetComponentInParent<Tubulin>();
-				if (_tubulin != null && !_tubulin.hasMotorBound)
+				if (_tubulin != null && !_tubulin.hasMotorBound && necklinkerWillNotBeStretched( _tubulin ) && closeToBindingOrientation( _tubulin ))
 				{
 					BindToMT( _tubulin );
 				}
@@ -261,7 +261,7 @@ namespace AICS.Kinesin
 
 		void BindToMT (Tubulin _tubulin)
 		{
-			if (!necklinkerWillBeStretched( _tubulin ) && closeToBindingOrientation( _tubulin ) && !pause)
+			if (!pause)
 			{
 				if (printEvents) { Debug.Log( name + " bind" ); }
 				tubulin = _tubulin;
@@ -276,9 +276,12 @@ namespace AICS.Kinesin
 			}
 		}
 
-		bool necklinkerWillBeStretched (Tubulin _tubulin)
+		bool necklinkerWillNotBeStretched (Tubulin _tubulin)
 		{
-			return Vector3.Distance( _tubulin.transform.TransformPoint( bindingPosition ), kinesin.hips.transform.position ) > 6f;
+			Vector3 motorToHips = Vector3.Normalize( kinesin.hips.transform.position - neckLinker.links[0].transform.position );
+			float angle = Mathf.Acos( Vector3.Dot( motorToHips, -_tubulin.transform.forward ) );
+
+			return Vector3.Distance( _tubulin.transform.TransformPoint( bindingPosition ), kinesin.hips.transform.position ) < 6f && angle > Mathf.PI / 6f;
 		}
 
 		bool closeToBindingOrientation (Tubulin _tubulin)
@@ -335,6 +338,7 @@ namespace AICS.Kinesin
 					state = MotorState.Free;
 					randomForces.addForce = randomForces.addTorque = true;
 					releasing = false;
+					otherMotor.RetryNecklinkerSnap();
 				}
 			}
 		}
@@ -417,6 +421,15 @@ namespace AICS.Kinesin
 				shouldReleaseNecklinker = false;
 			}
 		}
+
+		void RetryNecklinkerSnap ()
+		{
+			if (state == MotorState.Strong && !neckLinker.snapping && !neckLinker.bound)
+			{
+				neckLinker.StartSnapping();
+			}
+		}
+
 
 		// ---------------------------------------------- Push Forward
 

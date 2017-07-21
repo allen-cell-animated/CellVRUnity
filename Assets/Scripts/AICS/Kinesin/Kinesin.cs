@@ -90,37 +90,48 @@ namespace AICS.Kinesin
 			ReleaseWhenStretched();
 		}
 
+		float lastUnstretchTime = -1f;
+
 		void ReleaseWhenStretched ()
 		{
 			if (motors[0].neckLinker.stretched || motors[1].neckLinker.stretched)
-			{
+			{					
 				if (motors[0].state == MotorState.Strong && motors[1].state == MotorState.Strong)
 				{
-					foreach (Motor motor in motors)
+					if (Time.time - lastUnstretchTime < 0.1f)
 					{
-						if (motor.neckLinker.snapping || motor.neckLinker.bound)
+						foreach (Motor motor in motors)
 						{
-							if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
-							motor.neckLinker.Release();
+							if (motor.neckLinker.snapping || motor.neckLinker.bound)
+							{
+								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
+								motor.neckLinker.Release();
+							}
 						}
+					}
+					else
+					{
+						int m = Random.Range( 0, 2 );
+						if (motors[m].printEvents) { Debug.Log( "kinesin released " + motors[m].name ); }
+						motors[m].Eject();
 					}
 				}
 				else if (motors[0].state == MotorState.Strong || motors[1].state == MotorState.Strong)
 				{
 					foreach (Motor motor in motors)
 					{
-						if (motor.state == MotorState.Strong && motor.otherMotor.bound)
+						if (motor.state == MotorState.Strong)
 						{
-							if (motor.inFront)
+							if (motor.otherMotor.bound)
 							{
 								if (motor.otherMotor.printEvents) { Debug.Log( "kinesin released " + motor.otherMotor.name ); }
 								motor.otherMotor.Eject();
 							}
-							else if (motor.neckLinker.snapping || motor.neckLinker.bound)
-							{
-								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
-								motor.neckLinker.Release();
-							}
+//							else if (motor.neckLinker.snapping || motor.neckLinker.bound)
+//							{
+//								if (motor.printEvents) { Debug.Log( "kinesin released necklinker " + motor.name ); }
+//								motor.neckLinker.Release();
+//							}
 						}
 					}
 				}
@@ -135,6 +146,10 @@ namespace AICS.Kinesin
 						}
 					}
 				}
+			}
+			else
+			{
+				lastUnstretchTime = Time.time;
 			}
 		}
 
