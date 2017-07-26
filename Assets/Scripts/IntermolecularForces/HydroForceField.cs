@@ -16,5 +16,13 @@ namespace AICS.IntermolecularForces
 				OrientToField( otherField.transform, strength );
 			}
 		}
+
+		protected override Vector3 CalculateAngularAcceleration (Transform otherField)
+		{
+			float angleForward = Mathf.Acos( Vector3.Dot( transform.forward, otherField.forward ) );
+			Vector3 axisForward = Vector3.Cross( transform.forward, otherField.forward );
+
+			return angleForward * axisForward.normalized;
+		}
 	}
 }

@@ -32,18 +32,19 @@ namespace AICS.IntermolecularForces
 
 		protected void AddTorque (Transform otherField, float strength)
 		{
-			float angle = Mathf.Acos( Vector3.Dot( transform.forward, otherField.forward ) );
-			Vector3 axis = Vector3.Cross( transform.forward, otherField.forward );
-			float speed = strength * 8000f * Mathf.Pow( Vector3.Distance( transform.position, otherField.position ), -2f );
-			Vector3 w = angle * speed * axis.normalized;
+			float acceleration = strength * 8000f * Mathf.Pow( Vector3.Distance( transform.position, otherField.position ), -2f );
+			Vector3 angularAcceleration = acceleration * CalculateAngularAcceleration( otherField );
+
 			Quaternion q = transform.rotation * body.inertiaTensorRotation;
-			Vector3 torque = q * Vector3.Scale( body.inertiaTensor, Quaternion.Inverse(q) * w );
+			Vector3 torque = q * Vector3.Scale( body.inertiaTensor, Quaternion.Inverse(q) * angularAcceleration );
 
 			if (VectorIsValid( torque ))
 			{
 				body.AddTorque( torque );
 			}
 		}
+
+		protected abstract Vector3 CalculateAngularAcceleration (Transform otherField);
 
 		protected void AddForce (Transform otherField, float strength)
 		{
