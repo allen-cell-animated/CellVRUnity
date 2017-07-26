@@ -6,7 +6,7 @@ namespace AICS.Microtubule
 {
 	public class Tubulin : MonoBehaviour
 	{
-		public int type;
+		public int type = -1;
 		public bool hasMotorBound;
 
 		void Start ()
