@@ -26,7 +26,7 @@ namespace AICS.Binding
 
 		protected void AddTorque (ForceField otherField, float strength)
 		{
-			float acceleration = strength * 4e3f * Mathf.Pow( Vector3.Distance( transform.position, otherField.transform.position ), -2f );
+			float acceleration = strength * 1000f * Mathf.Pow( Vector3.Distance( transform.position, otherField.transform.position ), -2f );
 			Vector3 angularAcceleration = acceleration * CalculateAngularAccelerationDirection( otherField.transform );
 
 			Quaternion q = transform.rotation * body.inertiaTensorRotation;
@@ -43,7 +43,7 @@ namespace AICS.Binding
 		protected void AddForce (ForceField otherField, float strength)
 		{
 			Vector3 toGoalPosition = otherField.transform.TransformPoint( transform.InverseTransformPoint( body.transform.position ) ) - body.transform.position;
-			float s = strength * (2e4f / (1f * Mathf.Sqrt( 2f * Mathf.PI ))) * Mathf.Exp( -0.5f * Mathf.Pow( toGoalPosition.magnitude - 3.5f, 2f ) / 1f );
+			float s = strength * (10000f / (1f * Mathf.Sqrt( 2f * Mathf.PI ))) * Mathf.Exp( -0.5f * Mathf.Pow( toGoalPosition.magnitude - 3.5f, 2f ) / 1f );
 			Vector3 force = s * toGoalPosition.normalized;
 
 			if (VectorIsValid( force ))
