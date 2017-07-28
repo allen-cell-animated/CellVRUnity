@@ -2,31 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.IntermolecularForces
+namespace AICS.Binding
 {
-	public enum MoleculeType
-	{
-		A,
-		B,
-		C
-	}
-
+	// Simulate electrostatic and van der Waals (electrodynamic) forces 
+	// - only at distances < 0.6 nm
+	// - 0.02 pN force per atom pair
+	// - specific binding orientation for specific binding partner
 	public class ElectroForceField : ForceField 
 	{
 		public MoleculeType type;
 		public List<MoleculeType> bindingPartners;
-		public float strength = 500f;
+		public float strength = 100f;
+		public float angularStrength = 500f;
 
 		protected override void InteractWith (Collider other)
 		{
 			ElectroForceField otherField = other.GetComponent<ElectroForceField>();
 			if (otherField != null && bindingPartners.Contains( otherField.type ))
 			{
-				OrientToField( otherField.transform, strength );
+				AddForce( otherField, strength );
+				AddTorque( otherField, angularStrength );
 			}
 		}
 
-		protected override Vector3 CalculateAngularAcceleration (Transform otherField)
+		protected override Vector3 CalculateAngularAccelerationDirection (Transform otherField)
 		{
 			float angleForward = Mathf.Acos( Vector3.Dot( transform.forward, otherField.forward ) );
 			Vector3 axisForward = Vector3.Cross( transform.forward, otherField.forward );

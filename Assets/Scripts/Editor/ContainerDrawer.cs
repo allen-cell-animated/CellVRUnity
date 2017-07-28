@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-[CustomEditor( typeof(Container) )]
-public class ContainerEditor : Editor
+namespace AICS
 {
-	public override void OnInspectorGUI () 
+	[CustomEditor( typeof(Container) )]
+	public class ContainerEditor : Editor
 	{
-		Container container = (Container)target;
-
-		EditorGUI.BeginChangeCheck();
-
-		container.size = EditorGUILayout.Vector3Field( "Size", container.size );
-		container.wallWidth = EditorGUILayout.FloatField( "Wall width", container.wallWidth );
-
-		if (EditorGUI.EndChangeCheck())
+		public override void OnInspectorGUI () 
 		{
-			container.SetWalls();
+			Container container = (Container)target;
+
+			EditorGUI.BeginChangeCheck();
+
+			container.size = EditorGUILayout.Vector3Field( "Size", container.size );
+			container.wallWidth = EditorGUILayout.FloatField( "Wall width", container.wallWidth );
+
+			if (EditorGUI.EndChangeCheck())
+			{
+				container.SetWalls();
+			}
 		}
 	}
 }
