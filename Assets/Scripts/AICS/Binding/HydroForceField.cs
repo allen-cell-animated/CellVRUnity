@@ -16,10 +16,31 @@ namespace AICS.Binding
 		protected override void InteractWith (Collider other)
 		{
 			HydroForceField otherField = other.GetComponent<HydroForceField>();
-			if (otherField != null)
+			if (otherField != null && otherField.surface != null)
 			{
-				AddForce( otherField, strength );
-				AddTorque( otherField, angularStrength );
+				float fieldAngle = Mathf.Acos( Vector3.Dot( transform.forward, other.transform.forward ) );
+
+				float surfaceToOtherSurfaceDistance = Vector3.Distance( otherField.surface.position, surface.transform.position );
+				float surfaceToOtherFieldDistance = Vector3.Distance( otherField.transform.position, surface.transform.position );
+
+				Vector3 surfaceToOtherSurface = Vector3.Normalize( otherField.surface.position - surface.position );
+				Vector3 surfaceToField = Vector3.Normalize( transform.position - surface.transform.position );
+				float surfaceAngle = Mathf.Acos( Vector3.Dot( surfaceToOtherSurface, surfaceToField ) );
+
+				if (fieldAngle < Mathf.PI / 3f && surfaceToOtherSurfaceDistance > surfaceToOtherFieldDistance && surfaceAngle < Mathf.PI / 3f)
+				{
+					interacting = true;
+					AddForce( otherField, strength );
+					AddTorque( otherField, angularStrength );
+				}
+				else 
+				{
+					interacting = false;
+				}
+			}
+			else 
+			{
+				interacting = false;
 			}
 		}
 

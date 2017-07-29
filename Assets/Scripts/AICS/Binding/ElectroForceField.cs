@@ -20,8 +20,13 @@ namespace AICS.Binding
 			ElectroForceField otherField = other.GetComponent<ElectroForceField>();
 			if (otherField != null && bindingPartners.Contains( otherField.type ))
 			{
+				interacting = true;
 				AddForce( otherField, strength );
 				AddTorque( otherField, angularStrength );
+			}
+			else
+			{
+				interacting = false;
 			}
 		}
 

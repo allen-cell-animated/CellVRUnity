@@ -140,7 +140,7 @@ namespace AICS.Microtubule
 		{
 			if (canMakeTubulins)
 			{
-				int type = (index % (2 * tubulinsPerTurn) < tubulinsPerTurn) ? 0 : 1;
+				int type = direction < 0 ? (index % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 0 : 1) : (index % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 1 : 0);
 				Tubulin tubulin = Instantiate( tubulinPrefabs[type], GetTubulinParent( (direction < 0) ? 0 : 1 ) );
 				tubulin.name = tubulinPrefabs[type].name + "_" + index;
 

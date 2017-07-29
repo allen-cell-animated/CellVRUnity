@@ -4,14 +4,20 @@ using UnityEngine;
 
 namespace AICS.Binding
 {
-	[RequireComponent( typeof(SphereCollider) )]
+	[RequireComponent( typeof(Collider) )]
 	public abstract class ForceField : MonoBehaviour 
 	{
+		public bool interacting;
+		public Transform surface;
+
 		protected Rigidbody body;
 
 		void Start ()
 		{
-			body = GetComponentInParent<Rigidbody>();
+			if (surface != null)
+			{
+				body = surface.GetComponent<Rigidbody>();
+			}
 		}
 
 		void OnTriggerStay (Collider other)
@@ -55,6 +61,11 @@ namespace AICS.Binding
 		protected bool VectorIsValid (Vector3 vector)
 		{
 			return !float.IsNaN( vector.x ) && !float.IsNaN( vector.y ) && !float.IsNaN( vector.z );
+		}
+
+		void OnTriggerExit (Collider other)
+		{
+			interacting = false;
 		}
 	}
 }

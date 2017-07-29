@@ -7,9 +7,10 @@ namespace AICS.Binding
 	public enum MoleculeType
 	{
 		none,
-		A,
-		B,
-		C
+		KinesinMotor,
+		Tubulin,
+		ATP,
+		ADP
 	}
 
 	public enum RegulationType
@@ -28,5 +29,43 @@ namespace AICS.Binding
 		public RegulationType regulationType;
 		public HydroForceField hydroField;
 		public ElectroForceField electroField;
+
+		public Color hydroColor;
+		public Color electroColor;
+		Color startColor;
+
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer
+		{
+			get
+			{
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = transform.parent.GetComponentInChildren<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
+		}
+
+		void Start ()
+		{
+			startColor = meshRenderer.material.color;
+		}
+
+		void Update ()
+		{
+			if (electroField.interacting)
+			{
+				meshRenderer.material.color = electroColor;
+			}
+			else if (hydroField.interacting)
+			{
+				meshRenderer.material.color = hydroColor;
+			}
+			else
+			{
+				meshRenderer.material.color = startColor;
+			}
+		}
 	}
 }
