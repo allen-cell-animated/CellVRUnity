@@ -7,8 +7,9 @@ namespace AICS.AnimatedKinesin
 	public class Kinesin : MonoBehaviour 
 	{
 		public Hips hips;
-		public Motor[] motors;
+		public List<Motor> motors;
 
+		// For testing with UI
 		public void SetParent (string newParent)
 		{
 			switch (newParent) 
@@ -20,28 +21,30 @@ namespace AICS.AnimatedKinesin
 
 			case "motor1" :
 				
-				MakeMotorTheParent( 0 );
+				MakeMotorTheParent( motors[0] );
 				return;
 
 			case "motor2" :
 				
-				MakeMotorTheParent( 1 );
+				MakeMotorTheParent( motors[1] );
 				return;
 			}
 		}
 
-		void MakeHipsTheParent ()
+		public void MakeHipsTheParent ()
 		{
 			hips.transform.SetParent( transform );
 			motors[0].transform.SetParent( hips.transform );
 			motors[1].transform.SetParent( hips.transform );
 		}
 
-		void MakeMotorTheParent (int index)
+		public void MakeMotorTheParent (Motor parentMotor)
 		{
-			motors[index].transform.SetParent( transform );
-			hips.transform.SetParent( motors[index].transform );
-			motors[index == 0 ? 1 : 0].transform.SetParent( hips.transform );
+			parentMotor.transform.SetParent( transform );
+			hips.transform.SetParent( parentMotor.transform );
+			Motor otherMotor = motors.Find( m => m != parentMotor );
+			otherMotor.transform.SetParent( hips.transform );
+			otherMotor.Release();
 		}
 	}
 }

@@ -6,6 +6,7 @@ namespace AICS.AnimatedKinesin
 {
 	public abstract class Molecule : MonoBehaviour 
 	{
+		public bool logEvents;
 		public float maxDistanceFromParent = 8f;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 1f;
@@ -32,18 +33,33 @@ namespace AICS.AnimatedKinesin
 
 		protected void Move () 
 		{
-			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
+			float stepSize = SampleExponentialDistribution( meanStepSize );
+			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
 			if (!WillCollide( moveStep ))
 			{
-				if (transform.parent == null)
+				if (transform.parent == null || Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent)
 				{
 					transform.position += moveStep;
 				}
-				else if (Vector3.Magnitude( transform.localPosition + moveStep ) <= maxDistanceFromParent)
+				else if (transform.parent != null)
 				{
-					transform.position += moveStep;
+					moveStep = stepSize * (transform.parent.position - transform.position).normalized;
+					if (!WillCollide( moveStep ))
+					{
+						transform.position += moveStep;
+					}
 				}
 			}
+		}
+
+		bool MoveIsValid (Vector3 moveStep)
+		{
+			return !WillCollide( moveStep ) && (transform.parent == null || Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent);
+		}
+
+		protected void Jitter () 
+		{
+			transform.position += Helpers.GetRandomVector( SampleExponentialDistribution( 0.01f ) );
 		}
 
 		protected abstract bool WillCollide (Vector3 moveStep);
