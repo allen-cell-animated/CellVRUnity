@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.AnimatedKinesin
 {
-	public class Hip : MonoBehaviour 
+	public class Hips : MonoBehaviour 
 	{
 		RandomMover _mover;
 		RandomMover mover
