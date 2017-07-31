@@ -15,19 +15,16 @@ namespace AICS.AnimatedKinesin
 			{
 			case "hips" :
 				
-				Debug.Log( "hips" );
 				MakeHipsTheParent();
 				return;
 
 			case "motor1" :
 				
-				Debug.Log( "motor 1" );
 				MakeMotorTheParent( 0 );
 				return;
 
 			case "motor2" :
 				
-				Debug.Log( "motor 2" );
 				MakeMotorTheParent( 1 );
 				return;
 			}

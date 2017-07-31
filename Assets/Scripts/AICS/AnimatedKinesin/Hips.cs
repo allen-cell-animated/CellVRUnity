@@ -4,29 +4,22 @@ using UnityEngine;
 
 namespace AICS.AnimatedKinesin
 {
-	public class Hips : MonoBehaviour 
+	public class Hips : Molecule 
 	{
-		RandomMover _mover;
-		RandomMover mover
-		{
-			get
-			{
-				if (_mover == null)
-				{
-					_mover = GetComponent<RandomMover>();
-					if (_mover == null)
-					{
-						_mover = gameObject.AddComponent<RandomMover>();
-					}
-				}
-				return _mover;
-			}
-		}
-
 		void FixedUpdate () 
 		{
-			mover.Rotate();
-			mover.Move();
+			Rotate();
+			Move();
+		}
+
+		protected override bool WillCollide (Vector3 moveStep)
+		{
+			RaycastHit hit;
+			if (body.SweepTest( moveStep.normalized, out hit, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide ))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

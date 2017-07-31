@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace AICS.AnimatedKinesin
 {
-	public class RandomMover : MonoBehaviour 
+	public abstract class Molecule : MonoBehaviour 
 	{
 		public float maxDistanceFromParent = 8f;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 1f;
 
 		Rigidbody _body;
-		Rigidbody body 
+		protected Rigidbody body 
 		{
 			get
 			{
@@ -25,12 +25,12 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		public void Rotate ()
+		protected void Rotate ()
 		{
 			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
 		}
 
-		public void Move () 
+		protected void Move () 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
 			if (!WillCollide( moveStep ))
@@ -46,15 +46,7 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		bool WillCollide (Vector3 moveStep)
-		{
-			RaycastHit hit;
-			if (body.SweepTest( moveStep.normalized, out hit, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide ))
-			{
-				return true;
-			}
-			return false;
-		}
+		protected abstract bool WillCollide (Vector3 moveStep);
 
 		float SampleExponentialDistribution (float mean)
 		{
