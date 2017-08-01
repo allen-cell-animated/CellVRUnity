@@ -7,9 +7,9 @@ namespace AICS.AnimatedKinesin
 	public abstract class Molecule : MonoBehaviour 
 	{
 		public bool logEvents;
-		public float maxDistanceFromParent = 8f;
+		public float maxDistanceFromParent = 6f;
 		public float meanStepSize = 0.2f;
-		public float meanRotation = 1f;
+		public float meanRotation = 5f;
 
 		Rigidbody _body;
 		protected Rigidbody body 
@@ -37,13 +37,13 @@ namespace AICS.AnimatedKinesin
 			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
 			if (!WillCollide( moveStep ))
 			{
-				if (transform.parent == null || Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent)
+				if (transform.parent == null || WithinLeash( moveStep ))
 				{
 					transform.position += moveStep;
 				}
 				else if (transform.parent != null)
 				{
-					moveStep = stepSize * (transform.parent.position - transform.position).normalized;
+					moveStep = stepSize * towardLeashDirection;
 					if (!WillCollide( moveStep ))
 					{
 						transform.position += moveStep;
@@ -57,12 +57,19 @@ namespace AICS.AnimatedKinesin
 			return !WillCollide( moveStep ) && (transform.parent == null || Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent);
 		}
 
+		protected abstract bool WillCollide (Vector3 moveStep);
+
+		protected abstract bool WithinLeash (Vector3 moveStep);
+
+		protected abstract Vector3 towardLeashDirection
+		{
+			get;
+		}
+
 		protected void Jitter () 
 		{
 			transform.position += Helpers.GetRandomVector( SampleExponentialDistribution( 0.01f ) );
 		}
-
-		protected abstract bool WillCollide (Vector3 moveStep);
 
 		float SampleExponentialDistribution (float mean)
 		{

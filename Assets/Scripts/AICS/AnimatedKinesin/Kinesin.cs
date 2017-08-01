@@ -9,42 +9,67 @@ namespace AICS.AnimatedKinesin
 		public Hips hips;
 		public List<Motor> motors;
 
-		// For testing with UI
-		public void SetParent (string newParent)
+		public void Release (string whichMotors)
 		{
-			switch (newParent) 
+			switch (whichMotors) 
 			{
-			case "hips" :
-				
-				MakeHipsTheParent();
+			case "both" :
+
+				ReleaseMotor( motors[0] );
+				ReleaseMotor( motors[1] );
 				return;
 
 			case "motor1" :
-				
-				MakeMotorTheParent( motors[0] );
+
+				ReleaseMotor( motors[0] );
 				return;
 
 			case "motor2" :
-				
-				MakeMotorTheParent( motors[1] );
+
+				ReleaseMotor( motors[1] );
 				return;
 			}
 		}
 
 		public void MakeHipsTheParent ()
 		{
-			hips.transform.SetParent( transform );
+			hips.transform.SetParent( null );
 			motors[0].transform.SetParent( hips.transform );
 			motors[1].transform.SetParent( hips.transform );
 		}
 
-		public void MakeMotorTheParent (Motor parentMotor)
+		public void BindMotor (Motor motor)
 		{
-			parentMotor.transform.SetParent( transform );
-			hips.transform.SetParent( parentMotor.transform );
-			Motor otherMotor = motors.Find( m => m != parentMotor );
-			otherMotor.transform.SetParent( hips.transform );
-			otherMotor.Release();
+			Motor otherMotor = motors.Find( m => m != motor );
+			if (otherMotor.state != MotorState.Free)
+			{
+				motor.transform.SetParent( null );
+				hips.SetSecondParent( motor.transform );
+			}
+			else
+			{
+				motor.transform.SetParent( null );
+				hips.transform.SetParent( motor.transform );
+				otherMotor.transform.SetParent( hips.transform );
+			}
+		}
+
+		public void ReleaseMotor (Motor motor)
+		{
+			Motor otherMotor = motors.Find( m => m != motor );
+			if (otherMotor.state != MotorState.Free)
+			{
+				hips.transform.SetParent( otherMotor.transform );
+				motor.transform.SetParent( hips.transform );
+				hips.SetSecondParent( null );
+			}
+			else
+			{
+				hips.transform.SetParent( null );
+				motors[0].transform.SetParent( hips.transform );
+				motors[1].transform.SetParent( hips.transform );
+			}
+			motor.Release();
 		}
 	}
 }
