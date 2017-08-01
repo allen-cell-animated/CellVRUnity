@@ -40,14 +40,6 @@ namespace AICS.AnimatedKinesin
 				{
 					transform.position += moveStep;
 				}
-				else if (transform.parent != null)
-				{
-					moveStep = stepSize * towardLeashDirection;
-					if (!WillCollide( moveStep ))
-					{
-						transform.position += moveStep;
-					}
-				}
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace AICS.AnimatedKinesin
 		void LateUpdate () 
 		{
 			Move();
-			Rotate();
+//			Rotate();
 		}
 
 		protected override bool WillCollide (Vector3 moveStep)

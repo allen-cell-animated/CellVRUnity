@@ -38,7 +38,7 @@ namespace AICS.AnimatedKinesin
 			if (state == MotorState.Free)
 			{
 				Move();
-				Rotate();
+//				Rotate();
 			}
 			else if (state == MotorState.Weak)
 			{
