@@ -8,16 +8,16 @@ namespace AICS.AnimatedKinesin
 	{
 		Transform secondParent = null;
 
-		void FixedUpdate () 
+		void LateUpdate () 
 		{
-			Rotate();
 			Move();
+			Rotate();
 		}
 
 		protected override bool WillCollide (Vector3 moveStep)
 		{
 			RaycastHit hit;
-			if (body.SweepTest( moveStep.normalized, out hit, 2f * moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide ))
+			if (body.SweepTest( moveStep.normalized, out hit, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide ))
 			{
 				return true;
 			}
@@ -39,23 +39,7 @@ namespace AICS.AnimatedKinesin
 		{
 			get
 			{
-				return ((transform.parent.position + (secondParent != null ? secondParent.position : Vector3.zero)) / 2f - transform.position).normalized;
-			}
-		}
-
-		// for testing
-		public float distanceFromParent;
-		public float distanceFromSecondParent;
-
-		void Update ()
-		{
-			if (transform.parent != null)
-			{
-				distanceFromParent = Vector3.Distance( transform.position, transform.parent.position );
-			}
-			if (secondParent != null)
-			{
-				distanceFromSecondParent = Vector3.Distance( transform.position, secondParent.position );
+				return ((secondParent != null ? (transform.parent.position + secondParent.position) / 2f : transform.parent.position) - transform.position).normalized;
 			}
 		}
 	}

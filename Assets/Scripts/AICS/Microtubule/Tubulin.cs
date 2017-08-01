@@ -9,17 +9,17 @@ namespace AICS.Microtubule
 		public int type = -1;
 		public bool hasMotorBound;
 
-		void Start ()
-		{
-			if (type == 0)
-			{
-				Collider[] colliders = GetComponentsInChildren<Collider>();
-				foreach (Collider collider in colliders)
-				{
-					collider.enabled = false;
-				}
-			}
-		}
+//		void Start ()
+//		{
+//			if (type == 0)
+//			{
+//				Collider[] colliders = GetComponentsInChildren<Collider>();
+//				foreach (Collider collider in colliders)
+//				{
+//					collider.enabled = false;
+//				}
+//			}
+//		}
 
 		public void Place (Vector3 position, Vector3 lookDirection, Vector3 normal)
 		{

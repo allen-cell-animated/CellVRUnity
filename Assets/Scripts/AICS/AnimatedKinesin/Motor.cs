@@ -33,12 +33,12 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		void FixedUpdate () 
+		void LateUpdate () 
 		{
 			if (state == MotorState.Free)
 			{
-				Rotate();
 				Move();
+				Rotate();
 			}
 			else if (state == MotorState.Weak)
 			{
@@ -48,7 +48,7 @@ namespace AICS.AnimatedKinesin
 
 		protected override bool WillCollide (Vector3 moveStep)
 		{
-			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, 2f * moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
+			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
 			if (hits.Length > 0)
 			{
 				CheckHitsForTubulin( hits );
@@ -77,7 +77,7 @@ namespace AICS.AnimatedKinesin
 			foreach (RaycastHit hit in hits)
 			{
 				tubulin = hit.collider.GetComponent<Tubulin>();
-				if (tubulin != null && !tubulin.hasMotorBound)
+				if (tubulin != null && tubulin.type == 1 && !tubulin.hasMotorBound)
 				{
 					tubulins.Add( tubulin );
 				}
@@ -95,11 +95,6 @@ namespace AICS.AnimatedKinesin
 
 		Tubulin FindClosestValidTubulin (List<Tubulin> tubulins)
 		{
-			if (tubulins.Count == 1)
-			{
-				return tubulins[0];
-			}
-
 			float d, hipsD, minDistance = Mathf.Infinity;
 			Vector3 _bindingPosition;
 			Tubulin closestTubulin = null;
@@ -108,7 +103,7 @@ namespace AICS.AnimatedKinesin
 				_bindingPosition = tubulin.transform.TransformPoint( bindingPosition );
 				hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
 				d = Vector3.Distance( _bindingPosition, transform.position );
-				if (hipsD <= maxDistanceFromParent / 2f && closeToBindingOrientation( tubulin ) && d < minDistance)
+				if (hipsD <= maxDistanceFromParent && closeToBindingOrientation( tubulin ) && d < minDistance)
 				{
 					minDistance = d;
 					closestTubulin = tubulin;
@@ -137,17 +132,6 @@ namespace AICS.AnimatedKinesin
 		public void Release ()
 		{
 			state = MotorState.Free;
-		}
-
-		// for testing
-		public float distanceFromParent;
-
-		void Update ()
-		{
-			if (transform.parent != null)
-			{
-				distanceFromParent = Vector3.Distance( transform.position, transform.parent.position );
-			}
 		}
 	}
 }
