@@ -19,42 +19,42 @@ namespace AICS.AnimatedKinesin
 
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( 357.7f, 269.5f, 180.2f );
+		Tubulin tubulin;
+		float lastReleaseTime = -1f;
 
-		Kinesin _kinesin;
-		Kinesin kinesin
+		protected override bool canMove
 		{
 			get
 			{
-				if (_kinesin == null)
-				{
-					_kinesin = GameObject.FindObjectOfType<Kinesin>();
-				}
-				return _kinesin;
+				return state == MotorState.Free;
 			}
 		}
 
-		void LateUpdate () 
+		public override void DoRandomWalk ()
 		{
-			if (state == MotorState.Free)
+			if (canMove)
 			{
-				Move();
-//				Rotate();
+				Rotate();
+				for (int i = 0; i < kinesin.maxIterations; i++)
+				{
+					if (Move() || state != MotorState.Free)
+					{
+						return;
+					}
+				}
 			}
-			else if (state == MotorState.Weak)
+			else 
 			{
 				Jitter();
 			}
 		}
 
-		protected override bool WillCollide (Vector3 moveStep)
+		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins)
 		{
-			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
-			if (hits.Length > 0)
+			if (Time.time - lastReleaseTime > 0.5f)
 			{
-				CheckHitsForTubulin( hits );
-				return true;
+				CheckForBind( collidingTubulins );
 			}
-			return false;
 		}
 
 		protected override bool WithinLeash (Vector3 moveStep)
@@ -62,33 +62,23 @@ namespace AICS.AnimatedKinesin
 			return Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent;
 		}
 
-		protected override Vector3 towardLeashDirection
+		void CheckForBind (Tubulin[] collidingTubulins)
 		{
-			get
-			{
-				return (transform.parent.position - transform.position).normalized;
-			}
-		}
-
-		void CheckHitsForTubulin (RaycastHit[] hits)
-		{
-			Tubulin tubulin;
 			List<Tubulin> tubulins = new List<Tubulin>();
-			foreach (RaycastHit hit in hits)
+			foreach (Tubulin t in collidingTubulins)
 			{
-				tubulin = hit.collider.GetComponent<Tubulin>();
-				if (tubulin != null && tubulin.type == 1 && !tubulin.hasMotorBound)
+				if (t.type == 1 && !t.hasMotorBound)
 				{
-					tubulins.Add( tubulin );
+					tubulins.Add( t );
 				}
 			}
 
 			if (tubulins.Count > 0)
 			{
-				tubulin = FindClosestValidTubulin( tubulins );
-				if (tubulin != null)
+				Tubulin t = FindClosestValidTubulin( tubulins );
+				if (t != null)
 				{
-					BindTubulin( tubulin );
+					BindTubulin( t );
 				}
 			}
 		}
@@ -98,40 +88,48 @@ namespace AICS.AnimatedKinesin
 			float d, hipsD, minDistance = Mathf.Infinity;
 			Vector3 _bindingPosition;
 			Tubulin closestTubulin = null;
-			foreach (Tubulin tubulin in tubulins)
+			foreach (Tubulin t in tubulins)
 			{
-				_bindingPosition = tubulin.transform.TransformPoint( bindingPosition );
+				_bindingPosition = t.transform.TransformPoint( bindingPosition );
 				hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
 				d = Vector3.Distance( _bindingPosition, transform.position );
-				if (hipsD <= maxDistanceFromParent && closeToBindingOrientation( tubulin ) && d < minDistance)
+				if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
 				{
 					minDistance = d;
-					closestTubulin = tubulin;
+					closestTubulin = t;
 				}
 			}
 			return closestTubulin;
 		}
 
-		bool closeToBindingOrientation (Tubulin tubulin)
+		bool closeToBindingOrientation (Tubulin _tubulin)
 		{
-			Vector3 localRotation = (Quaternion.Inverse( tubulin.transform.rotation ) * transform.rotation).eulerAngles;
+			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
 			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance );
 		}
 
-		void BindTubulin (Tubulin tubulin)
+		void BindTubulin (Tubulin _tubulin)
 		{
 			state = MotorState.Weak;
+			tubulin = _tubulin;
 			tubulin.hasMotorBound = true;
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 			transform.position = tubulin.transform.TransformPoint( bindingPosition );
-			kinesin.BindMotor( this );
+			kinesin.SetParentSchemeOnBind( this );
 		}
 
 		public void Release ()
 		{
 			state = MotorState.Free;
+			lastReleaseTime = Time.time;
+			if (tubulin != null)
+			{
+				tubulin.hasMotorBound = false;
+				Vector3 fromTubulin = 1f * (transform.position - tubulin.transform.position).normalized;
+				MoveIfValid( fromTubulin );
+			}
 		}
 	}
 }
