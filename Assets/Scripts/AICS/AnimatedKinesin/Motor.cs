@@ -16,6 +16,8 @@ namespace AICS.AnimatedKinesin
 	{
 		public MotorState state = MotorState.Free;
 		public float bindingRotationTolerance = 30f;
+		public bool hipsAreLockedToThis;
+		public GameObject ATP;
 
 		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
 		Vector3 bindingRotation = new Vector3( 357.7f, 269.5f, 180.2f );
@@ -59,7 +61,8 @@ namespace AICS.AnimatedKinesin
 
 		protected override bool WithinLeash (Vector3 moveStep)
 		{
-			return Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent;
+			float d = Vector3.Distance( transform.parent.position, transform.position + moveStep );
+			return d >= minDistanceFromParent && d <= maxDistanceFromParent;
 		}
 
 		void CheckForBind (Tubulin[] collidingTubulins)
@@ -130,6 +133,17 @@ namespace AICS.AnimatedKinesin
 				Vector3 fromTubulin = 1f * (transform.position - tubulin.transform.position).normalized;
 				MoveIfValid( fromTubulin );
 			}
+			if (hipsAreLockedToThis)
+			{
+				kinesin.hips.SetFree();
+			}
+			ATP.SetActive( false );
+		}
+
+		public void BindATP ()
+		{
+			state = MotorState.Strong;
+			ATP.SetActive( true );
 		}
 	}
 }

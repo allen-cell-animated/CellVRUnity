@@ -5,33 +5,67 @@ using AICS.Microtubule;
 
 namespace AICS.AnimatedKinesin
 {
+	public enum HipsState 
+	{
+		Free,
+		Locked
+	}
+
 	public class Hips : Molecule 
 	{
+		public HipsState state = HipsState.Free;
+
 		Transform secondParent = null;
 
 		protected override bool canMove
 		{
 			get
 			{
-				return true;
+				return state != HipsState.Locked;
 			}
 		}
 
 		public override void DoRandomWalk ()
 		{
-			Rotate();
-			for (int i = 0; i < kinesin.maxIterations; i++)
+			if (canMove)
 			{
-				if (Move())
+				Rotate();
+				for (int i = 0; i < kinesin.maxIterations; i++)
 				{
-					return;
+					if (Move())
+					{
+						return;
+					}
 				}
 			}
 		}
 
-		public void CheckForSnap ()
+		public bool CheckForSnap (Motor strongMotor)
 		{
+			Vector3 bindingPosition = SnappedPosition( strongMotor );
+			if (Vector3.Distance( transform.position, bindingPosition ) <= 4f)
+			{
+				SnapDown( bindingPosition );
+				strongMotor.hipsAreLockedToThis = true;
+				return true;
+			}
+			return false;
+		}
 
+		Vector3 SnappedPosition (Motor strongMotor)
+		{
+			return strongMotor.transform.position + 5.5f * strongMotor.transform.forward;
+		}
+
+		void SnapDown (Vector3 bindingPosition)
+		{
+			transform.position = bindingPosition;
+			state = HipsState.Locked;
+		}
+
+		public void SetFree ()
+		{
+			state = HipsState.Free;
 		}
 
 		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins) { }
@@ -43,8 +77,16 @@ namespace AICS.AnimatedKinesin
 
 		protected override bool WithinLeash (Vector3 moveStep)
 		{
-			return (secondParent == null || Vector3.Distance( secondParent.position, transform.position + moveStep ) <= maxDistanceFromParent)
-				&& Vector3.Distance( transform.parent.position, transform.position + moveStep ) <= maxDistanceFromParent;
+			if (secondParent != null)
+			{
+				float d2 = Vector3.Distance( secondParent.position, transform.position + moveStep );
+				if (d2 < minDistanceFromParent || d2 > maxDistanceFromParent)
+				{
+					return false;
+				}
+			}
+			float d1 = Vector3.Distance( transform.parent.position, transform.position + moveStep );
+			return d1 >= minDistanceFromParent && d1 <= maxDistanceFromParent;
 		}
 	}
 }

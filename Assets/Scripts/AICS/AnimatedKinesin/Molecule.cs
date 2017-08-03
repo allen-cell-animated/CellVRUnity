@@ -8,6 +8,7 @@ namespace AICS.AnimatedKinesin
 	public abstract class Molecule : MonoBehaviour 
 	{
 		public float radius;
+		public float minDistanceFromParent = 2f;
 		public float maxDistanceFromParent = 6f;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;

@@ -49,23 +49,116 @@ namespace AICS.AnimatedKinesin
 			Simulate();
 		}
 
+		string lastState = "";
+
 		void Simulate ()
 		{
 			DoRandomWalks();
 
-			foreach (Motor motor in motors)
+			string state = "";
+			if (MotorStatesAre( MotorState.Free, MotorState.Free )) // case 200
 			{
-				CheckEject( motor, 10f );
+				state = "200";
+				// check for binding when a motor collides with a tubulin as part of random walk
 			}
-//			if (motors[0].state == MotorState.Free && motors[1].state == MotorState.Free) // case 200
-//			{
-//
-//			}
-//			else if (motors[0].state == MotorState.Free && motors[1].state != MotorState.Free
-//				|| motors[0].state != MotorState.Free && motors[1].state == MotorState.Free)
-//			{
-//
-//			}
+			else if (MotorStatesAre( MotorState.Free, MotorState.Weak )) // case 211
+			{
+				state = "211";
+				// check for free motor binding when it collides with a tubulin as part of random walk
+				CheckBindATP( MotorInState( MotorState.Weak ), 10f );
+				// check for weak motor eject? (in state machine but not C4D)
+			}
+			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Free) // case 312
+			{
+				state = "312";
+				hips.CheckForSnap( MotorInState( MotorState.Strong ) );
+				// check for strong motor eject? (in state machine but not C4D)
+				// check for free motor binding when it collides with a tubulin as part of random walk (in state machine but not C4D)
+			}
+			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Locked) // case 333
+			{
+				state = "333";
+				// check for free motor binding when it collides with a tubulin as part of random walk
+				// check for strong motor eject? (in state machine but not C4D)
+			}
+			else if (MotorStatesAre( MotorState.Weak, MotorState.Strong )) // case 345  && hips.state == HipsState.Locked
+			{
+				state = "345";
+				Motor initialStrongMotor = MotorInState( MotorState.Strong );
+				if (CheckBindATP( MotorInState( MotorState.Weak ), 70f ))
+				{
+					CheckEject( initialStrongMotor, 10f );
+				}
+				else
+				{
+					// check for weak motor eject? (in state machine but not C4D)
+					CheckEject( initialStrongMotor, 30f );
+				}
+			}
+			else if (MotorStatesAre( MotorState.Strong, MotorState.Strong )) // case 447
+			{
+				state = "447";
+				foreach (Motor motor in motors)
+				{
+					CheckEject( motor, 70f );
+				}
+			}
+			else if (MotorStatesAre( MotorState.Weak, MotorState.Weak )) // new case: 212?
+			{
+				state = "case 7"; // in state machine but not C4D, sim gets stuck without it
+				CheckBindATP( frontMotor, 80f ); // is this right and what are actual probabilities?
+				CheckBindATP( backMotor, 10f );
+			}
+			else 
+			{
+				state = "none";
+			}
+
+			if (state != lastState)
+			{
+				Debug.Log( state );
+				lastState = state;
+			}
+		}
+
+		bool MotorStatesAre (MotorState state1, MotorState state2)
+		{
+			if (state1 == state2)
+			{
+				return motors[0].state == state1 && motors[1].state == state1;
+			}
+			return (motors[0].state == state1 && motors[1].state == state2)
+				|| (motors[0].state == state2 && motors[1].state == state1);
+		}
+
+		Motor MotorInState (MotorState state)
+		{
+			return motors.Find( m => m.state == state );
+		}
+
+		Motor frontMotor
+		{
+			get
+			{
+				Vector3 motor1ToHips = (hips.transform.position - motors[0].transform.position).normalized;
+				float angle = Mathf.Acos( Vector3.Dot( motor1ToHips, motors[0].transform.forward ) );
+				if (angle < Mathf.PI / 2f)
+				{
+					return motors[1];
+				}
+				else
+				{
+					return motors[0];
+				}
+			}
+		}
+
+		Motor backMotor
+		{
+			get
+			{
+				return motors.Find( m => m != frontMotor );
+			}
 		}
 
 		void DoRandomWalks ()
@@ -76,20 +169,25 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		void CheckBindATP (Motor motor, float probability)
+		bool CheckBindATP (Motor motor, float probability)
 		{
 			if (DiceRoll( probability ))
 			{
-
+				motor.BindATP();
+				return true;
 			}
+			return false;
 		}
 
-		void CheckEject (Motor motor, float probability)
+		bool CheckEject (Motor motor, float probability)
 		{
 			if (DiceRoll( probability ))
 			{
-				ReleaseMotor( motor );
+				SetParentSchemeOnRelease( motor );
+				motor.Release();
+				return true;
 			}
+			return false;
 		}
 
 		bool DiceRoll (float probability)
