@@ -29,6 +29,11 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
+		public void CheckForSnap ()
+		{
+
+		}
+
 		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins) { }
 
 		public void SetSecondParent (Transform _secondParent)

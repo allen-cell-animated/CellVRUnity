@@ -51,11 +51,12 @@ namespace AICS.AnimatedKinesin
 
 		void Simulate ()
 		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.DoRandomWalk();
-			}
+			DoRandomWalks();
 
+			foreach (Motor motor in motors)
+			{
+				CheckEject( motor, 10f );
+			}
 //			if (motors[0].state == MotorState.Free && motors[1].state == MotorState.Free) // case 200
 //			{
 //
@@ -65,6 +66,35 @@ namespace AICS.AnimatedKinesin
 //			{
 //
 //			}
+		}
+
+		void DoRandomWalks ()
+		{
+			foreach (Molecule molecule in molecules)
+			{
+				molecule.DoRandomWalk();
+			}
+		}
+
+		void CheckBindATP (Motor motor, float probability)
+		{
+			if (DiceRoll( probability ))
+			{
+
+			}
+		}
+
+		void CheckEject (Motor motor, float probability)
+		{
+			if (DiceRoll( probability ))
+			{
+				ReleaseMotor( motor );
+			}
+		}
+
+		bool DiceRoll (float probability)
+		{
+			return Random.Range( 0, 1f ) <= Time.deltaTime * probability / 100f;
 		}
 
 		public bool CheckInternalCollision (Molecule molecule, Vector3 moveStep)
