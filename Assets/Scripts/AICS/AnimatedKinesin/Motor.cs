@@ -44,6 +44,7 @@ namespace AICS.AnimatedKinesin
 						return;
 					}
 				}
+				Jitter( 0.1f );
 			}
 			else 
 			{
@@ -53,7 +54,7 @@ namespace AICS.AnimatedKinesin
 
 		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins)
 		{
-			if (Time.time - lastReleaseTime > 0.5f)
+			if (Time.time - lastReleaseTime > 1f)
 			{
 				CheckForBind( collidingTubulins );
 			}
@@ -136,6 +137,7 @@ namespace AICS.AnimatedKinesin
 			if (hipsAreLockedToThis)
 			{
 				kinesin.hips.SetFree();
+				hipsAreLockedToThis = false;
 			}
 			ATP.SetActive( false );
 		}
@@ -144,6 +146,11 @@ namespace AICS.AnimatedKinesin
 		{
 			state = MotorState.Strong;
 			ATP.SetActive( true );
+		}
+
+		public void BindNecklinker ()
+		{
+			hipsAreLockedToThis = true;
 		}
 	}
 }

@@ -73,9 +73,9 @@ namespace AICS.AnimatedKinesin
 
 		protected abstract bool WithinLeash (Vector3 moveStep);
 
-		public void Jitter () 
+		public void Jitter (float amount = 0.01f) 
 		{
-			transform.position += Helpers.GetRandomVector( SampleExponentialDistribution( 0.01f ) );
+			transform.position += Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
 		}
 
 		float SampleExponentialDistribution (float mean)

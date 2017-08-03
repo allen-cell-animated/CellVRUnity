@@ -14,6 +14,7 @@ namespace AICS.AnimatedKinesin
 	public class Hips : Molecule 
 	{
 		public HipsState state = HipsState.Free;
+		public float snapPosition = 4.5f; // nm in front of motor pivot
 
 		Transform secondParent = null;
 
@@ -37,6 +38,7 @@ namespace AICS.AnimatedKinesin
 						return;
 					}
 				}
+				Jitter( 0.1f );
 			}
 		}
 
@@ -46,7 +48,7 @@ namespace AICS.AnimatedKinesin
 			if (Vector3.Distance( transform.position, bindingPosition ) <= 4f)
 			{
 				SnapDown( bindingPosition );
-				strongMotor.hipsAreLockedToThis = true;
+				strongMotor.BindNecklinker();
 				return true;
 			}
 			return false;
@@ -54,7 +56,7 @@ namespace AICS.AnimatedKinesin
 
 		Vector3 SnappedPosition (Motor strongMotor)
 		{
-			return strongMotor.transform.position + 5.5f * strongMotor.transform.forward;
+			return strongMotor.transform.position + snapPosition * strongMotor.transform.forward;
 		}
 
 		void SnapDown (Vector3 bindingPosition)

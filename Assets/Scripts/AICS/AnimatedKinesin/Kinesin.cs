@@ -87,7 +87,7 @@ namespace AICS.AnimatedKinesin
 				Motor initialStrongMotor = MotorInState( MotorState.Strong );
 				if (CheckBindATP( MotorInState( MotorState.Weak ), 70f ))
 				{
-					CheckEject( initialStrongMotor, 10f );
+					CheckEject( initialStrongMotor, 70f );
 				}
 				else
 				{
@@ -98,16 +98,15 @@ namespace AICS.AnimatedKinesin
 			else if (MotorStatesAre( MotorState.Strong, MotorState.Strong )) // case 447
 			{
 				state = "447";
-				foreach (Motor motor in motors)
-				{
-					CheckEject( motor, 70f );
-				}
+				Motor motor = motors.Find( m => m.hipsAreLockedToThis );
+				CheckEject( motor != null ? motor : backMotor, 70f );
 			}
-			else if (MotorStatesAre( MotorState.Weak, MotorState.Weak )) // new case: 212?
+			else if (MotorStatesAre( MotorState.Weak, MotorState.Weak )) // case 7: 212?
 			{
 				state = "case 7"; // in state machine but not C4D, sim gets stuck without it
-				CheckBindATP( frontMotor, 80f ); // is this right and what are actual probabilities?
-				CheckBindATP( backMotor, 10f );
+//				CheckBindATP( frontMotor, 80f ); // is this right and what are actual probabilities?
+//				CheckBindATP( backMotor, 10f );
+				CheckEject( backMotor, 70f );
 			}
 			else 
 			{
