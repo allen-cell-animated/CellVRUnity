@@ -52,7 +52,7 @@ namespace AICS.AnimatedKinesin
 		public void SetEjectionProbabilityBack (float _sliderValue)
 		{
 			ejectionProbabilityBack.Set( _sliderValue );
-			kinesin.ejectionProbabilityFront = ejectionProbabilityBack.value;
+			kinesin.ejectionProbabilityBack = ejectionProbabilityBack.value;
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)

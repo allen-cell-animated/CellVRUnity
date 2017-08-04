@@ -44,7 +44,7 @@ namespace AICS.AnimatedKinesin
 						return;
 					}
 				}
-				Jitter();
+				Jitter( 0.1f );
 			}
 			else 
 			{

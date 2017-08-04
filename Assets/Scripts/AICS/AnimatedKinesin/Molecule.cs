@@ -71,7 +71,11 @@ namespace AICS.AnimatedKinesin
 
 		public void Jitter (float amount = 0.01f) 
 		{
-			transform.position += Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
+			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
+			if (isParent || WithinLeash( moveStep ))
+			{
+				transform.position += moveStep;
+			}
 		}
 
 		float SampleExponentialDistribution (float mean)
@@ -79,7 +83,7 @@ namespace AICS.AnimatedKinesin
 			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
 		}
 
-		void OnTriggerEnter (Collider other)
+		void OnTriggerStay (Collider other)
 		{
 			SphereCollider sphere = other as SphereCollider;
 			if (sphere != null && canMove)
