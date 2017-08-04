@@ -20,6 +20,8 @@ namespace AICS.AnimatedKinesin
 
 		public Parameter averageWalkingSpeed; // nm/s
 
+		public Text stateDisplay;
+
 		public override void InitSliders () 
 		{
 			ATPBindingProbabilityFront.InitSlider();
@@ -95,6 +97,7 @@ namespace AICS.AnimatedKinesin
 				lastTime = Time.time;
 
 				averageWalkingSpeed.SetDisplay( kinesin.averageWalkingSpeed );
+				stateDisplay.text = kinesin.lastState;
 			}
 		}
 	}

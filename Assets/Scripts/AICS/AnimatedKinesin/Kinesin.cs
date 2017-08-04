@@ -19,7 +19,7 @@ namespace AICS.AnimatedKinesin
 		Vector3 hipsStartPosition;
 		Vector3 motor1StartPosition;
 		Vector3 motor2StartPosition;
-		string lastState = "";
+		public string lastState = "";
 		float startTime = 0;
 
 		Hips _hips;
