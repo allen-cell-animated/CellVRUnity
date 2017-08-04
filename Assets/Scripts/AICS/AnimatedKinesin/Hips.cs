@@ -15,8 +15,14 @@ namespace AICS.AnimatedKinesin
 	{
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 4.5f; // nm in front of motor pivot
+		public float snapSpeed = 30f; // degrees per second
 
 		Transform secondParent = null;
+		Vector3[] snappingArcPositions;
+		int currentSnapStep = 0;
+		bool snapping;
+		float timePerSnapStep = 0.2f;
+		float lastSnapStepTime = -1f;
 
 		protected override bool canMove
 		{
@@ -38,20 +44,69 @@ namespace AICS.AnimatedKinesin
 						return;
 					}
 				}
-				Jitter( 0.1f );
+				Jitter( 0.3f );
+			}
+			else
+			{
+				Jitter();
 			}
 		}
 
-		public bool CheckForSnap (Motor strongMotor)
+		public void StartSnap (Motor motor)
 		{
-			Vector3 bindingPosition = SnappedPosition( strongMotor );
-			if (Vector3.Distance( transform.position, bindingPosition ) <= 4f)
+			snappingArcPositions = CalculateSnapArcPositions( motor );
+
+			motor.BindNecklinker();
+			currentSnapStep = 0;
+			snapping = true;
+		}
+
+		Vector3[] CalculateSnapArcPositions (Motor motor)
+		{
+			Vector3 snappedPosition = SnappedPosition( motor );
+			Vector3 motorToCurrentPosition = transform.position - motor.transform.position;
+			Vector3 motorToSnappedPosition = snappedPosition - motor.transform.position;
+			float angle = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToCurrentPosition.normalized, motorToSnappedPosition.normalized ) );
+
+			Vector3[] arcPositions = null;
+			if (angle > 90f)
 			{
-				SnapDown( bindingPosition );
-				strongMotor.BindNecklinker();
-				return true;
+				Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * -motor.transform.up;
+				float angleToNorthPole = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ) );
+				float angleNorthPoleToSnapped = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ) );
+				int steps = Mathf.RoundToInt( (angleToNorthPole + angleNorthPoleToSnapped) / (snapSpeed * timePerSnapStep) );
+
+				Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole, 
+					Mathf.RoundToInt( steps * angleToNorthPole / (angleToNorthPole + angleNorthPoleToSnapped) ) );
+				Vector3[] arcPositions2 = CalculateArcPositions( motor.transform.position, motorToNorthPole, motorToSnappedPosition, 
+					Mathf.RoundToInt( steps * angleNorthPoleToSnapped / (angleToNorthPole + angleNorthPoleToSnapped) ) );
+
+				arcPositions = new Vector3[ arcPositions1.Length + arcPositions2.Length ];
+				arcPositions1.CopyTo( arcPositions, 0 );
+				arcPositions2.CopyTo( arcPositions, arcPositions1.Length );
 			}
-			return false;
+			else 
+			{
+				int steps = Mathf.RoundToInt( angle / (snapSpeed * timePerSnapStep) );
+				arcPositions = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToSnappedPosition, steps );
+			}
+			return arcPositions;
+		}
+
+		Vector3[] CalculateArcPositions (Vector3 pivotPosition, Vector3 startLocalPosition, Vector3 goalLocalPosition, int steps)
+		{
+			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude) / steps;
+			float dAngle = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ) ) / steps;
+			Vector3 axis = Vector3.Cross( startLocalPosition.normalized, goalLocalPosition.normalized ).normalized;
+			Vector3[] arcPositions = new Vector3[steps];
+
+			for (int i = 0; i < steps - 1; i++)
+			{
+				arcPositions[i] = pivotPosition + (startLocalPosition.magnitude + (i + 1f) * dLength) 
+					* (Quaternion.AngleAxis( (i + 1f) * dAngle, axis ) * startLocalPosition.normalized);
+			}
+			arcPositions[arcPositions.Length - 1] = pivotPosition + goalLocalPosition;
+			return arcPositions;
 		}
 
 		Vector3 SnappedPosition (Motor strongMotor)
@@ -59,10 +114,28 @@ namespace AICS.AnimatedKinesin
 			return strongMotor.transform.position + snapPosition * strongMotor.transform.forward;
 		}
 
-		void SnapDown (Vector3 bindingPosition)
+		public void UpdateSnap ()
 		{
-			transform.position = bindingPosition;
-			state = HipsState.Locked;
+			if (snapping)
+			{
+				if (Time.time - lastSnapStepTime >= timePerSnapStep)
+				{
+					transform.position = snappingArcPositions[currentSnapStep];
+
+					currentSnapStep++;
+					if (currentSnapStep >= snappingArcPositions.Length)
+					{
+						state = HipsState.Locked;
+						snapping = false;
+					}
+
+					lastSnapStepTime = Time.time;
+				}
+				else
+				{
+					DoRandomWalk();
+				}
+			}
 		}
 
 		public void SetFree ()

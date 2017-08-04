@@ -6,6 +6,7 @@ namespace AICS.AnimatedKinesin
 {
 	public class Kinesin : MonoBehaviour 
 	{
+		public bool logEvents;
 		public int maxIterations = 50;
 		public List<Molecule> molecules;
 		public TubulinDetector tubulinDetector;
@@ -81,14 +82,18 @@ namespace AICS.AnimatedKinesin
 			{
 				state = "211";
 				// check for free motor binding
-				CheckBindATP( MotorInState( MotorState.Weak ), 10f );
+				CheckBindATP( MotorInState( MotorState.Weak ), 50f ); // should be 10%
 				// check for weak motor eject? (in state machine but not C4D)
 			}
 			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Free) // case 312
 			{
 				state = "312";
 				// check for free motor binding
-				hips.CheckForSnap( MotorInState( MotorState.Strong ) );
+				if (lastState != state)
+				{
+					hips.StartSnap( MotorInState( MotorState.Strong ) );
+				}
+				hips.UpdateSnap();
 				// check for strong motor eject? (in state machine but not C4D)
 			}
 			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Locked) // case 333
@@ -129,9 +134,9 @@ namespace AICS.AnimatedKinesin
 				state = "none";
 			}
 
-			if (state != lastState)
+			if (state != lastState )
 			{
-				Debug.Log( state );
+				if (logEvents) { Debug.Log( state ); }
 				lastState = state;
 			}
 		}
