@@ -8,7 +8,7 @@ namespace AICS.Microtubule
 	{
 		public float radius = 9f;
 		public int tubulinsPerTurn = 13;
-		public GameObject[] tubulinPrefabs = new GameObject[2];
+		public Tubulin[] tubulinPrefabs = new Tubulin[2];
 		public Spline spline;
 
 		bool placedTubulins;
@@ -140,8 +140,8 @@ namespace AICS.Microtubule
 		{
 			if (canMakeTubulins)
 			{
-				int type = (index % (2 * tubulinsPerTurn) < tubulinsPerTurn) ? 0 : 1;
-				GameObject tubulin = Instantiate( tubulinPrefabs[type], GetTubulinParent( (direction < 0) ? 0 : 1 ) ) as GameObject;
+				int type = direction < 0 ? (index % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 0 : 1) : (index % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 1 : 0);
+				Tubulin tubulin = Instantiate( tubulinPrefabs[type], GetTubulinParent( (direction < 0) ? 0 : 1 ) );
 				tubulin.name = tubulinPrefabs[type].name + "_" + index;
 
 				return tubulin.GetComponent<Tubulin>();

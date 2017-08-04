@@ -290,7 +290,7 @@ namespace AICS.Microtubule
 			CubicSplinePosition splinePosition = GetSplinePositionForT( t );
 			Vector3 startPosition = calculatedPoints[splinePosition.pointIndex].position;
 			Vector3 endPosition = calculatedPoints[splinePosition.pointIndex + 1].position;
-			return Vector3.Lerp( startPosition, endPosition, splinePosition.sectionT );
+			return Vector3.Lerp( startPosition, endPosition, splinePosition.sectionT ) - transform.position;
 		}
 
 		public Vector3 GetTangent (float t)

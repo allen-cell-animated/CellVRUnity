@@ -12,7 +12,7 @@ namespace AICS.Kinesin
 		Strong
 	}
 
-	[RequireComponent( typeof(Rigidbody), typeof(RandomForces), typeof(ATPBinder) )]
+	[RequireComponent( typeof(Rigidbody), typeof(RandomForces) )]
 	public class Motor : MonoBehaviour, IBindATP
 	{
 		public bool printEvents;
