@@ -47,7 +47,20 @@ namespace AICS
 
 		void SetDisplay ()
 		{
-			displayValue.text = FormatDisplay( value ) + " - " + FormatDisplay( rangeValue );
+			displayValue.text = FormatDisplay( value, false ) + " - " + FormatDisplay( rangeValue );
+		}
+
+		protected override string FormatDisplay (float _value, bool addUnits = true)
+		{
+			switch (format) 
+			{
+			case ParameterFormat.Time :
+				return FormatTime( _value, addUnits );
+			case ParameterFormat.Round :
+				return FormatRound( _value, addUnits );
+			default :
+				return "";
+			}
 		}
 	}
 
@@ -65,10 +78,15 @@ namespace AICS
 		public int decimalPoints;
 		public bool spaceBeforeUnits = true;
 
-		public void Set (float _sliderValue) // slider goes from 0 --> 10
+		public void Set (float _sliderValue)
 		{
 			value = MapValue( _sliderValue );
 			displayValue.text = FormatDisplay( value );
+		}
+
+		public void SetDisplay (float _value)
+		{
+			displayValue.text = FormatDisplay( _value );
 		}
 
 		protected float MapValue (float _sliderValue)
@@ -125,14 +143,14 @@ namespace AICS
 			return (Mathf.Log10( _value ) - Mathf.Log10( min )) / (Mathf.Log10( max ) - Mathf.Log10( min ));
 		}
 
-		protected string FormatDisplay (float _value)
+		protected virtual string FormatDisplay (float _value, bool addUnits = true)
 		{
 			switch (format) 
 			{
 				case ParameterFormat.Time :
-					return FormatTime( _value );
+					return FormatTime( _value, addUnits );
 				case ParameterFormat.Round :
-					return FormatRound( _value );
+					return FormatRound( _value, addUnits );
 				default :
 					return "";
 			}
@@ -146,7 +164,7 @@ namespace AICS
 			}
 		}
 
-		string FormatTime (float _value)
+		protected string FormatTime (float _value, bool addUnits)
 		{
 			string n = _value.ToString();
 			if (_value >= 1000000f)
@@ -164,10 +182,10 @@ namespace AICS
 				n = Mathf.Round( _value ).ToString();
 				units = "ps";
 			}
-			return n + space + units;
+			return n + (addUnits ? space + units : "");
 		}
 
-		string FormatRound (float _value)
+		protected string FormatRound (float _value, bool addUnits)
 		{
 			float multiplier = Mathf.Pow( 10f, decimalPoints );
 			string n = (Mathf.Round( _value * multiplier ) / multiplier).ToString();
@@ -192,7 +210,7 @@ namespace AICS
 					n = result;
 				}
 			}
-			return n + space + units;
+			return n + (addUnits ? space + units : "");
 		}
 	}
 }
