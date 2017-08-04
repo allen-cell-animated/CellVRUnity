@@ -152,5 +152,14 @@ namespace AICS.AnimatedKinesin
 		{
 			hipsAreLockedToThis = true;
 		}
+
+		public override void Reset ()
+		{
+			state = MotorState.Free;
+			hipsAreLockedToThis = false;
+			tubulin = null;
+			lastReleaseTime = -1f;
+			ATP.SetActive( false );
+		}
 	}
 }

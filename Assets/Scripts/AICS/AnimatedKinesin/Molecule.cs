@@ -12,23 +12,19 @@ namespace AICS.AnimatedKinesin
 		public float maxDistanceFromParent = 6f;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
-
-		Kinesin _kinesin;
-		protected Kinesin kinesin
-		{
-			get
-			{
-				if (_kinesin == null)
-				{
-					_kinesin = GameObject.FindObjectOfType<Kinesin>();
-				}
-				return _kinesin;
-			}
-		}
+		public Kinesin kinesin;
 
 		protected abstract bool canMove
 		{
 			get;
+		}
+
+		bool isParent
+		{
+			get
+			{
+				return transform.parent == kinesin.transform;
+			}
 		}
 
 		public abstract void DoRandomWalk ();
@@ -49,7 +45,7 @@ namespace AICS.AnimatedKinesin
 		{
 			if (!WillCollide( moveStep ))
 			{
-				if (transform.parent == null || WithinLeash( moveStep ))
+				if (isParent || WithinLeash( moveStep ))
 				{
 					transform.position += moveStep;
 					return true;
@@ -90,11 +86,13 @@ namespace AICS.AnimatedKinesin
 			{
 				Vector3 fromOther = transform.position - other.transform.position;
 				Vector3 moveStep = (sphere.radius + radius - fromOther.magnitude) * fromOther.normalized;
-				if (transform.parent == null || WithinLeash( moveStep ))
+				if (isParent || WithinLeash( moveStep ))
 				{
 					transform.position += moveStep;
 				}
 			}
 		}
+
+		public abstract void Reset ();
 	}
 }

@@ -90,5 +90,11 @@ namespace AICS.AnimatedKinesin
 			float d1 = Vector3.Distance( transform.parent.position, transform.position + moveStep );
 			return d1 >= minDistanceFromParent && d1 <= maxDistanceFromParent;
 		}
+
+		public override void Reset ()
+		{
+			state = HipsState.Free;
+			secondParent = null;
+		}
 	}
 }

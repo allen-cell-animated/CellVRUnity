@@ -10,6 +10,10 @@ namespace AICS.AnimatedKinesin
 		public List<Molecule> molecules;
 		public TubulinDetector tubulinDetector;
 
+		Vector3 hipsStartPosition;
+		Vector3 motor1StartPosition;
+		Vector3 motor2StartPosition;
+
 		Hips _hips;
 		public Hips hips
 		{
@@ -44,6 +48,18 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
+		void Awake ()
+		{
+			hipsStartPosition = hips.transform.position;
+			motor1StartPosition = motors[0].transform.position;
+			motor2StartPosition = motors[1].transform.position;
+
+			foreach (Molecule molecule in molecules)
+			{
+				molecule.kinesin = this;
+			}
+		}
+
 		void LateUpdate ()
 		{
 			Simulate();
@@ -59,26 +75,26 @@ namespace AICS.AnimatedKinesin
 			if (MotorStatesAre( MotorState.Free, MotorState.Free )) // case 200
 			{
 				state = "200";
-				// check for binding when a motor collides with a tubulin as part of random walk
+				// check for free motor binding
 			}
 			else if (MotorStatesAre( MotorState.Free, MotorState.Weak )) // case 211
 			{
 				state = "211";
-				// check for free motor binding when it collides with a tubulin as part of random walk
+				// check for free motor binding
 				CheckBindATP( MotorInState( MotorState.Weak ), 10f );
 				// check for weak motor eject? (in state machine but not C4D)
 			}
 			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Free) // case 312
 			{
 				state = "312";
+				// check for free motor binding
 				hips.CheckForSnap( MotorInState( MotorState.Strong ) );
 				// check for strong motor eject? (in state machine but not C4D)
-				// check for free motor binding when it collides with a tubulin as part of random walk (in state machine but not C4D)
 			}
 			else if (MotorStatesAre( MotorState.Free, MotorState.Strong ) && hips.state == HipsState.Locked) // case 333
 			{
 				state = "333";
-				// check for free motor binding when it collides with a tubulin as part of random walk
+				// check for free motor binding
 				// check for strong motor eject? (in state machine but not C4D)
 			}
 			else if (MotorStatesAre( MotorState.Weak, MotorState.Strong )) // case 345  && hips.state == HipsState.Locked
@@ -104,9 +120,9 @@ namespace AICS.AnimatedKinesin
 			else if (MotorStatesAre( MotorState.Weak, MotorState.Weak )) // case 7: 212?
 			{
 				state = "case 7"; // in state machine but not C4D, sim gets stuck without it
-//				CheckBindATP( frontMotor, 80f ); // is this right and what are actual probabilities?
-//				CheckBindATP( backMotor, 10f );
-				CheckEject( backMotor, 70f );
+				CheckBindATP( frontMotor, 80f ); // is this right and what are actual probabilities?
+				CheckBindATP( backMotor, 10f );
+				// check for weak motor eject? (in state machine but not C4D)
 			}
 			else 
 			{
@@ -214,12 +230,12 @@ namespace AICS.AnimatedKinesin
 			Motor otherMotor = motors.Find( m => m != motor );
 			if (otherMotor.state != MotorState.Free)
 			{
-				motor.transform.SetParent( null );
+				motor.transform.SetParent( transform );
 				hips.SetSecondParent( motor.transform );
 			}
 			else
 			{
-				motor.transform.SetParent( null );
+				motor.transform.SetParent( transform );
 				hips.transform.SetParent( motor.transform );
 				otherMotor.transform.SetParent( hips.transform );
 			}
@@ -232,44 +248,32 @@ namespace AICS.AnimatedKinesin
 			{
 				hips.transform.SetParent( otherMotor.transform );
 				motor.transform.SetParent( hips.transform );
-				hips.SetSecondParent( null );
+				hips.SetSecondParent( transform );
 			}
 			else
 			{
-				hips.transform.SetParent( null );
-				motors[0].transform.SetParent( hips.transform );
-				motors[1].transform.SetParent( hips.transform );
+				SetHipsAsParent();
 			}
 		}
 
-		// for testing ------------------------------------------
-
-		public void Release (string whichMotors)
+		void SetHipsAsParent ()
 		{
-			switch (whichMotors) 
+			hips.transform.SetParent( transform );
+			motors[0].transform.SetParent( hips.transform );
+			motors[1].transform.SetParent( hips.transform );
+		}
+
+		public void Reset ()
+		{
+			foreach (Molecule molecule in molecules)
 			{
-			case "both" :
-
-				ReleaseMotor( motors[0] );
-				ReleaseMotor( motors[1] );
-				return;
-
-			case "motor1" :
-
-				ReleaseMotor( motors[0] );
-				return;
-
-			case "motor2" :
-
-				ReleaseMotor( motors[1] );
-				return;
+				molecule.Reset();
 			}
-		}
+			SetHipsAsParent();
 
-		void ReleaseMotor (Motor motor)
-		{
-			SetParentSchemeOnRelease( motor );
-			motor.Release();
+			hips.transform.position = hipsStartPosition;
+			motors[0].transform.position = motor1StartPosition;
+			motors[1].transform.position = motor2StartPosition;
 		}
 	}
 }
