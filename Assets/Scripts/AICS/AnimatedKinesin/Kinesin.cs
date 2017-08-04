@@ -58,6 +58,8 @@ namespace AICS.AnimatedKinesin
 
 		void Awake ()
 		{
+			Application.targetFrameRate = 30;
+
 			hipsStartPosition = hips.transform.position;
 			motor1StartPosition = motors[0].transform.position;
 			motor2StartPosition = motors[1].transform.position;
