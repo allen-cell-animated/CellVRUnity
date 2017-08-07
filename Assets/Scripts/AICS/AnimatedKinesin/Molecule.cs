@@ -27,6 +27,21 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
+		Rigidbody _body;
+		protected Rigidbody body
+		{
+			get
+			{
+				if (_body == null)
+				{
+					_body = GetComponent<Rigidbody>();
+					_body.useGravity = false;
+					_body.isKinematic = true;
+				}
+				return _body;
+			}
+		}
+
 		public abstract void DoRandomWalk ();
 
 		public void Rotate ()
@@ -54,18 +69,18 @@ namespace AICS.AnimatedKinesin
 			return false;
 		}
 
-		public bool WillCollide (Vector3 moveStep)
+		bool WillCollide (Vector3 moveStep)
 		{
-			Tubulin[] collidingTubulins = kinesin.tubulinDetector.GetCollidingTubulins( transform.position + moveStep, radius );
-			if (collidingTubulins.Length > 0)
+			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
+			if (hits.Length > 0)
 			{
-				OnCollisionWithTubulin( collidingTubulins );
+				ProcessHits( hits );
 				return true;
 			}
-			return kinesin.CheckInternalCollision( this, moveStep );
+			return false;
 		}
 
-		protected abstract void OnCollisionWithTubulin (Tubulin[] collidingTubulins);
+		protected abstract void ProcessHits (RaycastHit[] hits);
 
 		protected abstract bool WithinLeash (Vector3 moveStep);
 
@@ -85,11 +100,9 @@ namespace AICS.AnimatedKinesin
 
 		void OnTriggerStay (Collider other)
 		{
-			SphereCollider sphere = other as SphereCollider;
-			if (sphere != null && canMove)
+			if (canMove)
 			{
-				Vector3 fromOther = transform.position - other.transform.position;
-				Vector3 moveStep = (sphere.radius + radius - fromOther.magnitude) * fromOther.normalized;
+				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
 				if (isParent || WithinLeash( moveStep ))
 				{
 					transform.position += moveStep;

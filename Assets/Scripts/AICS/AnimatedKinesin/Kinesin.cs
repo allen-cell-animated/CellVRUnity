@@ -9,7 +9,6 @@ namespace AICS.AnimatedKinesin
 		public bool logEvents;
 		public int maxIterations = 50;
 		public List<Molecule> molecules;
-		public TubulinDetector tubulinDetector;
 		public float ATPBindingProbabilityFront = 70f;
 		public float ATPBindingProbabilityBack = 10f;
 		public float ejectionProbabilityFront = 70f;
@@ -222,21 +221,6 @@ namespace AICS.AnimatedKinesin
 		bool DiceRoll (float probability)
 		{
 			return Random.Range( 0, 1f ) <= Time.deltaTime * probability / 100f;
-		}
-
-		public bool CheckInternalCollision (Molecule molecule, Vector3 moveStep)
-		{
-			foreach (Molecule m in molecules)
-			{
-				if (m != molecule)
-				{
-					if (Vector3.Distance( m.transform.position, molecule.transform.position + moveStep ) <= m.radius + molecule.radius)
-					{
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 
 		public void SetParentSchemeOnBind (Motor motor)

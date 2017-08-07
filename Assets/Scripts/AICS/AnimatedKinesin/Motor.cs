@@ -52,21 +52,35 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins)
-		{
-			if (Time.time - lastReleaseTime > 1f)
-			{
-				CheckForBind( collidingTubulins );
-			}
-		}
-
 		protected override bool WithinLeash (Vector3 moveStep)
 		{
 			float d = Vector3.Distance( transform.parent.position, transform.position + moveStep );
 			return d >= minDistanceFromParent && d <= maxDistanceFromParent;
 		}
 
-		void CheckForBind (Tubulin[] collidingTubulins)
+		protected override void ProcessHits (RaycastHit[] hits)
+		{
+			if (Time.time - lastReleaseTime > 1f)
+			{
+				Tubulin t;
+				List<Tubulin> tubulins = new List<Tubulin>();
+				foreach (RaycastHit hit in hits)
+				{
+					t = hit.collider.GetComponentInParent<Tubulin>();
+					if (t != null)
+					{
+						tubulins.Add( t );
+					}
+				}
+
+				if (tubulins.Count > 0)
+				{
+					CheckForBind( tubulins );
+				}
+			}
+		}
+
+		void CheckForBind (List<Tubulin> collidingTubulins)
 		{
 			List<Tubulin> tubulins = new List<Tubulin>();
 			foreach (Tubulin t in collidingTubulins)

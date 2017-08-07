@@ -14,7 +14,7 @@ namespace AICS.AnimatedKinesin
 	public class Hips : Molecule 
 	{
 		public HipsState state = HipsState.Free;
-		public float snapPosition = 4.5f; // nm in front of motor pivot
+		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 30f; // degrees per second
 
 		Transform secondParent = null;
@@ -143,7 +143,7 @@ namespace AICS.AnimatedKinesin
 			state = HipsState.Free;
 		}
 
-		protected override void OnCollisionWithTubulin (Tubulin[] collidingTubulins) { }
+		protected override void ProcessHits (RaycastHit[] hits) { }
 
 		public void SetSecondParent (Transform _secondParent)
 		{
