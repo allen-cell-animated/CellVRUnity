@@ -46,21 +46,22 @@ namespace AICS.AnimatedKinesin
 
 		public void Rotate ()
 		{
-			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
+//			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
 		}
 
 		public bool Move () 
 		{
-			float stepSize = SampleExponentialDistribution( meanStepSize );
-			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
-			return MoveIfValid( moveStep );
+//			float stepSize = SampleExponentialDistribution( meanStepSize );
+//			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
+//			return MoveIfValid( moveStep );
+			return true;
 		}
 
-		protected bool MoveIfValid (Vector3 moveStep)
+		public bool MoveIfValid (Vector3 moveStep)
 		{
 			if (!WillCollide( moveStep ))
 			{
-				if (isParent || WithinLeash( moveStep ))
+				if (WithinLeash( moveStep ))
 				{
 					transform.position += moveStep;
 					return true;
@@ -82,12 +83,17 @@ namespace AICS.AnimatedKinesin
 
 		protected abstract void ProcessHits (RaycastHit[] hits);
 
-		protected abstract bool WithinLeash (Vector3 moveStep);
+		protected bool WithinLeash (Vector3 moveStep)
+		{
+			return isParent || CheckLeash( moveStep );
+		}
+
+		protected abstract bool CheckLeash (Vector3 moveStep);
 
 		public void Jitter (float amount = 0.01f) 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
-			if (isParent || WithinLeash( moveStep ))
+			if (WithinLeash( moveStep ))
 			{
 				transform.position += moveStep;
 			}
@@ -98,17 +104,17 @@ namespace AICS.AnimatedKinesin
 			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
 		}
 
-		void OnTriggerStay (Collider other)
-		{
-			if (canMove)
-			{
-				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
-				if (isParent || WithinLeash( moveStep ))
-				{
-					transform.position += moveStep;
-				}
-			}
-		}
+//		void OnTriggerStay (Collider other)
+//		{
+//			if (canMove)
+//			{
+//				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
+//				if (WithinLeash( moveStep ))
+//				{
+//					transform.position += moveStep;
+//				}
+//			}
+//		}
 
 		public abstract void Reset ();
 	}

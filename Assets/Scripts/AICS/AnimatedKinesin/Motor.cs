@@ -52,7 +52,7 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		protected override bool WithinLeash (Vector3 moveStep)
+		protected override bool CheckLeash (Vector3 moveStep)
 		{
 			float d = Vector3.Distance( transform.parent.position, transform.position + moveStep );
 			return d >= minDistanceFromParent && d <= maxDistanceFromParent;

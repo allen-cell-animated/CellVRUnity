@@ -150,7 +150,7 @@ namespace AICS.AnimatedKinesin
 			secondParent = _secondParent;
 		}
 
-		protected override bool WithinLeash (Vector3 moveStep)
+		protected override bool CheckLeash (Vector3 moveStep)
 		{
 			if (secondParent != null)
 			{
