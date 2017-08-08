@@ -66,14 +66,14 @@ namespace AICS.AnimatedKinesin
 			Vector3 snappedPosition = SnappedPosition( motor );
 			Vector3 motorToCurrentPosition = transform.position - motor.transform.position;
 			Vector3 motorToSnappedPosition = snappedPosition - motor.transform.position;
-			float angle = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToCurrentPosition.normalized, motorToSnappedPosition.normalized ) );
+			float angle = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
 
 			Vector3[] arcPositions = null;
 			if (angle > 90f)
 			{
 				Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * -motor.transform.up;
-				float angleToNorthPole = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ) );
-				float angleNorthPoleToSnapped = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ) );
+				float angleToNorthPole = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ), -1f, 1f ) );
+				float angleNorthPoleToSnapped = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
 				int steps = Mathf.RoundToInt( (angleToNorthPole + angleNorthPoleToSnapped) / (snapSpeed * timePerSnapStep) );
 
 				Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole, 
@@ -96,7 +96,7 @@ namespace AICS.AnimatedKinesin
 		Vector3[] CalculateArcPositions (Vector3 pivotPosition, Vector3 startLocalPosition, Vector3 goalLocalPosition, int steps)
 		{
 			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude) / steps;
-			float dAngle = (180f / Mathf.PI) * Mathf.Acos( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ) ) / steps;
+			float dAngle = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ), -1f, 1f ) ) / steps;
 			Vector3 axis = Vector3.Cross( startLocalPosition.normalized, goalLocalPosition.normalized ).normalized;
 			Vector3[] arcPositions = new Vector3[steps];
 

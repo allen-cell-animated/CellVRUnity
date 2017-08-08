@@ -34,22 +34,20 @@ namespace AICS.AnimatedKinesin
 		protected void Move (ForceField otherField, float strength)
 		{
 			Vector3 toGoalPosition = otherField.transform.TransformPoint( transform.InverseTransformPoint( molecule.transform.position ) ) - molecule.transform.position;
-			Debug.Log( "position = " + toGoalPosition.magnitude );
-//			if (toGoalPosition.magnitude > 0.01f)
-//			{
+			if (toGoalPosition.magnitude > 0.03f)
+			{
 				float s = (strength / (1f * Mathf.Sqrt( 2f * Mathf.PI ))) * Mathf.Exp( -0.5f * Mathf.Pow( toGoalPosition.magnitude - 2.5f, 2f ) / 1f );
 				Vector3 moveStep = s * toGoalPosition.normalized;
 
-//				molecule.MoveIfValid( moveStep );
-				molecule.transform.position += moveStep;
-//			}
+				molecule.MoveIfValid( moveStep );
+			}
 		}
 
 		protected void Rotate (ForceField otherField, float strength)
 		{
 			float speed = Mathf.Min( strength * 0.01f * Mathf.Pow( Vector3.Distance( transform.position, otherField.transform.position ), -2f ), 1f );
 			Vector3 rotationStep = CalculateRotation( otherField.transform, speed );
-			Debug.Log( "rotation = " + rotationStep.magnitude );
+
 			if (rotationStep.magnitude > 0)
 			{
 				molecule.transform.Rotate( rotationStep, Space.World );

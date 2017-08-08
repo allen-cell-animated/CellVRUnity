@@ -25,7 +25,7 @@ namespace AICS.AnimatedKinesin
 
 				Vector3 surfaceToOtherSurface = Vector3.Normalize( otherField.surface.position - surface.position );
 				Vector3 surfaceToField = Vector3.Normalize( transform.position - surface.transform.position );
-				float surfaceAngle = Mathf.Acos( Vector3.Dot( surfaceToOtherSurface, surfaceToField ) );
+				float surfaceAngle = Mathf.Acos( Mathf.Clamp( Vector3.Dot( surfaceToOtherSurface, surfaceToField ), -1f, 1f ) );
 
 				if (fieldAngle < Mathf.PI / 3f && surfaceToOtherSurfaceDistance > surfaceToOtherFieldDistance && surfaceAngle < Mathf.PI / 3f)
 				{
@@ -46,7 +46,7 @@ namespace AICS.AnimatedKinesin
 
 		protected override Vector3 CalculateRotation (Transform otherField, float speed)
 		{
-			float angleForward = 180f * Mathf.Acos( Vector3.Dot( transform.forward, otherField.forward ) ) / Mathf.PI;
+			float angleForward = 180f * Mathf.Acos( Mathf.Clamp( Vector3.Dot( transform.forward, otherField.forward ), -1f, 1f ) ) / Mathf.PI;
 			Vector3 axisForward = Vector3.Cross( transform.forward, otherField.forward );
 
 			return Quaternion.AngleAxis( speed * angleForward, axisForward ).eulerAngles;

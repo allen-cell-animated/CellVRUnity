@@ -46,15 +46,14 @@ namespace AICS.AnimatedKinesin
 
 		public void Rotate ()
 		{
-//			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
+			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
 		}
 
 		public bool Move () 
 		{
-//			float stepSize = SampleExponentialDistribution( meanStepSize );
-//			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
-//			return MoveIfValid( moveStep );
-			return true;
+			float stepSize = SampleExponentialDistribution( meanStepSize );
+			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
+			return MoveIfValid( moveStep );
 		}
 
 		public bool MoveIfValid (Vector3 moveStep)

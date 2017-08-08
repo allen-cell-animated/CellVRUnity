@@ -169,7 +169,7 @@ namespace AICS.AnimatedKinesin
 			get
 			{
 				Vector3 motor1ToHips = (hips.transform.position - motors[0].transform.position).normalized;
-				float angle = Mathf.Acos( Vector3.Dot( motor1ToHips, motors[0].transform.forward ) );
+				float angle = Mathf.Acos( Mathf.Clamp( Vector3.Dot( motor1ToHips, motors[0].transform.forward ), -1f, 1f ) );
 				if (angle < Mathf.PI / 2f)
 				{
 					return motors[1];
