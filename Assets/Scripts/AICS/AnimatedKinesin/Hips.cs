@@ -111,7 +111,7 @@ namespace AICS.AnimatedKinesin
 
 		Vector3 SnappedPosition (Motor strongMotor)
 		{
-			return strongMotor.transform.position + snapPosition * strongMotor.transform.forward;
+			return strongMotor.transform.position + snapPosition * -strongMotor.transform.right;
 		}
 
 		public void UpdateSnap ()

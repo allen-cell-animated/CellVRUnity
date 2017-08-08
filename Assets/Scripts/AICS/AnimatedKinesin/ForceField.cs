@@ -13,9 +13,9 @@ namespace AICS.AnimatedKinesin
 
 		protected Molecule molecule;
 
-		void Start ()
+		void OnEnable ()
 		{
-			if (surface != null)
+			if (molecule == null && surface != null)
 			{
 				molecule = surface.GetComponent<Molecule>();
 			}

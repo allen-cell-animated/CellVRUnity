@@ -19,8 +19,8 @@ namespace AICS.AnimatedKinesin
 		public bool hipsAreLockedToThis;
 		public GameObject ATP;
 
-		Vector3 bindingPosition = new Vector3( 0.34f, 4.01f, 0.34f );
-		Vector3 bindingRotation = new Vector3( 357.7f, 269.5f, 180.2f );
+		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
+		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
 

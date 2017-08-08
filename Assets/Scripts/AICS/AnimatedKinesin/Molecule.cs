@@ -103,17 +103,17 @@ namespace AICS.AnimatedKinesin
 			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
 		}
 
-//		void OnTriggerStay (Collider other)
-//		{
-//			if (canMove)
-//			{
-//				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
-//				if (WithinLeash( moveStep ))
-//				{
-//					transform.position += moveStep;
-//				}
-//			}
-//		}
+		void OnTriggerStay (Collider other)
+		{
+			if (canMove)
+			{
+				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
+				if (WithinLeash( moveStep ))
+				{
+					transform.position += moveStep;
+				}
+			}
+		}
 
 		public abstract void Reset ();
 	}
