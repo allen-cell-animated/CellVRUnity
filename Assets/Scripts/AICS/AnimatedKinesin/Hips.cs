@@ -24,20 +24,36 @@ namespace AICS.AnimatedKinesin
 		float timePerSnapStep = 0.2f;
 		float lastSnapStepTime = -1f;
 
-		protected override bool canMove
+		public override bool bound
 		{
 			get
 			{
-				return state != HipsState.Locked;
+				return state == HipsState.Locked;
 			}
 		}
 
-		public override void DoRandomWalk ()
+		public override void Simulate ()
 		{
-			if (canMove)
+			if (snapping && Time.time - lastSnapStepTime >= timePerSnapStep)
+			{
+				UpdateSnap();
+			}
+			else 
+			{
+				DoRandomWalk();
+			}
+		}
+
+		protected override void ProcessHits (RaycastHit[] hits) { }
+
+		// --------------------------------------------------------------------------------------------------- Random walk
+
+		protected override void DoRandomWalk ()
+		{
+			if (!bound)
 			{
 				Rotate();
-				for (int i = 0; i < kinesin.maxIterations; i++)
+				for (int i = 0; i < kinesin.maxIterationsPerStep; i++)
 				{
 					if (Move())
 					{
@@ -52,11 +68,30 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
+		protected override bool CheckLeash (Vector3 moveStep)
+		{
+			if (secondParent != null)
+			{
+				float d2 = Vector3.Distance( secondParent.position, transform.position + moveStep );
+				if (d2 < minDistanceFromParent || d2 > maxDistanceFromParent)
+				{
+					return false;
+				}
+			}
+			float d1 = Vector3.Distance( transform.parent.position, transform.position + moveStep );
+			return d1 >= minDistanceFromParent && d1 <= maxDistanceFromParent;
+		}
+
+		public void SetSecondParent (Transform _secondParent)
+		{
+			secondParent = _secondParent;
+		}
+
+		// --------------------------------------------------------------------------------------------------- Snap
+
 		public void StartSnap (Motor motor)
 		{
 			snappingArcPositions = CalculateSnapArcPositions( motor );
-
-			motor.BindNecklinker();
 			currentSnapStep = 0;
 			snapping = true;
 		}
@@ -93,6 +128,11 @@ namespace AICS.AnimatedKinesin
 			return arcPositions;
 		}
 
+		Vector3 SnappedPosition (Motor strongMotor)
+		{
+			return strongMotor.transform.position + snapPosition * -strongMotor.transform.right;
+		}
+
 		Vector3[] CalculateArcPositions (Vector3 pivotPosition, Vector3 startLocalPosition, Vector3 goalLocalPosition, int steps)
 		{
 			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude) / steps;
@@ -109,60 +149,27 @@ namespace AICS.AnimatedKinesin
 			return arcPositions;
 		}
 
-		Vector3 SnappedPosition (Motor strongMotor)
+		void UpdateSnap ()
 		{
-			return strongMotor.transform.position + snapPosition * -strongMotor.transform.right;
-		}
+			transform.position = snappingArcPositions[currentSnapStep];
 
-		public void UpdateSnap ()
-		{
-			if (snapping)
+			currentSnapStep++;
+			if (currentSnapStep >= snappingArcPositions.Length)
 			{
-				if (Time.time - lastSnapStepTime >= timePerSnapStep)
-				{
-					transform.position = snappingArcPositions[currentSnapStep];
-
-					currentSnapStep++;
-					if (currentSnapStep >= snappingArcPositions.Length)
-					{
-						state = HipsState.Locked;
-						snapping = false;
-					}
-
-					lastSnapStepTime = Time.time;
-				}
-				else
-				{
-					DoRandomWalk();
-				}
+				state = HipsState.Locked;
+				snapping = false;
 			}
+
+			lastSnapStepTime = Time.time;
 		}
 
 		public void SetFree ()
 		{
+			snapping = false;
 			state = HipsState.Free;
 		}
 
-		protected override void ProcessHits (RaycastHit[] hits) { }
-
-		public void SetSecondParent (Transform _secondParent)
-		{
-			secondParent = _secondParent;
-		}
-
-		protected override bool CheckLeash (Vector3 moveStep)
-		{
-			if (secondParent != null)
-			{
-				float d2 = Vector3.Distance( secondParent.position, transform.position + moveStep );
-				if (d2 < minDistanceFromParent || d2 > maxDistanceFromParent)
-				{
-					return false;
-				}
-			}
-			float d1 = Vector3.Distance( transform.parent.position, transform.position + moveStep );
-			return d1 >= minDistanceFromParent && d1 <= maxDistanceFromParent;
-		}
+		// --------------------------------------------------------------------------------------------------- Reset
 
 		public override void Reset ()
 		{

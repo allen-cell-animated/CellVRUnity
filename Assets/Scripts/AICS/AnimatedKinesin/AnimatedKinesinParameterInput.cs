@@ -20,8 +20,6 @@ namespace AICS.AnimatedKinesin
 
 		public Parameter averageWalkingSpeed; // nm/s
 
-		public Text stateDisplay;
-
 		public override void InitSliders () 
 		{
 			ATPBindingProbabilityFront.InitSlider();
@@ -36,25 +34,25 @@ namespace AICS.AnimatedKinesin
 		public void SetATPBindingProbabilityFront (float _sliderValue)
 		{
 			ATPBindingProbabilityFront.Set( _sliderValue );
-			kinesin.ATPBindingProbabilityFront = ATPBindingProbabilityFront.value;
+//			kinesin.ATPBindingProbabilityFront = ATPBindingProbabilityFront.value;
 		}
 
 		public void SetATPBindingProbabilityBack (float _sliderValue)
 		{
 			ATPBindingProbabilityBack.Set( _sliderValue );
-			kinesin.ATPBindingProbabilityBack = ATPBindingProbabilityBack.value;
+//			kinesin.ATPBindingProbabilityBack = ATPBindingProbabilityBack.value;
 		}
 
 		public void SetEjectionProbabilityFront (float _sliderValue)
 		{
 			ejectionProbabilityFront.Set( _sliderValue );
-			kinesin.ejectionProbabilityFront = ejectionProbabilityFront.value;
+//			kinesin.ejectionProbabilityFront = ejectionProbabilityFront.value;
 		}
 
 		public void SetEjectionProbabilityBack (float _sliderValue)
 		{
 			ejectionProbabilityBack.Set( _sliderValue );
-			kinesin.ejectionProbabilityBack = ejectionProbabilityBack.value;
+//			kinesin.ejectionProbabilityBack = ejectionProbabilityBack.value;
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)
@@ -97,7 +95,6 @@ namespace AICS.AnimatedKinesin
 				lastTime = Time.time;
 
 				averageWalkingSpeed.SetDisplay( kinesin.averageWalkingSpeed );
-				stateDisplay.text = kinesin.lastState;
 			}
 		}
 	}

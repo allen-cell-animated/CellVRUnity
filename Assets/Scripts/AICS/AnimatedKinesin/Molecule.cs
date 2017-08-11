@@ -5,16 +5,29 @@ using AICS.Microtubule;
 
 namespace AICS.AnimatedKinesin
 {
+	public delegate void KineticEvent ();
+
+	public class EventWithKineticRate
+	{
+		public KineticEvent kineticEvent;
+		public float frequencyPerSecond;
+
+		public EventWithKineticRate (KineticEvent _event, float _frequencyPerSecond)
+		{
+			kineticEvent = _event;
+			frequencyPerSecond = _frequencyPerSecond;
+		}
+	}
+
 	public abstract class Molecule : MonoBehaviour 
 	{
-		public float radius;
 		public float minDistanceFromParent = 2f;
 		public float maxDistanceFromParent = 6f;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
 		public Kinesin kinesin;
 
-		protected abstract bool canMove
+		public abstract bool bound
 		{
 			get;
 		}
@@ -42,14 +55,16 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		public abstract void DoRandomWalk ();
+		public abstract void Simulate ();
 
-		public void Rotate ()
+		protected abstract void DoRandomWalk ();
+
+		protected void Rotate ()
 		{
 			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
 		}
 
-		public bool Move () 
+		protected bool Move () 
 		{
 			float stepSize = SampleExponentialDistribution( meanStepSize );
 			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
@@ -89,7 +104,7 @@ namespace AICS.AnimatedKinesin
 
 		protected abstract bool CheckLeash (Vector3 moveStep);
 
-		public void Jitter (float amount = 0.01f) 
+		protected void Jitter (float amount = 0.01f) 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
 			if (WithinLeash( moveStep ))
@@ -105,16 +120,47 @@ namespace AICS.AnimatedKinesin
 
 		void OnTriggerStay (Collider other)
 		{
-			if (canMove)
+			if (!bound)
 			{
-				Vector3 moveStep = 0.1f * (transform.position - other.transform.position);
-				if (WithinLeash( moveStep ))
-				{
-					transform.position += moveStep;
-				}
+				ExitCollision( other.transform.position );
+			}
+		}
+
+		void ExitCollision (Vector3 otherPosition)
+		{
+			Vector3 moveStep = 0.1f * (transform.position - otherPosition);
+			if (WithinLeash( moveStep ))
+			{
+				transform.position += moveStep;
 			}
 		}
 
 		public abstract void Reset ();
+
+		protected void DoInRandomOrder (EventWithKineticRate[] things)
+		{
+			if (things.Length > 0)
+			{
+				things.Shuffle();
+				for (int i = 0; i < things.Length; i++)
+				{
+					if (DoSomethingAtKineticRate( things[i] ))
+					{
+						return;
+					}
+				}
+			}
+		}
+
+		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
+		{
+			Debug.Log(something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-9f );
+			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-9f)
+			{
+				something.kineticEvent();
+				return true;
+			}
+			return false;
+		}
 	}
 }
