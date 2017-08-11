@@ -55,7 +55,7 @@ namespace AICS.AnimatedKinesin
 
 		void Awake ()
 		{
-			Application.targetFrameRate = 30;
+			Application.targetFrameRate = -1;
 			kineticRates.Init();
 			speedMultiplier = 1E-3f / (nanosecondsPerStep * 1E-9f * stepsPerFrame);
 
@@ -105,12 +105,12 @@ namespace AICS.AnimatedKinesin
 			{
 				hips.transform.SetParent( otherMotor.transform );
 				motor.transform.SetParent( hips.transform );
-				hips.SetSecondParent( transform );
 			}
 			else
 			{
 				SetHipsAsParent();
 			}
+			hips.SetSecondParent( null );
 		}
 
 		void SetHipsAsParent ()

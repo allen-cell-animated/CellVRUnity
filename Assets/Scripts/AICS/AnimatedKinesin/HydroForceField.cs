@@ -29,6 +29,7 @@ namespace AICS.AnimatedKinesin
 
 				if (fieldAngle < Mathf.PI / 3f && surfaceToOtherSurfaceDistance > surfaceToOtherFieldDistance && surfaceAngle < Mathf.PI / 3f)
 				{
+//					Debug.Log( surface.name + " hydrofield interacting with " + otherField.surface.name );
 					interacting = true;
 					Move( otherField, strength );
 					Rotate( otherField, angularStrength );

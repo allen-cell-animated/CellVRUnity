@@ -9,11 +9,13 @@ namespace AICS.AnimatedKinesin
 
 	public class EventWithKineticRate
 	{
+		public string name;
 		public KineticEvent kineticEvent;
 		public float frequencyPerSecond;
 
-		public EventWithKineticRate (KineticEvent _event, float _frequencyPerSecond)
+		public EventWithKineticRate (string _name, KineticEvent _event, float _frequencyPerSecond)
 		{
+			name = _name;
 			kineticEvent = _event;
 			frequencyPerSecond = _frequencyPerSecond;
 		}
@@ -75,11 +77,17 @@ namespace AICS.AnimatedKinesin
 		{
 			if (!WillCollide( moveStep ))
 			{
-				if (WithinLeash( moveStep ))
-				{
-					transform.position += moveStep;
-					return true;
-				}
+				return MoveIfWithinLeash( moveStep );
+			}
+			return false;
+		}
+
+		public bool MoveIfWithinLeash (Vector3 moveStep)
+		{
+			if (WithinLeash( moveStep ))
+			{
+				transform.position += moveStep;
+				return true;
 			}
 			return false;
 		}
@@ -154,8 +162,8 @@ namespace AICS.AnimatedKinesin
 
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
-			Debug.Log(something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-9f );
-			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-9f)
+//			Debug.Log( something.name + " " + (something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-5f) );
+			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-4f) // should be * 1E-9f
 			{
 				something.kineticEvent();
 				return true;

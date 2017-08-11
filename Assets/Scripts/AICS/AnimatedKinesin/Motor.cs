@@ -20,16 +20,17 @@ namespace AICS.AnimatedKinesin
 		public bool logEvents;
 		public MotorState state = MotorState.KD;
 		public float bindingRotationTolerance = 30f;
-		public bool hipsAreLockedToThis;
 		public GameObject ATP;
 		public GameObject ADP;
 		public GameObject Pi;
+		public GameObject chargeForceFields;
 		public bool needToSwitchToStrong;
 
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
+		float lastSetToBindingPositionTime = -1f;
 
 		Motor _otherMotor;
 		Motor otherMotor
@@ -42,6 +43,14 @@ namespace AICS.AnimatedKinesin
 				}
 				return _otherMotor;
 			}
+		}
+
+		// for testing
+		public MeshRenderer meshRenderer; 
+		Color color;
+		void Awake ()
+		{
+			color = meshRenderer.material.color;
 		}
 
 		// --------------------------------------------------------------------------------------------------- State
@@ -80,31 +89,31 @@ namespace AICS.AnimatedKinesin
 			_actionsForState = new Dictionary<MotorState, EventWithKineticRate[]>();
 
 			EventWithKineticRate[] actions = new EventWithKineticRate[1];
-			actions[0] = new EventWithKineticRate( BindATP, kinesin.kineticRates.GetRate( "A" ) );
+			actions[0] = new EventWithKineticRate( "BindATP", BindATP, kinesin.kineticRates.GetRate( "A" ) );
 			_actionsForState.Add( MotorState.MtK, actions );
 
 			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( ReleaseATP, kinesin.kineticRates.GetRate( "B" ) );
-			actions[1] = new EventWithKineticRate( HydrolyzeATP, kinesin.kineticRates.GetRate( "C" ) );
+			actions[0] = new EventWithKineticRate( "ReleaseATP", ReleaseATP, kinesin.kineticRates.GetRate( "B" ) );
+			actions[1] = new EventWithKineticRate( "HydrolyzeATP", HydrolyzeATP, kinesin.kineticRates.GetRate( "C" ) );
 			_actionsForState.Add( MotorState.MtKT, actions );
 
 			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( ReleasePhosphate, kinesin.kineticRates.GetRate( "D" ) );
-			actions[1] = new EventWithKineticRate( ReleaseTubulin, kinesin.kineticRates.GetRate( "F" ) );
+			actions[0] = new EventWithKineticRate( "ReleasePhosphate", ReleasePhosphate, kinesin.kineticRates.GetRate( "D" ) );
+			actions[1] = new EventWithKineticRate( "ReleaseTubulin", ReleaseTubulin, kinesin.kineticRates.GetRate( "F" ) );
 			_actionsForState.Add( MotorState.MtKDP, actions );
 
 			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( ReleaseADP, kinesin.kineticRates.GetRate( "J" ) );
-			actions[1] = new EventWithKineticRate( ReleaseTubulin, kinesin.kineticRates.GetRate( "I" ) );
+			actions[0] = new EventWithKineticRate( "ReleaseADP", ReleaseADP, kinesin.kineticRates.GetRate( "J" ) );
+			actions[1] = new EventWithKineticRate( "ReleaseTubulin", ReleaseTubulin, kinesin.kineticRates.GetRate( "I" ) );
 			_actionsForState.Add( MotorState.MtKD, actions );
 
 			actions = new EventWithKineticRate[1];
-			// check bind tubulin via collision sweep test
-			actions[0] = new EventWithKineticRate( ReleasePhosphate, kinesin.kineticRates.GetRate( "G" ) );
+			// check bind tubulin via collision test during random walk
+			actions[0] = new EventWithKineticRate( "ReleasePhosphate", ReleasePhosphate, kinesin.kineticRates.GetRate( "G" ) );
 			_actionsForState.Add( MotorState.KDP, actions );
 
 			actions = new EventWithKineticRate[0];
-			// check bind tubulin via collision sweep test
+			// check bind tubulin via collision test during random walk
 			_actionsForState.Add( MotorState.KD, actions );
 		}
 
@@ -114,49 +123,71 @@ namespace AICS.AnimatedKinesin
 
 			if (needToSwitchToStrong)
 			{
-				if (bound)
-				{
-					if (state == MotorState.MtKDP)
-					{
-						ReleasePhosphate();
-					}
-					else if (state == MotorState.MtKD)
-					{
-						ReleaseADP();
-					}
-				}
-				// else speed up bind to tubulin?
+				TryToSwitchToStrong();
 			}
 			else
 			{
 				DoInRandomOrder( actionsForState[state] );
 			}
+
+			// for testing
+			if (stateIsStrong)
+			{
+				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
+			}
+			else if (needToSwitchToStrong)
+			{
+				meshRenderer.material.color = Color.yellow;
+			}
+			else
+			{
+				meshRenderer.material.color = color;
+			}
+		}
+
+		void TryToSwitchToStrong ()
+		{
+			if (bound)
+			{
+				if (state == MotorState.MtKDP)
+				{
+					ReleasePhosphate();
+				}
+				else if (state == MotorState.MtKD)
+				{
+					ReleaseADP();
+					needToSwitchToStrong = false;
+				}
+			}
+			else if (!chargeForceFields.activeSelf)
+			{
+				chargeForceFields.SetActive( true );
+			}
 		}
 
 		void BindATP ()
 		{
-			if (logEvents) { Debug.Log( name + " bind ATP" ); }
+			if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
 			state = MotorState.MtKT;
 			ATP.SetActive( true );
+			kinesin.hips.StartSnap( this );
 		}
 
 		void ReleaseATP ()
 		{
-			if (logEvents) { Debug.Log( name + " release ATP" ); }
+			if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
 			state = MotorState.MtK;
 			ATP.SetActive( false );
 		}
 
 		void HydrolyzeATP ()
 		{
-			if (logEvents) { Debug.Log( name + " hydrolyze" ); }
+			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
 			state = MotorState.MtKDP;
 			ATP.SetActive( false );
 			ADP.SetActive( true );
 			Pi.SetActive( true );
 			otherMotor.SwitchToStrong();
-			kinesin.hips.StartSnap( this );
-			hipsAreLockedToThis = true;
 		}
 
 		void SwitchToStrong ()
@@ -166,16 +197,19 @@ namespace AICS.AnimatedKinesin
 
 		void ReleasePhosphate ()
 		{
-			if (logEvents) { Debug.Log( name + " release Pi" ); }
+			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
 			state = (state == MotorState.MtKDP) ? MotorState.MtKD : MotorState.KD;
 			Pi.SetActive( false );
 		}
 
 		void ReleaseADP ()
 		{
-			if (logEvents) { Debug.Log( name + " release ADP" ); }
-			state = MotorState.MtK;
-			ADP.SetActive( false );
+			if (!otherMotor.stateIsStrong)
+			{
+				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
+				state = MotorState.MtK;
+				ADP.SetActive( false );
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Random walk
@@ -197,6 +231,12 @@ namespace AICS.AnimatedKinesin
 			else 
 			{
 				Jitter();
+
+				if (Time.time - lastSetToBindingPositionTime >= 1f)
+				{
+					transform.position = tubulin.transform.TransformPoint( bindingPosition );
+					lastSetToBindingPositionTime = Time.time;
+				}
 			}
 		}
 
@@ -215,14 +255,14 @@ namespace AICS.AnimatedKinesin
 
 		void CheckForTubulinCollision (RaycastHit[] hits)
 		{
-			if (!bound && Time.time - lastReleaseTime > 1f)
+			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 1f))
 			{
 				Tubulin t;
 				List<Tubulin> tubulins = new List<Tubulin>();
 				foreach (RaycastHit hit in hits)
 				{
 					t = hit.collider.GetComponentInParent<Tubulin>();
-					if (t != null)// && t.type == 1 && !t.hasMotorBound)
+					if (t != null && t.type == 1 && !t.hasMotorBound)
 					{
 						tubulins.Add( t );
 					}
@@ -268,31 +308,33 @@ namespace AICS.AnimatedKinesin
 
 		void BindTubulin (Tubulin _tubulin)
 		{
-			if (logEvents) { Debug.Log( name + " BIND" ); }
+			if (logEvents) { Debug.Log( name + " BIND --------------------------------" ); }
 			state = (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD;
 			tubulin = _tubulin;
 			tubulin.hasMotorBound = true;
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 			transform.position = tubulin.transform.TransformPoint( bindingPosition );
+			lastSetToBindingPositionTime = Time.time;
 			kinesin.SetParentSchemeOnBind( this );
+			chargeForceFields.SetActive( false );
 		}
 
 		void ReleaseTubulin ()
 		{
-			if (logEvents) { Debug.Log( name + " RELEASE" ); }
-			state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
-			kinesin.SetParentSchemeOnRelease( this );
-			lastReleaseTime = Time.time;
-			if (tubulin != null)
+			if (otherMotor.bound)
 			{
-				tubulin.hasMotorBound = false;
-				Vector3 fromTubulin = (transform.position - tubulin.transform.position).normalized;
-				MoveIfValid( fromTubulin );
-			}
-			if (hipsAreLockedToThis)
-			{
-				kinesin.hips.SetFree();
-				hipsAreLockedToThis = false;
+				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
+				state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
+				kinesin.SetParentSchemeOnRelease( this );
+				lastReleaseTime = Time.time;
+				if (tubulin != null)
+				{
+					tubulin.hasMotorBound = false;
+					Vector3 fromTubulin = (transform.position - tubulin.transform.position).normalized;
+					MoveIfValid( fromTubulin );
+				}
+				kinesin.hips.SetFree( this );
+				chargeForceFields.SetActive( true );
 			}
 		}
 
@@ -300,12 +342,15 @@ namespace AICS.AnimatedKinesin
 
 		public override void Reset ()
 		{
-			if (logEvents) { Debug.Log( name + " reset" ); }
+			if (logEvents) { Debug.Log( name + " reset --------------------------------" ); }
 			state = MotorState.KD;
-			hipsAreLockedToThis = false;
+			needToSwitchToStrong = false;
 			tubulin = null;
 			lastReleaseTime = -1f;
 			ATP.SetActive( false );
+			ADP.SetActive( true );
+			Pi.SetActive( false );
+			chargeForceFields.SetActive( true );
 		}
 	}
 }
