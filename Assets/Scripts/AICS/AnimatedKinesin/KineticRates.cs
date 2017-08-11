@@ -23,23 +23,14 @@ namespace AICS.AnimatedKinesin
 	{
 		public List<KineticRate> rates;
 
-		Dictionary<string,float> _rates;
-
-		public void Init ()
+		public KineticRate GetRate (string id)
 		{
-			_rates = new Dictionary<string,float>();
-			foreach (KineticRate r in rates)
-			{
-				if (!_rates.ContainsKey( r.id ))
-				{
-					_rates.Add( r.id, r.rate );
-				}
-			}
+			return rates.Find( r => r.id == id );
 		}
 
-		public float GetRate (string id)
+		public void SetRate (string id, float rate)
 		{
-			return _rates[id];
+			rates.Find( r => r.id == id ).rate = rate;
 		}
 
 		public void SetKinesinDefaults () // from Pollard

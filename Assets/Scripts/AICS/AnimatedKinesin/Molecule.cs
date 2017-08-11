@@ -11,9 +11,9 @@ namespace AICS.AnimatedKinesin
 	{
 		public string name;
 		public KineticEvent kineticEvent;
-		public float frequencyPerSecond;
+		public KineticRate frequencyPerSecond;
 
-		public EventWithKineticRate (string _name, KineticEvent _event, float _frequencyPerSecond)
+		public EventWithKineticRate (string _name, KineticEvent _event, KineticRate _frequencyPerSecond)
 		{
 			name = _name;
 			kineticEvent = _event;
@@ -162,8 +162,8 @@ namespace AICS.AnimatedKinesin
 
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
-//			Debug.Log( something.name + " " + (something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-5f) );
-			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond * kinesin.nanosecondsPerStep * 1E-4f) // should be * 1E-9f
+			Debug.Log( something.name + " " + something.frequencyPerSecond.rate );
+			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond.rate * kinesin.nanosecondsPerStep * 1E-9f)
 			{
 				something.kineticEvent();
 				return true;

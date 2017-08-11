@@ -45,14 +45,6 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		// for testing
-		public MeshRenderer meshRenderer; 
-		Color color;
-		void Awake ()
-		{
-			color = meshRenderer.material.color;
-		}
-
 		// --------------------------------------------------------------------------------------------------- State
 
 		public override bool bound
@@ -128,20 +120,6 @@ namespace AICS.AnimatedKinesin
 			else
 			{
 				DoInRandomOrder( actionsForState[state] );
-			}
-
-			// for testing
-			if (stateIsStrong)
-			{
-				meshRenderer.material.color = new Color( 1f, 0.5f, 0 );
-			}
-			else if (needToSwitchToStrong)
-			{
-				meshRenderer.material.color = Color.yellow;
-			}
-			else
-			{
-				meshRenderer.material.color = color;
 			}
 		}
 

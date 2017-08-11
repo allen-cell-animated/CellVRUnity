@@ -8,8 +8,8 @@ namespace AICS.AnimatedKinesin
 	{
 		public List<Molecule> molecules;
 		public KineticRates kineticRates;
-		public float nanosecondsPerStep = 10f;
-		public int stepsPerFrame = 10;
+		public float nanosecondsPerStep = 1E5f;
+		public int stepsPerFrame = 1;
 		public int maxIterationsPerStep = 50;
 		public float averageWalkingSpeed; // μm/s
 
@@ -56,7 +56,6 @@ namespace AICS.AnimatedKinesin
 		void Awake ()
 		{
 			Application.targetFrameRate = -1;
-			kineticRates.Init();
 			speedMultiplier = 1E-3f / (nanosecondsPerStep * 1E-9f * stepsPerFrame);
 
 			hipsStartPosition = hips.transform.position;

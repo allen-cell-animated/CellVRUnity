@@ -9,50 +9,91 @@ namespace AICS.AnimatedKinesin
 	{
 		public Kinesin kinesin;
 
-		public Parameter ATPBindingProbabilityFront; // = 70%, 1 --> 99
-		public Parameter ATPBindingProbabilityBack; // = 10%, 1 --> 99
-		public Parameter ejectionProbabilityFront; // = 70%, 1 --> 99
-		public Parameter ejectionProbabilityBack; // = 30%, 1 --> 99
+		public Parameter[] rates;
 
-		public RangeParameter necklinkerLength; // = (2, 6), 1 --> 9
-		public Parameter snappingSpeed; // = 30°/s, 5 --> 100
-		public Parameter meanStepSize; // = 0.2 nm, 0.05 --> 1
+		public Parameter timePerStep; // = 100 μs, 10 ns --> 1 ms
+		public RangeParameter necklinkerLength; // = (1, 5), 1 --> 9
+		public Parameter snappingSpeed; // = 90°/s, 5 --> 100
+		public Parameter meanStepSize; // = 0.8 nm, 0.1 --> 2
 
-		public Parameter averageWalkingSpeed; // nm/s
+		public Parameter averageWalkingSpeed; // μm/s
 
 		public override void InitSliders () 
 		{
-			ATPBindingProbabilityFront.InitSlider();
-			ATPBindingProbabilityBack.InitSlider();
-			ejectionProbabilityFront.InitSlider();
-			ejectionProbabilityBack.InitSlider();
+			foreach (Parameter rate in rates)
+			{
+				rate.InitSlider();
+			}
+			timePerStep.InitSlider();
 			necklinkerLength.InitSlider();
 			snappingSpeed.InitSlider();
 			meanStepSize.InitSlider();
 		}
 
-		public void SetATPBindingProbabilityFront (float _sliderValue)
+		public void SetRateA (float _sliderValue)
 		{
-			ATPBindingProbabilityFront.Set( _sliderValue );
-//			kinesin.ATPBindingProbabilityFront = ATPBindingProbabilityFront.value;
+			rates[0].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "A", rates[0].value );
 		}
 
-		public void SetATPBindingProbabilityBack (float _sliderValue)
+		public void SetRateB (float _sliderValue)
 		{
-			ATPBindingProbabilityBack.Set( _sliderValue );
-//			kinesin.ATPBindingProbabilityBack = ATPBindingProbabilityBack.value;
+			rates[1].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "B", rates[1].value );
 		}
 
-		public void SetEjectionProbabilityFront (float _sliderValue)
+		public void SetRateC (float _sliderValue)
 		{
-			ejectionProbabilityFront.Set( _sliderValue );
-//			kinesin.ejectionProbabilityFront = ejectionProbabilityFront.value;
+			rates[2].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "C", rates[2].value );
 		}
 
-		public void SetEjectionProbabilityBack (float _sliderValue)
+		public void SetRateD (float _sliderValue)
 		{
-			ejectionProbabilityBack.Set( _sliderValue );
-//			kinesin.ejectionProbabilityBack = ejectionProbabilityBack.value;
+			rates[3].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "D", rates[3].value );
+		}
+
+		public void SetRateE (float _sliderValue)
+		{
+			rates[4].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "E", rates[4].value );
+		}
+
+		public void SetRateF (float _sliderValue)
+		{
+			rates[5].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "F", rates[5].value );
+		}
+
+		public void SetRateG (float _sliderValue)
+		{
+			rates[6].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "G", rates[6].value );
+		}
+
+		public void SetRateH (float _sliderValue)
+		{
+			rates[7].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "H", rates[7].value );
+		}
+
+		public void SetRateI (float _sliderValue)
+		{
+			rates[8].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "I", rates[8].value );
+		}
+
+		public void SetRateJ (float _sliderValue)
+		{
+			rates[9].Set( _sliderValue );
+			kinesin.kineticRates.SetRate( "J", rates[9].value );
+		}
+
+		public void SetTimePerStep (float _sliderValue)
+		{
+			timePerStep.Set( _sliderValue );
+			kinesin.nanosecondsPerStep = timePerStep.value * 1E-3f;
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)

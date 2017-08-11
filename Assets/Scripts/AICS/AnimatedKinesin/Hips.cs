@@ -25,14 +25,6 @@ namespace AICS.AnimatedKinesin
 		float lastSnapStepTime = -1f;
 		Motor lastSnappingPivot;
 
-		// for testing
-		public MeshRenderer meshRenderer; 
-		Color color;
-		void Awake ()
-		{
-			color = meshRenderer.material.color;
-		}
-
 		public override bool bound
 		{
 			get
@@ -48,16 +40,6 @@ namespace AICS.AnimatedKinesin
 				UpdateSnap();
 			}
 			DoRandomWalk();
-
-			// for testing
-			if (snapping || bound)
-			{
-				meshRenderer.material.color = Color.white;
-			}
-			else
-			{
-				meshRenderer.material.color = color;
-			}
 		}
 
 		protected override void ProcessHits (RaycastHit[] hits) { }
