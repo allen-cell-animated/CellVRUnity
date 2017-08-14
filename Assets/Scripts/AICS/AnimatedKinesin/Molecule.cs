@@ -21,25 +21,18 @@ namespace AICS.AnimatedKinesin
 		}
 	}
 
+	// A basic molecule object that can 
+	// - randomly rotate and move while avoiding and reporting collisions
+	// - do kinetic events
 	public abstract class Molecule : MonoBehaviour 
 	{
-		public float minDistanceFromParent = 2f;
-		public float maxDistanceFromParent = 6f;
+		public float radius;
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
-		public Kinesin kinesin;
 
 		public abstract bool bound
 		{
 			get;
-		}
-
-		bool isParent
-		{
-			get
-			{
-				return transform.parent == kinesin.transform;
-			}
 		}
 
 		Rigidbody _body;
@@ -59,7 +52,7 @@ namespace AICS.AnimatedKinesin
 
 		public abstract void Simulate ();
 
-		protected abstract void DoRandomWalk ();
+		public abstract void DoRandomWalk ();
 
 		protected void Rotate ()
 		{
@@ -68,31 +61,28 @@ namespace AICS.AnimatedKinesin
 
 		protected bool Move () 
 		{
-			float stepSize = SampleExponentialDistribution( meanStepSize );
-			Vector3 moveStep = Helpers.GetRandomVector( stepSize );
-			return MoveIfValid( moveStep );
-		}
-
-		public bool MoveIfValid (Vector3 moveStep)
-		{
+			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
 			if (!WillCollide( moveStep ))
 			{
-				return MoveIfWithinLeash( moveStep );
-			}
-			return false;
-		}
-
-		public bool MoveIfWithinLeash (Vector3 moveStep)
-		{
-			if (WithinLeash( moveStep ))
-			{
-				transform.position += moveStep;
-				return true;
+				return MoveIfValid( moveStep );
 			}
 			return false;
 		}
 
 		bool WillCollide (Vector3 moveStep)
+		{
+			if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Sweeptest)
+			{
+				return CheckCollisionsSweeptest( moveStep );
+			}
+			else if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Spheres)
+			{
+				return CheckCollisionsSpheres( moveStep );
+			}
+			return false;
+		}
+
+		bool CheckCollisionsSweeptest (Vector3 moveStep)
 		{
 			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
 			if (hits.Length > 0)
@@ -103,23 +93,31 @@ namespace AICS.AnimatedKinesin
 			return false;
 		}
 
+		bool CheckCollisionsSpheres (Vector3 moveStep)
+		{
+			// TODO
+			return false;
+		}
+
 		protected abstract void ProcessHits (RaycastHit[] hits);
 
-		protected bool WithinLeash (Vector3 moveStep)
-		{
-			return isParent || CheckLeash( moveStep );
-		}
-
-		protected abstract bool CheckLeash (Vector3 moveStep);
-
-		protected void Jitter (float amount = 0.01f) 
+		protected virtual void Jitter (float amount = 0.01f) 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
-			if (WithinLeash( moveStep ))
+			MoveIfValid( moveStep );
+		}
+
+		public bool MoveIfValid (Vector3 moveStep)
+		{
+			if (IsValidMove( moveStep ))
 			{
 				transform.position += moveStep;
+				return true;
 			}
+			return false;
 		}
+
+		protected abstract bool IsValidMove (Vector3 moveStep);
 
 		float SampleExponentialDistribution (float mean)
 		{
@@ -137,10 +135,7 @@ namespace AICS.AnimatedKinesin
 		void ExitCollision (Vector3 otherPosition)
 		{
 			Vector3 moveStep = 0.1f * (transform.position - otherPosition);
-			if (WithinLeash( moveStep ))
-			{
-				transform.position += moveStep;
-			}
+			MoveIfValid( moveStep );
 		}
 
 		public abstract void Reset ();
@@ -162,8 +157,7 @@ namespace AICS.AnimatedKinesin
 
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
-			Debug.Log( something.name + " " + something.frequencyPerSecond.rate );
-			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond.rate * kinesin.nanosecondsPerStep * 1E-9f)
+			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond.rate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f)
 			{
 				something.kineticEvent();
 				return true;

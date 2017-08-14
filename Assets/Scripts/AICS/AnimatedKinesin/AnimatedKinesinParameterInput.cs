@@ -93,19 +93,19 @@ namespace AICS.AnimatedKinesin
 		public void SetTimePerStep (float _sliderValue)
 		{
 			timePerStep.Set( _sliderValue );
-			kinesin.nanosecondsPerStep = timePerStep.value * 1E-3f;
+			MolecularEnvironment.Instance.nanosecondsPerStep = timePerStep.value * 1E-3f;
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)
 		{
 			necklinkerLength.SetMin( _sliderValue );
-			kinesin.SetNeckLinkerMinLength( necklinkerLength.value );
+			kinesin.SetMinDistanceFromParent( necklinkerLength.value );
 		}
 
 		public void SetNecklinkerLengthMax (float _sliderValue)
 		{
 			necklinkerLength.SetMax( _sliderValue );
-			kinesin.SetNeckLinkerMaxLength( necklinkerLength.rangeValue );
+			kinesin.SetMaxDistanceFromParent( necklinkerLength.rangeValue );
 		}
 
 		public void SetSnappingSpeed (float _sliderValue)

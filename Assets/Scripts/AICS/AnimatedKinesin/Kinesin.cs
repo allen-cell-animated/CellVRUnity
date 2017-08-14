@@ -4,13 +4,8 @@ using UnityEngine;
 
 namespace AICS.AnimatedKinesin
 {
-	public class Kinesin : MonoBehaviour 
+	public class Kinesin : AssemblyMolecule 
 	{
-		public List<Molecule> molecules;
-		public KineticRates kineticRates;
-		public float nanosecondsPerStep = 1E5f;
-		public int stepsPerFrame = 1;
-		public int maxIterationsPerStep = 50;
 		public float averageWalkingSpeed; // μm/s
 
 		Vector3 hipsStartPosition;
@@ -40,7 +35,7 @@ namespace AICS.AnimatedKinesin
 				if (_motors == null)
 				{
 					_motors = new List<Motor>();
-					foreach (Molecule molecule in molecules)
+					foreach (ComponentMolecule molecule in molecules)
 					{
 						Motor motor = molecule.GetComponent<Motor>();
 						if (motor != null)
@@ -53,36 +48,86 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
+		public override bool bound
+		{
+			get
+			{
+				foreach (Motor motor in motors)
+				{
+					if (motor.bound)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+
 		void Awake ()
 		{
 			Application.targetFrameRate = -1;
-			speedMultiplier = 1E-3f / (nanosecondsPerStep * 1E-9f * stepsPerFrame);
+			speedMultiplier = 1E-3f / (MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsPerFrame);
 
 			hipsStartPosition = hips.transform.position;
 			motor1StartPosition = motors[0].transform.position;
 			motor2StartPosition = motors[1].transform.position;
 
-			foreach (Molecule molecule in molecules)
+			foreach (ComponentMolecule molecule in molecules)
 			{
-				molecule.kinesin = this;
+				molecule.assembly = this as AssemblyMolecule;
 			}
 		}
 
-		void LateUpdate ()
+		void Update ()
 		{
-			for (int i = 0; i < stepsPerFrame; i++)
+			for (int i = 0; i < MolecularEnvironment.Instance.stepsPerFrame; i++)
 			{
-				foreach (Molecule molecule in molecules)
-				{
-					molecule.Simulate();
-				}
+				DoRandomWalk();
+				Simulate();
 			}
-
 			CalculateWalkingSpeed();
 		}
 
-		public void SetParentSchemeOnBind (Motor motor)
+		public override void DoRandomWalk ()
 		{
+			foreach (ComponentMolecule molecule in molecules)
+			{
+				molecule.DoRandomWalk();
+			}
+		}
+
+		public override void Simulate ()
+		{
+			foreach (ComponentMolecule molecule in molecules)
+			{
+				molecule.Simulate();
+			}
+		}
+
+		protected override void ProcessHits (RaycastHit[] hits) { }
+
+		protected override bool IsValidMove (Vector3 moveStep)
+		{
+			return true;
+		}
+
+		public override void Reset ()
+		{
+			foreach (Molecule molecule in molecules)
+			{
+				molecule.Reset();
+			}
+			SetHipsAsParent();
+
+			hips.transform.position = hipsStartPosition;
+			motors[0].transform.position = motor1StartPosition;
+			motors[1].transform.position = motor2StartPosition;
+			startTime = Time.time;
+		}
+
+		public override void SetParentSchemeOnComponentBind (ComponentMolecule molecule)
+		{
+			Motor motor = molecule as Motor;
 			Motor otherMotor = motors.Find( m => m != motor );
 			if (otherMotor.bound)
 			{
@@ -97,8 +142,9 @@ namespace AICS.AnimatedKinesin
 			}
 		}
 
-		public void SetParentSchemeOnRelease (Motor motor)
+		public override void SetParentSchemeOnComponentRelease (ComponentMolecule molecule)
 		{
+			Motor motor = molecule as Motor;
 			Motor otherMotor = motors.Find( m => m != motor );
 			if (otherMotor.bound)
 			{
@@ -117,44 +163,6 @@ namespace AICS.AnimatedKinesin
 			hips.transform.SetParent( transform );
 			motors[0].transform.SetParent( hips.transform );
 			motors[1].transform.SetParent( hips.transform );
-		}
-
-		public void Reset ()
-		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.Reset();
-			}
-			SetHipsAsParent();
-
-			hips.transform.position = hipsStartPosition;
-			motors[0].transform.position = motor1StartPosition;
-			motors[1].transform.position = motor2StartPosition;
-			startTime = Time.time;
-		}
-
-		public void SetNeckLinkerMinLength (float min)
-		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.minDistanceFromParent = min;
-			}
-		}
-
-		public void SetNeckLinkerMaxLength (float max)
-		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.maxDistanceFromParent = max;
-			}
-		}
-
-		public void SetMeanStepSize (float size)
-		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.meanStepSize = size;
-			}
 		}
 
 		void CalculateWalkingSpeed ()

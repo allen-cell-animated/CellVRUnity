@@ -11,7 +11,7 @@ namespace AICS.AnimatedKinesin
 		Locked
 	}
 
-	public class Hips : Molecule 
+	public class Hips : ComponentMolecule 
 	{
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
@@ -24,6 +24,14 @@ namespace AICS.AnimatedKinesin
 		float timePerSnapStep = 0.2f;
 		float lastSnapStepTime = -1f;
 		Motor lastSnappingPivot;
+
+		Kinesin kinesin
+		{
+			get
+			{
+				return assembly as Kinesin;
+			}
+		}
 
 		public override bool bound
 		{
@@ -39,19 +47,18 @@ namespace AICS.AnimatedKinesin
 			{
 				UpdateSnap();
 			}
-			DoRandomWalk();
 		}
 
 		protected override void ProcessHits (RaycastHit[] hits) { }
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 
-		protected override void DoRandomWalk ()
+		public override void DoRandomWalk ()
 		{
 			if (!bound)
 			{
 				Rotate();
-				for (int i = 0; i < kinesin.maxIterationsPerStep; i++)
+				for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
 				{
 					if (Move())
 					{
@@ -159,7 +166,7 @@ namespace AICS.AnimatedKinesin
 		void UpdateSnap ()
 		{
 			Vector3 toGoal = snappingArcPositions[currentSnapStep] - transform.position;
-			if (Time.time - lastSnapStepTime >= timePerSnapStep && MoveIfWithinLeash( toGoal ))
+			if (Time.time - lastSnapStepTime >= timePerSnapStep && MoveIfValid( toGoal ))
 			{
 				currentSnapStep++;
 				if (currentSnapStep >= snappingArcPositions.Length)
@@ -171,7 +178,7 @@ namespace AICS.AnimatedKinesin
 			}
 			else
 			{
-				MoveIfWithinLeash( 0.1f * toGoal );
+				MoveIfValid( 0.1f * toGoal );
 			}
 		}
 

@@ -15,7 +15,7 @@ namespace AICS.AnimatedKinesin
 		KD // free moving with ADP bound
 	}
 
-	public class Motor : Molecule 
+	public class Motor : ComponentMolecule 
 	{
 		public bool logEvents;
 		public MotorState state = MotorState.KD;
@@ -31,6 +31,14 @@ namespace AICS.AnimatedKinesin
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
+
+		Kinesin kinesin
+		{
+			get
+			{
+				return assembly as Kinesin;
+			}
+		}
 
 		Motor _otherMotor;
 		Motor otherMotor
@@ -111,8 +119,6 @@ namespace AICS.AnimatedKinesin
 
 		public override void Simulate ()
 		{
-			DoRandomWalk();
-
 			if (needToSwitchToStrong)
 			{
 				TryToSwitchToStrong();
@@ -192,12 +198,12 @@ namespace AICS.AnimatedKinesin
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 
-		protected override void DoRandomWalk ()
+		public override void DoRandomWalk ()
 		{
 			if (!bound)
 			{
 				Rotate();
-				for (int i = 0; i < kinesin.maxIterationsPerStep; i++)
+				for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
 				{
 					if (Move() || bound)
 					{
@@ -209,7 +215,6 @@ namespace AICS.AnimatedKinesin
 			else 
 			{
 				Jitter();
-
 				if (Time.time - lastSetToBindingPositionTime >= 1f)
 				{
 					transform.position = tubulin.transform.TransformPoint( bindingPosition );
@@ -293,7 +298,7 @@ namespace AICS.AnimatedKinesin
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 			transform.position = tubulin.transform.TransformPoint( bindingPosition );
 			lastSetToBindingPositionTime = Time.time;
-			kinesin.SetParentSchemeOnBind( this );
+			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			chargeForceFields.SetActive( false );
 		}
 
@@ -303,7 +308,7 @@ namespace AICS.AnimatedKinesin
 			{
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
 				state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
-				kinesin.SetParentSchemeOnRelease( this );
+				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 				lastReleaseTime = Time.time;
 				if (tubulin != null)
 				{
