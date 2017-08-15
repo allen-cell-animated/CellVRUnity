@@ -51,7 +51,7 @@ namespace AICS.MotorProteins
 
 		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod)
 		{
-			collisionDetectionMethod = _collisionDetectionMethod;
+			collisionDetectionMethod = stepsPerFrame > 1 ? CollisionDetectionMethod.Spheres : _collisionDetectionMethod;
 
 			SetCollisionsBetweenMoleculeLayers( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
 			SetMoleculeDetectorsActive( collisionDetectionMethod == CollisionDetectionMethod.Spheres );

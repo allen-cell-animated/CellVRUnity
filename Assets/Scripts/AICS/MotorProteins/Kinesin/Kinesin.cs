@@ -120,6 +120,7 @@ namespace AICS.MotorProteins.Kinesin
 				hips.transform.SetParent( motor.transform );
 				otherMotor.transform.SetParent( hips.transform );
 			}
+			ResetComponentScale();
 		}
 
 		public override void SetParentSchemeOnComponentRelease (ComponentMolecule molecule)
@@ -136,6 +137,7 @@ namespace AICS.MotorProteins.Kinesin
 				SetHipsAsParent();
 			}
 			hips.SetSecondParent( null );
+			ResetComponentScale();
 		}
 
 		void SetHipsAsParent ()

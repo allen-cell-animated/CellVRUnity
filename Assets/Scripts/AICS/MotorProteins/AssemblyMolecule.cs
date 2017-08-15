@@ -39,6 +39,14 @@ namespace AICS.MotorProteins
 
 		public abstract void SetParentSchemeOnComponentRelease (ComponentMolecule molecule);
 
+		protected void ResetComponentScale ()
+		{
+			foreach (ComponentMolecule molecule in componentMolecules)
+			{
+				molecule.transform.localScale = Vector3.one;
+			}
+		}
+
 		public void SetMinDistanceFromParent (float min)
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
