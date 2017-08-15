@@ -41,6 +41,11 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
+		void Awake ()
+		{
+			interactsWithOtherMolecules = false;
+		}
+
 		public override void Simulate ()
 		{
 			if (snapping)
@@ -50,7 +55,7 @@ namespace AICS.MotorProteins.Kinesin
 			DoRandomWalk();
 		}
 
-		protected override void ProcessHits (RaycastHit[] hits) { }
+		protected override void InteractWithCollidingMolecules () { }
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 

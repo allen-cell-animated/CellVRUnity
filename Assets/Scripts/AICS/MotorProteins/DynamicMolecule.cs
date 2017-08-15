@@ -28,6 +28,9 @@ namespace AICS.MotorProteins
 	{
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
+		public bool interactsWithOtherMolecules;
+
+		protected List<Molecule> collidingMolecules = new List<Molecule>();
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -54,14 +57,14 @@ namespace AICS.MotorProteins
 		protected bool Move () 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
-			if (!WillCollide( moveStep ))
+			if (!WillCollideOnMove( moveStep ))
 			{
 				return MoveIfValid( moveStep );
 			}
 			return false;
 		}
 
-		bool WillCollide (Vector3 moveStep)
+		bool WillCollideOnMove (Vector3 moveStep)
 		{
 			if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Sweeptest)
 			{
@@ -79,19 +82,56 @@ namespace AICS.MotorProteins
 			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
 			if (hits.Length > 0)
 			{
-				ProcessHits( hits );
+				if (interactsWithOtherMolecules)
+				{
+					InteractWithMoleculesInHits( hits );
+				}
 				return true;
 			}
 			return false;
 		}
 
-		bool CheckCollisionsSpheres (Vector3 moveStep)
+		protected void InteractWithMoleculesInHits (RaycastHit[] hits)
 		{
-			// TODO
-			return false;
+			Molecule m;
+			collidingMolecules.Clear();
+			foreach (RaycastHit hit in hits)
+			{
+				m = hit.collider.GetComponentInParent<Molecule>();
+				if (m != null)
+				{
+					collidingMolecules.Add( m );
+				}
+			}
+			InteractWithCollidingMolecules();
 		}
 
-		protected abstract void ProcessHits (RaycastHit[] hits);
+		bool CheckCollisionsSpheres (Vector3 moveStep)
+		{
+			GetCollidingMolecules( this, moveStep );
+			if (collidingMolecules.Count > 0)
+			{
+				if (interactsWithOtherMolecules)
+				{
+					InteractWithCollidingMolecules();
+				}
+				return true;
+			}
+			return DoExtraCollisionChecks( moveStep );
+		}
+
+		protected void GetCollidingMolecules (Molecule molecule, Vector3 moveStep)
+		{
+			collidingMolecules.Clear();
+			foreach (MoleculeDetector detector in moleculeDetectors)
+			{
+				collidingMolecules.AddRange( detector.GetCollidingMolecules( molecule, moveStep ) );
+			}
+		}
+
+		protected abstract void InteractWithCollidingMolecules ();
+
+		protected abstract bool DoExtraCollisionChecks (Vector3 moveStep);
 
 		protected virtual void Jitter (float amount = 0.01f) 
 		{

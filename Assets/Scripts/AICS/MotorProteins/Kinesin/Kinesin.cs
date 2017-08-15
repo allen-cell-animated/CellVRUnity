@@ -21,7 +21,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				if (_hips == null)
 				{
-					_hips = molecules.Find( m => m.GetComponent<Hips>() != null ) as Hips;
+					_hips = componentMolecules.Find( m => m.GetComponent<Hips>() != null ) as Hips;
 				}
 				return _hips;
 			}
@@ -35,7 +35,7 @@ namespace AICS.MotorProteins.Kinesin
 				if (_motors == null)
 				{
 					_motors = new List<Motor>();
-					foreach (ComponentMolecule molecule in molecules)
+					foreach (ComponentMolecule molecule in componentMolecules)
 					{
 						Motor motor = molecule.GetComponent<Motor>();
 						if (motor != null)
@@ -65,17 +65,13 @@ namespace AICS.MotorProteins.Kinesin
 
 		void Awake ()
 		{
-			Application.targetFrameRate = -1;
+			ConnectComponents();
+
 			speedMultiplier = 1E-3f / (MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsPerFrame);
 
 			hipsStartPosition = hips.transform.position;
 			motor1StartPosition = motors[0].transform.position;
 			motor2StartPosition = motors[1].transform.position;
-
-			foreach (ComponentMolecule molecule in molecules)
-			{
-				molecule.assembly = this as AssemblyMolecule;
-			}
 		}
 
 		void Update ()
@@ -89,7 +85,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void Simulate ()
 		{
-			foreach (ComponentMolecule molecule in molecules)
+			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.Simulate();
 			}
@@ -97,7 +93,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void Reset ()
 		{
-			foreach (Molecule molecule in molecules)
+			foreach (Molecule molecule in componentMolecules)
 			{
 				molecule.Reset();
 			}

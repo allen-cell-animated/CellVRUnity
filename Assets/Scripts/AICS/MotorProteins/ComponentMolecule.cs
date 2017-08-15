@@ -20,6 +20,11 @@ namespace AICS.MotorProteins
 			}
 		}
 
+		protected override bool DoExtraCollisionChecks (Vector3 moveStep)
+		{
+			return assembly.OtherWillCollide( this, moveStep );
+		}
+
 		protected override bool IsValidMove (Vector3 moveStep)
 		{
 			return isParent || CheckLeash( moveStep );

@@ -7,16 +7,26 @@ namespace AICS.MotorProteins
 	// An assembly that is made up of molecules
 	public abstract class AssemblyMolecule : Molecule 
 	{
-		public List<ComponentMolecule> molecules;
+		public List<ComponentMolecule> componentMolecules;
 		public KineticRates kineticRates;
 
-		public bool CheckCollision (Molecule molecule, Vector3 moveStep)
+		// should be called in Awake()
+		protected void ConnectComponents ()
 		{
-			foreach (ComponentMolecule m in molecules)
+			foreach (ComponentMolecule molecule in componentMolecules)
+			{
+				molecule.assembly = this as AssemblyMolecule;
+				molecule.moleculeDetectors = moleculeDetectors;
+			}
+		}
+
+		public override bool OtherWillCollide (Molecule molecule, Vector3 moveStep)
+		{
+			foreach (ComponentMolecule m in componentMolecules)
 			{
 				if (m as Molecule != molecule)
 				{
-					if (Vector3.Distance( m.transform.position, molecule.transform.position + moveStep ) <= m.radius + molecule.radius)
+					if (m.OtherWillCollide( molecule, moveStep ))
 					{
 						return true;
 					}
@@ -31,7 +41,7 @@ namespace AICS.MotorProteins
 
 		public void SetMinDistanceFromParent (float min)
 		{
-			foreach (ComponentMolecule molecule in molecules)
+			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.minDistanceFromParent = min;
 			}
@@ -39,7 +49,7 @@ namespace AICS.MotorProteins
 
 		public void SetMaxDistanceFromParent (float max)
 		{
-			foreach (ComponentMolecule molecule in molecules)
+			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.maxDistanceFromParent = max;
 			}
@@ -47,7 +57,7 @@ namespace AICS.MotorProteins
 
 		public void SetMeanStepSize (float size)
 		{
-			foreach (ComponentMolecule molecule in molecules)
+			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.meanStepSize = size;
 			}

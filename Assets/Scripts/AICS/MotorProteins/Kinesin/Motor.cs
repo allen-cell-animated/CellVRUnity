@@ -26,6 +26,7 @@ namespace AICS.MotorProteins.Kinesin
 		public GameObject chargeForceFields;
 		public bool needToSwitchToStrong;
 
+		List<Tubulin> collidingTubulins = new List<Tubulin>();
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
@@ -51,6 +52,11 @@ namespace AICS.MotorProteins.Kinesin
 				}
 				return _otherMotor;
 			}
+		}
+
+		void Awake ()
+		{
+			interactsWithOtherMolecules = true;
 		}
 
 		// --------------------------------------------------------------------------------------------------- State
@@ -233,29 +239,29 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Tubulin binding/release
 
-		protected override void ProcessHits (RaycastHit[] hits)
+		protected override void InteractWithCollidingMolecules ()
 		{
-			CheckForTubulinCollision( hits );
+			CheckForTubulinCollision( collidingMolecules );
 		}
 
-		void CheckForTubulinCollision (RaycastHit[] hits)
+		void CheckForTubulinCollision (List<Molecule> collidingMolecules)
 		{
 			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 1f))
 			{
 				Tubulin t;
-				List<Tubulin> tubulins = new List<Tubulin>();
-				foreach (RaycastHit hit in hits)
+				collidingTubulins.Clear();
+				foreach (Molecule m in collidingMolecules)
 				{
-					t = hit.collider.GetComponentInParent<Tubulin>();
+					t = m as Tubulin;
 					if (t != null && t.type == 1 && !t.hasMotorBound)
 					{
-						tubulins.Add( t );
+						collidingTubulins.Add( t );
 					}
 				}
 
-				if (tubulins.Count > 0)
+				if (collidingTubulins.Count > 0)
 				{
-					t = FindClosestValidTubulin( tubulins );
+					t = FindClosestValidTubulin( collidingTubulins );
 					if (t != null)
 					{
 						BindTubulin( t );
