@@ -17,6 +17,10 @@ namespace AICS.MotorProteins
 		public int maxIterationsPerStep = 50;
 		public CollisionDetectionMethod collisionDetectionMethod;
 		public LayerMask[] moleculeLayers;
+		public Vector3 size = 100f * Vector3.one;
+		public float gridSize = 50f;
+		public LayerMask resolutionManagementLayer;
+		public float[] LODDistances;
 
 		static MolecularEnvironment _Instance;
 		public static MolecularEnvironment Instance
@@ -44,9 +48,15 @@ namespace AICS.MotorProteins
 			}
 		}
 
+		void OnDrawGizmos ()
+		{
+			Gizmos.DrawWireCube( transform.position, size );
+		}
+
 		void Start ()
 		{
 			SetCollisionDetectionMethod( collisionDetectionMethod );
+			CreateResolutionNodes();
 		}
 
 		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod)
@@ -75,6 +85,35 @@ namespace AICS.MotorProteins
 			{
 				molecule.SetMoleculeDetectorsActive( active );
 			}
+		}
+
+		void CreateResolutionNodes ()
+		{
+			Vector3 divisions = size / gridSize;
+			Vector3 position = -(size - gridSize * Vector3.one) / 2f;
+			for (int x = 0; x < Mathf.FloorToInt( divisions.x ); x++)
+			{
+				for (int y = 0; y < Mathf.FloorToInt( divisions.y ); y++)
+				{
+					for (int z = 0; z < Mathf.FloorToInt( divisions.z ); z++)
+					{
+						CreateResolutionNode( position, x + "_" + y + "_" + z );
+						position += gridSize * Vector3.forward;
+					}
+					position += gridSize * Vector3.up - size.z * Vector3.forward;
+				}
+				position += gridSize * Vector3.right - size.y * Vector3.up;
+			}
+		}
+
+		void CreateResolutionNode (Vector3 position, string _name)
+		{
+			ResolutionNode node = GameObject.CreatePrimitive( PrimitiveType.Cube ).AddComponent<ResolutionNode>();
+			node.transform.SetParent( transform );
+			node.transform.localPosition = position;
+			node.gameObject.layer = Mathf.RoundToInt( Mathf.Log( resolutionManagementLayer, 2f ) );
+			node.name = "node_" + _name;
+			node.Setup( this );
 		}
 	}
 }

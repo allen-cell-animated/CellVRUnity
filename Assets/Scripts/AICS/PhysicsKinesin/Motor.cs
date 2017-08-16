@@ -176,7 +176,7 @@ namespace AICS.PhysicsKinesin
 			get {
 				if (_meshRenderer == null)
 				{
-					_meshRenderer = GetComponent<ResolutionManager>().lods[0].geometry.GetComponent<MeshRenderer>();
+					_meshRenderer = GetComponent<MeshRenderer>(); //GetComponent<ResolutionManager>().lods[0].geometry.
 				}
 				return _meshRenderer;
 			}
