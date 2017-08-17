@@ -10,7 +10,7 @@ namespace AICS.MotorProteins
 		List<ResolutionManager> objectsInNode = new List<ResolutionManager>();
 
 		int currentLOD = 0;
-		float maxUpdateInterval = 0.1f;
+		float updateInterval = 0.1f;
 		float lastTime = -1f;
 		float lastDistance = 20f;
 
@@ -32,6 +32,7 @@ namespace AICS.MotorProteins
 			if (obj != null && !objectsInNode.Contains( obj ))
 			{
 				objectsInNode.Add( obj );
+				obj.SetLOD( currentLOD );
 			}
 		}
 
@@ -46,7 +47,7 @@ namespace AICS.MotorProteins
 
 		void Update () 
 		{
-			if (Time.time - lastTime > maxUpdateInterval * lastDistance / 50f)
+			if (Time.time - lastTime > updateInterval)
 			{
 				CheckLOD();
 				lastTime = Time.time;

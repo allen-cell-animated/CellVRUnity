@@ -7,12 +7,12 @@ namespace AICS.MotorProteins.Kinesin
 	public class Kinesin : AssemblyMolecule 
 	{
 		public float averageWalkingSpeed; // μm/s
+		public float nanosecondsSinceStart;
 
 		Vector3 hipsStartPosition;
 		Vector3 motor1StartPosition;
 		Vector3 motor2StartPosition;
 		int stepsSinceStart;
-		float nanosecondsSinceStart;
 		public float stepsPerCollisionPerMotor;
 		float totalValidTubulinCollisions;
 

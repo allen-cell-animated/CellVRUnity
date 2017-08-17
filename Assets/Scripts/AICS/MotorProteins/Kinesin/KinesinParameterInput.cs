@@ -33,61 +33,61 @@ namespace AICS.MotorProteins.Kinesin
 		public void SetRateA (float _sliderValue)
 		{
 			rates[0].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "A", rates[0].value );
+			kinesin.kineticRates.rates[0].rate = rates[0].value;
 		}
 
 		public void SetRateB (float _sliderValue)
 		{
 			rates[1].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "B", rates[1].value );
+			kinesin.kineticRates.rates[1].rate = rates[1].value;
 		}
 
 		public void SetRateC (float _sliderValue)
 		{
 			rates[2].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "C", rates[2].value );
+			kinesin.kineticRates.rates[2].rate = rates[2].value;
 		}
 
 		public void SetRateD (float _sliderValue)
 		{
 			rates[3].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "D", rates[3].value );
+			kinesin.kineticRates.rates[3].rate = rates[3].value;
 		}
 
 		public void SetRateE (float _sliderValue)
 		{
 			rates[4].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "E", rates[4].value );
+			kinesin.kineticRates.rates[4].rate = rates[4].value;
 		}
 
 		public void SetRateF (float _sliderValue)
 		{
 			rates[5].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "F", rates[5].value );
+			kinesin.kineticRates.rates[5].rate = rates[5].value;
 		}
 
 		public void SetRateG (float _sliderValue)
 		{
 			rates[6].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "G", rates[6].value );
+			kinesin.kineticRates.rates[6].rate = rates[6].value;
 		}
 
 		public void SetRateH (float _sliderValue)
 		{
 			rates[7].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "H", rates[7].value );
+			kinesin.kineticRates.rates[7].rate = rates[7].value;
 		}
 
 		public void SetRateI (float _sliderValue)
 		{
 			rates[8].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "I", rates[8].value );
+			kinesin.kineticRates.rates[8].rate = rates[8].value;
 		}
 
 		public void SetRateJ (float _sliderValue)
 		{
 			rates[9].Set( _sliderValue );
-			kinesin.kineticRates.SetRate( "J", rates[9].value );
+			kinesin.kineticRates.rates[9].rate = rates[9].value;
 		}
 
 		public void SetTimePerStep (float _sliderValue)
