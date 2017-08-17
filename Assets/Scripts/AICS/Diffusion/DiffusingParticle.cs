@@ -14,6 +14,7 @@ namespace AICS.Diffusion
 		float timeInterval;
 		Vector3 startPosition;
 		int samples;
+		Vector3 lastPosition;
 
 		Rigidbody _rigidbody;
 		Rigidbody body
@@ -51,9 +52,22 @@ namespace AICS.Diffusion
 			}
 		}
 
+		MSDCalculator _calculator;
+		MSDCalculator calculator
+		{
+			get {
+				if (_calculator == null)
+				{
+					_calculator = GetComponentInParent<MSDCalculator>();
+				}
+				return _calculator;
+			}
+		}
+
 		void Start ()
 		{
 			SetTimeInterval();
+			lastPosition = transform.position;
 		}
 
 		void Update () 
@@ -68,7 +82,9 @@ namespace AICS.Diffusion
 				body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 
 				lastTime = Time.time;
+				calculator.LogDisplacement( (transform.position - lastPosition).magnitude );
 			}
+			lastPosition = transform.position;
 		}
 
 		public void SetStartPosition ()

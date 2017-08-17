@@ -246,7 +246,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void CheckForTubulinCollision (List<Molecule> collidingMolecules)
 		{
-			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 1f))
+			if (!bound && (needToSwitchToStrong || (Time.time - lastReleaseTime > 0.1f && shouldBind)))
 			{
 				Tubulin t;
 				collidingTubulins.Clear();
@@ -264,9 +264,19 @@ namespace AICS.MotorProteins.Kinesin
 					t = FindClosestValidTubulin( collidingTubulins );
 					if (t != null)
 					{
+						kinesin.LogValidTubulinCollision();
 						BindTubulin( t );
 					}
 				}
+			}
+		}
+
+		bool shouldBind
+		{
+			get
+			{
+				float bindsPerSecond = (state == MotorState.KDP) ? kinesin.kineticRates.GetRate( "E" ).rate : kinesin.kineticRates.GetRate( "H" ).rate;
+				return Random.Range( 0, 1f ) <= bindsPerSecond * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * kinesin.stepsPerValidTubulinCollision;
 			}
 		}
 

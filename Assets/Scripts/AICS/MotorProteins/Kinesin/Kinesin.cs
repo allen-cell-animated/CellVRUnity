@@ -11,8 +11,10 @@ namespace AICS.MotorProteins.Kinesin
 		Vector3 hipsStartPosition;
 		Vector3 motor1StartPosition;
 		Vector3 motor2StartPosition;
-		float startTime = 0;
-		float speedMultiplier;
+		int stepsSinceStart;
+		float nanosecondsSinceStart;
+		public float stepsPerCollisionPerMotor;
+		float totalValidTubulinCollisions;
 
 		Hips _hips;
 		public Hips hips
@@ -67,8 +69,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			ConnectComponents();
 
-			speedMultiplier = 1E-3f / (MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsPerFrame);
-
 			hipsStartPosition = hips.transform.position;
 			motor1StartPosition = motors[0].transform.position;
 			motor2StartPosition = motors[1].transform.position;
@@ -89,6 +89,8 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				molecule.Simulate();
 			}
+			nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
+			stepsSinceStart++;
 		}
 
 		public override void Reset ()
@@ -102,7 +104,8 @@ namespace AICS.MotorProteins.Kinesin
 			hips.transform.position = hipsStartPosition;
 			motors[0].transform.position = motor1StartPosition;
 			motors[1].transform.position = motor2StartPosition;
-			startTime = Time.time;
+			nanosecondsSinceStart = 0;
+			stepsSinceStart = 0;
 		}
 
 		public override void SetParentSchemeOnComponentBind (ComponentMolecule molecule)
@@ -149,7 +152,21 @@ namespace AICS.MotorProteins.Kinesin
 
 		void CalculateWalkingSpeed ()
 		{
-			averageWalkingSpeed = Time.deltaTime * speedMultiplier * (hips.transform.position - hipsStartPosition).magnitude / (Time.time - startTime);
+			averageWalkingSpeed = 1E-3f * (hips.transform.position - hipsStartPosition).magnitude / (nanosecondsSinceStart * 1E-9f);
+		}
+
+		public void LogValidTubulinCollision ()
+		{
+			totalValidTubulinCollisions++;
+			stepsPerCollisionPerMotor = stepsSinceStart / (totalValidTubulinCollisions / 2f);
+		}
+
+		public float stepsPerValidTubulinCollision
+		{
+			get
+			{
+				return (stepsSinceStart < 100) ? 50 : stepsPerCollisionPerMotor;
+			}
 		}
 	}
 }
