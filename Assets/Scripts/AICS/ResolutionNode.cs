@@ -56,7 +56,7 @@ namespace AICS.MotorProteins
 
 		void CheckLOD ()
 		{
-			lastDistance = Vector3.Distance( transform.position, Camera.main.transform.position );
+			lastDistance = Vector3.Distance( transform.position, DragLookZoomCamera.Instance.Target.transform.position );
 
 			if (lastDistance > environment.LODDistances[environment.LODDistances.Length - 1])
 			{

@@ -11,6 +11,19 @@ public class DragLookZoomCamera : FreeLookCam
 	public float zoomSpeedArrows = 0.1f;
 	public Vector2 zoomLimits = new Vector2( -5f, -50f );
 
+	static DragLookZoomCamera _Instance;
+	public static DragLookZoomCamera Instance
+	{
+		get
+		{
+			if (_Instance == null)
+			{
+				_Instance = GameObject.FindObjectOfType<DragLookZoomCamera>();
+			}
+			return _Instance;
+		}
+	}
+
 	new void Update () 
 	{
 		DragToLook();
