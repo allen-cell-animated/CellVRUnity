@@ -24,8 +24,8 @@ namespace AICS.Microtubule
 			transform.LookAt( transform.position + lookDirection, normal );
 		}
 
-		public override void Simulate () { }
+		public override void DoCustomSimulation () { }
 
-		public override void Reset () { }
+		public override void DoCustomReset () { }
 	}
 }

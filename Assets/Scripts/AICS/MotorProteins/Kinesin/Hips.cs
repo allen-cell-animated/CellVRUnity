@@ -46,7 +46,7 @@ namespace AICS.MotorProteins.Kinesin
 			interactsWithOtherMolecules = false;
 		}
 
-		public override void Simulate ()
+		public override void DoCustomSimulation ()
 		{
 			if (snapping)
 			{
@@ -199,7 +199,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Reset
 
-		public override void Reset ()
+		public override void DoCustomReset ()
 		{
 			state = HipsState.Free;
 			secondParent = null;

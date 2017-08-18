@@ -11,13 +11,13 @@ namespace AICS.MotorProteins
 	{
 		public string name;
 		public KineticEvent kineticEvent;
-		public KineticRate frequencyPerSecond;
+		public Kinetic kinetic;
 
-		public EventWithKineticRate (string _name, KineticEvent _event, KineticRate _frequencyPerSecond)
+		public EventWithKineticRate (string _name, KineticEvent _event, Kinetic _kinetic)
 		{
 			name = _name;
 			kineticEvent = _event;
-			frequencyPerSecond = _frequencyPerSecond;
+			kinetic = _kinetic;
 		}
 	}
 
@@ -187,9 +187,12 @@ namespace AICS.MotorProteins
 
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
-			if (Random.Range( 0, 1f ) <= something.frequencyPerSecond.rate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f)
+			something.kinetic.attempts++;
+			if (Random.Range( 0, 1f ) <= something.kinetic.kineticRate.rate 
+				* MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * stepsSinceStart / something.kinetic.attempts)
 			{
 				something.kineticEvent();
+				something.kinetic.events++;
 				return true;
 			}
 			return false;

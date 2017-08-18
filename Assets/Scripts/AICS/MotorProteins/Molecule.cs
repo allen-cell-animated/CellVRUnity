@@ -8,6 +8,9 @@ namespace AICS.MotorProteins
 	// A basic molecule object
 	public abstract class Molecule : MonoBehaviour 
 	{
+		public float nanosecondsSinceStart;
+		public int stepsSinceStart;
+
 		public float radius;
 		public MoleculeDetector[] moleculeDetectors;
 
@@ -16,7 +19,15 @@ namespace AICS.MotorProteins
 			get;
 		}
 
-		public abstract void Simulate ();
+		public void Simulate ()
+		{
+			DoCustomSimulation();
+
+			nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
+			stepsSinceStart++;
+		}
+
+		public abstract void DoCustomSimulation ();
 
 		public void SetMoleculeDetectorsActive (bool active)
 		{
@@ -31,6 +42,14 @@ namespace AICS.MotorProteins
 			return Vector3.Distance( transform.position, other.transform.position + moveStep ) <= radius + other.radius;
 		}
 
-		public abstract void Reset ();
+		public void Reset ()
+		{
+			DoCustomReset();
+
+			nanosecondsSinceStart = 0;
+			stepsSinceStart = 0;
+		}
+
+		public abstract void DoCustomReset ();
 	}
 }

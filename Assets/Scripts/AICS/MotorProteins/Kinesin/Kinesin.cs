@@ -7,14 +7,10 @@ namespace AICS.MotorProteins.Kinesin
 	public class Kinesin : AssemblyMolecule 
 	{
 		public float averageWalkingSpeed; // μm/s
-		public float nanosecondsSinceStart;
 
 		Vector3 hipsStartPosition;
 		Vector3 motor1StartPosition;
 		Vector3 motor2StartPosition;
-		int stepsSinceStart;
-		public float stepsPerCollisionPerMotor;
-		float totalValidTubulinCollisions;
 
 		Hips _hips;
 		public Hips hips
@@ -83,17 +79,15 @@ namespace AICS.MotorProteins.Kinesin
 			CalculateWalkingSpeed();
 		}
 
-		public override void Simulate ()
+		public override void DoCustomSimulation ()
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.Simulate();
 			}
-			nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
-			stepsSinceStart++;
 		}
 
-		public override void Reset ()
+		public override void DoCustomReset ()
 		{
 			foreach (Molecule molecule in componentMolecules)
 			{
@@ -104,8 +98,6 @@ namespace AICS.MotorProteins.Kinesin
 			hips.transform.position = hipsStartPosition;
 			motors[0].transform.position = motor1StartPosition;
 			motors[1].transform.position = motor2StartPosition;
-			nanosecondsSinceStart = 0;
-			stepsSinceStart = 0;
 		}
 
 		public override void SetParentSchemeOnComponentBind (ComponentMolecule molecule)
@@ -153,20 +145,6 @@ namespace AICS.MotorProteins.Kinesin
 		void CalculateWalkingSpeed ()
 		{
 			averageWalkingSpeed = 1E-3f * (hips.transform.position - hipsStartPosition).magnitude / (nanosecondsSinceStart * 1E-9f);
-		}
-
-		public void LogValidTubulinCollision ()
-		{
-			totalValidTubulinCollisions++;
-			stepsPerCollisionPerMotor = stepsSinceStart / (totalValidTubulinCollisions / 2f);
-		}
-
-		public float stepsPerValidTubulinCollision
-		{
-			get
-			{
-				return (stepsSinceStart < 100) ? 50 : stepsPerCollisionPerMotor;
-			}
 		}
 	}
 }
