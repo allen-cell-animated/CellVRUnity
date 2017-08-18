@@ -59,12 +59,16 @@ namespace AICS.MotorProteins
 			CreateResolutionNodes();
 		}
 
-		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod)
+		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod = CollisionDetectionMethod.Sweeptest)
 		{
-			collisionDetectionMethod = stepsPerFrame > 1 ? CollisionDetectionMethod.Spheres : _collisionDetectionMethod;
+			CollisionDetectionMethod newCollisionDetectionMethod = stepsPerFrame > 1 ? CollisionDetectionMethod.Spheres : _collisionDetectionMethod;
 
-			SetCollisionsBetweenMoleculeLayers( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
-			SetMoleculeDetectorsActive( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
+			if (newCollisionDetectionMethod != collisionDetectionMethod)
+			{
+				collisionDetectionMethod = newCollisionDetectionMethod;
+				SetCollisionsBetweenMoleculeLayers( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
+				SetMoleculeDetectorsActive( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
+			}
 		}
 
 		void SetCollisionsBetweenMoleculeLayers (bool enabled)

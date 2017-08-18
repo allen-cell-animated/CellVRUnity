@@ -12,6 +12,7 @@ namespace AICS.MotorProteins.Kinesin
 		public Parameter[] rates;
 
 		public Parameter timePerStep; // = 100 μs, 10 ns --> 1 ms
+		public Parameter stepsPerFrame; // = 1, 1 --> 100
 		public RangeParameter necklinkerLength; // = (1, 5), 1 --> 9
 		public Parameter snappingSpeed; // = 90°/s, 5 --> 100
 		public Parameter meanStepSize; // = 0.8 nm, 0.1 --> 2
@@ -25,6 +26,7 @@ namespace AICS.MotorProteins.Kinesin
 				rate.InitSlider();
 			}
 			timePerStep.InitSlider();
+			stepsPerFrame.InitSlider();
 			necklinkerLength.InitSlider();
 			snappingSpeed.InitSlider();
 			meanStepSize.InitSlider();
@@ -94,6 +96,13 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			timePerStep.Set( _sliderValue );
 			MolecularEnvironment.Instance.nanosecondsPerStep = timePerStep.value * 1E-3f;
+		}
+
+		public void SetStepsPerFrame (float _sliderValue)
+		{
+			stepsPerFrame.Set( _sliderValue );
+			MolecularEnvironment.Instance.stepsPerFrame = Mathf.RoundToInt( stepsPerFrame.value );
+			MolecularEnvironment.Instance.SetCollisionDetectionMethod();
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)
