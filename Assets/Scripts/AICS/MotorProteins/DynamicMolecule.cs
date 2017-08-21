@@ -192,7 +192,6 @@ namespace AICS.MotorProteins
 				* MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * stepsSinceStart / something.kinetic.attempts)
 			{
 				something.kineticEvent();
-				something.kinetic.events++;
 				return true;
 			}
 			return false;

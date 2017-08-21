@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AICS.Microtubule;
+using System.IO;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -63,6 +64,11 @@ namespace AICS.MotorProteins.Kinesin
 		void Start ()
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
+
+			for (int i = 0; i < 6; i++)
+			{
+				count.Add( 0 );
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- State
@@ -131,6 +137,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
+			count[(int)state]++;
 			DoRandomWalk();
 
 			if (needToSwitchToStrong)
@@ -143,6 +150,34 @@ namespace AICS.MotorProteins.Kinesin
 			}
 
 			kinetics.CalculateObservedRates( nanosecondsSinceStart );
+		}
+
+		public List<int> count = new List<int>();
+		string filePath = "/Users/blairl/Desktop/test";
+		public int n;
+		void OnApplicationQuit ()
+		{
+			string data = " , " + kinesin.averageWalkingSpeed + "\n";
+			int r = 0;
+			foreach (Kinetic k in kinetics.kinetics)
+			{
+				if (k.attempts < 1.1f * k.events && k.observedKineticRate < 0.9f * k.kineticRate.rate)
+				{
+					data += r + ", 1\n";
+				}
+				else 
+				{
+					data += r + ", 0\n";
+				}
+				r++;
+			}
+			data += "\n";
+			for (int i = 0; i < 6; i++)
+			{
+				data += i + ", " + count[i] + "\n";
+			}
+
+			File.WriteAllText( filePath + n.ToString() + ".csv", data );
 		}
 
 		void TryToSwitchToStrong ()
@@ -169,6 +204,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			kinetics.kinetics[0].events++;
 			if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
+
 			state = MotorState.MtKT;
 			ATP.SetActive( true );
 			kinesin.hips.StartSnap( this );
@@ -178,6 +214,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			kinetics.kinetics[1].events++;
 			if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
+
 			state = MotorState.MtK;
 			ATP.SetActive( false );
 		}
@@ -186,6 +223,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			kinetics.kinetics[2].events++;
 			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
+
 			state = MotorState.MtKDP;
 			ATP.SetActive( false );
 			ADP.SetActive( true );
@@ -199,9 +237,10 @@ namespace AICS.MotorProteins.Kinesin
 		}
 
 		void ReleasePhosphate ()
-		{
-			if (bound) { kinetics.kinetics[3].events++; } else { kinetics.kinetics[6].events++; }
+		{			
+			kinetics.kinetics[bound ? 3 : 6].events++;
 			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
+
 			state = (state == MotorState.MtKDP) ? MotorState.MtKD : MotorState.KD;
 			Pi.SetActive( false );
 		}
@@ -212,6 +251,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				kinetics.kinetics[9].events++;
 				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
+
 				state = MotorState.MtK;
 				ADP.SetActive( false );
 			}
@@ -259,7 +299,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void CheckForTubulinCollision (List<Molecule> collidingMolecules)
 		{
-			if (!bound && (needToSwitchToStrong || (Time.time - lastReleaseTime > 0.1f && shouldBind)))
+			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 0.1f))
 			{
 				Tubulin t;
 				collidingTubulins.Clear();
@@ -278,7 +318,10 @@ namespace AICS.MotorProteins.Kinesin
 					if (t != null)
 					{
 						kinetics.kinetics[state == MotorState.KDP ? 4 : 7].attempts++;
-						BindTubulin( t );
+						if (shouldBind)
+						{
+							BindTubulin( t );
+						}
 					}
 				}
 			}
@@ -323,8 +366,9 @@ namespace AICS.MotorProteins.Kinesin
 
 		void BindTubulin (Tubulin _tubulin)
 		{
-			if (state == MotorState.KDP) { kinetics.kinetics[4].events++; } else { kinetics.kinetics[7].events++; }
+			kinetics.kinetics[state == MotorState.KDP ? 4 : 7].events++;
 			if (logEvents) { Debug.Log( name + " BIND --------------------------------" ); }
+
 			state = (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD;
 			tubulin = _tubulin;
 			tubulin.hasMotorBound = true;
@@ -339,8 +383,9 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (otherMotor.bound)
 			{
-				if (state == MotorState.MtKDP) { kinetics.kinetics[5].events++; } else { kinetics.kinetics[8].events++; }
+				kinetics.kinetics[state == MotorState.KDP ? 5 : 8].events++;
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
+
 				state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
 				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 				lastReleaseTime = Time.time;
@@ -369,6 +414,11 @@ namespace AICS.MotorProteins.Kinesin
 			Pi.SetActive( false );
 			chargeForceFields.SetActive( true );
 			kinetics.Reset();
+
+			for (int i = 0; i < 6; i++)
+			{
+				count[i] = 0;
+			}
 		}
 	}
 }
