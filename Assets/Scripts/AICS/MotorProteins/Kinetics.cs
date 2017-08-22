@@ -7,6 +7,7 @@ namespace AICS.MotorProteins
 	[System.Serializable]
 	public class Kinetic
 	{
+		public bool log;
 		public KineticRate kineticRate;
 		public int attempts;
 		public int events;
@@ -15,6 +16,39 @@ namespace AICS.MotorProteins
 		public Kinetic (KineticRate _rate)
 		{
 			kineticRate = _rate;
+		}
+
+		public bool ShouldHappen (float nanosecondsPerStep, int stepsSinceStart)
+		{
+			string s = observedKineticRate + " / " + kineticRate.rate;
+			if (observedRateTooLow)
+			{
+				if (log) { Debug.Log( "true " + s ); }
+				return true;
+			}
+			if (observedRateTooHigh)
+			{
+				if (log) { Debug.Log( "false " + s ); }
+				return false;
+			}
+			if (log) { Debug.Log( "try " + s ); }
+			return Random.Range( 0, 1f ) <= kineticRate.rate * nanosecondsPerStep * 1E-9f * stepsSinceStart / attempts;
+		}
+
+		public bool observedRateTooHigh
+		{
+			get
+			{
+				return observedKineticRate > 1.2f * kineticRate.rate;
+			}
+		}
+
+		public bool observedRateTooLow
+		{
+			get
+			{
+				return observedKineticRate < 0.8f * kineticRate.rate;
+			}
 		}
 	}
 

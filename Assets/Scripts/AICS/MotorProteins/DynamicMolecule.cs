@@ -188,8 +188,7 @@ namespace AICS.MotorProteins
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
 			something.kinetic.attempts++;
-			if (Random.Range( 0, 1f ) <= something.kinetic.kineticRate.rate 
-				* MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * stepsSinceStart / something.kinetic.attempts)
+			if (something.kinetic.ShouldHappen( MolecularEnvironment.Instance.nanosecondsPerStep, stepsSinceStart ))
 			{
 				something.kineticEvent();
 				return true;

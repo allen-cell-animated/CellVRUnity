@@ -21,9 +21,9 @@ namespace AICS.MotorProteins.Kinesin
 		Vector3[] snappingArcPositions;
 		int currentSnapStep = 0;
 		public bool snapping;
-		float timePerSnapStep = 0.2f;
+		float timePerSnapStep = 0.1f;
 		float lastSnapStepTime = -1f;
-		Motor lastSnappingPivot;
+		public Motor lastSnappingPivot;
 
 		Kinesin kinesin
 		{
@@ -44,6 +44,7 @@ namespace AICS.MotorProteins.Kinesin
 		void Awake ()
 		{
 			interactsWithOtherMolecules = false;
+			color = meshRenderer.material.color;
 		}
 
 		public override void DoCustomSimulation ()
@@ -53,6 +54,28 @@ namespace AICS.MotorProteins.Kinesin
 				UpdateSnap();
 			}
 			DoRandomWalk();
+
+			if (bound)
+			{
+				meshRenderer.material.color = Color.yellow;
+			}
+			else 
+			{
+				meshRenderer.material.color = color;
+			}
+		}
+		Color color;
+		MeshRenderer _meshRenderer;
+		MeshRenderer meshRenderer
+		{
+			get
+			{
+				if (_meshRenderer == null)
+				{
+					_meshRenderer = GetComponent<MeshRenderer>();
+				}
+				return _meshRenderer;
+			}
 		}
 
 		protected override void InteractWithCollidingMolecules () { }
@@ -102,11 +125,14 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			snappingArcPositions = CalculateSnapArcPositions( motor );
-			lastSnappingPivot = motor;
-			currentSnapStep = 0;
-			state = HipsState.Free;
-			snapping = true;
+			if (!(motor == lastSnappingPivot && state == HipsState.Locked))
+			{
+				snappingArcPositions = CalculateSnapArcPositions( motor );
+				lastSnappingPivot = motor;
+				currentSnapStep = 0;
+				state = HipsState.Free;
+				snapping = true;
+			}
 		}
 
 		Vector3[] CalculateSnapArcPositions (Motor motor)

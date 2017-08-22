@@ -176,6 +176,12 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				data += i + ", " + count[i] + "\n";
 			}
+			data += "\n";
+			r = 0;
+			foreach (Kinetic k in kinetics.kinetics)
+			{
+				data += r + ", " + (k.observedKineticRate / k.kineticRate.rate) + "\n";
+			}
 
 			File.WriteAllText( filePath + n.ToString() + ".csv", data );
 		}
@@ -186,17 +192,36 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				if (state == MotorState.MtKDP)
 				{
-					ReleasePhosphate();
+					if (!kinetics.kinetics[3].observedRateTooHigh)
+					{
+						kinetics.kinetics[3].attempts++;
+						ReleasePhosphate();
+					}
 				}
 				else if (state == MotorState.MtKD)
 				{
-					ReleaseADP();
-					needToSwitchToStrong = false;
+					if (!kinetics.kinetics[9].observedRateTooHigh)
+					{
+						kinetics.kinetics[9].attempts++;
+						ReleaseADP();
+						needToSwitchToStrong = false;
+					}
 				}
 			}
-			else if (!chargeForceFields.activeSelf)
+			else 
 			{
-				chargeForceFields.SetActive( true );
+				if (!chargeForceFields.activeSelf)
+				{
+					chargeForceFields.SetActive( true );
+				}
+				if (state == MotorState.KDP)
+				{
+					if (!kinetics.kinetics[6].observedRateTooHigh)
+					{
+						kinetics.kinetics[6].attempts++;
+						ReleasePhosphate();
+					}
+				}
 			}
 		}
 
@@ -233,7 +258,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void SwitchToStrong ()
 		{
-			needToSwitchToStrong = stateIsStrong ? false : true;
+			needToSwitchToStrong = !stateIsStrong;
 		}
 
 		void ReleasePhosphate ()
@@ -331,9 +356,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			get
 			{
-				int rateIndex = (state == MotorState.KDP) ? 4 : 7;
-				return Random.Range( 0, 1f ) <= kinetics.kinetics[rateIndex].kineticRate.rate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f 
-					* stepsSinceStart / kinetics.kinetics[rateIndex].attempts;
+				return kinetics.kinetics[(state == MotorState.KDP) ? 4 : 7].ShouldHappen( MolecularEnvironment.Instance.nanosecondsPerStep, stepsSinceStart );
 			}
 		}
 
@@ -383,7 +406,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (otherMotor.bound)
 			{
-				kinetics.kinetics[state == MotorState.KDP ? 5 : 8].events++;
+				kinetics.kinetics[state == MotorState.MtKDP ? 5 : 8].events++;
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
 
 				state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
