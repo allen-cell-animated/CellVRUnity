@@ -164,7 +164,7 @@ namespace AICS.MotorProteins
 		{
 			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
 //			Debug.Log( "nanoseconds per step = " + nanosecondsPerStep );
-			Debug.Log( timeMultiplier + " x slower, A*B = " + nanosecondsPerStep * stepsPerFrame );
+//			Debug.Log( timeMultiplier + " x slower, A*B = " + nanosecondsPerStep * stepsPerFrame );
 		}
 	}
 }

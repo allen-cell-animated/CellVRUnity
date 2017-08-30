@@ -15,7 +15,7 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
-		public float snapSpeed = 30f; // degrees per second
+		public float snapSpeed = 9000f; // degrees per simulated second
 		public bool doSnap = true;
 
 		public Transform secondParent = null;
@@ -151,7 +151,7 @@ namespace AICS.MotorProteins.Kinesin
 					Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * motor.transform.up;
 					float angleToNorthPole = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ), -1f, 1f ) );
 					float angleNorthPoleToSnapped = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
-					int steps = Mathf.RoundToInt( (angleToNorthPole + angleNorthPoleToSnapped) / (snapSpeed * timePerSnapStep) );
+					int steps = Mathf.RoundToInt( (angleToNorthPole + angleNorthPoleToSnapped) / ((snapSpeed / MolecularEnvironment.Instance.timeMultiplier) * timePerSnapStep) );
 
 					Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole, 
 						Mathf.Max( Mathf.RoundToInt( steps * angleToNorthPole / (angleToNorthPole + angleNorthPoleToSnapped) ), 1 ) );
@@ -164,7 +164,7 @@ namespace AICS.MotorProteins.Kinesin
 				}
 				else 
 				{
-					int steps = Mathf.Max( Mathf.RoundToInt( angle / (snapSpeed * timePerSnapStep) ), 1 );
+					int steps = Mathf.Max( Mathf.RoundToInt( angle / ((snapSpeed / MolecularEnvironment.Instance.timeMultiplier) * timePerSnapStep) ), 1 );
 					arcPositions = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToSnappedPosition, steps );
 				}
 				return arcPositions;

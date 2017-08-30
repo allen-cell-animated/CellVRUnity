@@ -75,7 +75,7 @@ namespace AICS
 		public Text displayValue;
 		public string units;
 		public ParameterFormat format;
-		public int decimalPoints;
+		public int significantFigures = 1;
 		public bool spaceBeforeUnits = true;
 
 		public void Set (float _sliderValue)
@@ -187,8 +187,18 @@ namespace AICS
 
 		protected string FormatRound (float _value, bool addUnits)
 		{
-			float multiplier = Mathf.Pow( 10f, decimalPoints );
-			string n = (Mathf.Round( _value * multiplier ) / multiplier).ToString();
+			float logValue = Mathf.Log10( _value );
+			float multiplier = Mathf.Pow( 10f, Mathf.Floor( logValue ) - significantFigures + 1 );
+			string n = "";
+			if (logValue < 0)
+			{
+				n = (Mathf.Round( _value / multiplier ) / Mathf.Round(1f / multiplier)).ToString();
+			}
+			else 
+			{
+				n = (Mathf.Round( _value / multiplier ) * multiplier).ToString();
+			}
+
 			string[] splitN = n.Split('.');
 			string wholeN = splitN[0];
 			if (wholeN.Length > 3)
