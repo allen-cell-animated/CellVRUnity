@@ -10,7 +10,7 @@ namespace AICS.MotorProteins
 		List<ResolutionManager> objectsInNode = new List<ResolutionManager>();
 
 		int currentLOD = 0;
-		float updateInterval = 0.1f;
+		float updateInterval = 2f;
 		float lastTime = -1f;
 		float lastDistance = 20f;
 

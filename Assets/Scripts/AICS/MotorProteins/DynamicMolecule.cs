@@ -64,7 +64,7 @@ namespace AICS.MotorProteins
 			return false;
 		}
 
-		bool WillCollideOnMove (Vector3 moveStep)
+		protected bool WillCollideOnMove (Vector3 moveStep)
 		{
 			if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Sweeptest)
 			{
@@ -151,7 +151,7 @@ namespace AICS.MotorProteins
 
 		protected abstract bool IsValidMove (Vector3 moveStep);
 
-		float SampleExponentialDistribution (float mean)
+		protected float SampleExponentialDistribution (float mean)
 		{
 			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
 		}

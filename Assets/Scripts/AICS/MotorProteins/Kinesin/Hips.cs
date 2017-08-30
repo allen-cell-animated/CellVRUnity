@@ -11,14 +11,13 @@ namespace AICS.MotorProteins.Kinesin
 		Locked
 	}
 
-	public class Hips : ComponentMolecule 
+	public class Hips : LinkerComponentMolecule 
 	{
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 9000f; // degrees per simulated second
 		public bool doSnap = true;
 
-		public Transform secondParent = null;
 		Vector3[] snappingArcPositions;
 		int currentSnapStep = 0;
 		public bool snapping;
@@ -45,7 +44,6 @@ namespace AICS.MotorProteins.Kinesin
 		void Awake ()
 		{
 			interactsWithOtherMolecules = false;
-			color = meshRenderer.material.color;
 		}
 
 		public override void DoCustomSimulation ()
@@ -55,28 +53,6 @@ namespace AICS.MotorProteins.Kinesin
 				UpdateSnap();
 			}
 			DoRandomWalk();
-
-			if (bound)
-			{
-				meshRenderer.material.color = Color.yellow;
-			}
-			else 
-			{
-				meshRenderer.material.color = color;
-			}
-		}
-		Color color;
-		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer
-		{
-			get
-			{
-				if (_meshRenderer == null)
-				{
-					_meshRenderer = GetComponent<MeshRenderer>();
-				}
-				return _meshRenderer;
-			}
 		}
 
 		protected override void InteractWithCollidingMolecules () { }
@@ -101,25 +77,6 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				Jitter();
 			}
-		}
-
-		protected override bool CheckLeash (Vector3 moveStep)
-		{
-			if (secondParent != null)
-			{
-				float d2 = Vector3.Distance( secondParent.position, transform.position + moveStep );
-				if (d2 < minDistanceFromParent || d2 > maxDistanceFromParent)
-				{
-					return false;
-				}
-			}
-			float d1 = Vector3.Distance( transform.parent.position, transform.position + moveStep );
-			return d1 >= minDistanceFromParent && d1 <= maxDistanceFromParent;
-		}
-
-		public void SetSecondParent (Transform _secondParent)
-		{
-			secondParent = _secondParent;
 		}
 
 		// --------------------------------------------------------------------------------------------------- Snap
