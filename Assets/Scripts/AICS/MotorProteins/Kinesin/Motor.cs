@@ -157,7 +157,7 @@ namespace AICS.MotorProteins.Kinesin
 		public int n;
 		void OnApplicationQuit ()
 		{
-			string data = " , " + kinesin.averageWalkingSpeed + "\n";
+			string data = " , " + MolecularEnvironment.Instance.timeMultiplier + "\n" + " , " + kinesin.averageWalkingSpeed + "\n";
 			int r = 0;
 			foreach (Kinetic k in kinetics.kinetics)
 			{

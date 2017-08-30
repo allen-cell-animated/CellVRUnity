@@ -152,6 +152,7 @@ namespace AICS.MotorProteins
 				if (a != 0)
 				{
 					stepsPerFrame = Mathf.Max( 1, stepsPerFrame + Mathf.Clamp( a, -5, 5 ) );
+//					Debug.Log( "steps per frame = " + stepsPerFrame );
 					UpdateTimePerStep();
 					averageFrameRate = 1f / Time.deltaTime;
 					frameRateSamples = 1;
@@ -162,7 +163,8 @@ namespace AICS.MotorProteins
 		void UpdateTimePerStep ()
 		{
 			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
-			Debug.Log( nanosecondsPerStep + " = 1E9 * " + Time.deltaTime + " / (" + timeMultiplier + " * " + stepsPerFrame + ")" );
+//			Debug.Log( "nanoseconds per step = " + nanosecondsPerStep );
+			Debug.Log( timeMultiplier + " x slower, A*B = " + nanosecondsPerStep * stepsPerFrame );
 		}
 	}
 }
