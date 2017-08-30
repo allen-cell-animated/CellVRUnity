@@ -7,12 +7,12 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class KinesinParameterInput : ParameterInput<KinesinParameterInput>  
 	{
+		public bool countFrameRate;
 		public Kinesin kinesin;
 
 		public Parameter[] rates;
 
-		public Parameter timePerStep; // = 100 μs, 10 ns --> 1 ms
-		public Parameter stepsPerFrame; // = 1, 1 --> 100
+		public Parameter timeMultiplier; // = 300x, 10 --> 10000000
 		public RangeParameter necklinkerLength; // = (1, 5), 1 --> 9
 		public Parameter snappingSpeed; // = 90°/s, 5 --> 100
 		public Parameter meanStepSize; // = 0.8 nm, 0.1 --> 2
@@ -25,8 +25,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				rate.InitSlider();
 			}
-			timePerStep.InitSlider();
-			stepsPerFrame.InitSlider();
+			timeMultiplier.InitSlider();
 			necklinkerLength.InitSlider();
 			snappingSpeed.InitSlider();
 			meanStepSize.InitSlider();
@@ -92,17 +91,10 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.kineticRates.rates[9].rate = rates[9].value;
 		}
 
-		public void SetTimePerStep (float _sliderValue)
+		public void SetTimeMultiplier (float _sliderValue)
 		{
-			timePerStep.Set( _sliderValue );
-			MolecularEnvironment.Instance.nanosecondsPerStep = timePerStep.value * 1E-3f;
-		}
-
-		public void SetStepsPerFrame (float _sliderValue)
-		{
-			stepsPerFrame.Set( _sliderValue );
-			MolecularEnvironment.Instance.stepsPerFrame = Mathf.RoundToInt( stepsPerFrame.value );
-			MolecularEnvironment.Instance.SetCollisionDetectionMethod();
+			timeMultiplier.Set( _sliderValue );
+			MolecularEnvironment.Instance.SetTime( timeMultiplier.value );
 		}
 
 		public void SetNecklinkerLengthMin (float _sliderValue)
@@ -129,6 +121,11 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.SetMeanStepSize( meanStepSize.value );
 		}
 
+		public void SetSteerNecklinker (bool _toggleValue)
+		{
+			kinesin.hips.doSnap = _toggleValue;
+		}
+
 		public void Reset ()
 		{
 			kinesin.Reset();
@@ -139,7 +136,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void Update ()
 		{
-			if (Time.time - lastTime > 0.3f)
+			if (countFrameRate && Time.time - lastTime > 0.3f)
 			{
 				fpsDisplay.text = Mathf.Round(1f / Time.deltaTime).ToString() + " fps";
 				lastTime = Time.time;

@@ -16,6 +16,7 @@ namespace AICS.MotorProteins.Kinesin
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 30f; // degrees per second
+		public bool doSnap = true;
 
 		public Transform secondParent = null;
 		Vector3[] snappingArcPositions;

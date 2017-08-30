@@ -12,7 +12,9 @@ namespace AICS.MotorProteins
 
 	public class MolecularEnvironment : MonoBehaviour 
 	{
+		public float timeMultiplier = 300f;
 		public float nanosecondsPerStep = 1E5f;
+		public float idealFrameRate = 30f;
 		public int stepsPerFrame = 1;
 		public int maxIterationsPerStep = 50;
 		public CollisionDetectionMethod collisionDetectionMethod;
@@ -21,6 +23,9 @@ namespace AICS.MotorProteins
 		public float gridSize = 50f;
 		public LayerMask resolutionManagementLayer;
 		public float[] LODDistances;
+
+		public float averageFrameRate;
+		int frameRateSamples;
 
 		static MolecularEnvironment _Instance;
 		public static MolecularEnvironment Instance
@@ -57,6 +62,11 @@ namespace AICS.MotorProteins
 		{
 			SetCollisionDetectionMethod( collisionDetectionMethod );
 			CreateResolutionNodes();
+		}
+
+		void Update ()
+		{
+			CalculateFrameRate();
 		}
 
 		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod = CollisionDetectionMethod.Sweeptest)
@@ -118,6 +128,41 @@ namespace AICS.MotorProteins
 			node.gameObject.layer = Mathf.RoundToInt( Mathf.Log( resolutionManagementLayer, 2f ) );
 			node.name = "node_" + _name;
 			node.Setup( this );
+		}
+
+		public void SetTime (float _timeMultiplier)
+		{
+			timeMultiplier = _timeMultiplier;
+			UpdateTimePerStep();
+		}
+
+		void CalculateFrameRate ()
+		{
+			averageFrameRate = (averageFrameRate * frameRateSamples + 1f / Time.deltaTime) / (frameRateSamples + 1f);
+			frameRateSamples++;
+
+			UpdateStepsPerFrame();
+		}
+
+		void UpdateStepsPerFrame ()
+		{
+			if (frameRateSamples >= 50)
+			{
+				int a = -Mathf.FloorToInt( (idealFrameRate - averageFrameRate) / (0.1f * idealFrameRate) );
+				if (a != 0)
+				{
+					stepsPerFrame = Mathf.Max( 1, stepsPerFrame + Mathf.Clamp( a, -5, 5 ) );
+					UpdateTimePerStep();
+					averageFrameRate = 1f / Time.deltaTime;
+					frameRateSamples = 1;
+				}
+			}
+		}
+
+		void UpdateTimePerStep ()
+		{
+			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
+			Debug.Log( nanosecondsPerStep + " = 1E9 * " + Time.deltaTime + " / (" + timeMultiplier + " * " + stepsPerFrame + ")" );
 		}
 	}
 }
