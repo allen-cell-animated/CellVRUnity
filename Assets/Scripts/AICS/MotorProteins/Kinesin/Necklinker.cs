@@ -19,7 +19,15 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 			Jitter( 0.1f );
-			RelaxBetweenParents();
+			PositionBetweenParents();
+		}
+
+		void PositionBetweenParents ()
+		{
+			if (transform.parent != null && secondParent != null)
+			{
+				transform.position = (transform.parent.position + secondParent.position) / 2f;
+			}
 		}
 
 		public override void DoRandomWalk () { }

@@ -28,23 +28,5 @@ namespace AICS.MotorProteins
 		{
 			secondParent = _secondParent;
 		}
-
-		protected void RelaxBetweenParents ()
-		{
-			if (transform.parent != null && secondParent != null)
-			{
-				transform.position = (transform.parent.position + secondParent.position) / 2f;
-//				Vector3 midpoint = (transform.parent.position + secondParent.position) / 2f;
-//				Vector3 moveStep = SampleExponentialDistribution( meanStepSize ) * (midpoint - transform.position).normalized;
-//				if (IsValidMove( Vector3.zero ))
-//				{
-//					MoveIfValid( moveStep );
-//				}
-//				else
-//				{
-//					transform.position += moveStep;
-//				}
-			}
-		}
 	}
 }

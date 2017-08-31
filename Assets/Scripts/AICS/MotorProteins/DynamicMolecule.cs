@@ -28,6 +28,7 @@ namespace AICS.MotorProteins
 	{
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
+		public bool exitCollisions = true;
 		public bool interactsWithOtherMolecules;
 
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
@@ -158,7 +159,7 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound)
+			if (!bound && exitCollisions)
 			{
 				ExitCollision( other.transform.position );
 			}
