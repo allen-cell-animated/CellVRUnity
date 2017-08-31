@@ -1,16 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AICS.Microtubule;
 
 namespace AICS.MotorProteins.Kinesin
 {
 	public class Kinesin : AssemblyMolecule 
 	{
 		public float averageWalkingSpeed; // μm/s
-
-		Vector3 hipsStartPosition;
-		Vector3 motor1StartPosition;
-		Vector3 motor2StartPosition;
+		public Tubulin lastTubulin;
 
 		Hips _hips;
 		public Hips hips
@@ -61,15 +59,6 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		void Awake ()
-		{
-			ConnectComponents();
-
-			hipsStartPosition = hips.transform.position;
-			motor1StartPosition = motors[0].transform.position;
-			motor2StartPosition = motors[1].transform.position;
-		}
-
 		void Update ()
 		{
 			for (int i = 0; i < MolecularEnvironment.Instance.stepsPerFrame; i++)
@@ -94,10 +83,6 @@ namespace AICS.MotorProteins.Kinesin
 				molecule.Reset();
 			}
 			SetHipsAsParent();
-
-			hips.transform.position = hipsStartPosition;
-			motors[0].transform.position = motor1StartPosition;
-			motors[1].transform.position = motor2StartPosition;
 		}
 
 		public override void SetParentSchemeOnComponentBind (ComponentMolecule molecule)
@@ -144,7 +129,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void CalculateWalkingSpeed ()
 		{
-			averageWalkingSpeed = 1E-3f * (hips.transform.position - hipsStartPosition).magnitude / (nanosecondsSinceStart * 1E-9f);
+			averageWalkingSpeed = 1E-3f * (hips.transform.position - hips.startPosition).magnitude / (nanosecondsSinceStart * 1E-9f);
 		}
 	}
 }

@@ -14,25 +14,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		void Start ()
-		{
-			CalculateDistanceFromParents();
-		}
-
-		void CalculateDistanceFromParents ()
-		{
-			float d1 = 0, d2 = 0;
-			if (transform.parent != null)
-			{
-				d1 = Vector3.Distance( transform.position, transform.parent.position );
-			}
-			if (secondParent != null)
-			{
-				d2 = Vector3.Distance( transform.position, secondParent.position );
-			}
-			minDistanceFromParent = Mathf.Min( d1, d2 );
-			maxDistanceFromParent = Mathf.Max( d1, d2 );
-		}
+		protected override void OnAwake () { }
 
 		public override void DoCustomSimulation ()
 		{
@@ -40,10 +22,7 @@ namespace AICS.MotorProteins.Kinesin
 			RelaxBetweenParents();
 		}
 
-		public override void DoRandomWalk ()
-		{
-			Move();
-		}
+		public override void DoRandomWalk () { }
 
 		protected override void InteractWithCollidingMolecules () { }
 

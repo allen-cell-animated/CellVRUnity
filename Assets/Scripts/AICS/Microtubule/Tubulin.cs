@@ -18,6 +18,8 @@ namespace AICS.Microtubule
 			}
 		}
 
+		protected override void OnAwake () { }
+
 		public void Place (Vector3 position, Vector3 lookDirection, Vector3 normal)
 		{
 			transform.localPosition = position;

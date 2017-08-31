@@ -10,14 +10,22 @@ namespace AICS.MotorProteins
 	{
 		public float nanosecondsSinceStart;
 		public int stepsSinceStart;
-
 		public float radius;
 		public MoleculeDetector[] moleculeDetectors;
+		public Vector3 startPosition;
 
 		public abstract bool bound
 		{
 			get;
 		}
+
+		void Awake ()
+		{
+			startPosition = transform.position;
+			OnAwake();
+		}
+
+		protected abstract void OnAwake ();
 
 		public void Simulate ()
 		{
@@ -44,6 +52,8 @@ namespace AICS.MotorProteins
 
 		public void Reset ()
 		{
+			transform.position = startPosition;
+
 			DoCustomReset();
 
 			nanosecondsSinceStart = 0;

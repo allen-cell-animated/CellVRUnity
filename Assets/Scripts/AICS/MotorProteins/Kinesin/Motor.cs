@@ -56,7 +56,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		void Awake ()
+		protected override void OnAwake ()
 		{
 			interactsWithOtherMolecules = true;
 		}
@@ -394,6 +394,7 @@ namespace AICS.MotorProteins.Kinesin
 
 			state = (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD;
 			tubulin = _tubulin;
+			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 			transform.position = tubulin.transform.TransformPoint( bindingPosition );

@@ -10,7 +10,11 @@ namespace AICS.MotorProteins
 		public List<ComponentMolecule> componentMolecules;
 		public KineticRates kineticRates;
 
-		// should be called in Awake()
+		protected override void OnAwake ()
+		{
+			ConnectComponents();
+		}
+
 		protected void ConnectComponents ()
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
@@ -51,7 +55,10 @@ namespace AICS.MotorProteins
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
-				molecule.minDistanceFromParent = min;
+				if (molecule.dynamicLeash)
+				{
+					molecule.minDistanceFromParent = min;
+				}
 			}
 		}
 
@@ -59,7 +66,10 @@ namespace AICS.MotorProteins
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
-				molecule.maxDistanceFromParent = max;
+				if (molecule.dynamicLeash)
+				{
+					molecule.maxDistanceFromParent = max;
+				}
 			}
 		}
 
@@ -67,7 +77,10 @@ namespace AICS.MotorProteins
 		{
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
-				molecule.meanStepSize = size;
+				if (molecule.dynamicStepSize)
+				{
+					molecule.meanStepSize = size;
+				}
 			}
 		}
 	}

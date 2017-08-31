@@ -41,7 +41,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		void Awake ()
+		protected override void OnAwake ()
 		{
 			interactsWithOtherMolecules = false;
 		}
