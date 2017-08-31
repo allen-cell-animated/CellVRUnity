@@ -112,7 +112,8 @@ namespace AICS.MotorProteins.Kinesin
 		public void SetSnappingSpeed (float _sliderValue)
 		{
 			snappingSpeed.Set( _sliderValue );
-			kinesin.hips.snapSpeed = snappingSpeed.value;
+			kinesin.hips.snapSpeed = 1000f * snappingSpeed.value;
+			Debug.Log( kinesin.hips.snapSpeed );
 		}
 
 		public void SetMeanStepSize (float _sliderValue)

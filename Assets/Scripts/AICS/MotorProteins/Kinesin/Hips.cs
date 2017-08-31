@@ -83,7 +83,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			if (!(motor == lastSnappingPivot && state == HipsState.Locked))
+			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
 			{
 				snappingArcPositions = CalculateSnapArcPositions( motor );
 				lastSnappingPivot = motor;
