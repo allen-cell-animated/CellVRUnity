@@ -133,13 +133,15 @@ namespace AICS.MotorProteins.Kinesin
 		}
 
 		public Text fpsDisplay;
+		public Text spfDisplay;
 		float lastTime = -1f;
 
 		void Update ()
 		{
 			if (countFrameRate && Time.time - lastTime > 0.3f)
 			{
-				fpsDisplay.text = Mathf.Round(1f / Time.deltaTime).ToString() + " fps";
+				fpsDisplay.text = Mathf.Round(1f / Time.deltaTime).ToString() + " frames per second";
+				spfDisplay.text = MolecularEnvironment.Instance.stepsPerFrame.ToString() + " sim steps per frame";
 				lastTime = Time.time;
 
 				averageWalkingSpeed.SetDisplay( kinesin.averageWalkingSpeed );
