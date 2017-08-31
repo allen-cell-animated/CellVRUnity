@@ -29,6 +29,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
+			SnapToBounds();
 			DoRandomWalk();
 		}
 
@@ -41,21 +42,58 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomReset () { }
 
-		protected override bool CheckLeash (Vector3 moveStep)
+		void SnapToBounds ()
+		{
+			ClampDistance();
+			ClampAngle();
+		}
+
+		void ClampDistance ()
+		{
+			Vector3 anchorToPosition = transform.position - anchor.position;
+			transform.position = anchor.position + Mathf.Clamp( anchorToPosition.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToPosition.normalized;
+		}
+
+		void ClampAngle ()
 		{
 			if (kinesin.lastTubulin != null)
 			{
-				float d = Vector3.Distance( anchor.position, transform.position + moveStep );
-				if (d >= minDistanceFromParent && d <= maxDistanceFromParent)
+				Vector3 upFromAnchor = kinesin.lastTubulin.transform.up;
+				Vector3 anchorToPosition = transform.position - anchor.position;
+				float angle = Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToPosition.normalized ) );
+				if (180f * angle / Mathf.PI > maxAngleFromUp)
 				{
-					Vector3 upFromAnchor = kinesin.lastTubulin.transform.up;
-					Vector3 anchorToNewPosition = (transform.position + moveStep - anchor.position).normalized;
-					float angle = 180f * Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToNewPosition ) ) / Mathf.PI;
-
-					return angle <= maxAngleFromUp;
+					Vector3 axis = Vector3.Cross( upFromAnchor, anchorToPosition.normalized ).normalized;
+					Vector3 goalPosition = anchor.position + anchorToPosition.magnitude * (Quaternion.AngleAxis( angle, axis ) * upFromAnchor);
+					transform.position += 3f * meanStepSize * (goalPosition - transform.position).normalized;
 				}
 			}
-			return true;
+		}
+
+		protected override bool CheckLeash (Vector3 moveStep)
+		{
+			if (DistanceFromAnchorIsWithinBounds( moveStep ))
+			{
+				if (kinesin.lastTubulin == null)
+				{
+					return true;
+				}
+				return AngleFromCenter( moveStep ) <= maxAngleFromUp;
+			}
+			return false;
+		}
+
+		bool DistanceFromAnchorIsWithinBounds (Vector3 moveStep)
+		{
+			float d = Vector3.Distance( anchor.position, transform.position + moveStep );
+			return d >= minDistanceFromParent && d <= maxDistanceFromParent;
+		}
+
+		float AngleFromCenter (Vector3 moveStep)
+		{
+			Vector3 upFromAnchor = kinesin.lastTubulin.transform.up;
+			Vector3 anchorToNewPosition = (transform.position + moveStep - anchor.position).normalized;
+			return 180f * Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToNewPosition ) ) / Mathf.PI;
 		}
 	}
 }
