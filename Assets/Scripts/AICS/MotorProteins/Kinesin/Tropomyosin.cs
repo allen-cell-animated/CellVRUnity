@@ -49,7 +49,7 @@ namespace AICS.MotorProteins.Kinesin
 			transform.LookAt( hips.transform );
 
 			//scale
-			transform.GetChild( 0 ).localScale = new Vector3( 1f, length / 2f, 1f );
+//			transform.GetChild( 0 ).localScale = new Vector3( 1f, length / 2f, 1f );
 			capsuleCollider.height = length;
 		}
 
