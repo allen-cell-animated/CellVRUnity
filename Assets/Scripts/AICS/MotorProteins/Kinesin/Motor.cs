@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AICS.Microtubule;
 using System.IO;
+using AICS.UI;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -34,6 +35,7 @@ namespace AICS.MotorProteins.Kinesin
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
+		public StateIndicator stateIndicatorUI;
 
 		Kinesin kinesin
 		{
@@ -54,6 +56,12 @@ namespace AICS.MotorProteins.Kinesin
 				}
 				return _otherMotor;
 			}
+		}
+
+		void SetState (MotorState newState)
+		{
+			state = newState;
+			stateIndicatorUI.GoToState( (int)state );
 		}
 
 		protected override void OnAwake ()
@@ -230,7 +238,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.kinetics[0].events++;
 			if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
 
-			state = MotorState.MtKT;
+			SetState( MotorState.MtKT );
 			ATP.SetActive( true );
 			kinesin.hips.StartSnap( this );
 		}
@@ -240,7 +248,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.kinetics[1].events++;
 			if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
 
-			state = MotorState.MtK;
+			SetState( MotorState.MtK );
 			ATP.SetActive( false );
 		}
 
@@ -249,7 +257,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.kinetics[2].events++;
 			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
 
-			state = MotorState.MtKDP;
+			SetState( MotorState.MtKDP );
 			ATP.SetActive( false );
 			ADP.SetActive( true );
 			Pi.SetActive( true );
@@ -266,7 +274,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.kinetics[bound ? 3 : 6].events++;
 			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
 
-			state = (state == MotorState.MtKDP) ? MotorState.MtKD : MotorState.KD;
+			SetState( (state == MotorState.MtKDP) ? MotorState.MtKD : MotorState.KD );
 			Pi.SetActive( false );
 		}
 
@@ -277,7 +285,7 @@ namespace AICS.MotorProteins.Kinesin
 				kinetics.kinetics[9].events++;
 				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
 
-				state = MotorState.MtK;
+				SetState( MotorState.MtK );
 				ADP.SetActive( false );
 			}
 		}
@@ -392,7 +400,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.kinetics[state == MotorState.KDP ? 4 : 7].events++;
 			if (logEvents) { Debug.Log( name + " BIND --------------------------------" ); }
 
-			state = (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD;
+			SetState( (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD );
 			tubulin = _tubulin;
 			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
@@ -410,7 +418,7 @@ namespace AICS.MotorProteins.Kinesin
 				kinetics.kinetics[state == MotorState.MtKDP ? 5 : 8].events++;
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
 
-				state = (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD;
+				SetState( (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD );
 				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 				lastReleaseTime = Time.time;
 				if (tubulin != null)
@@ -429,7 +437,7 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomReset ()
 		{
 			if (logEvents) { Debug.Log( name + " reset --------------------------------" ); }
-			state = MotorState.KD;
+			SetState( MotorState.KD );
 			needToSwitchToStrong = false;
 			tubulin = null;
 			lastReleaseTime = -1f;
