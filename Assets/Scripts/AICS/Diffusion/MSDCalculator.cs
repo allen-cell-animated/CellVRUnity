@@ -8,13 +8,15 @@ namespace AICS.Diffusion
 	[RequireComponent( typeof(ParticleFactory) )]
 	public class MSDCalculator : MonoBehaviour 
 	{
-		public bool saveDataToFile;
+		public bool saveMSDDataToFile;
+		public bool saveDisplacementDataToFile;
 		public string filePath = "/Users/blairl/Dropbox/AICS/MotorProteins/cytoplasmSimulations/MSDData/Auto/";
 		public float simulatedMSD;
 		public float theoreticalMSD;
 		public float simulationTimePassed;
 
-		string data = "time,theoretical msd,simulated msd\n";
+		string MSDdata = "time,theoretical msd,simulated msd\n";
+		string displacementData = "";
 		float lastDataTime = -1000000f;
 		bool startedLogging;
 
@@ -76,14 +78,19 @@ namespace AICS.Diffusion
 			float t = simulationTimePassed;
 			if (t - lastDataTime >= DiffusionParameterInput.Instance.dTime.value)
 			{
-				data += t + "," + theoreticalMSD + "," + simulatedMSD + "\n";
+				MSDdata += t + "," + theoreticalMSD + "," + simulatedMSD + "\n";
 				lastDataTime = t;
 			}
 		}
 
+		public void LogDisplacement (float displacement)
+		{
+			displacementData += displacement + "\n";
+		}
+
 		void OnApplicationQuit ()
 		{
-			if (saveDataToFile)
+			if (saveMSDDataToFile)
 			{
 				string fileName = "msd" 
 					+ "_vm" + DiffusionParameterInput.Instance.forceMultiplier + "sqrt"
@@ -91,7 +98,12 @@ namespace AICS.Diffusion
 					+ "_t" + DiffusionParameterInput.Instance.dTime.value 
 					+ "_dc" + DiffusionParameterInput.Instance.diffusionCoefficient.value.ToString().Split('.')[0]
 					+ "_drag" + particleFactory.particles[0].GetComponent<Rigidbody>().drag.ToString().Split('.')[0] + ".csv";
-				File.WriteAllText( filePath + fileName, data );
+				File.WriteAllText( filePath + fileName, MSDdata );
+			}
+			if (saveDisplacementDataToFile)
+			{
+				string fileName = "displacement.csv";
+				File.WriteAllText( filePath + fileName, displacementData );
 			}
 		}
 	}

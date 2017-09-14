@@ -121,5 +121,19 @@ namespace AICS
 				break;
 			}
 		}
+
+		public static void Shuffle<T> (this T[] array)
+		{
+			int n = array.Length;
+			while (n > 1) 
+			{ 
+				int k = Random.Range( 0, n );
+				n--;
+
+				T value = array[k];  
+				array[k] = array[n];  
+				array[n] = value; 
+			} 
+		}
 	}
 }
