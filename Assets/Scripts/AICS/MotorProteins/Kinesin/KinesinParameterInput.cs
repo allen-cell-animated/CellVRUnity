@@ -135,6 +135,14 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.Reset();
 		}
 
+		public void ResetRates ()
+		{
+			foreach (Parameter rate in rates)
+			{
+				rate.ResetSlider();
+			}
+		}
+
 		public Text fpsDisplay;
 		public Text spfDisplay;
 		float lastTime = -1f;

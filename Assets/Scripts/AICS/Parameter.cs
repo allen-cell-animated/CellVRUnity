@@ -78,6 +78,8 @@ namespace AICS
 		public int significantFigures = 1;
 		public bool spaceBeforeUnits = true;
 
+		public float initialValue;
+
 		public void Set (float _sliderValue)
 		{
 			value = MapValue( _sliderValue );
@@ -114,9 +116,18 @@ namespace AICS
 
 		public virtual void InitSlider ()
 		{
+			initialValue = value;
 			if (slider != null)
 			{
 				slider.value = UnmapValue( value );
+			}
+		}
+
+		public void ResetSlider ()
+		{
+			if (slider != null)
+			{
+				slider.value = UnmapValue( initialValue );
 			}
 		}
 
