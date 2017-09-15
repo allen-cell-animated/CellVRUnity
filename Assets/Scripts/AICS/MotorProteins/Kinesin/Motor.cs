@@ -314,7 +314,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			else 
 			{
-				Jitter();
+				Jitter( 0.001f );
 				if (Time.time - lastSetToBindingPositionTime >= 1f)
 				{
 					transform.position = tubulin.transform.TransformPoint( bindingPosition );
