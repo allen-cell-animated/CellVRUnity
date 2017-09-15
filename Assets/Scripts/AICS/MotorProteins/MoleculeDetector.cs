@@ -30,12 +30,12 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		public List<Molecule> GetCollidingMolecules (Molecule molecule, Vector3 moveStep)
+		public List<Molecule> GetCollidingMolecules (Molecule molecule, Vector3 moveStep, float radius = -1f)
 		{
 			collidingMolecules.Clear();
 			foreach (Molecule m in nearbyMolecules)
 			{
-				if (Vector3.Distance( m.transform.position, molecule.transform.position + moveStep ) <= m.radius + molecule.radius)
+				if (Vector3.Distance( m.transform.position, molecule.transform.position + moveStep ) <= m.radius + (radius >= 0 ? radius : molecule.radius))
 				{
 					collidingMolecules.Add( m );
 				}

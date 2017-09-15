@@ -30,7 +30,9 @@ namespace AICS.MotorProteins
 		public float meanRotation = 5f;
 		public bool exitCollisions = true;
 		public bool interactsWithOtherMolecules;
+		public float bindingRadius;
 
+		protected List<Molecule> bindingPartners = new List<Molecule>();
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
 
 		Rigidbody _body;
@@ -58,58 +60,35 @@ namespace AICS.MotorProteins
 		protected bool Move () 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
-			if (!WillCollideOnMove( moveStep ))
-			{
-				return MoveIfValid( moveStep );
-			}
+//			CheckForBindingPartner( moveStep );
+//			if (!bound)
+//			{
+				if (!WillCollideOnMove( moveStep ))
+				{
+					return MoveIfValid( moveStep );
+				}
+//			}
 			return false;
 		}
 
-		protected bool WillCollideOnMove (Vector3 moveStep)
+		bool CheckForBindingPartner (Vector3 moveStep)
 		{
-			if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Sweeptest)
-			{
-				return CheckCollisionsSweeptest( moveStep );
-			}
-			else if (MolecularEnvironment.Instance.collisionDetectionMethod == CollisionDetectionMethod.Spheres)
-			{
-				return CheckCollisionsSpheres( moveStep );
-			}
-			return false;
-		}
-
-		bool CheckCollisionsSweeptest (Vector3 moveStep)
-		{
-			RaycastHit[] hits = body.SweepTestAll( moveStep.normalized, moveStep.magnitude, UnityEngine.QueryTriggerInteraction.Collide );
-			if (hits.Length > 0)
+			GetCollidingMolecules( bindingPartners, this, moveStep, bindingRadius );
+			if (bindingPartners.Count > 0)
 			{
 				if (interactsWithOtherMolecules)
 				{
-					InteractWithMoleculesInHits( hits );
+					// interact with binding partners here instead of in WillCollideOnMove
+					InteractWithCollidingMolecules();
 				}
 				return true;
 			}
 			return false;
 		}
 
-		protected void InteractWithMoleculesInHits (RaycastHit[] hits)
+		bool WillCollideOnMove (Vector3 moveStep)
 		{
-			Molecule m;
-			collidingMolecules.Clear();
-			foreach (RaycastHit hit in hits)
-			{
-				m = hit.collider.GetComponentInParent<Molecule>();
-				if (m != null)
-				{
-					collidingMolecules.Add( m );
-				}
-			}
-			InteractWithCollidingMolecules();
-		}
-
-		bool CheckCollisionsSpheres (Vector3 moveStep)
-		{
-			GetCollidingMolecules( this, moveStep );
+			GetCollidingMolecules( collidingMolecules, this, moveStep );
 			if (collidingMolecules.Count > 0)
 			{
 				if (interactsWithOtherMolecules)
@@ -121,12 +100,12 @@ namespace AICS.MotorProteins
 			return DoExtraCollisionChecks( moveStep );
 		}
 
-		protected void GetCollidingMolecules (Molecule molecule, Vector3 moveStep)
+		void GetCollidingMolecules (List<Molecule> moleculeList, Molecule molecule, Vector3 moveStep, float _radius = -1f)
 		{
-			collidingMolecules.Clear();
+			moleculeList.Clear();
 			foreach (MoleculeDetector detector in moleculeDetectors)
 			{
-				collidingMolecules.AddRange( detector.GetCollidingMolecules( molecule, moveStep ) );
+				moleculeList.AddRange( detector.GetCollidingMolecules( molecule, moveStep, _radius ) );
 			}
 		}
 

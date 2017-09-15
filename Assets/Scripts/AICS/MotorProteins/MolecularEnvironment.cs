@@ -17,8 +17,6 @@ namespace AICS.MotorProteins
 		public float idealFrameRate = 30f;
 		public int stepsPerFrame = 1;
 		public int maxIterationsPerStep = 50;
-		public CollisionDetectionMethod collisionDetectionMethod;
-		public LayerMask[] moleculeLayers;
 		public Vector3 size = 100f * Vector3.one;
 		public float gridSize = 50f;
 		public LayerMask resolutionManagementLayer;
@@ -60,7 +58,6 @@ namespace AICS.MotorProteins
 
 		void Start ()
 		{
-			SetCollisionDetectionMethod( collisionDetectionMethod );
 			CreateResolutionNodes();
 		}
 
@@ -69,37 +66,7 @@ namespace AICS.MotorProteins
 			CalculateFrameRate();
 		}
 
-		public void SetCollisionDetectionMethod (CollisionDetectionMethod _collisionDetectionMethod = CollisionDetectionMethod.Sweeptest)
-		{
-			CollisionDetectionMethod newCollisionDetectionMethod = stepsPerFrame > 1 ? CollisionDetectionMethod.Spheres : _collisionDetectionMethod;
-
-			if (newCollisionDetectionMethod != collisionDetectionMethod)
-			{
-				collisionDetectionMethod = newCollisionDetectionMethod;
-				SetCollisionsBetweenMoleculeLayers( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
-				SetMoleculeDetectorsActive( collisionDetectionMethod == CollisionDetectionMethod.Spheres );
-			}
-		}
-
-		void SetCollisionsBetweenMoleculeLayers (bool enabled)
-		{
-			for (int i = 0; i < moleculeLayers.Length; i++)
-			{
-				for (int j = i + 1; j < moleculeLayers.Length; j++)
-				{
-					Physics.IgnoreLayerCollision( Mathf.RoundToInt( Mathf.Log( moleculeLayers[i], 2f ) ), 
-						Mathf.RoundToInt( Mathf.Log( moleculeLayers[j], 2f ) ), enabled );
-				}
-			}
-		}
-
-		void SetMoleculeDetectorsActive (bool active)
-		{
-			foreach (Molecule molecule in molecules)
-			{
-				molecule.SetMoleculeDetectorsActive( active );
-			}
-		}
+		// --------------------------------------------------------------------------------------------------- Resolution
 
 		void CreateResolutionNodes ()
 		{
@@ -130,6 +97,8 @@ namespace AICS.MotorProteins
 			node.Setup( this );
 		}
 
+		// --------------------------------------------------------------------------------------------------- Time
+
 		public void SetTime (float _timeMultiplier)
 		{
 			timeMultiplier = _timeMultiplier;
@@ -152,7 +121,6 @@ namespace AICS.MotorProteins
 				if (a != 0)
 				{
 					stepsPerFrame = Mathf.Max( 1, stepsPerFrame + Mathf.Clamp( a, -5, 5 ) );
-//					Debug.Log( "steps per frame = " + stepsPerFrame );
 					UpdateTimePerStep();
 					averageFrameRate = 1f / Time.deltaTime;
 					frameRateSamples = 1;
@@ -163,8 +131,6 @@ namespace AICS.MotorProteins
 		void UpdateTimePerStep ()
 		{
 			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
-//			Debug.Log( "nanoseconds per step = " + nanosecondsPerStep );
-//			Debug.Log( timeMultiplier + " x slower, A*B = " + nanosecondsPerStep * stepsPerFrame );
 		}
 	}
 }

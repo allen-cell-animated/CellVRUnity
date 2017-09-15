@@ -36,6 +36,7 @@ namespace AICS.MotorProteins.Kinesin
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
 		public StateIndicator stateIndicatorUI;
+		public MoleculeGraph<Tubulin> tubulinGraph;
 
 		Kinesin kinesin
 		{
@@ -141,6 +142,11 @@ namespace AICS.MotorProteins.Kinesin
 			actions = new EventWithKineticRate[0];
 			// check bind tubulin via collision test during random walk
 			_actionsForState.Add( MotorState.KD, actions );
+		}
+
+		public void PreCalculateSimulation ()
+		{
+
 		}
 
 		public override void DoCustomSimulation ()
@@ -339,7 +345,7 @@ namespace AICS.MotorProteins.Kinesin
 				foreach (Molecule m in collidingMolecules)
 				{
 					t = m as Tubulin;
-					if (t != null && t.type == 1 && !t.hasMotorBound)
+					if (t != null && t.type == 1)
 					{
 						collidingTubulins.Add( t );
 					}
@@ -354,6 +360,7 @@ namespace AICS.MotorProteins.Kinesin
 						if (shouldBind)
 						{
 							BindTubulin( t );
+//							tubulinGraph.AddMolecules( collidingTubulins, transform );
 						}
 					}
 				}
@@ -375,13 +382,16 @@ namespace AICS.MotorProteins.Kinesin
 			Tubulin closestTubulin = null;
 			foreach (Tubulin t in tubulins)
 			{
-				_bindingPosition = t.transform.TransformPoint( bindingPosition );
-				hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-				d = Vector3.Distance( _bindingPosition, transform.position );
-				if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
+				if (!t.hasMotorBound)
 				{
-					minDistance = d;
-					closestTubulin = t;
+					_bindingPosition = t.transform.TransformPoint( bindingPosition );
+					hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
+					d = Vector3.Distance( _bindingPosition, transform.position );
+					if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
+					{
+						minDistance = d;
+						closestTubulin = t;
+					}
 				}
 			}
 			return closestTubulin;
