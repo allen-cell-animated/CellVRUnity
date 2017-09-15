@@ -12,7 +12,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public Parameter[] rates;
 
-		public Parameter timeMultiplier; // = 300x, 10 --> 10000000
+		public Parameter timeMultiplier; // = 300x, 0 --> 10000
 		public RangeParameter necklinkerLength; // = (1, 5), 1 --> 9
 		public Parameter snappingSpeed; // = 90°/s, 5 --> 100
 		public Parameter meanStepSize; // = 0.8 nm, 0.1 --> 2
@@ -93,7 +93,11 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void SetTimeMultiplier (float _sliderValue)
 		{
-			timeMultiplier.Set( _sliderValue );
+			timeMultiplier.Set( 1f - _sliderValue );
+			if (timeMultiplier.value < 2f)
+			{
+				timeMultiplier.displayValue.text = "0 " + timeMultiplier.units;
+			}
 			MolecularEnvironment.Instance.SetTime( timeMultiplier.value );
 		}
 
