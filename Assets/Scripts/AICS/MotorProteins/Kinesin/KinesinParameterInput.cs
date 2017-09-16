@@ -130,9 +130,33 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.hips.doSnap = _toggleValue;
 		}
 
+		public Text pauseButtonText;
+
+		public void TogglePause ()
+		{
+			if (MolecularEnvironment.Instance.pause)
+			{
+				MolecularEnvironment.Instance.pause = false;
+				pauseButtonText.text = "Pause";
+			}
+			else 
+			{
+				MolecularEnvironment.Instance.pause = true;
+				pauseButtonText.text = "Play";
+			}
+		}
+
 		public void Reset ()
 		{
 			kinesin.Reset();
+
+//			Invoke( "FinishReset", 1f );
+		}
+
+		void FinishReset ()
+		{
+			kinesin.Reset();
+			kinesin.Print();
 		}
 
 		public void ResetRates ()

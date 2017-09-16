@@ -13,6 +13,7 @@ namespace AICS.MotorProteins
 		public float radius;
 		public MoleculeDetector[] moleculeDetectors;
 		public Vector3 startPosition;
+		public Quaternion startRotation;
 
 		public abstract bool bound
 		{
@@ -22,6 +23,7 @@ namespace AICS.MotorProteins
 		void Awake ()
 		{
 			startPosition = transform.position;
+			startRotation = transform.rotation;
 			OnAwake();
 		}
 
@@ -29,10 +31,13 @@ namespace AICS.MotorProteins
 
 		public void Simulate ()
 		{
-			DoCustomSimulation();
+			if (!MolecularEnvironment.Instance.pause)
+			{
+				DoCustomSimulation();
 
-			nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
-			stepsSinceStart++;
+				nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
+				stepsSinceStart++;
+			}
 		}
 
 		public abstract void DoCustomSimulation ();
@@ -53,6 +58,7 @@ namespace AICS.MotorProteins
 		public void Reset ()
 		{
 			transform.position = startPosition;
+			transform.rotation = startRotation;
 
 			DoCustomReset();
 

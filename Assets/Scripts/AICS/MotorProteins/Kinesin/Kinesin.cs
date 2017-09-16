@@ -61,6 +61,11 @@ namespace AICS.MotorProteins.Kinesin
 
 		void Update ()
 		{
+			if (needToReset)
+			{
+				DoReset();
+				needToReset = false;
+			}
 			for (int i = 0; i < MolecularEnvironment.Instance.stepsPerFrame; i++)
 			{
 				Simulate();
@@ -76,13 +81,25 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
+		bool needToReset;
+
 		public override void DoCustomReset ()
 		{
+			DoReset();
+			needToReset = true;
+		}
+
+		void DoReset ()
+		{
+			SetHipsAsParent();
+			hips.Reset();
 			foreach (Molecule molecule in componentMolecules)
 			{
-				molecule.Reset();
+				if (molecule != hips)
+				{
+					molecule.Reset();
+				}
 			}
-			SetHipsAsParent();
 		}
 
 		public override void SetParentSchemeOnComponentBind (ComponentMolecule molecule)
@@ -130,6 +147,18 @@ namespace AICS.MotorProteins.Kinesin
 		void CalculateWalkingSpeed ()
 		{
 			averageWalkingSpeed = 1E-3f * (hips.transform.position - hips.startPosition).magnitude / (nanosecondsSinceStart * 1E-9f);
+		}
+
+		public void Print ()
+		{
+			foreach (Molecule molecule in componentMolecules)
+			{
+				float d = Mathf.Round( Vector3.Distance( molecule.startPosition, molecule.transform.position ) );
+				if (d > 0)
+				{
+					Debug.Log( molecule.name + " " + d );
+				}
+			}
 		}
 	}
 }

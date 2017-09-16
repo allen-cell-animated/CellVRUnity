@@ -12,6 +12,7 @@ namespace AICS.MotorProteins
 
 	public class MolecularEnvironment : MonoBehaviour 
 	{
+		public bool pause;
 		public float timeMultiplier = 300f;
 		public float nanosecondsPerStep = 1E5f;
 		public float idealFrameRate = 30f;

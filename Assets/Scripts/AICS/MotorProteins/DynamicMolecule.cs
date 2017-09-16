@@ -138,7 +138,7 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound && exitCollisions)
+			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
 			{
 				ExitCollision( other.transform.position );
 			}
