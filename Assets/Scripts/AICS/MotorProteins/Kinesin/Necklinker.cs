@@ -40,7 +40,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (transform.parent != null && secondParent != null)
 			{
-				transform.position = (transform.parent.position + secondParent.position) / 2f;
+				SetPosition( (transform.parent.position + secondParent.position) / 2f );
 			}
 		}
 

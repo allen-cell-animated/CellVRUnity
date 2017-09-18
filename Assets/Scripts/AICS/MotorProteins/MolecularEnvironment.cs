@@ -4,12 +4,6 @@ using UnityEngine;
 
 namespace AICS.MotorProteins
 {
-	public enum CollisionDetectionMethod
-	{
-		Sweeptest,
-		Spheres
-	}
-
 	public class MolecularEnvironment : MonoBehaviour 
 	{
 		public bool pause;
@@ -22,8 +16,10 @@ namespace AICS.MotorProteins
 		public float gridSize = 50f;
 		public LayerMask resolutionManagementLayer;
 		public float[] LODDistances;
+		public float nanosecondsSinceStart;
+		public int stepsSinceStart;
 
-		public float averageFrameRate;
+		float averageFrameRate;
 		int frameRateSamples;
 
 		static MolecularEnvironment _Instance;
@@ -65,6 +61,15 @@ namespace AICS.MotorProteins
 		void Update ()
 		{
 			CalculateFrameRate();
+
+			for (int i = 0; i < stepsPerFrame; i++)
+			{
+				if (!pause)
+				{
+					nanosecondsSinceStart += nanosecondsPerStep;
+					stepsSinceStart++;
+				}
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Resolution
@@ -132,6 +137,12 @@ namespace AICS.MotorProteins
 		void UpdateTimePerStep ()
 		{
 			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
+		}
+
+		public void Reset ()
+		{
+			nanosecondsSinceStart = 0;
+			stepsSinceStart = 0;
 		}
 	}
 }

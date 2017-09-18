@@ -18,7 +18,7 @@ namespace AICS.MotorProteins
 			kineticRate = _rate;
 		}
 
-		public bool ShouldHappen (float nanosecondsPerStep, int stepsSinceStart)
+		public bool ShouldHappen ()
 		{
 			string s = observedKineticRate + " / " + kineticRate.rate;
 			if (observedRateTooLow)
@@ -32,7 +32,7 @@ namespace AICS.MotorProteins
 				return false;
 			}
 			if (log) { Debug.Log( "try " + s ); }
-			return Random.Range( 0, 1f ) <= kineticRate.rate * nanosecondsPerStep * 1E-9f * stepsSinceStart / attempts;
+			return Random.Range( 0, 1f ) <= kineticRate.rate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsSinceStart / attempts;
 		}
 
 		public bool observedRateTooHigh
@@ -65,9 +65,9 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		public void CalculateObservedRates (float nanosecondsSinceStart)
+		public void CalculateObservedRates ()
 		{
-			float secondsSinceStart = nanosecondsSinceStart * 1E-9f;
+			float secondsSinceStart = MolecularEnvironment.Instance.nanosecondsSinceStart * 1E-9f;
 			foreach (Kinetic k in kinetics)
 			{
 				k.observedKineticRate = Mathf.Round( k.events / secondsSinceStart );

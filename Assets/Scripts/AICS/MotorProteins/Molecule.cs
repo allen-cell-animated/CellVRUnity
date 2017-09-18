@@ -8,12 +8,12 @@ namespace AICS.MotorProteins
 	// A basic molecule object
 	public abstract class Molecule : MonoBehaviour 
 	{
-		public float nanosecondsSinceStart;
-		public int stepsSinceStart;
+		public bool logEvents;
 		public float radius;
 		public MoleculeDetector[] moleculeDetectors;
 		public Vector3 startPosition;
 		public Quaternion startRotation;
+		public int resetFrames;
 
 		public abstract bool bound
 		{
@@ -34,13 +34,20 @@ namespace AICS.MotorProteins
 			if (!MolecularEnvironment.Instance.pause)
 			{
 				DoCustomSimulation();
-
-				nanosecondsSinceStart += MolecularEnvironment.Instance.nanosecondsPerStep;
-				stepsSinceStart++;
 			}
 		}
 
 		public abstract void DoCustomSimulation ();
+
+		protected void IncrementPosition (Vector3 moveStep)
+		{
+			SetPosition( transform.position + moveStep );
+		}
+
+		protected void SetPosition (Vector3 newPosition)
+		{
+			transform.position = (resetFrames > 0) ? startPosition : newPosition;
+		}
 
 		public void SetMoleculeDetectorsActive (bool active)
 		{
@@ -59,11 +66,9 @@ namespace AICS.MotorProteins
 		{
 			transform.position = startPosition;
 			transform.rotation = startRotation;
+			resetFrames = 3;
 
 			DoCustomReset();
-
-			nanosecondsSinceStart = 0;
-			stepsSinceStart = 0;
 		}
 
 		public abstract void DoCustomReset ();

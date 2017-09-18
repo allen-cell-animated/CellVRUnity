@@ -51,7 +51,7 @@ namespace AICS.MotorProteins.Kinesin
 		void ClampDistance ()
 		{
 			Vector3 anchorToPosition = transform.position - anchor.position;
-			transform.position = anchor.position + Mathf.Clamp( anchorToPosition.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToPosition.normalized;
+			SetPosition( anchor.position + Mathf.Clamp( anchorToPosition.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToPosition.normalized );
 		}
 
 		void ClampAngle ()

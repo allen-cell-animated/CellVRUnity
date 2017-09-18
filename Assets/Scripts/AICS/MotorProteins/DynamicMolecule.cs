@@ -123,7 +123,7 @@ namespace AICS.MotorProteins
 		{
 			if (IsValidMove( moveStep ))
 			{
-				transform.position += moveStep;
+				IncrementPosition( moveStep );
 				return true;
 			}
 			return false;
@@ -168,7 +168,7 @@ namespace AICS.MotorProteins
 		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
 		{
 			something.kinetic.attempts++;
-			if (something.kinetic.ShouldHappen( MolecularEnvironment.Instance.nanosecondsPerStep, stepsSinceStart ))
+			if (something.kinetic.ShouldHappen())
 			{
 				something.kineticEvent();
 				return true;

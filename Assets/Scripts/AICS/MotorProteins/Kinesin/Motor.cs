@@ -19,7 +19,6 @@ namespace AICS.MotorProteins.Kinesin
 
 	public class Motor : ComponentMolecule 
 	{
-		public bool logEvents;
 		public MotorState state = MotorState.KD;
 		public float bindingRotationTolerance = 30f;
 		public GameObject ATP;
@@ -163,7 +162,7 @@ namespace AICS.MotorProteins.Kinesin
 				DoInRandomOrder( actionsForState[state] );
 			}
 
-			kinetics.CalculateObservedRates( nanosecondsSinceStart );
+			kinetics.CalculateObservedRates();
 		}
 
 		public List<int> count = new List<int>();
@@ -317,7 +316,7 @@ namespace AICS.MotorProteins.Kinesin
 				Jitter( 0.001f );
 				if (Time.time - lastSetToBindingPositionTime >= 1f)
 				{
-					transform.position = tubulin.transform.TransformPoint( bindingPosition );
+					SetPosition( tubulin.transform.TransformPoint( bindingPosition ) );
 					lastSetToBindingPositionTime = Time.time;
 				}
 			}
@@ -371,7 +370,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			get
 			{
-				return kinetics.kinetics[(state == MotorState.KDP) ? 4 : 7].ShouldHappen( MolecularEnvironment.Instance.nanosecondsPerStep, stepsSinceStart );
+				return kinetics.kinetics[(state == MotorState.KDP) ? 4 : 7].ShouldHappen();
 			}
 		}
 
@@ -415,7 +414,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
-			transform.position = tubulin.transform.TransformPoint( bindingPosition );
+			SetPosition( tubulin.transform.TransformPoint( bindingPosition ) );
 			lastSetToBindingPositionTime = Time.time;
 			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			chargeForceFields.SetActive( false );

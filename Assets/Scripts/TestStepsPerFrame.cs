@@ -12,6 +12,11 @@ public class TestStepsPerFrame : MonoBehaviour
 	bool atStartPosition = true;
 	int t = 0;
 
+	void Start ()
+	{
+		startPosition = transform.position;
+	}
+
 	void Update ()
 	{
 		int c = 0;

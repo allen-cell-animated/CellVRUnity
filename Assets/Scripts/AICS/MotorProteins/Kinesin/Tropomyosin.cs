@@ -43,7 +43,7 @@ namespace AICS.MotorProteins.Kinesin
 			float length = hipsToCargo.magnitude - cargo.radius;
 
 			//position
-			transform.position = hips.transform.position + (hips.radius + (length / 2f)) * hipsToCargo.normalized;
+			SetPosition( hips.transform.position + (hips.radius + (length / 2f)) * hipsToCargo.normalized );
 
 			//rotation
 			transform.LookAt( hips.transform );

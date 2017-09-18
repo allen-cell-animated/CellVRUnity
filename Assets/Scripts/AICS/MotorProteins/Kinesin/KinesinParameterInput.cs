@@ -138,25 +138,22 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				MolecularEnvironment.Instance.pause = false;
 				pauseButtonText.text = "Pause";
+				Debug.Log( "Play!" );
 			}
 			else 
 			{
 				MolecularEnvironment.Instance.pause = true;
 				pauseButtonText.text = "Play";
+				Debug.Log( "Pause................................." );
 			}
 		}
 
 		public void Reset ()
 		{
+			Debug.Log( "RESET--------------------------------------" );
 			kinesin.Reset();
-
-//			Invoke( "FinishReset", 1f );
-		}
-
-		void FinishReset ()
-		{
-			kinesin.Reset();
-			kinesin.Print();
+			MolecularEnvironment.Instance.Reset();
+//			TogglePause();
 		}
 
 		public void ResetRates ()
