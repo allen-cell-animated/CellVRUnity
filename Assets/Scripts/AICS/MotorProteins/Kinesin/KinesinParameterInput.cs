@@ -126,9 +126,14 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.SetMeanStepSize( meanStepSize.value );
 		}
 
-		public void SetSteerNecklinker (bool _toggleValue)
+		public void ToggleSteerNecklinker (bool _toggleValue)
 		{
 			kinesin.hips.doSnap = _toggleValue;
+		}
+
+		public void ToggleStartBound (bool _toggleValue)
+		{
+			
 		}
 
 		public Text pauseButtonText;

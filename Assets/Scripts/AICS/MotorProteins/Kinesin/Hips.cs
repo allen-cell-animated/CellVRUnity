@@ -41,10 +41,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		protected override void OnAwake ()
-		{
-			interactsWithOtherMolecules = false;
-		}
+		protected override void OnAwake () { }
 
 		public override void DoCustomSimulation ()
 		{
@@ -55,7 +52,7 @@ namespace AICS.MotorProteins.Kinesin
 			DoRandomWalk();
 		}
 
-		protected override void InteractWithCollidingMolecules () { }
+		protected override void InteractWithBindingPartners () { }
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 

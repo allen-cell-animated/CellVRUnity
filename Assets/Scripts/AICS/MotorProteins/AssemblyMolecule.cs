@@ -20,7 +20,6 @@ namespace AICS.MotorProteins
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				molecule.assembly = this as AssemblyMolecule;
-				molecule.moleculeDetectors = moleculeDetectors;
 			}
 		}
 

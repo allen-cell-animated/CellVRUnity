@@ -4,15 +4,6 @@ using UnityEngine;
 
 namespace AICS.MotorProteins
 {
-	public enum MoleculeType
-	{
-		none,
-		KinesinMotor,
-		Tubulin,
-		ATP,
-		ADP
-	}
-
 	// Simulate electrostatic and van der Waals (electrodynamic) forces 
 	// - only at distances < 0.6 nm
 	// - 0.02 pN force per atom pair

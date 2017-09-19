@@ -55,7 +55,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoRandomWalk () { }
 
-		protected override void InteractWithCollidingMolecules () { }
+		protected override void InteractWithBindingPartners () { }
 
 		public override void DoCustomReset () { }
 	}

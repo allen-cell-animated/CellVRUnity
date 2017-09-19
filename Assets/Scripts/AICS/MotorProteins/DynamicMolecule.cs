@@ -29,10 +29,9 @@ namespace AICS.MotorProteins
 		public float meanStepSize = 0.2f;
 		public float meanRotation = 5f;
 		public bool exitCollisions = true;
-		public bool interactsWithOtherMolecules;
 		public float bindingRadius;
 
-		protected List<Molecule> bindingPartners = new List<Molecule>();
+		[SerializeField] protected List<Molecule> bindingPartners = new List<Molecule>();
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
 
 		Rigidbody _body;
@@ -60,44 +59,35 @@ namespace AICS.MotorProteins
 		protected bool Move () 
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
-//			CheckForBindingPartner( moveStep );
-//			if (!bound)
-//			{
+
+			if (moleculeDetectors.Length > 0)
+			{
+				CheckForBindingPartner( moveStep );
+			}
+
+			if (!bound)
+			{
 				if (!WillCollideOnMove( moveStep ))
 				{
 					return MoveIfValid( moveStep );
 				}
-//			}
+			}
 			return false;
 		}
 
-		bool CheckForBindingPartner (Vector3 moveStep)
+		void CheckForBindingPartner (Vector3 moveStep)
 		{
 			GetCollidingMolecules( bindingPartners, this, moveStep, bindingRadius );
 			if (bindingPartners.Count > 0)
 			{
-				if (interactsWithOtherMolecules)
-				{
-					// interact with binding partners here instead of in WillCollideOnMove
-					InteractWithCollidingMolecules();
-				}
-				return true;
+				InteractWithBindingPartners();
 			}
-			return false;
 		}
 
 		bool WillCollideOnMove (Vector3 moveStep)
 		{
 			GetCollidingMolecules( collidingMolecules, this, moveStep );
-			if (collidingMolecules.Count > 0)
-			{
-				if (interactsWithOtherMolecules)
-				{
-					InteractWithCollidingMolecules();
-				}
-				return true;
-			}
-			return DoExtraCollisionChecks( moveStep );
+			return (collidingMolecules.Count > 0) ? true : DoExtraCollisionChecks( moveStep );
 		}
 
 		void GetCollidingMolecules (List<Molecule> moleculeList, Molecule molecule, Vector3 moveStep, float _radius = -1f)
@@ -109,7 +99,7 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		protected abstract void InteractWithCollidingMolecules ();
+		protected abstract void InteractWithBindingPartners ();
 
 		protected abstract bool DoExtraCollisionChecks (Vector3 moveStep);
 

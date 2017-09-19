@@ -9,6 +9,7 @@ namespace AICS.MotorProteins
 	public abstract class Molecule : MonoBehaviour 
 	{
 		public bool logEvents;
+		public MoleculeType type;
 		public float radius;
 		public MoleculeDetector[] moleculeDetectors;
 		public Vector3 startPosition;

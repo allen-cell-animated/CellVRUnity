@@ -7,7 +7,7 @@ namespace AICS.Microtubule
 {
 	public class Tubulin : Molecule
 	{
-		public int type = -1;
+		public int tubulinType = -1;
 		public bool hasMotorBound;
 
 		public override bool bound

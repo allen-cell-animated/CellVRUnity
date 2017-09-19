@@ -38,7 +38,7 @@ namespace AICS.MotorProteins.Kinesin
 			Move();		
 		}
 
-		protected override void InteractWithCollidingMolecules () { }
+		protected override void InteractWithBindingPartners () { }
 
 		public override void DoCustomReset () { }
 

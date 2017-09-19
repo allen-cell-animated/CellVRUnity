@@ -28,7 +28,7 @@ namespace AICS.MotorProteins.Kinesin
 		public bool needToSwitchToStrong;
 		public Kinetics kinetics;
 
-		List<Tubulin> collidingTubulins = new List<Tubulin>();
+		[SerializeField] List<Tubulin> collidingTubulins = new List<Tubulin>();
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
@@ -64,10 +64,7 @@ namespace AICS.MotorProteins.Kinesin
 			stateIndicatorUI.GoToState( (int)state );
 		}
 
-		protected override void OnAwake ()
-		{
-			interactsWithOtherMolecules = true;
-		}
+		protected override void OnAwake () { }
 
 		void Start ()
 		{
@@ -330,21 +327,21 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Tubulin binding/release
 
-		protected override void InteractWithCollidingMolecules ()
+		protected override void InteractWithBindingPartners ()
 		{
-			CheckForTubulinCollision( collidingMolecules );
+			CheckForTubulinCollision( bindingPartners );
 		}
 
-		void CheckForTubulinCollision (List<Molecule> collidingMolecules)
+		void CheckForTubulinCollision (List<Molecule> bindingPartners)
 		{
 			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 0.1f))
 			{
 				Tubulin t;
 				collidingTubulins.Clear();
-				foreach (Molecule m in collidingMolecules)
+				foreach (Molecule m in bindingPartners)
 				{
 					t = m as Tubulin;
-					if (t != null && t.type == 1)
+					if (t != null && t.tubulinType == 1)
 					{
 						collidingTubulins.Add( t );
 					}
@@ -356,11 +353,15 @@ namespace AICS.MotorProteins.Kinesin
 					if (t != null)
 					{
 						kinetics.kinetics[state == MotorState.KDP ? 4 : 7].attempts++;
-						if (shouldBind)
-						{
+//						if (shouldBind)
+//						{
 							BindTubulin( t );
 //							tubulinGraph.AddMolecules( collidingTubulins, transform );
-						}
+//						}
+//						else if (MolecularEnvironment.Instance.timeSinceRestart > 3f)
+//						{
+//							Debug.Log( name + " didn't bind when it could have!!" );
+//						}
 					}
 				}
 			}
@@ -386,7 +387,7 @@ namespace AICS.MotorProteins.Kinesin
 					_bindingPosition = t.transform.TransformPoint( bindingPosition );
 					hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
 					d = Vector3.Distance( _bindingPosition, transform.position );
-					if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
+					if (hipsD <= maxDistanceFromParent + 1f && d < minDistance) // && closeToBindingOrientation( t )
 					{
 						minDistance = d;
 						closestTubulin = t;

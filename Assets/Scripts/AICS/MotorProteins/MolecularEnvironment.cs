@@ -21,6 +21,7 @@ namespace AICS.MotorProteins
 
 		float averageFrameRate;
 		int frameRateSamples;
+		float startTime = 0;
 
 		static MolecularEnvironment _Instance;
 		public static MolecularEnvironment Instance
@@ -143,6 +144,15 @@ namespace AICS.MotorProteins
 		{
 			nanosecondsSinceStart = 0;
 			stepsSinceStart = 0;
+			startTime = Time.time;
+		}
+
+		public float timeSinceRestart
+		{
+			get
+			{
+				return Time.time - startTime;
+			}
 		}
 	}
 }
