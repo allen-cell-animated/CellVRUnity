@@ -9,6 +9,7 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public bool countFrameRate;
 		public Kinesin kinesin;
+		public DragLookZoomCamera cameraController;
 
 		public Parameter[] rates;
 
@@ -138,22 +139,19 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				MolecularEnvironment.Instance.pause = false;
 				pauseButtonText.text = "Pause";
-				Debug.Log( "Play!" );
 			}
 			else 
 			{
 				MolecularEnvironment.Instance.pause = true;
 				pauseButtonText.text = "Play";
-				Debug.Log( "Pause................................." );
 			}
 		}
 
 		public void Reset ()
 		{
-			Debug.Log( "RESET--------------------------------------" );
 			kinesin.Reset();
 			MolecularEnvironment.Instance.Reset();
-//			TogglePause();
+			cameraController.LookAtTarget();
 		}
 
 		public void ResetRates ()

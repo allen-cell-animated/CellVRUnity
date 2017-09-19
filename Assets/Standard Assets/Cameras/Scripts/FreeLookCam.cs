@@ -79,9 +79,6 @@ namespace UnityStandardAssets.Cameras
             // Adjust the look angle by an amount proportional to the turn speed and horizontal input.
             m_LookAngle += x*m_TurnSpeed;
 
-            // Rotate the rig (the root object) around Y axis only:
-            m_TransformTargetRot = Quaternion.Euler(0f, m_LookAngle, 0f);
-
             if (m_VerticalAutoReturn)
             {
                 // For tilt input, we need to behave differently depending on whether we're using mouse or touch input:
@@ -97,8 +94,16 @@ namespace UnityStandardAssets.Cameras
                 m_TiltAngle = Mathf.Clamp(m_TiltAngle, -m_TiltMin, m_TiltMax);
             }
 
-            // Tilt input around X is applied to the pivot (the child of this object)
-			m_PivotTargetRot = Quaternion.Euler(m_TiltAngle, m_PivotEulers.y , m_PivotEulers.z);
+			SetRotation( m_LookAngle, m_TiltAngle );
+        }
+
+		protected void SetRotation (float lookAngle, float tiltAngle)
+		{
+			// Rotate the rig (the root object) around Y axis only:
+			m_TransformTargetRot = Quaternion.Euler(0f, lookAngle, 0f);
+
+			// Tilt input around X is applied to the pivot (the child of this object)
+			m_PivotTargetRot = Quaternion.Euler(tiltAngle, m_PivotEulers.y , m_PivotEulers.z);
 
 			if (m_TurnSmoothing > 0)
 			{
@@ -110,6 +115,6 @@ namespace UnityStandardAssets.Cameras
 				m_Pivot.localRotation = m_PivotTargetRot;
 				transform.localRotation = m_TransformTargetRot;
 			}
-        }
+		}
     }
 }

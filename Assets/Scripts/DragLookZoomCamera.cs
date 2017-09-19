@@ -24,6 +24,14 @@ public class DragLookZoomCamera : FreeLookCam
 		}
 	}
 
+	bool dragging
+	{
+		get
+		{
+			return CrossPlatformInputManager.GetButton( "Fire1" ) && !EventSystem.current.IsPointerOverGameObject();
+		}
+	}
+
 	new void Update () 
 	{
 		DragToLook();
@@ -32,7 +40,7 @@ public class DragLookZoomCamera : FreeLookCam
 
 	void DragToLook ()
 	{
-		if (CrossPlatformInputManager.GetButton( "Fire1" ) && !EventSystem.current.IsPointerOverGameObject())
+		if (dragging)
 		{
 			HandleRotationMovement();
 		}
@@ -63,5 +71,10 @@ public class DragLookZoomCamera : FreeLookCam
 				m_Cam.localPosition -= speed * Vector3.forward;
 			}
 		}
+	}
+
+	public void LookAtTarget ()
+	{
+		// calculate tilt and look angles and slerp to them
 	}
 }
