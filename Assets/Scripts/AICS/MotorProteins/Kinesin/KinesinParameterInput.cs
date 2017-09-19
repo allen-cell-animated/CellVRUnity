@@ -9,7 +9,7 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public bool countFrameRate;
 		public Kinesin kinesin;
-		public DragLookZoomCamera cameraController;
+		public FollowLookZoomCamera cameraController;
 
 		public Parameter[] rates;
 
