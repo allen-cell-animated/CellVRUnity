@@ -26,16 +26,19 @@ namespace AICS.MotorProteins.Kinesin
 		public GameObject Pi;
 		public GameObject chargeForceFields;
 		public bool needToSwitchToStrong;
+		public StateIndicator stateIndicatorUI;
+		public Direction forwardDirection;
+		public Direction rightDirection;
 		public Kinetics kinetics;
 
-		[SerializeField] List<Tubulin> collidingTubulins = new List<Tubulin>();
+		List<Tubulin> collidingTubulins = new List<Tubulin>();
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
-		public StateIndicator stateIndicatorUI;
-		public MoleculeGraph<Tubulin> tubulinGraph;
+
+		MoleculeGraph<Tubulin> tubulinGraph;
 
 		Kinesin kinesin
 		{
@@ -69,6 +72,7 @@ namespace AICS.MotorProteins.Kinesin
 		void Start ()
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
+			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, rightDirection );
 
 			for (int i = 0; i < 6; i++)
 			{
@@ -353,15 +357,11 @@ namespace AICS.MotorProteins.Kinesin
 					if (t != null)
 					{
 						kinetics.kinetics[state == MotorState.KDP ? 4 : 7].attempts++;
-//						if (shouldBind)
-//						{
+						if (shouldBind)
+						{
 							BindTubulin( t );
-//							tubulinGraph.AddMolecules( collidingTubulins, transform );
-//						}
-//						else if (MolecularEnvironment.Instance.timeSinceRestart > 3f)
-//						{
-//							Debug.Log( name + " didn't bind when it could have!!" );
-//						}
+							tubulinGraph.AddMolecules( collidingTubulins, transform );
+						}
 					}
 				}
 			}
@@ -387,7 +387,7 @@ namespace AICS.MotorProteins.Kinesin
 					_bindingPosition = t.transform.TransformPoint( bindingPosition );
 					hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
 					d = Vector3.Distance( _bindingPosition, transform.position );
-					if (hipsD <= maxDistanceFromParent + 1f && d < minDistance) // && closeToBindingOrientation( t )
+					if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
 					{
 						minDistance = d;
 						closestTubulin = t;

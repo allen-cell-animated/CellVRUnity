@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace AICS
 {
+	public enum Direction
+	{
+		right, left,
+		up, down,
+		forward, backward
+	}
+
 	public static class Helpers 
 	{
 		// Get a vector of magnitude with random direction
@@ -134,6 +141,33 @@ namespace AICS
 				array[k] = array[n];  
 				array[n] = value; 
 			} 
+		}
+
+		public static Vector3 GetLocalDirection (Direction direction, Transform transform)
+		{
+			switch (direction)
+			{
+			case Direction.right :
+				return transform.right;
+
+			case Direction.left :
+				return -transform.right;
+
+			case Direction.up :
+				return transform.up;
+
+			case Direction.down :
+				return -transform.up;
+
+			case Direction.forward :
+				return transform.forward;
+
+			case Direction.backward :
+				return -transform.forward;
+
+			default :
+				return Vector3.zero;
+			}
 		}
 	}
 }

@@ -115,13 +115,13 @@ namespace AICS.MotorProteins
 		void CalculateFrameRate ()
 		{
 			averageFrameRate = (averageFrameRate * frameRateSamples + 1f / Time.deltaTime) / (frameRateSamples + 1f);
-			frameRateSamples++;
 
 			UpdateStepsPerFrame();
 		}
 
 		void UpdateStepsPerFrame ()
 		{
+			frameRateSamples++;
 			if (frameRateSamples >= 50)
 			{
 				int a = -Mathf.FloorToInt( (idealFrameRate - averageFrameRate) / (0.1f * idealFrameRate) );
