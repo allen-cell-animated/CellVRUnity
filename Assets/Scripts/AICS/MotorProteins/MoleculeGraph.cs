@@ -1,54 +1,76 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace AICS.MotorProteins
 {
+	public class MoleculeAngle : IComparable<MoleculeAngle>
+	{
+		public Molecule molecule;
+		public float angle;
+
+		public MoleculeAngle (Molecule _molecule, float _angle)
+		{
+			molecule = _molecule;
+			angle = _angle;
+		}
+
+		public int CompareTo (MoleculeAngle other)
+		{
+			if (other.angle < angle)
+			{
+				return -1;
+			}
+			else if (other.angle == angle)
+			{
+				return 0;
+			}
+			else 
+			{
+				return 1;
+			}
+		}
+	}
+
 	[System.Serializable]
 	public class MoleculeGraph<T> where T : Molecule
 	{
+		public List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+
 		Direction forwardDirection;
-		Direction rightDirection;
-		Dictionary<Molecule,float> moleculeAngles = new Dictionary<Molecule,float>();
+		Direction upDirection;
 		Transform lastCenterTransform;
 
-		public MoleculeGraph (Direction _forwardDirection, Direction _rightDirection)
+		public MoleculeGraph (Direction _forwardDirection, Direction _upDirection)
 		{
 			forwardDirection = _forwardDirection;
-			rightDirection = _rightDirection;
+			upDirection = _upDirection;
 		}
 
-		public void AddMolecules (List<T> molecules, Transform centerTransform)
+		public void AddMolecules (List<T> _molecules, Transform centerTransform)
 		{
-			moleculeAngles.Clear();
+			molecules.Clear();
 			lastCenterTransform = centerTransform;
 			Molecule molecule;
 			float angle;
-			Debug.Log( centerTransform.name + " graph tubulins-------------------------------------" );
-			foreach (T m in molecules)
+			foreach (T m in _molecules)
 			{
 				molecule = m as Molecule;
 				angle = GetMoleculeAngleFromForward( molecule );
-				moleculeAngles.Add( molecule, angle );
-				Debug.Log( molecule.name + " = " + angle );
+				molecules.Add( new MoleculeAngle( molecule, angle ) );
 			}
 		}
 
-		// Get angle in degrees starting at 12 o'clock (forward) and going clockwise
+		// Get angle in degrees from forward vector
 		float GetMoleculeAngleFromForward (Molecule molecule)
 		{
-			Vector3 toMolecule = Vector3.Normalize( molecule.transform.position - lastCenterTransform.position );
-			float angleForward = Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, lastCenterTransform ), toMolecule ) ) * Mathf.Rad2Deg;
-			float angleRight = Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( rightDirection, lastCenterTransform ), toMolecule ) ) * Mathf.Rad2Deg;
+			Vector3 toMolecule = molecule.transform.position - lastCenterTransform.position;
+			Vector3 normal = Helpers.GetLocalDirection( upDirection, lastCenterTransform );
+			Vector3 projectionToNormal = Vector3.Dot( toMolecule, normal ) * normal;
+			Vector3 moleculeDirectionInMotorPlane = (toMolecule - projectionToNormal).normalized;
 
-			if (angleRight <= 90f)
-			{
-				return Mathf.Round( angleForward );
-			}
-			else
-			{
-				return Mathf.Round( 360f - angleForward );
-			}
+			return Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, lastCenterTransform ), moleculeDirectionInMotorPlane ) ) * Mathf.Rad2Deg;
 		}
 	}
 }

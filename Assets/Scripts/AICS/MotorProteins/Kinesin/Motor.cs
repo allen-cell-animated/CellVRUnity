@@ -28,10 +28,10 @@ namespace AICS.MotorProteins.Kinesin
 		public bool needToSwitchToStrong;
 		public StateIndicator stateIndicatorUI;
 		public Direction forwardDirection;
-		public Direction rightDirection;
+		public Direction upDirection;
 		public Kinetics kinetics;
 
-		List<Tubulin> collidingTubulins = new List<Tubulin>();
+		List<Tubulin> tubulins = new List<Tubulin>();
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
 		Tubulin tubulin;
@@ -72,7 +72,7 @@ namespace AICS.MotorProteins.Kinesin
 		void Start ()
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
-			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, rightDirection );
+			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, upDirection );
 
 			for (int i = 0; i < 6; i++)
 			{
@@ -341,26 +341,27 @@ namespace AICS.MotorProteins.Kinesin
 			if (!bound && (needToSwitchToStrong || Time.time - lastReleaseTime > 0.1f))
 			{
 				Tubulin t;
-				collidingTubulins.Clear();
+				tubulins.Clear();
 				foreach (Molecule m in bindingPartners)
 				{
 					t = m as Tubulin;
 					if (t != null && t.tubulinType == 1)
 					{
-						collidingTubulins.Add( t );
+						tubulins.Add( t );
 					}
 				}
 
-				if (collidingTubulins.Count > 0)
+				if (tubulins.Count > 0)
 				{
-					t = FindClosestValidTubulin( collidingTubulins );
+					t = FindClosestValidTubulin( tubulins );
 					if (t != null)
 					{
 						kinetics.kinetics[state == MotorState.KDP ? 4 : 7].attempts++;
 						if (shouldBind)
 						{
 							BindTubulin( t );
-							tubulinGraph.AddMolecules( collidingTubulins, transform );
+							Debug.Log( name + " " + transform.rotation.eulerAngles );
+							tubulinGraph.AddMolecules( tubulins, transform );
 						}
 					}
 				}
@@ -382,12 +383,10 @@ namespace AICS.MotorProteins.Kinesin
 			Tubulin closestTubulin = null;
 			foreach (Tubulin t in tubulins)
 			{
-				if (!t.hasMotorBound)
+				if (TubulinIsValid( t, out _bindingPosition ))
 				{
-					_bindingPosition = t.transform.TransformPoint( bindingPosition );
-					hipsD = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
 					d = Vector3.Distance( _bindingPosition, transform.position );
-					if (hipsD <= maxDistanceFromParent && d < minDistance) // && closeToBindingOrientation( t )
+					if (d < minDistance)
 					{
 						minDistance = d;
 						closestTubulin = t;
@@ -397,12 +396,54 @@ namespace AICS.MotorProteins.Kinesin
 			return closestTubulin;
 		}
 
-		bool closeToBindingOrientation (Tubulin _tubulin)
+		bool TubulinIsValid (Tubulin _tubulin, out Vector3 _bindingPosition)
+		{
+			_bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
+			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
+			return !_tubulin.hasMotorBound && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
+		}
+
+		bool CloseToBindingOrientation (Tubulin _tubulin)
 		{
 			Vector3 localRotation = (Quaternion.Inverse( _tubulin.transform.rotation ) * transform.rotation).eulerAngles;
 			return Helpers.AngleIsWithinTolerance( localRotation.x, bindingRotation.x, bindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.y, bindingRotation.y, bindingRotationTolerance )
 				&& Helpers.AngleIsWithinTolerance( localRotation.z, bindingRotation.z, bindingRotationTolerance );
+		}
+
+		Tubulin GetRandomTubulinToBind ()
+		{
+			tubulins.Clear();
+
+			List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+			Vector3 _bindingPosition;
+			foreach (MoleculeAngle ma in otherMotor.tubulinGraph.molecules)
+			{
+				Tubulin t = ma.molecule as Tubulin;
+				if (t != null && TubulinIsValid( t, out _bindingPosition ))
+				{
+					molecules.Add( ma );
+				}
+			}
+
+			if (molecules.Count > 0)
+			{
+				if (molecules.Count == 1)
+				{
+					return molecules[0].molecule as Tubulin;
+				}
+
+				molecules.Sort();
+				int index = GetRandomIndex( molecules.Count );
+				return molecules[index].molecule as Tubulin;
+			}
+			return null;
+		}
+
+		int GetRandomIndex (int n)
+		{
+			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
+			return Mathf.CeilToInt( i * n ) - 1;
 		}
 
 		void BindTubulin (Tubulin _tubulin)
