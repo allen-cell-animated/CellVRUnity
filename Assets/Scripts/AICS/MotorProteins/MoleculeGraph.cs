@@ -42,15 +42,23 @@ namespace AICS.MotorProteins
 		Direction upDirection;
 		Transform lastCenterTransform;
 
+		public bool empty 
+		{
+			get
+			{
+				return molecules.Count < 1;
+			}
+		}
+
 		public MoleculeGraph (Direction _forwardDirection, Direction _upDirection)
 		{
 			forwardDirection = _forwardDirection;
 			upDirection = _upDirection;
 		}
 
-		public void AddMolecules (List<T> _molecules, Transform centerTransform)
+		public void SetMolecules (List<T> _molecules, Transform centerTransform)
 		{
-			molecules.Clear();
+			Clear();
 			lastCenterTransform = centerTransform;
 			Molecule molecule;
 			float angle;
@@ -62,7 +70,7 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		// Get angle in degrees from forward vector
+		// Get angle in degrees from forward vector projected on plane passing through transform and perpendicular to up vector
 		float GetMoleculeAngleFromForward (Molecule molecule)
 		{
 			Vector3 toMolecule = molecule.transform.position - lastCenterTransform.position;
@@ -71,6 +79,11 @@ namespace AICS.MotorProteins
 			Vector3 moleculeDirectionInMotorPlane = (toMolecule - projectionToNormal).normalized;
 
 			return Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, lastCenterTransform ), moleculeDirectionInMotorPlane ) ) * Mathf.Rad2Deg;
+		}
+
+		public void Clear ()
+		{
+			molecules.Clear();
 		}
 	}
 }

@@ -30,6 +30,7 @@ namespace AICS.MotorProteins
 		public float meanRotation = 5f;
 		public bool exitCollisions = true;
 		public float bindingRadius;
+		public bool interactsWithOthers;
 
 		[SerializeField] protected List<Molecule> bindingPartners = new List<Molecule>();
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
@@ -60,7 +61,7 @@ namespace AICS.MotorProteins
 		{
 			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
 
-			if (moleculeDetectors.Length > 0)
+			if (interactsWithOthers)
 			{
 				CheckForBindingPartner( moveStep );
 			}
@@ -97,6 +98,19 @@ namespace AICS.MotorProteins
 			{
 				moleculeList.AddRange( detector.GetCollidingMolecules( molecule, moveStep, _radius ) );
 			}
+		}
+
+		protected List<Molecule> GetNearbyMolecules (MoleculeType _type)
+		{
+			List<Molecule> moleculeList = new List<Molecule>();
+			foreach (MoleculeDetector detector in moleculeDetectors)
+			{
+				if (detector.moleculeType == _type)
+				{
+					moleculeList.AddRange( detector.nearbyMolecules );
+				}
+			}
+			return moleculeList;
 		}
 
 		protected abstract void InteractWithBindingPartners ();
