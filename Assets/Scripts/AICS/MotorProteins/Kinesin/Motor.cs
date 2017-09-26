@@ -36,6 +36,7 @@ namespace AICS.MotorProteins.Kinesin
 		Tubulin tubulin;
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
+		public Color tubulinFlashColor;
 
 		MoleculeGraph<Tubulin> tubulinGraph;
 
@@ -371,15 +372,18 @@ namespace AICS.MotorProteins.Kinesin
 			return null;
 		}
 
+		public List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+
 		Tubulin GetTubulinAroundOtherMotor ()
 		{
-			List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+			molecules.Clear();
 			foreach (MoleculeAngle ma in otherMotor.tubulinGraph.molecules)
 			{
 				Tubulin t = ma.molecule as Tubulin;
 				if (t != null && TubulinIsValid( t ))
 				{
 					molecules.Add( ma );
+					t.Flash( tubulinFlashColor );
 				}
 			}
 
@@ -399,7 +403,7 @@ namespace AICS.MotorProteins.Kinesin
 			foreach (Molecule m in nearbyMolecules)
 			{
 				t = m as Tubulin;
-				if (t != null && t.tubulinType == 1)
+				if (t != null && t != tubulin && t.tubulinType == 1)
 				{
 					tubulins.Add( t );
 				}
@@ -411,7 +415,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
 			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound && hipsDistance <= 2f * maxDistanceFromParent; // && CloseToBindingOrientation( t )
+			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
 		}
 
 		bool CloseToBindingOrientation (Tubulin _tubulin)
@@ -431,8 +435,8 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
 			Debug.Log( (Mathf.CeilToInt( i * n ) - 1) + " / " + n );
-			return Mathf.CeilToInt( i * n ) - 1;
-//			return 0;
+//			return Mathf.CeilToInt( i * n ) - 1;
+			return 0;
 		}
 
 		void DoTubulinBind (Tubulin _tubulin)
@@ -490,6 +494,7 @@ namespace AICS.MotorProteins.Kinesin
 			Pi.SetActive( false );
 			chargeForceFields.SetActive( true );
 			kinetics.Reset();
+			tubulinGraph.Clear();
 
 			for (int i = 0; i < 6; i++)
 			{

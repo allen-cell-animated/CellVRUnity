@@ -5,6 +5,7 @@ using System;
 
 namespace AICS.MotorProteins
 {
+	[System.Serializable]
 	public class MoleculeAngle : IComparable<MoleculeAngle>
 	{
 		public Molecule molecule;
@@ -18,7 +19,7 @@ namespace AICS.MotorProteins
 
 		public int CompareTo (MoleculeAngle other)
 		{
-			if (other.angle < angle)
+			if (other.angle > angle)
 			{
 				return -1;
 			}

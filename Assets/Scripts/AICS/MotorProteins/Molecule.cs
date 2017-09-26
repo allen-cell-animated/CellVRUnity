@@ -16,6 +16,21 @@ namespace AICS.MotorProteins
 		public Quaternion startRotation;
 		public int resetFrames;
 
+		public MeshRenderer meshRenderer;
+		public Color flashColor;
+		Color color;
+
+		public void Flash (Color _flashColor = new Color())
+		{
+			meshRenderer.material.color = _flashColor == new Color() ? flashColor : _flashColor;
+			Invoke( "EndFlash", 1.5f );
+		}
+
+		void EndFlash ()
+		{
+			meshRenderer.material.color = color;
+		}
+
 		public abstract bool bound
 		{
 			get;
@@ -25,6 +40,7 @@ namespace AICS.MotorProteins
 		{
 			startPosition = transform.position;
 			startRotation = transform.rotation;
+			if (meshRenderer != null) { color = meshRenderer.material.color; }
 			OnAwake();
 		}
 
