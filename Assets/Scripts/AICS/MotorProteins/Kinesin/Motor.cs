@@ -383,7 +383,7 @@ namespace AICS.MotorProteins.Kinesin
 				if (t != null && TubulinIsValid( t ))
 				{
 					molecules.Add( ma );
-					t.Flash( tubulinFlashColor );
+//					t.Flash( tubulinFlashColor );
 				}
 			}
 
