@@ -54,12 +54,12 @@ namespace AICS.MotorProteins
 
 		protected void Rotate ()
 		{
-			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( SampleExponentialDistribution( meanRotation ) ) );
+			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) );
 		}
 
 		protected bool Move () 
 		{
-			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( meanStepSize ) );
+			Vector3 moveStep = Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) );
 
 			if (interactsWithOthers)
 			{
@@ -119,7 +119,7 @@ namespace AICS.MotorProteins
 
 		protected virtual void Jitter (float amount = 0.01f) 
 		{
-			Vector3 moveStep = Helpers.GetRandomVector( SampleExponentialDistribution( amount ) );
+			Vector3 moveStep = Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( amount ) );
 			MoveIfValid( moveStep );
 		}
 
@@ -134,11 +134,6 @@ namespace AICS.MotorProteins
 		}
 
 		protected abstract bool IsValidMove (Vector3 moveStep);
-
-		protected float SampleExponentialDistribution (float mean)
-		{
-			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
-		}
 
 		void OnTriggerStay (Collider other)
 		{
