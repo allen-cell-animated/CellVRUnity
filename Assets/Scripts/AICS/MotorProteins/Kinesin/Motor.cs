@@ -24,7 +24,6 @@ namespace AICS.MotorProteins.Kinesin
 		public GameObject ATP;
 		public GameObject ADP;
 		public GameObject Pi;
-		public GameObject chargeForceFields;
 		public bool needToSwitchToStrong;
 		public StateIndicator stateIndicatorUI;
 		public Direction forwardDirection;
@@ -69,6 +68,16 @@ namespace AICS.MotorProteins.Kinesin
 
 		protected override void OnAwake () { }
 
+		public static Kinetic GetNextEvent (MotorState startState)
+		{
+			return new Kinetic( new KineticRate( "", 0, 0, 1f ) );
+		}
+
+		public static float GetEventNanoseconds (Kinetic transition)
+		{
+			return 0;
+		}
+
 		void Start ()
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
@@ -98,55 +107,60 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		Dictionary<MotorState,EventWithKineticRate[]> _actionsForState;
-		Dictionary<MotorState,EventWithKineticRate[]> actionsForState
+		Dictionary<MotorState,Kinetic[]> _eventsForState;
+		Dictionary<MotorState,Kinetic[]> eventsForState
 		{
 			get 
 			{
-				if (_actionsForState == null)
+				if (_eventsForState == null)
 				{
-					SetActionsForStates();
+					SetEventsForStates();
 				}
-				return _actionsForState;
+				return _eventsForState;
 			}
 		}
 
-		void SetActionsForStates ()
+		void SetEventsForStates ()
 		{
-			_actionsForState = new Dictionary<MotorState, EventWithKineticRate[]>();
+			_eventsForState = new Dictionary<MotorState,Kinetic[]>();
 
-			EventWithKineticRate[] actions = new EventWithKineticRate[1];
-			actions[0] = new EventWithKineticRate( "BindATP", BindATP, kinetics.kinetics[0] );
-			_actionsForState.Add( MotorState.MtK, actions );
+			Kinetic[] events = new Kinetic[1];
+			events[0] = kinetics.GetKinetic( (int)MotorState.MtK, (int)MotorState.MtKT );
+			events[0].kineticEvent = BindATP;
+			_eventsForState.Add( MotorState.MtK, events );
 
-			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( "ReleaseATP", ReleaseATP, kinetics.kinetics[1] );
-			actions[1] = new EventWithKineticRate( "HydrolyzeATP", HydrolyzeATP, kinetics.kinetics[2] );
-			_actionsForState.Add( MotorState.MtKT, actions );
+			events = new Kinetic[2];
+			events[0] = kinetics.GetKinetic( (int)MotorState.MtKT, (int)MotorState.MtK );
+			events[0].kineticEvent = ReleaseATP;
+			events[1] = kinetics.GetKinetic( (int)MotorState.MtKT, (int)MotorState.MtKDP );
+			events[1].kineticEvent = HydrolyzeATP;
+			_eventsForState.Add( MotorState.MtKT, events );
 
-			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( "ReleasePhosphate", ReleasePhosphate, kinetics.kinetics[3] );
-			actions[1] = new EventWithKineticRate( "ReleaseTubulin", ReleaseTubulin, kinetics.kinetics[5] );
-			_actionsForState.Add( MotorState.MtKDP, actions );
+			events = new Kinetic[2];
+			events[0] = kinetics.GetKinetic( (int)MotorState.MtKDP, (int)MotorState.MtKD );
+			events[0].kineticEvent = ReleasePhosphate;
+			events[1] = kinetics.GetKinetic( (int)MotorState.MtKDP, (int)MotorState.KDP );
+			events[1].kineticEvent = ReleaseTubulin;
+			_eventsForState.Add( MotorState.MtKDP, events );
 
-			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( "ReleaseADP", ReleaseADP, kinetics.kinetics[9] );
-			actions[1] = new EventWithKineticRate( "ReleaseTubulin", ReleaseTubulin, kinetics.kinetics[8] );
-			_actionsForState.Add( MotorState.MtKD, actions );
+			events = new Kinetic[2];
+			events[0] = kinetics.GetKinetic( (int)MotorState.MtKD, (int)MotorState.MtK );
+			events[0].kineticEvent = ReleaseADP;
+			events[1] = kinetics.GetKinetic( (int)MotorState.MtKD, (int)MotorState.KD );
+			events[1].kineticEvent = ReleaseTubulin;
+			_eventsForState.Add( MotorState.MtKD, events );
 
-			actions = new EventWithKineticRate[2];
-			actions[0] = new EventWithKineticRate( "BindTubulin", BindTubulin, kinetics.kinetics[4] );
-			actions[1] = new EventWithKineticRate( "ReleasePhosphate", ReleasePhosphate, kinetics.kinetics[6] );
-			_actionsForState.Add( MotorState.KDP, actions );
+			events = new Kinetic[2];
+			events[0] = kinetics.GetKinetic( (int)MotorState.KDP, (int)MotorState.MtKDP );
+			events[0].kineticEvent = BindTubulin;
+			events[1] = kinetics.GetKinetic( (int)MotorState.KDP, (int)MotorState.KD );
+			events[1].kineticEvent = ReleasePhosphate;
+			_eventsForState.Add( MotorState.KDP, events );
 
-			actions = new EventWithKineticRate[1];
-			actions[0] = new EventWithKineticRate( "BindTubulin", BindTubulin, kinetics.kinetics[7] );
-			_actionsForState.Add( MotorState.KD, actions );
-		}
-
-		public void PreCalculateSimulation ()
-		{
-
+			events = new Kinetic[1];
+			events[0] = kinetics.GetKinetic( (int)MotorState.KD, (int)MotorState.MtKD );
+			events[0].kineticEvent = BindTubulin;
+			_eventsForState.Add( MotorState.KD, events );
 		}
 
 		public override void DoCustomSimulation ()
@@ -159,44 +173,44 @@ namespace AICS.MotorProteins.Kinesin
 				TryToSwitchToStrong();
 			}
 
-			DoInRandomOrder( actionsForState[state] );
+			DoInRandomOrder( eventsForState[state] );
 
 			kinetics.CalculateObservedRates();
 		}
 
 		public List<int> count = new List<int>();
-		string filePath = "/Users/blairl/Desktop/test";
-		public int n;
-		void OnApplicationQuit ()
-		{
-			string data = " , " + MolecularEnvironment.Instance.timeMultiplier + "\n" + " , " + kinesin.averageWalkingSpeed + "\n";
-			int r = 0;
-			foreach (Kinetic k in kinetics.kinetics)
-			{
-				if (k.attempts < 1.1f * k.events && k.observedKineticRate < 0.9f * k.kineticRate.rate)
-				{
-					data += r + ", 1\n";
-				}
-				else 
-				{
-					data += r + ", 0\n";
-				}
-				r++;
-			}
-			data += "\n";
-			for (int i = 0; i < 6; i++)
-			{
-				data += i + ", " + count[i] + "\n";
-			}
-			data += "\n";
-			r = 0;
-			foreach (Kinetic k in kinetics.kinetics)
-			{
-				data += r + ", " + (k.observedKineticRate / k.kineticRate.rate) + "\n";
-			}
-
-			File.WriteAllText( filePath + n.ToString() + ".csv", data );
-		}
+//		string filePath = "/Users/blairl/Desktop/test";
+//		public int n;
+//		void OnApplicationQuit ()
+//		{
+//			string data = " , " + MolecularEnvironment.Instance.timeMultiplier + "\n" + " , " + kinesin.averageWalkingSpeed + "\n";
+//			int r = 0;
+//			foreach (Kinetic k in kinetics.kinetics)
+//			{
+//				if (k.attempts < 1.1f * k.events && k.observedRate < 0.9f * k.theoreticalRate)
+//				{
+//					data += r + ", 1\n";
+//				}
+//				else 
+//				{
+//					data += r + ", 0\n";
+//				}
+//				r++;
+//			}
+//			data += "\n";
+//			for (int i = 0; i < 6; i++)
+//			{
+//				data += i + ", " + count[i] + "\n";
+//			}
+//			data += "\n";
+//			r = 0;
+//			foreach (Kinetic k in kinetics.kinetics)
+//			{
+//				data += r + ", " + (k.observedRate / k.theoreticalRate) + "\n";
+//			}
+//
+//			File.WriteAllText( filePath + n.ToString() + ".csv", data );
+//		}
 
 		void TryToSwitchToStrong ()
 		{
@@ -204,68 +218,68 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				if (state == MotorState.MtKDP)
 				{
-					if (!kinetics.kinetics[3].observedRateTooHigh)
+					Kinetic k = kinetics.GetKinetic( (int)MotorState.MtKDP, (int)MotorState.MtKD );
+					if (!k.observedRateTooHigh)
 					{
-						kinetics.kinetics[3].attempts++;
-						ReleasePhosphate();
+						k.attempts++;
+						ReleasePhosphate( k );
 					}
 				}
 				else if (state == MotorState.MtKD)
 				{
-					if (!kinetics.kinetics[9].observedRateTooHigh)
+					Kinetic k = kinetics.GetKinetic( (int)MotorState.MtKD, (int)MotorState.MtK );
+					if (!k.observedRateTooHigh)
 					{
-						kinetics.kinetics[9].attempts++;
-						ReleaseADP();
+						k.attempts++;
+						ReleaseADP( k );
 						needToSwitchToStrong = false;
 					}
 				}
 			}
 			else 
 			{
-				if (!chargeForceFields.activeSelf)
+				if (state == MotorState.KDP || state == MotorState.KD)
 				{
-					chargeForceFields.SetActive( true );
-				}
-				if (state == MotorState.KDP)
-				{
-					if (!kinetics.kinetics[6].observedRateTooHigh)
+					Kinetic k = (state == MotorState.KDP) ? 
+						kinetics.GetKinetic( (int)MotorState.KDP, (int)MotorState.MtKDP ) : kinetics.GetKinetic( (int)MotorState.KD, (int)MotorState.MtKD );
+					if (!k.observedRateTooHigh)
 					{
-						kinetics.kinetics[6].attempts++;
-						ReleasePhosphate();
+						k.attempts++;
+						BindTubulin( k );
 					}
 				}
 			}
 		}
 
-		void BindATP ()
+		bool BindATP (Kinetic kinetic)
 		{
-			kinetics.kinetics[0].events++;
 			if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
 
-			SetState( MotorState.MtKT );
+			SetState( (MotorState)kinetic.finalStateIndex );
 			ATP.SetActive( true );
 			kinesin.hips.StartSnap( this );
+			return true;
 		}
 
-		void ReleaseATP ()
+		bool ReleaseATP (Kinetic kinetic)
 		{
-			kinetics.kinetics[1].events++;
 			if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
 
-			SetState( MotorState.MtK );
+			SetState( (MotorState)kinetic.finalStateIndex );
 			ATP.SetActive( false );
+			return true;
 		}
 
-		void HydrolyzeATP ()
+		bool HydrolyzeATP (Kinetic kinetic)
 		{
-			kinetics.kinetics[2].events++;
 			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
 
-			SetState( MotorState.MtKDP );
+			SetState( (MotorState)kinetic.finalStateIndex );
 			ATP.SetActive( false );
 			ADP.SetActive( true );
 			Pi.SetActive( true );
 			otherMotor.SwitchToStrong();
+			return true;
 		}
 
 		void SwitchToStrong ()
@@ -273,25 +287,26 @@ namespace AICS.MotorProteins.Kinesin
 			needToSwitchToStrong = !stateIsStrong;
 		}
 
-		void ReleasePhosphate ()
-		{			
-			kinetics.kinetics[bound ? 3 : 6].events++;
+		bool ReleasePhosphate (Kinetic kinetic)
+		{
 			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
 
-			SetState( (state == MotorState.MtKDP) ? MotorState.MtKD : MotorState.KD );
+			SetState( (MotorState)kinetic.finalStateIndex );
 			Pi.SetActive( false );
+			return true;
 		}
 
-		void ReleaseADP ()
+		bool ReleaseADP (Kinetic kinetic)
 		{
 			if (!otherMotor.stateIsStrong)
 			{
-				kinetics.kinetics[9].events++;
 				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
 
-				SetState( MotorState.MtK );
+				SetState( (MotorState)kinetic.finalStateIndex );
 				ADP.SetActive( false );
+				return true;
 			}
+			return false;
 		}
 
 		// --------------------------------------------------------------------------------------------------- Random walk
@@ -329,16 +344,18 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Tubulin binding/release
 
-		void BindTubulin ()
+		bool BindTubulin (Kinetic kinetic)
 		{
 			if (!bound && (Time.time - lastReleaseTime > 0.1f || needToSwitchToStrong))
 			{
 				Tubulin t = FindTubulin();
 				if (t != null)
 				{
-					DoTubulinBind( t );
+					DoTubulinBind( t, kinetic );
+					return true;
 				}
 			}
+			return false;
 		}
 
 		Tubulin FindTubulin ()
@@ -383,7 +400,7 @@ namespace AICS.MotorProteins.Kinesin
 				if (t != null && TubulinIsValid( t ))
 				{
 					molecules.Add( ma );
-//					t.Flash( tubulinFlashColor );
+					t.Flash( tubulinFlashColor );
 				}
 			}
 
@@ -434,17 +451,16 @@ namespace AICS.MotorProteins.Kinesin
 		int GetExponentialRandomIndex (int n)
 		{
 			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
-			Debug.Log( (Mathf.CeilToInt( i * n ) - 1) + " / " + n );
-//			return Mathf.CeilToInt( i * n ) - 1;
-			return 0;
+//			Debug.Log( (Mathf.CeilToInt( i * n ) - 1) + " / " + n );
+			return Mathf.CeilToInt( i * n ) - 1;
+//			return 0;
 		}
 
-		void DoTubulinBind (Tubulin _tubulin)
+		void DoTubulinBind (Tubulin _tubulin, Kinetic kinetic)
 		{
-			kinetics.kinetics[state == MotorState.KDP ? 4 : 7].events++;
 			if (logEvents) { Debug.Log( name + " BIND --------------------------------" ); }
 
-			SetState( (state == MotorState.KDP) ? MotorState.MtKDP : MotorState.MtKD );
+			SetState( (MotorState)kinetic.finalStateIndex );
 			tubulin = _tubulin;
 			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
@@ -452,18 +468,16 @@ namespace AICS.MotorProteins.Kinesin
 			SetPosition( tubulin.transform.TransformPoint( bindingPosition ) );
 			lastSetToBindingPositionTime = Time.time;
 			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
-			chargeForceFields.SetActive( false );
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
 		}
 
-		void ReleaseTubulin ()
+		bool ReleaseTubulin (Kinetic kinetic)
 		{
 			if (otherMotor.bound)
 			{
-				kinetics.kinetics[state == MotorState.MtKDP ? 5 : 8].events++;
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
 
-				SetState( (state == MotorState.MtKDP) ? MotorState.KDP : MotorState.KD );
+				SetState( (MotorState)kinetic.finalStateIndex );
 				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 				lastReleaseTime = Time.time;
 				if (tubulin != null)
@@ -473,9 +487,10 @@ namespace AICS.MotorProteins.Kinesin
 					MoveIfValid( fromTubulin );
 				}
 				kinesin.hips.SetFree( this );
-				chargeForceFields.SetActive( true );
 				tubulinGraph.Clear();
+				return true;
 			}
+			return false;
 		}
 
 		protected override void InteractWithBindingPartners () { }
@@ -485,6 +500,7 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomReset ()
 		{
 			if (logEvents) { Debug.Log( name + " reset --------------------------------" ); }
+
 			SetState( MotorState.KD );
 			needToSwitchToStrong = false;
 			tubulin = null;
@@ -492,7 +508,6 @@ namespace AICS.MotorProteins.Kinesin
 			ATP.SetActive( false );
 			ADP.SetActive( true );
 			Pi.SetActive( false );
-			chargeForceFields.SetActive( true );
 			kinetics.Reset();
 			tubulinGraph.Clear();
 

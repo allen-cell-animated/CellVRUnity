@@ -17,18 +17,23 @@ namespace AICS.MotorProteins
 		public int resetFrames;
 
 		public MeshRenderer meshRenderer;
-		public Color flashColor;
 		Color color;
 
-		public void Flash (Color _flashColor = new Color())
+		public void Flash (Color _flashColor)
 		{
-			meshRenderer.material.color = _flashColor == new Color() ? flashColor : _flashColor;
-			Invoke( "EndFlash", 1.5f );
+			if (meshRenderer != null) 
+			{ 
+				meshRenderer.material.color = _flashColor;
+				Invoke( "EndFlash", 1.5f );
+			}
 		}
 
 		void EndFlash ()
 		{
-			meshRenderer.material.color = color;
+			if (meshRenderer != null) 
+			{ 
+				meshRenderer.material.color = color;
+			}
 		}
 
 		public abstract bool bound

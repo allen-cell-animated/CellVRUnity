@@ -8,7 +8,7 @@ namespace AICS.MotorProteins
 	public class CreateKineticRates 
 	{
 		[MenuItem("Assets/Create/KinesinKineticRates")]
-		public static void CreateKinesinKineticRates ()
+		public static void Create ()
 		{
 			KineticRates asset = ScriptableObject.CreateInstance<KineticRates>();
 			asset.SetKinesinDefaults();

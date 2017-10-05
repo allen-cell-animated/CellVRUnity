@@ -8,7 +8,6 @@ namespace AICS.MotorProteins
 	public abstract class AssemblyMolecule : Molecule 
 	{
 		public List<ComponentMolecule> componentMolecules;
-		public KineticRates kineticRates;
 
 		protected override void OnAwake ()
 		{

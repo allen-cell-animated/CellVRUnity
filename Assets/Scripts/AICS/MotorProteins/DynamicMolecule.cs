@@ -5,22 +5,6 @@ using AICS.Microtubule;
 
 namespace AICS.MotorProteins
 {
-	public delegate void KineticEvent ();
-
-	public class EventWithKineticRate
-	{
-		public string name;
-		public KineticEvent kineticEvent;
-		public Kinetic kinetic;
-
-		public EventWithKineticRate (string _name, KineticEvent _event, Kinetic _kinetic)
-		{
-			name = _name;
-			kineticEvent = _event;
-			kinetic = _kinetic;
-		}
-	}
-
 	// A molecule object that can 
 	// - randomly rotate and move while avoiding and reporting collisions
 	// - do kinetic events
@@ -149,14 +133,14 @@ namespace AICS.MotorProteins
 			MoveIfValid( moveStep );
 		}
 
-		protected void DoInRandomOrder (EventWithKineticRate[] things)
+		protected void DoInRandomOrder (Kinetic[] kinetics)
 		{
-			if (things.Length > 0)
+			if (kinetics.Length > 0)
 			{
-				things.Shuffle();
-				for (int i = 0; i < things.Length; i++)
+				kinetics.Shuffle();
+				for (int i = 0; i < kinetics.Length; i++)
 				{
-					if (DoSomethingAtKineticRate( things[i] ))
+					if (DoEventAtKineticRate( kinetics[i] ))
 					{
 						return;
 					}
@@ -164,13 +148,16 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		protected bool DoSomethingAtKineticRate (EventWithKineticRate something)
+		protected bool DoEventAtKineticRate (Kinetic kinetic)
 		{
-			something.kinetic.attempts++;
-			if (something.kinetic.ShouldHappen())
+			kinetic.attempts++;
+			if (kinetic.ShouldHappen())
 			{
-				something.kineticEvent();
-				return true;
+				if (kinetic.kineticEvent( kinetic ))
+				{
+					kinetic.events++;
+					return true;
+				}
 			}
 			return false;
 		}
