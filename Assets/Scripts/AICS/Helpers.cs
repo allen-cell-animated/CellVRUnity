@@ -209,8 +209,8 @@ namespace AICS
 			float v1 = 0, v2 = 0, s = 0;
 			while (s >= 1f || s == 0) 
 			{
-				v1 = 2f * Random.Range( 0, 1f ) - 1f;
-				v2 = 2f * Random.Range( 0, 1f ) - 1f;
+				v1 = 2f * Random.value - 1f;
+				v2 = 2f * Random.value - 1f;
 				s = v1 * v1 + v2 * v2;
 			}
 			s = Mathf.Sqrt( (-2f * Mathf.Log( s )) / s );

@@ -57,7 +57,7 @@ namespace AICS.MotorProteins
 				return false;
 			}
 			if (log) { Debug.Log( "try " + s ); }
-			return Random.Range( 0, 1f ) <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsSinceStart / attempts;
+			return Random.value <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsPerStep * 1E-9f * MolecularEnvironment.Instance.stepsSinceStart / attempts;
 		}
 
 		public void CalculateObservedRate (float secondsSinceStart)

@@ -70,12 +70,46 @@ namespace AICS.MotorProteins.Kinesin
 
 		public static Kinetic GetNextEvent (MotorState startState)
 		{
-			return new Kinetic( new KineticRate( "", 0, 0, 1f ) );
+			Kinetics[] possibleEvents = eventsForState[startState];
+			float sumOfTheoreticalRates = GetSumOfTheoreticalRatesExitingState( startState );
+			Kinetic eventToDo = null;
+
+			do
+			{
+				eventToDo = TryToGetNextEvent( possibleEvents, sumOfTheoreticalRates );
+			} 
+			while (eventToDo == null);
+
+			return eventToDo;
 		}
 
-		public static float GetEventNanoseconds (Kinetic transition)
+		Kinetic TryToGetNextEvent (Kinetics[] possibleEvents, float sumOfTheoreticalRates)
 		{
-			return 0;
+			possibleEvents.Shuffle();
+			foreach (Kinetic k in possibleEvents)
+			{
+				if (Random.value <= k.theoreticalRate / sumOfTheoreticalRates)
+				{
+					return k;
+				}
+			}
+			return null;
+		}
+
+		float GetSumOfTheoreticalRatesExitingState (MotorState startState)
+		{
+			float sum = 0;
+			foreach (Kinetic k in eventsForState[startState])
+			{
+				sum += k.theoreticalRate;
+			}
+			return sum;
+		}
+
+		public static float GetEventNanoseconds (Kinetic _event)
+		{
+			float mean = 1f / _event.theoreticalRate;
+			return Mathf.Max( 0, Helpers.SampleNormalDistribution( mean, mean / 3.5f ) );
 		}
 
 		void Start ()

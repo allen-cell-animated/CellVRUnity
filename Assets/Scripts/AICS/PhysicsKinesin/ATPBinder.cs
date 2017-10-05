@@ -41,7 +41,7 @@ namespace AICS.PhysicsKinesin
 		{
 			if (nucleotide == null && _nucleotide != null && _nucleotide.isATP)
 			{
-				float random = Random.Range(0, 1f);
+				float random = Random.value;
 				return random <= ATPBindingProbability;
 			}
 			return false;
@@ -79,7 +79,7 @@ namespace AICS.PhysicsKinesin
 			get {
 				if (nucleotide != null && !nucleotide.isATP && Time.time - bindingTime > 0.5f)
 				{
-					float random = Random.Range(0, 1f);
+					float random = Random.value;
 					return random <= Time.deltaTime * ADPReleaseProbability;
 				}
 				return false;
@@ -107,7 +107,7 @@ namespace AICS.PhysicsKinesin
 				if (nucleotide != null && nucleotide.isATP)
 				{
 					float probability = (Time.time - bindingTime) / hydrolysisTime - 0.5f;
-					float random = Random.Range(0, 1f);
+					float random = Random.value;
 					return random <= probability;
 				}
 				return false;

@@ -365,7 +365,7 @@ namespace AICS.PhysicsKinesin
 		{
 			get {
 				float probability = (state == MotorState.Weak) ? probabilityOfEjectionFromWeak : probabilityOfEjectionFromStrong;
-				return Random.Range(0, 1f) <= Time.deltaTime * probability;
+				return Random.value <= Time.deltaTime * probability;
 			}
 		}
 
