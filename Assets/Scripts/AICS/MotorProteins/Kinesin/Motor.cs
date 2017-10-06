@@ -17,6 +17,35 @@ namespace AICS.MotorProteins.Kinesin
 		KD // free moving with ADP bound
 	}
 
+	[System.Serializable]
+	public class CachedMotorEvent : System.IComparable<CachedMotorEvent>
+	{
+		public Motor motor;
+		public MotorState startState;
+		public MotorState finalState;
+		public float timeNanoseconds; 
+
+		public CachedMotorEvent (Motor _motor, MotorState _startState, MotorState _finalState, float _timeNanoseconds)
+		{
+			motor = _motor;
+			startState = _startState;
+			finalState = _finalState;
+			timeNanoseconds = _timeNanoseconds;
+		}
+
+		public int CompareTo (CachedMotorEvent other)
+		{
+			if (other.timeNanoseconds > timeNanoseconds)
+			{
+				return -1;
+			}
+			else 
+			{
+				return 1;
+			}
+		}
+	}
+
 	public class Motor : ComponentMolecule 
 	{
 		public MotorState state = MotorState.KD;
@@ -28,7 +57,7 @@ namespace AICS.MotorProteins.Kinesin
 		public StateIndicator stateIndicatorUI;
 		public Direction forwardDirection;
 		public Direction upDirection;
-		public Kinetics kinetics;
+		public bool calculateStatesIndependently;
 
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
@@ -68,29 +97,30 @@ namespace AICS.MotorProteins.Kinesin
 
 		protected override void OnAwake () { }
 
-		public static Kinetic GetNextEvent (MotorState startState)
+		public Kinetic GetNextEvent (MotorState startState, MotorState otherMotorState)
 		{
-			Kinetics[] possibleEvents = eventsForState[startState];
+			Kinetic[] possibleEvents = eventsForState[startState];
 			float sumOfTheoreticalRates = GetSumOfTheoreticalRatesExitingState( startState );
 			Kinetic eventToDo = null;
 
 			do
 			{
-				eventToDo = TryToGetNextEvent( possibleEvents, sumOfTheoreticalRates );
+				eventToDo = TryToGetNextEvent( possibleEvents, otherMotorState, sumOfTheoreticalRates );
 			} 
 			while (eventToDo == null);
 
 			return eventToDo;
 		}
 
-		Kinetic TryToGetNextEvent (Kinetics[] possibleEvents, float sumOfTheoreticalRates)
+		Kinetic TryToGetNextEvent (Kinetic[] possibleEvents, MotorState otherMotorState, float sumOfTheoreticalRates)
 		{
 			possibleEvents.Shuffle();
-			foreach (Kinetic k in possibleEvents)
+			foreach (Kinetic _event in possibleEvents)
 			{
-				if (Random.value <= k.theoreticalRate / sumOfTheoreticalRates)
+				if (!_event.illegalSimultaneousStates.Contains( (int)otherMotorState ) &&
+					Random.value <= _event.theoreticalRate / sumOfTheoreticalRates)
 				{
-					return k;
+					return _event;
 				}
 			}
 			return null;
@@ -106,15 +136,15 @@ namespace AICS.MotorProteins.Kinesin
 			return sum;
 		}
 
-		public static float GetEventNanoseconds (Kinetic _event)
+		public float GetNanosecondsUntilEvent (Kinetic _event, float lastEventTime)
 		{
-			float mean = 1f / _event.theoreticalRate;
-			return Mathf.Max( 0, Helpers.SampleNormalDistribution( mean, mean / 3.5f ) );
+			float nanosecondsBetweenEvents = 1E9f / _event.theoreticalRate;
+			float meanTimeUntilEvent = nanosecondsBetweenEvents - lastEventTime - _event.events * nanosecondsBetweenEvents;
+			return Mathf.Max( 1f, Helpers.SampleNormalDistribution( meanTimeUntilEvent, nanosecondsBetweenEvents / 3.5f ) );
 		}
 
 		void Start ()
 		{
-			kinetics = new Kinetics( kinesin.kineticRates );
 			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, upDirection );
 
 			for (int i = 0; i < 6; i++)
@@ -151,6 +181,19 @@ namespace AICS.MotorProteins.Kinesin
 					SetEventsForStates();
 				}
 				return _eventsForState;
+			}
+		}
+
+		Kinetics _kinetics;
+		public Kinetics kinetics
+		{
+			get 
+			{
+				if (_kinetics == null)
+				{
+					_kinetics = new Kinetics( kinesin.kineticRates );
+				}
+				return _kinetics;
 			}
 		}
 

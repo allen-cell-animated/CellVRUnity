@@ -5,29 +5,50 @@ using AICS.Microtubule;
 
 namespace AICS.MotorProteins.Kinesin
 {
-	public class CachedMotorEvent
-	{
-		public MotorState startState;
-		public MotorState finalState;
-		public float timeNanoseconds; 
-
-		public CachedMotorEvent (MotorState _startState, MotorState _finalState, float _timeNanoseconds)
-		{
-			startState = _startState;
-			finalState = _finalState;
-			timeNanoseconds = _timeNanoseconds;
-		}
-	}
-
 	public class Kinesin : AssemblyMolecule 
 	{
 		public float averageWalkingSpeed; // μm/s
 		public Tubulin lastTubulin;
 		public KineticRates kineticRates;
+		public float nanosecondsToCacheAtStart = 1E9f;
 
-		Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
-		float lastQueuedTime;
-		CachedMotorEvent[] lastQueuedMotorEvents = new CachedMotorEvent[2];
+		public Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
+		public List<CachedMotorEvent> eventList = new List<CachedMotorEvent>();
+		float lastCachedTime;
+
+		List<CachedMotorEvent> _lastCachedMotorEvents;
+		List<CachedMotorEvent> lastCachedMotorEvents
+		{
+			get
+			{
+				if (_lastCachedMotorEvents == null)
+				{
+					InitCache();
+				}
+				return _lastCachedMotorEvents;
+			}
+		}
+
+		void InitCache ()
+		{
+			eventQueue.Clear();
+			eventList.Clear();
+			lastCachedTime = 0;
+			if (_lastCachedMotorEvents == null)
+			{
+				_lastCachedMotorEvents = new List<CachedMotorEvent>();
+			}
+			else
+			{
+				_lastCachedMotorEvents.Clear();
+			}
+
+			for (int i = 0; i < motors.Count; i++)
+			{
+				_lastCachedMotorEvents.Add( new CachedMotorEvent( motors[i], MotorState.KDP, MotorState.KD, 0 ) );
+			}
+			IncreaseCache( nanosecondsToCacheAtStart );
+		}
 
 		Hips _hips;
 		public Hips hips
@@ -78,32 +99,40 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
+		protected override void OnAwake ()
+		{
+			base.OnAwake();
+			InitCache();
+		}
+
 		void IncreaseCache (float nanosecondsToAdd)
 		{
-			float goalTime = lastQueuedTime + nanosecondsToAdd;
-			while (lastQueuedTime < goalTime)
+			float goalTime = lastCachedTime + nanosecondsToAdd;
+			while (lastCachedTime < goalTime)
 			{
-				lastQueuedTime = CalculateCache();
+				lastCachedTime = CalculateCache();
 			}
 		}
 
 		float CalculateCache () 
-		{ 
-			float firstEventNanoseconds = Mathf.Infinity;
-			int firstEventIndex = 0;
-			for (int i = 0; i < lastQueuedMotorEvents.Length; i++)
+		{
+			for (int i = 0; i < motors.Count; i++)
 			{
-				CachedMotorEvent lastEvent = lastQueuedMotorEvents[i];
-				Kinetic k = Motor.GetNextEvent( lastEvent.finalState );
-				float t = Motor.GetEventNanoseconds( k );
-				if (t < firstEventNanoseconds)
-				{
-					firstEventNanoseconds = t;
-					firstEventIndex = i;
-				}
-//				lastQueuedMotorEvents[i] = new CachedMotorEvent( lastEvent.finalState,  );
+				CachedMotorEvent lastEvent = lastCachedMotorEvents[i];
+				Kinetic nextEvent = lastEvent.motor.GetNextEvent( lastEvent.finalState, lastCachedMotorEvents[Mathf.Abs(i - 1)].finalState );
+				float nextEventTime = lastEvent.timeNanoseconds + lastEvent.motor.GetNanosecondsUntilEvent( nextEvent, lastEvent.timeNanoseconds );
+				lastCachedMotorEvents[i] = new CachedMotorEvent( motors[i], (MotorState)lastEvent.finalState, 
+					(MotorState)nextEvent.finalStateIndex, lastEvent.timeNanoseconds + nextEventTime );
 			}
-			return 0;
+
+			lastCachedMotorEvents.Sort(); //so that earliest is first
+			foreach (CachedMotorEvent _event in lastCachedMotorEvents)
+			{
+				eventQueue.Enqueue( _event );
+				eventList.Add( _event );
+			}
+
+			return lastCachedMotorEvents[0].timeNanoseconds;
 		}
 
 		void Update ()
@@ -140,6 +169,7 @@ namespace AICS.MotorProteins.Kinesin
 					molecule.Reset();
 				}
 			}
+			InitCache();
 		}
 
 		void FinishReset ()

@@ -18,6 +18,7 @@ namespace AICS.MotorProteins
 		public float theoreticalRate;
 		public float observedRate;
 		public bool log; // for testing
+		public List<int> illegalSimultaneousStates; //needs generalization
 
 		public bool observedRateTooHigh
 		{
@@ -41,6 +42,7 @@ namespace AICS.MotorProteins
 			startStateIndex = _kineticRate.startStateIndex;
 			finalStateIndex = _kineticRate.finalStateIndex;
 			theoreticalRate = _kineticRate.rate;
+			illegalSimultaneousStates = new List<int>( _kineticRate.illegalSimultaneousStates );
 		}
 
 		public bool ShouldHappen ()

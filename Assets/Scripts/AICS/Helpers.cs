@@ -197,7 +197,7 @@ namespace AICS
 
 			do
 			{
-				n = mean + Helpers.GetGaussian() * standardDeviation;
+				n = mean + GetGaussian() * standardDeviation;
 			} 
 			while (n < min || n > max);
 
