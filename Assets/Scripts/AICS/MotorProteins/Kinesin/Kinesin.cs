@@ -7,10 +7,13 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class Kinesin : AssemblyMolecule 
 	{
+		public bool useCachedSim;
 		public float averageWalkingSpeed; // μm/s
 		public Tubulin lastTubulin;
 		public KineticRates kineticRates;
-		public float nanosecondsToCacheAtStart = 1E9f;
+		public float nanosecondsToCacheAtStart = 1E8f;
+		public float minimumCacheTime = 1E3f;
+		public float increaseCacheIncrement = 1E4f;
 
 		public Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
 		public List<CachedMotorEvent> eventList = new List<CachedMotorEvent>();
@@ -170,6 +173,10 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			for (int i = 0; i < MolecularEnvironment.Instance.stepsPerFrame; i++)
 			{
+				if (useCachedSim)
+				{
+					PlayCachedSim();
+				}
 				Simulate();
 			}
 
@@ -179,6 +186,22 @@ namespace AICS.MotorProteins.Kinesin
 			}
 
 			CalculateWalkingSpeed();
+		}
+
+		void PlayCachedSim ()
+		{
+			if (MolecularEnvironment.Instance.nanosecondsSinceStart >= eventQueue.Peek().timeNanoseconds)
+			{
+				CachedMotorEvent nextEvent = eventQueue.Dequeue();
+				eventList.RemoveAt( 0 );
+				nextEvent.motor.GoToState( nextEvent.finalState );
+			}
+
+			if (lastCachedTime - MolecularEnvironment.Instance.nanosecondsSinceStart < minimumCacheTime)
+			{
+				Debug.Log( "increase cache!" );
+				IncreaseCache( increaseCacheIncrement );
+			}
 		}
 
 		public override void DoCustomSimulation ()

@@ -242,17 +242,31 @@ namespace AICS.MotorProteins.Kinesin
 			_eventsForState.Add( MotorState.KD, events );
 		}
 
+		public void GoToState (MotorState newState)
+		{
+			for (int i = 0; i < eventsForState[state].Length; i++)
+			{
+				if (eventsForState[state][i].finalStateIndex == (int)newState)
+				{
+					Kinetic k = eventsForState[state][i];
+					k.kineticEvent( k );
+				}
+			}
+		}
+
 		public override void DoCustomSimulation ()
 		{
 			count[(int)state]++;
 			DoRandomWalk();
 
-			if (needToSwitchToStrong)
+			if (!kinesin.useCachedSim)
 			{
-				TryToSwitchToStrong();
+				if (needToSwitchToStrong)
+				{
+					TryToSwitchToStrong();
+				}
+				DoInRandomOrder( eventsForState[state] );
 			}
-
-			DoInRandomOrder( eventsForState[state] );
 
 			kinetics.CalculateObservedRates();
 		}
@@ -511,7 +525,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
 			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
+			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound;// && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
 		}
 
 		bool CloseToBindingOrientation (Tubulin _tubulin)
