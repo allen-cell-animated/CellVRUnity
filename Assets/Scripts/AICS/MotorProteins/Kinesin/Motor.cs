@@ -109,6 +109,8 @@ namespace AICS.MotorProteins.Kinesin
 			} 
 			while (eventToDo == null);
 
+//			Debug.Log( name + " : " + (MotorState)eventToDo.startStateIndex + " --> " + (MotorState)eventToDo.finalStateIndex + " while other = " + otherMotorState );
+
 			return eventToDo;
 		}
 
@@ -136,11 +138,11 @@ namespace AICS.MotorProteins.Kinesin
 			return sum;
 		}
 
-		public float GetNanosecondsUntilEvent (Kinetic _event, float lastEventTime)
+		public float GetEventTime (Kinetic _event, float lastEventTime)
 		{
 			float nanosecondsBetweenEvents = 1E9f / _event.theoreticalRate;
-			float meanTimeUntilEvent = nanosecondsBetweenEvents - lastEventTime - _event.events * nanosecondsBetweenEvents;
-			return Mathf.Max( 1f, Helpers.SampleNormalDistribution( meanTimeUntilEvent, nanosecondsBetweenEvents / 3.5f ) );
+			float meanTimeUntilEvent = Mathf.Max( 0, nanosecondsBetweenEvents - lastEventTime - _event.events * nanosecondsBetweenEvents );
+			return lastEventTime + Mathf.Max( 1f, Helpers.SampleNormalDistribution( meanTimeUntilEvent, nanosecondsBetweenEvents / 3.5f ) );
 		}
 
 		void Start ()

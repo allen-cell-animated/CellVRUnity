@@ -23,7 +23,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				if (_lastCachedMotorEvents == null)
 				{
-					InitCache();
+					_lastCachedMotorEvents = new List<CachedMotorEvent>();
 				}
 				return _lastCachedMotorEvents;
 			}
@@ -33,21 +33,82 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			eventQueue.Clear();
 			eventList.Clear();
-			lastCachedTime = 0;
-			if (_lastCachedMotorEvents == null)
-			{
-				_lastCachedMotorEvents = new List<CachedMotorEvent>();
-			}
-			else
-			{
-				_lastCachedMotorEvents.Clear();
-			}
+			lastCachedMotorEvents.Clear();
 
+			SeedCache();
+			IncreaseCache( nanosecondsToCacheAtStart - lastCachedTime );
+		}
+
+		void SeedCache ()
+		{
 			for (int i = 0; i < motors.Count; i++)
 			{
-				_lastCachedMotorEvents.Add( new CachedMotorEvent( motors[i], MotorState.KDP, MotorState.KD, 0 ) );
+				lastCachedMotorEvents.Add( new CachedMotorEvent( motors[i], MotorState.KDP, MotorState.KD, 0 ) );
 			}
-			IncreaseCache( nanosecondsToCacheAtStart );
+			for (int i = 0; i < motors.Count; i++)
+			{
+				lastCachedMotorEvents[i] = GetNextEventToCache( i );
+			}
+			lastCachedMotorEvents.Sort(); //so that earliest is first
+//			Debug.Log( "SEED " + lastCachedMotorEvents[0].motor.name + " : " + lastCachedMotorEvents[0].startState + " --> " + lastCachedMotorEvents[0].finalState
+//				+ " @ " + lastCachedMotorEvents[0].timeNanoseconds );
+			eventQueue.Enqueue( lastCachedMotorEvents[0] );
+			eventList.Add( lastCachedMotorEvents[0] );
+			lastCachedTime = lastCachedMotorEvents[0].timeNanoseconds;
+		}
+
+		void IncreaseCache (float nanosecondsToAdd)
+		{
+			float goalTime = lastCachedTime + nanosecondsToAdd;
+			while (lastCachedTime < goalTime)
+			{
+				lastCachedTime = CalculateCache();
+			}
+		}
+
+		float CalculateCache () 
+		{
+			int lastIndex = lastMotorEventIndex;
+			int firstIndex = OtherIndex( lastIndex );
+
+			lastCachedMotorEvents[firstIndex] = GetNextEventToCache( firstIndex );
+
+			while (lastCachedMotorEvents[firstIndex].timeNanoseconds < lastCachedMotorEvents[lastIndex].timeNanoseconds)
+			{
+//				Debug.Log( "EXTRA " + lastCachedMotorEvents[firstIndex].motor.name + " : " + lastCachedMotorEvents[firstIndex].startState + " --> " + lastCachedMotorEvents[firstIndex].finalState
+//					+ " @ " + lastCachedMotorEvents[firstIndex].timeNanoseconds );
+				eventQueue.Enqueue( lastCachedMotorEvents[firstIndex] );
+				eventList.Add( lastCachedMotorEvents[firstIndex] );
+
+				lastCachedMotorEvents[firstIndex] = GetNextEventToCache( firstIndex );
+			}
+//			Debug.Log( lastCachedMotorEvents[lastIndex].motor.name + " : " + lastCachedMotorEvents[lastIndex].startState + " --> " + lastCachedMotorEvents[lastIndex].finalState
+//				+ " @ " + lastCachedMotorEvents[lastIndex].timeNanoseconds );
+			eventQueue.Enqueue( lastCachedMotorEvents[lastIndex] );
+			eventList.Add( lastCachedMotorEvents[lastIndex] );
+
+			return lastCachedMotorEvents[lastIndex].timeNanoseconds;
+		}
+
+		int lastMotorEventIndex
+		{
+			get
+			{
+				return lastCachedMotorEvents[0].CompareTo( lastCachedMotorEvents[1] ) > 0 ? 0 : 1;
+			}
+		}
+
+		int OtherIndex (int motorIndex)
+		{
+			return Mathf.Abs( motorIndex - 1 );
+		}
+
+		CachedMotorEvent GetNextEventToCache (int index)
+		{
+			CachedMotorEvent lastEvent = lastCachedMotorEvents[index];
+			Kinetic nextEvent = lastEvent.motor.GetNextEvent( lastEvent.finalState, lastCachedMotorEvents[OtherIndex( index )].startState );
+			float nextEventTime = lastEvent.motor.GetEventTime( nextEvent, lastEvent.timeNanoseconds );
+			return new CachedMotorEvent( lastEvent.motor, lastEvent.finalState, (MotorState)nextEvent.finalStateIndex, nextEventTime );
 		}
 
 		Hips _hips;
@@ -103,36 +164,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			base.OnAwake();
 			InitCache();
-		}
-
-		void IncreaseCache (float nanosecondsToAdd)
-		{
-			float goalTime = lastCachedTime + nanosecondsToAdd;
-			while (lastCachedTime < goalTime)
-			{
-				lastCachedTime = CalculateCache();
-			}
-		}
-
-		float CalculateCache () 
-		{
-			for (int i = 0; i < motors.Count; i++)
-			{
-				CachedMotorEvent lastEvent = lastCachedMotorEvents[i];
-				Kinetic nextEvent = lastEvent.motor.GetNextEvent( lastEvent.finalState, lastCachedMotorEvents[Mathf.Abs(i - 1)].finalState );
-				float nextEventTime = lastEvent.timeNanoseconds + lastEvent.motor.GetNanosecondsUntilEvent( nextEvent, lastEvent.timeNanoseconds );
-				lastCachedMotorEvents[i] = new CachedMotorEvent( motors[i], (MotorState)lastEvent.finalState, 
-					(MotorState)nextEvent.finalStateIndex, lastEvent.timeNanoseconds + nextEventTime );
-			}
-
-			lastCachedMotorEvents.Sort(); //so that earliest is first
-			foreach (CachedMotorEvent _event in lastCachedMotorEvents)
-			{
-				eventQueue.Enqueue( _event );
-				eventList.Add( _event );
-			}
-
-			return lastCachedMotorEvents[0].timeNanoseconds;
 		}
 
 		void Update ()
