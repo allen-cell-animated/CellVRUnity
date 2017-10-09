@@ -166,7 +166,10 @@ namespace AICS.MotorProteins.Kinesin
 		protected override void OnAwake ()
 		{
 			base.OnAwake();
-			InitCache();
+			if (useCachedSim)
+			{
+				InitCache();
+			}
 		}
 
 		void Update ()
@@ -256,7 +259,7 @@ namespace AICS.MotorProteins.Kinesin
 		public override void SetParentSchemeOnComponentRelease (ComponentMolecule molecule)
 		{
 			Motor motor = molecule as Motor;
-			Motor otherMotor = motors.Find( m => m != motor );
+			Motor otherMotor = OtherMotor( motor );
 			if (otherMotor.bound)
 			{
 				hips.transform.SetParent( otherMotor.transform );
@@ -275,6 +278,47 @@ namespace AICS.MotorProteins.Kinesin
 			hips.transform.SetParent( transform );
 			motors[0].transform.SetParent( hips.transform );
 			motors[1].transform.SetParent( hips.transform );
+		}
+
+		Motor OtherMotor (Motor motor)
+		{
+			return motors.Find( m => m != motor );
+		}
+
+		public bool MoveToTubulin (Motor bindingMotor, Vector3 bindingPosition)
+		{
+			if (Vector3.Distance( bindingPosition, hips.transform.position ) > maxDistanceBetweenComponents)
+			{
+				Motor otherMotor = OtherMotor( bindingMotor );
+				if (otherMotor.bound)
+				{
+					float distanceBetweenMotors = Vector3.Distance( otherMotor.transform.position, bindingPosition );
+					if (distanceBetweenMotors > 2f * maxDistanceBetweenComponents)
+					{
+						return false;
+					}
+
+					if (distanceBetweenMotors < 2f * minDistanceBetweenComponents)
+					{
+						Vector3 bindingPositionToOtherMotor = (otherMotor.transform.position - bindingPosition).normalized;
+						Vector3 bindingPositionToHips = (hips.transform.position - bindingPosition).normalized;
+						Vector3 perpendicular = Vector3.Cross( bindingPositionToOtherMotor, bindingPositionToHips );
+						float d = Mathf.Sqrt( Mathf.Pow( minDistanceBetweenComponents, 2f ) + Mathf.Pow( distanceBetweenMotors / 2f, 2f ) );
+						hips.SetPosition( (otherMotor.transform.position + bindingPosition) / 2f + d * perpendicular );
+					}
+					else
+					{
+						hips.SetPosition( (otherMotor.transform.position + bindingPosition) / 2f );
+					}
+				}
+				else
+				{
+					Vector3 bindingPositionToOtherMotor = (otherMotor.transform.position - bindingPosition).normalized;
+					hips.SetPosition( bindingPosition + maxDistanceBetweenComponents * bindingPositionToOtherMotor );
+					otherMotor.SetPosition( bindingPosition + 2f * maxDistanceBetweenComponents * bindingPositionToOtherMotor );
+				}
+			}
+			return true;
 		}
 
 		void CalculateWalkingSpeed ()

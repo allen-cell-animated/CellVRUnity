@@ -58,6 +58,7 @@ namespace AICS.MotorProteins.Kinesin
 		public Direction forwardDirection;
 		public Direction upDirection;
 		public bool calculateStatesIndependently;
+		public Kinetics kinetics;
 
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
@@ -186,21 +187,9 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		Kinetics _kinetics;
-		public Kinetics kinetics
-		{
-			get 
-			{
-				if (_kinetics == null)
-				{
-					_kinetics = new Kinetics( kinesin.kineticRates );
-				}
-				return _kinetics;
-			}
-		}
-
 		void SetEventsForStates ()
 		{
+			kinetics = new Kinetics( kinesin.kineticRates );
 			_eventsForState = new Dictionary<MotorState,Kinetic[]>();
 
 			Kinetic[] events = new Kinetic[1];
@@ -444,8 +433,11 @@ namespace AICS.MotorProteins.Kinesin
 				Tubulin t = FindTubulin();
 				if (t != null)
 				{
-					DoTubulinBind( t, kinetic );
-					return true;
+					if (kinesin.MoveToTubulin( this, t.transform.TransformPoint( bindingPosition ) ))
+					{
+						DoTubulinBind( t, kinetic );
+						return true;
+					}
 				}
 			}
 			return false;
@@ -523,9 +515,9 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool TubulinIsValid (Tubulin _tubulin)
 		{
-			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
-			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound;// && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
+//			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
+//			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
+			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound;//&& hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
 		}
 
 		bool CloseToBindingOrientation (Tubulin _tubulin)

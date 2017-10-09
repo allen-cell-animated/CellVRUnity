@@ -8,6 +8,8 @@ namespace AICS.MotorProteins
 	public abstract class AssemblyMolecule : Molecule 
 	{
 		public List<ComponentMolecule> componentMolecules;
+		public float minDistanceBetweenComponents;
+		public float maxDistanceBetweenComponents;
 
 		protected override void OnAwake ()
 		{
@@ -51,6 +53,7 @@ namespace AICS.MotorProteins
 
 		public void SetMinDistanceFromParent (float min)
 		{
+			minDistanceBetweenComponents = min;
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				if (molecule.dynamicLeash)
@@ -62,6 +65,7 @@ namespace AICS.MotorProteins
 
 		public void SetMaxDistanceFromParent (float max)
 		{
+			maxDistanceBetweenComponents = max;
 			foreach (ComponentMolecule molecule in componentMolecules)
 			{
 				if (molecule.dynamicLeash)

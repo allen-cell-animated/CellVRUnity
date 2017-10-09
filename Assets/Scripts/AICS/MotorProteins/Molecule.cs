@@ -66,7 +66,7 @@ namespace AICS.MotorProteins
 			SetPosition( transform.position + moveStep );
 		}
 
-		protected void SetPosition (Vector3 newPosition)
+		public void SetPosition (Vector3 newPosition)
 		{
 			transform.position = (resetFrames > 0) ? startPosition : newPosition;
 		}
