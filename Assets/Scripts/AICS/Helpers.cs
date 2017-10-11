@@ -143,6 +143,17 @@ namespace AICS
 			} 
 		}
 
+		public static int GetRandomIndex<T> (this T[] array)
+		{
+			return Mathf.CeilToInt( Random.Range( Mathf.Epsilon, 1f ) * array.Length ) - 1;
+		}
+
+		public static int GetExponentialRandomIndex<T> (this T[] array)
+		{
+			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
+			return Mathf.CeilToInt( i * array.Length ) - 1;
+		}
+
 		public static void Shuffle<T> (this List<T> list)
 		{
 			int n = list.Count;
@@ -155,6 +166,17 @@ namespace AICS
 				list[k] = list[n];  
 				list[n] = value; 
 			} 
+		}
+
+		public static int GetRandomIndex<T> (this List<T> list)
+		{
+			return Mathf.CeilToInt( Random.Range( Mathf.Epsilon, 1f ) * list.Count ) - 1;
+		}
+
+		public static int GetExponentialRandomIndex<T> (this List<T> list)
+		{
+			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
+			return Mathf.CeilToInt( i * list.Count ) - 1;
 		}
 
 		public static Vector3 GetLocalDirection (Direction direction, Transform transform)
