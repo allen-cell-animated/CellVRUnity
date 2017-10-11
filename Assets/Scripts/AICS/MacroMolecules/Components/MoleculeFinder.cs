@@ -6,12 +6,12 @@ namespace AICS.MacroMolecules
 {
 	public class MoleculeFinder : MolecularComponent 
 	{
-		public MoleculeType moleculeToFind;
+		public MoleculeType typeToFind;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
 
 		MoleculeDetector detector;
-		protected List<Molecule> validMolecules = new List<Molecule>();
+		protected List<IBind> validBinders = new List<IBind>();
 
 		List<Molecule> potentialMolecules
 		{
@@ -35,34 +35,39 @@ namespace AICS.MacroMolecules
 
 		void CreateDetector ()
 		{
-			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject).GetComponent<MoleculeDetector>().Setup( moleculeToFind, searchRadius );
+			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject).GetComponent<MoleculeDetector>().Setup( typeToFind, searchRadius );
 		}
 
-		public Molecule Find (List<Molecule> excludedMolecules = null)
+		public IBind Find (List<Molecule> excludedMolecules = null)
 		{
-			validMolecules.Clear();
+			validBinders.Clear();
+			IBind otherBinder = null;
 			foreach (Molecule m in potentialMolecules)
 			{
-				if ((excludedMolecules == null || !excludedMolecules.Contains( m )) && MoleculeIsValid( m ))
+				if ((excludedMolecules == null || !excludedMolecules.Contains( m )))
 				{
-					validMolecules.Add( m );
+					otherBinder = GetValidBinder( m );
+					if (otherBinder != null)
+					{
+						validBinders.Add( otherBinder );
+					}
 				}
 			}
-			if (validMolecules.Count > 0)
+			if (validBinders.Count > 0)
 			{
-				return PickFromValidMolecules();
+				return PickFromValidBinders();
 			}
 			return null;
 		}
 
-		protected virtual bool MoleculeIsValid (Molecule other)
+		protected virtual IBind GetValidBinder (Molecule other)
 		{
-			return other.NotBoundToType( molecule.type );
+			return other.GetOpenBinder( molecule.type );
 		}
 
-		protected virtual Molecule PickFromValidMolecules ()
+		protected virtual IBind PickFromValidBinders ()
 		{
-			return validMolecules[validMolecules.GetRandomIndex()];
+			return validBinders[validBinders.GetRandomIndex()];
 		}
 	}
 }

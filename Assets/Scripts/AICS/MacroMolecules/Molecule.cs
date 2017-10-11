@@ -26,9 +26,23 @@ namespace AICS.MacroMolecules
 	{
 		public MoleculeType type;
 		public float radius = 1f;
-		public bool bound;
 
 		// --------------------------------------------------------------------------------------------------- Interactions
+
+		public bool bound
+		{
+			get
+			{
+				foreach (IBind binder in binders)
+				{
+					if (binder.boundMoleculeBinder != null && binder.parentToBoundMolecule)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+		}
 
 		IBind[] _binders;
 		IBind[] binders
@@ -43,16 +57,26 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public bool BoundToType (MoleculeType _type)
+		public IBind GetOpenBinder (MoleculeType _type)
 		{
 			foreach (IBind binder in binders)
 			{
-				if (binder.typeToBind == _type && binder.boundMolecule != null)
+				if (binder.typeToBind == _type && binder.boundMoleculeBinder == null)
 				{
-					return true;
+					return binder;
 				}
 			}
-			return false;
+			return null;
+		}
+
+		public virtual void ParentToBoundMolecule (Molecule _boundMolecule)
+		{
+			transform.SetParent( _boundMolecule.transform );
+		}
+
+		public virtual void UnParentFromBoundMolecule ()
+		{
+			transform.SetParent( null );
 		}
 
 		// --------------------------------------------------------------------------------------------------- Movement

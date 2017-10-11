@@ -5,18 +5,18 @@ using UnityEngine;
 namespace AICS.MacroMolecules
 {
 	[System.Serializable]
-	public class MoleculeAngle : System.IComparable<MoleculeAngle>
+	public class BinderAngle : System.IComparable<BinderAngle>
 	{
-		public Molecule molecule;
+		public IBind binder;
 		public float angle;
 
-		public MoleculeAngle (Molecule _molecule, float _angle)
+		public BinderAngle (IBind _binder, float _angle)
 		{
-			molecule = _molecule;
+			binder = _binder;
 			angle = _angle;
 		}
 
-		public int CompareTo (MoleculeAngle other)
+		public int CompareTo (BinderAngle other)
 		{
 			if (other.angle > angle)
 			{
@@ -39,27 +39,27 @@ namespace AICS.MacroMolecules
 		public Direction upDirection = Direction.up;
 		public Transform centerTransform;
 
-		List<MoleculeAngle> graphedMolecules = new List<MoleculeAngle>();
+		List<BinderAngle> graphedBinders = new List<BinderAngle>();
 
-		protected override Molecule PickFromValidMolecules ()
+		protected override IBind PickFromValidBinders ()
 		{
 			GraphMolecules();
-			return graphedMolecules[graphedMolecules.GetExponentialRandomIndex()];
+			return graphedBinders[graphedBinders.GetExponentialRandomIndex()].binder;
 		}
 
 		void GraphMolecules ()
 		{
-			foreach (Molecule m in validMolecules)
+			foreach (IBind binder in validBinders)
 			{
-				graphedMolecules.Add( new MoleculeAngle( m, GetMoleculeAngleFromForward( m ) ) );
+				graphedBinders.Add( new BinderAngle( binder, GetMoleculeAngleFromForward( binder.thisMolecule ) ) );
 			}
-			graphedMolecules.Sort();
+			graphedBinders.Sort();
 		}
 
-		float GetMoleculeAngleFromForward (Molecule molecule)
+		float GetMoleculeAngleFromForward (Molecule _molecule)
 		{
 			// Get angle in degrees from forward vector projected on plane passing through transform and perpendicular to up vector
-			Vector3 toMolecule = molecule.transform.position - centerTransform.position;
+			Vector3 toMolecule = _molecule.transform.position - centerTransform.position;
 			Vector3 normal = Helpers.GetLocalDirection( upDirection, centerTransform );
 			Vector3 projectionToNormal = Vector3.Dot( toMolecule, normal ) * normal;
 			Vector3 moleculeDirectionInMotorPlane = (toMolecule - projectionToNormal).normalized;

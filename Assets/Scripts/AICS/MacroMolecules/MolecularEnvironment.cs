@@ -96,12 +96,12 @@ namespace AICS.MacroMolecules
 
 		void CreateResolutionNode (Vector3 position, string _name)
 		{
-			ResolutionNode node = GameObject.CreatePrimitive( PrimitiveType.Cube ).AddComponent<ResolutionNode>();
-			node.transform.SetParent( transform );
-			node.transform.localPosition = position;
-			node.gameObject.layer = Mathf.RoundToInt( Mathf.Log( resolutionManagementLayer, 2f ) );
-			node.name = "node_" + _name;
-			node.Setup( this );
+//			ResolutionNode node = GameObject.CreatePrimitive( PrimitiveType.Cube ).AddComponent<ResolutionNode>();
+//			node.transform.SetParent( transform );
+//			node.transform.localPosition = position;
+//			node.gameObject.layer = Mathf.RoundToInt( Mathf.Log( resolutionManagementLayer, 2f ) );
+//			node.name = "node_" + _name;
+//			node.Setup( this );
 		}
 
 		// --------------------------------------------------------------------------------------------------- Time
