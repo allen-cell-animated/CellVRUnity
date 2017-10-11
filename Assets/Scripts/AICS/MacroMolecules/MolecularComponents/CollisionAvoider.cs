@@ -10,21 +10,6 @@ namespace AICS.MacroMolecules
 
 		MoleculeDetector detector;
 
-		Rigidbody _body;
-		Rigidbody body
-		{
-			get
-			{
-				if (_body == null)
-				{
-					_body = GetComponent<Rigidbody>();
-					_body.useGravity = false;
-					_body.isKinematic = true;
-				}
-				return _body;
-			}
-		}
-
 		public bool MoveIsValid (Vector3 position, float radius)
 		{
 			return !detector.WillCollide( position, radius );

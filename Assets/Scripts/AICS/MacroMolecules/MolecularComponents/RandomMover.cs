@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class RandomMotion : MolecularComponent, ISimulate
+	public class RandomMover : MolecularComponent, ISimulate
 	{
 		public float meanStepSize = 2f;
 

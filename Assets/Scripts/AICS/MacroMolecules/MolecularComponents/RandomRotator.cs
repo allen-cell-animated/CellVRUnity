@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class RandomRotation : MolecularComponent, ISimulate
+	public class RandomRotator : MolecularComponent, ISimulate
 	{
 		public float meanRotation = 5f;
 

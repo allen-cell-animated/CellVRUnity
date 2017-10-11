@@ -6,7 +6,8 @@ namespace AICS.MacroMolecules
 {
 	public class Leash : MolecularComponent, IValidateMoves
 	{
-		public bool dynamicLeash = true;
+		public Molecule attachedMolecule;
+		public bool dynamicLength = true;
 		public float minDistanceFromParent;
 		public float maxDistanceFromParent;
 
@@ -17,13 +18,13 @@ namespace AICS.MacroMolecules
 
 		protected virtual bool CheckLeash (Vector3 position)
 		{
-			float d = Vector3.Distance( transform.parent.position, position );
+			float d = Vector3.Distance( attachedMolecule.transform.position, position );
 			return d >= minDistanceFromParent && d <= maxDistanceFromParent;
 		}
 
 		public void SetMinDistanceFromParent (float min)
 		{
-			if (dynamicLeash)
+			if (dynamicLength)
 			{
 				minDistanceFromParent = min;
 			}
@@ -31,7 +32,7 @@ namespace AICS.MacroMolecules
 
 		public void SetMaxDistanceFromParent (float max)
 		{
-			if (dynamicLeash)
+			if (dynamicLength)
 			{
 				maxDistanceFromParent = max;
 			}
