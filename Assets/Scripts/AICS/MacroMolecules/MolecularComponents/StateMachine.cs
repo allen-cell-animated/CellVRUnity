@@ -29,6 +29,13 @@ namespace AICS.MacroMolecules
 	}
 
 	[System.Serializable]
+	public class MolecularMethod
+	{
+		public MolecularComponent component;
+		public string methodName;
+	}
+
+	[System.Serializable]
 	public class StateTransition
 	{
 		public string name;
@@ -38,13 +45,15 @@ namespace AICS.MacroMolecules
 		public int events;
 		public float theoreticalRate;
 		public float observedRate;
-		public MolecularComponent transitionComponent;
-		public string transitionEventName;
+		public MolecularMethod transitionMethod;
 		public TransitionEvent transitionEvent;
 
 		public void CreateTransitionEvent ()
 		{
-			transitionEvent = System.Delegate.CreateDelegate( typeof(TransitionEvent), transitionComponent, transitionEventName ) as TransitionEvent;
+			if (transitionMethod != null)
+			{
+				transitionEvent = System.Delegate.CreateDelegate( typeof(TransitionEvent), transitionMethod.component, transitionMethod.methodName ) as TransitionEvent;
+			}
 		}
 
 		public bool observedRateTooHigh

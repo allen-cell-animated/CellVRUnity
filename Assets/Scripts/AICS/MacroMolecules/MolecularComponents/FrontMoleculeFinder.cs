@@ -51,7 +51,7 @@ namespace AICS.MacroMolecules
 		{
 			foreach (IBind binder in validBinders)
 			{
-				graphedBinders.Add( new BinderAngle( binder, GetMoleculeAngleFromForward( binder.thisMolecule ) ) );
+				graphedBinders.Add( new BinderAngle( binder, GetMoleculeAngleFromForward( binder.molecule ) ) );
 			}
 			graphedBinders.Sort();
 		}

@@ -18,7 +18,10 @@ namespace AICS.MacroMolecules
 		KinesinNecklinker,
 		KinesinCargo,
 		KinesinTropomyosin,
-		Kinesin
+		Kinesin,
+		ATP,
+		ADP,
+		Pi
 	}
 
 	// A basic molecule object

@@ -20,14 +20,6 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public Molecule thisMolecule
-		{
-			get
-			{
-				return molecule;
-			}
-		}
-
 		public IBind boundMoleculeBinder
 		{
 			get
@@ -72,25 +64,25 @@ namespace AICS.MacroMolecules
 
 			if (parentToBoundMolecule)
 			{
-				molecule.ParentToBoundMolecule( boundMoleculeBinder.thisMolecule );
+				molecule.ParentToBoundMolecule( boundMoleculeBinder.molecule );
+				MoveMoleculeToBindingPosition();
 			}
 			else if (boundMoleculeBinder.parentToBoundMolecule)
 			{
-				boundMoleculeBinder.thisMolecule.ParentToBoundMolecule( molecule );
+				boundMoleculeBinder.molecule.ParentToBoundMolecule( molecule );
+				boundMoleculeBinder.MoveMoleculeToBindingPosition();
 			}
-
-			MoveMoleculeToBindingPosition();
 		}
 
 		public void MoveMoleculeToBindingPosition ()
 		{
-			transform.rotation = boundMoleculeBinder.thisMolecule.transform.rotation * Quaternion.Euler( bindingRotation );
-			molecule.SetPosition( boundMoleculeBinder.thisMolecule.transform.TransformPoint( bindingPosition ) );
+			transform.rotation = boundMoleculeBinder.molecule.transform.rotation * Quaternion.Euler( bindingRotation );
+			molecule.SetPosition( boundMoleculeBinder.molecule.transform.TransformPoint( bindingPosition ) );
 		}
 
 		public bool Release ()
 		{
-			if (boundMoleculeBinder != null)
+			if (boundMoleculeBinder != null && ReadyToRelease())
 			{
 				DoRelease();
 				return true;
@@ -98,9 +90,14 @@ namespace AICS.MacroMolecules
 			return false;
 		}
 
+		protected virtual bool ReadyToRelease ()
+		{
+			return true;
+		}
+
 		protected virtual void DoRelease ()
 		{
-			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundMoleculeBinder.thisMolecule.transform.position).normalized;
+			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundMoleculeBinder.molecule.transform.position).normalized;
 
 			if (parentToBoundMolecule)
 			{
@@ -108,7 +105,7 @@ namespace AICS.MacroMolecules
 			}
 			else if (boundMoleculeBinder.parentToBoundMolecule)
 			{
-				boundMoleculeBinder.thisMolecule.UnParentFromBoundMolecule();
+				boundMoleculeBinder.molecule.UnParentFromBoundMolecule();
 			}
 
 			boundMoleculeBinder.boundMoleculeBinder = null;

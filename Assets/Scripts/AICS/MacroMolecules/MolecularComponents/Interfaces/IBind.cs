@@ -8,10 +8,12 @@ namespace AICS.MacroMolecules
 	{
 		MoleculeType typeToBind { get; }
 
-		Molecule thisMolecule { get; }
+		Molecule molecule { get; }
 
 		IBind boundMoleculeBinder { get; set; }
 
 		bool parentToBoundMolecule { get; }
+
+		void MoveMoleculeToBindingPosition();
 	}
 }
