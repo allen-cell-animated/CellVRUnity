@@ -61,16 +61,15 @@ namespace AICS.MacroMolecules
 
 		void Update ()
 		{
-			CalculateFrameRate();
-
 			for (int i = 0; i < stepsPerFrame; i++)
 			{
-				if (!pause)
+				foreach (Molecule molecule in molecules)
 				{
-					nanosecondsSinceStart += nanosecondsPerStep;
-					stepsSinceStart++;
+					molecule.DoStep();
 				}
 			}
+			CalculateFrameRate();
+			IncrementTime();
 		}
 
 		// --------------------------------------------------------------------------------------------------- Resolution
@@ -105,6 +104,18 @@ namespace AICS.MacroMolecules
 		}
 
 		// --------------------------------------------------------------------------------------------------- Time
+
+		void IncrementTime ()
+		{
+			for (int i = 0; i < stepsPerFrame; i++)
+			{
+				if (!pause)
+				{
+					nanosecondsSinceStart += nanosecondsPerStep;
+					stepsSinceStart++;
+				}
+			}
+		}
 
 		public void SetTime (float _timeMultiplier)
 		{

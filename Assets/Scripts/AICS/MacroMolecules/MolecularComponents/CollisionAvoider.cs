@@ -23,6 +23,7 @@ namespace AICS.MacroMolecules
 		void CreateDetector ()
 		{
 			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject).GetComponent<MoleculeDetector>().Setup( MoleculeType.All, molecule.radius );
+			detector.name = "Collider";
 		}
 
 		void OnTriggerStay (Collider other)

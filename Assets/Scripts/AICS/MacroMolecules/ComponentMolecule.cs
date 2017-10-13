@@ -6,7 +6,7 @@ namespace AICS.MacroMolecules
 {
 	public class ComponentMolecule : Molecule 
 	{
-		public MolecularAssembly assembly;
+		public AssemblyMolecule assembly;
 
 		public override void ParentToBoundMolecule (Molecule _boundMolecule)
 		{

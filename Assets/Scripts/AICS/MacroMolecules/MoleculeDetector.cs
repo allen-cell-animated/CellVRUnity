@@ -7,9 +7,9 @@ namespace AICS.MacroMolecules
 	public class MoleculeDetector : MonoBehaviour 
 	{
 		public List<Molecule> nearbyMolecules = new List<Molecule>();
+		public MoleculeType moleculeToFind;
 
 		List<Molecule> collidingMolecules = new List<Molecule>();
-		MoleculeType moleculeToFind;
 
 		public MoleculeDetector Setup (MoleculeType _moleculeToFind, float radius)
 		{

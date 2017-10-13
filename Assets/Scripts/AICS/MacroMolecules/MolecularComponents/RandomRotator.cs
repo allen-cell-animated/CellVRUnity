@@ -7,6 +7,7 @@ namespace AICS.MacroMolecules
 	public class RandomRotator : MolecularComponent, ISimulate
 	{
 		public float meanRotation = 5f;
+		public bool dynamicMeanRotation = true;
 
 		public void DoSimulationStep ()
 		{
@@ -18,6 +19,14 @@ namespace AICS.MacroMolecules
 			if (molecule.canMove)
 			{
 				transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) );
+			}
+		}
+
+		public void SetMeanRotation (float _meanRotation)
+		{
+			if (dynamicMeanRotation)
+			{
+				meanRotation = _meanRotation;
 			}
 		}
 	}

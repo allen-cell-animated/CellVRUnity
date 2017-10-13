@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
+	[RequireComponent( typeof(Molecule) )]
 	public abstract class MolecularComponent : MonoBehaviour 
 	{
 		Molecule _molecule;

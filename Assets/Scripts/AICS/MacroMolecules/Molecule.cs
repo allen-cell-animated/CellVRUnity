@@ -8,8 +8,8 @@ namespace AICS.MacroMolecules
 {
 	public enum MoleculeType
 	{
-		All,
 		None,
+		All,
 		TubulinA,
 		TubulinB,
 		Microtubule,
@@ -26,6 +26,44 @@ namespace AICS.MacroMolecules
 	{
 		public MoleculeType type;
 		public float radius = 1f;
+
+		void Start ()
+		{
+			DoSetup();
+		}
+
+		void Update ()
+		{
+			FinishReset();
+		}
+
+		public void DoStep ()
+		{
+			DoSimulationStep();
+		}
+
+		// --------------------------------------------------------------------------------------------------- Setup
+
+		ISetup[] _setterUppers;
+		ISetup[] setterUppers
+		{
+			get
+			{
+				if (_setterUppers == null)
+				{
+					_setterUppers = GetComponents<ISetup>();
+				}
+				return _setterUppers;
+			}
+		}
+
+		void DoSetup ()
+		{
+			foreach (ISetup setterUpper in setterUppers)
+			{
+				setterUpper.DoSetup();
+			}
+		}
 
 		// --------------------------------------------------------------------------------------------------- Interactions
 
@@ -156,6 +194,14 @@ namespace AICS.MacroMolecules
 			}
 		}
 
+		void DoSimulationStep ()
+		{
+			foreach (ISimulate simulator in simulators)
+			{
+				simulator.DoSimulationStep();
+			}
+		}
+
 		// --------------------------------------------------------------------------------------------------- Reset
 
 		Vector3 startPosition;
@@ -168,12 +214,7 @@ namespace AICS.MacroMolecules
 			startRotation = transform.rotation;
 		}
 
-		void Update ()
-		{
-			FinishReset();
-		}
-
-		protected virtual void FinishReset ()
+		void FinishReset ()
 		{
 			if (resetFrames > 0)
 			{
@@ -181,7 +222,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public void Reset ()
+		public void Restart ()
 		{
 			transform.position = startPosition;
 			transform.rotation = startRotation;
