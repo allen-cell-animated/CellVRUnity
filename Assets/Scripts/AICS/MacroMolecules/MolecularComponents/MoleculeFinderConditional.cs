@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class MoleculeFinder : MolecularComponent 
+	public class MoleculeFinderConditional : Conditional
 	{
 		public MoleculeType typeToFind;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
+		public IBind lastBinderFound;
 
 		MoleculeDetector detector;
 		protected List<IBind> validBinders = new List<IBind>();
@@ -28,7 +29,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		void Awake ()
+		void Start ()
 		{
 			CreateDetector();
 		}
@@ -38,13 +39,19 @@ namespace AICS.MacroMolecules
 			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject).GetComponent<MoleculeDetector>().Setup( typeToFind, searchRadius );
 		}
 
-		public IBind Find (List<Molecule> excludedMolecules = null)
+		protected override bool DoCheck ()
+		{
+			lastBinderFound = Find();
+			return lastBinderFound != null;
+		}
+
+		public IBind Find ()
 		{
 			validBinders.Clear();
 			IBind otherBinder = null;
 			foreach (Molecule m in potentialMolecules)
 			{
-				if ((excludedMolecules == null || !excludedMolecules.Contains( m )))
+				if (!molecule.IsBoundToOther( m ))
 				{
 					otherBinder = GetValidBinder( m );
 					if (otherBinder != null)

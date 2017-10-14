@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace AICS.MacroMolecules
 {
@@ -29,32 +30,16 @@ namespace AICS.MacroMolecules
 	}
 
 	[System.Serializable]
-	public class MolecularMethod
-	{
-		public MolecularComponent component;
-		public string methodName;
-	}
-
-	[System.Serializable]
 	public class StateTransition
 	{
 		public string name;
 		public int startStateID;
 		public int finalStateID;
 		public int attempts;
-		public int events;
+		public int successes;
 		public float theoreticalRate;
 		public float observedRate;
-		public MolecularMethod transitionMethod;
-		public TransitionEvent transitionEvent;
-
-		public void CreateTransitionEvent ()
-		{
-			if (transitionMethod != null)
-			{
-				transitionEvent = System.Delegate.CreateDelegate( typeof(TransitionEvent), transitionMethod.component, transitionMethod.methodName ) as TransitionEvent;
-			}
-		}
+		public ConditionalEvent[] conditionalEvents;
 
 		public bool observedRateTooHigh
 		{
@@ -87,17 +72,34 @@ namespace AICS.MacroMolecules
 
 		public void CalculateObservedRate (float secondsSinceStart)
 		{
-			observedRate = Mathf.Round( events / secondsSinceStart );
+			observedRate = Mathf.Round( successes / secondsSinceStart );
 		}
 
 		public void Reset ()
 		{
-			events = attempts = 0;
+			successes = attempts = 0;
 			observedRate = 0;
 		}
 	}
 
-	public delegate bool TransitionEvent ();
+	[System.Serializable]
+	public class ConditionalEvent 
+	{
+		public Conditional[] conditionals;
+		public UnityEvent eventToDo;
+
+		public bool PassesConditions ()
+		{
+			foreach (Conditional conditional in conditionals)
+			{
+				if (!conditional.Pass())
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 
 	public class StateMachine : MolecularComponent, ISimulate
 	{
@@ -128,17 +130,32 @@ namespace AICS.MacroMolecules
 
 		bool DoTransitionAtKineticRate (StateTransition transition)
 		{
-			transition.attempts++;
-			if (transition.ShouldHappen())
+			UnityEvent eventToDo = GetEventToDo( transition );
+			if (eventToDo != null)
 			{
-				if (transition.transitionEvent())
+				transition.attempts++;
+				if (transition.ShouldHappen())
 				{
-					transition.events++;
+					eventToDo.Invoke();
+					transition.successes++;
 					currentState = GetStateForID( transition.finalStateID );
 					return true;
 				}
 			}
 			return false;
+		}
+
+		UnityEvent GetEventToDo (StateTransition transition)
+		{
+			bool pass;
+			foreach (ConditionalEvent conditionalEvent in transition.conditionalEvents)
+			{
+				if (conditionalEvent.PassesConditions())
+				{
+					return conditionalEvent.eventToDo;
+				}
+			}
+			return null;
 		}
 
 		State GetStateForID (int id)

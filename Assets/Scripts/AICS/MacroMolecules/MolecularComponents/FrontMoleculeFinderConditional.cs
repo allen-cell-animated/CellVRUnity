@@ -33,7 +33,7 @@ namespace AICS.MacroMolecules
 		}
 	}
 
-	public class FrontMoleculeFinder : MoleculeFinder 
+	public class FrontMoleculeFinderConditional : MoleculeFinderConditional 
 	{
 		public Direction forwardDirection = Direction.forward;
 		public Direction upDirection = Direction.up;

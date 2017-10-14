@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	[RequireComponent( typeof(Molecule) )]
 	public abstract class MolecularComponent : MonoBehaviour 
 	{
 		Molecule _molecule;
@@ -14,7 +13,7 @@ namespace AICS.MacroMolecules
 			{
 				if (_molecule == null)
 				{
-					_molecule = GetComponent<Molecule>();
+					_molecule = GetComponentInParent<Molecule>();
 				}
 				return _molecule;
 			}

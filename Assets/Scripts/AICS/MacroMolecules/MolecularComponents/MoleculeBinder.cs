@@ -6,7 +6,7 @@ namespace AICS.MacroMolecules
 {
 	public class MoleculeBinder : MolecularComponent, IBind
 	{
-		public MoleculeFinder moleculeFinder;
+		public MoleculeFinderConditional moleculeFinder;
 		public bool _parentToBoundMolecule;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
@@ -40,21 +40,18 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public bool Bind ()
+		public void Bind ()
 		{
 			IBind otherBinder = GetMoleculeToBind();
-
 			if (otherBinder != null)
 			{
 				DoBind( otherBinder );
-				return true;
 			}
-			return false;
 		}
 
 		protected virtual IBind GetMoleculeToBind ()
 		{
-			return moleculeFinder.Find();
+			return moleculeFinder.lastBinderFound;
 		}
 
 		protected virtual void DoBind (IBind otherBinder)
@@ -80,14 +77,12 @@ namespace AICS.MacroMolecules
 			molecule.SetPosition( boundMoleculeBinder.molecule.transform.TransformPoint( bindingPosition ) );
 		}
 
-		public bool Release ()
+		public void Release ()
 		{
 			if (boundMoleculeBinder != null && ReadyToRelease())
 			{
 				DoRelease();
-				return true;
 			}
-			return false;
 		}
 
 		protected virtual bool ReadyToRelease ()

@@ -29,6 +29,7 @@ namespace AICS.MacroMolecules
 	{
 		public MoleculeType type;
 		public float radius = 1f;
+		public GameObject[] componentObjects;
 
 		void Start ()
 		{
@@ -45,16 +46,26 @@ namespace AICS.MacroMolecules
 			DoSimulationStep();
 		}
 
+		List<T> GetMolecularComponents<T> ()
+		{
+			List<T> list = new List<T>();
+			foreach (GameObject componentObj in componentObjects)
+			{
+				list.AddRange( componentObj.GetComponents<T>() );
+			}
+			return list;
+		}
+
 		// --------------------------------------------------------------------------------------------------- Setup
 
-		ISetup[] _setterUppers;
-		ISetup[] setterUppers
+		List<ISetup> _setterUppers;
+		List<ISetup> setterUppers
 		{
 			get
 			{
 				if (_setterUppers == null)
 				{
-					_setterUppers = GetComponents<ISetup>();
+					_setterUppers = GetMolecularComponents<ISetup>();
 				}
 				return _setterUppers;
 			}
@@ -85,14 +96,14 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		IBind[] _binders;
-		IBind[] binders
+		List<IBind> _binders;
+		List<IBind> binders
 		{
 			get
 			{
 				if (_binders == null)
 				{
-					_binders = GetComponents<IBind>();
+					_binders = GetMolecularComponents<IBind>();
 				}
 				return _binders;
 			}
@@ -108,6 +119,18 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return null;
+		}
+
+		public bool IsBoundToOther (Molecule other)
+		{
+			foreach (IBind binder in binders)
+			{
+				if (binder.boundMoleculeBinder.molecule == other)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public virtual void ParentToBoundMolecule (Molecule _boundMolecule)
@@ -130,14 +153,14 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		IValidateMoves[] _moveValidators;
-		IValidateMoves[] moveValidators
+		List<IValidateMoves> _moveValidators;
+		List<IValidateMoves> moveValidators
 		{
 			get
 			{
 				if (_moveValidators == null)
 				{
-					_moveValidators = GetComponents<IValidateMoves>();
+					_moveValidators = GetMolecularComponents<IValidateMoves>();
 				}
 				return _moveValidators;
 			}
@@ -184,14 +207,14 @@ namespace AICS.MacroMolecules
 
 		// --------------------------------------------------------------------------------------------------- Simulation
 
-		ISimulate[] _simulators;
-		ISimulate[] simulators
+		List<ISimulate> _simulators;
+		List<ISimulate> simulators
 		{
 			get
 			{
 				if (_simulators == null)
 				{
-					_simulators = GetComponents<ISimulate>();
+					_simulators = GetMolecularComponents<ISimulate>();
 				}
 				return _simulators;
 			}
