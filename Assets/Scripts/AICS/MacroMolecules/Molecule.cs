@@ -53,6 +53,7 @@ namespace AICS.MacroMolecules
 			{
 				list.AddRange( componentObj.GetComponents<T>() );
 			}
+			list.AddRange( GetComponents<T>() );
 			return list;
 		}
 

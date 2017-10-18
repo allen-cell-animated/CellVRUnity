@@ -39,7 +39,8 @@ namespace AICS.MacroMolecules
 		public int successes;
 		public float theoreticalRate;
 		public float observedRate;
-		public ConditionalEvent[] conditionalEvents;
+		public Conditional[] conditionals;
+		public UnityEvent eventToDo;
 
 		public bool observedRateTooHigh
 		{
@@ -70,24 +71,6 @@ namespace AICS.MacroMolecules
 			return Random.value <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsSinceStart * 1E-9f / attempts;
 		}
 
-		public void CalculateObservedRate (float secondsSinceStart)
-		{
-			observedRate = Mathf.Round( successes / secondsSinceStart );
-		}
-
-		public void Reset ()
-		{
-			successes = attempts = 0;
-			observedRate = 0;
-		}
-	}
-
-	[System.Serializable]
-	public class ConditionalEvent 
-	{
-		public Conditional[] conditionals;
-		public UnityEvent eventToDo;
-
 		public bool PassesConditions ()
 		{
 			foreach (Conditional conditional in conditionals)
@@ -98,6 +81,17 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return true;
+		}
+
+		public void CalculateObservedRate (float secondsSinceStart)
+		{
+			observedRate = Mathf.Round( successes / secondsSinceStart );
+		}
+
+		public void Reset ()
+		{
+			successes = attempts = 0;
+			observedRate = 0;
 		}
 	}
 
@@ -130,32 +124,22 @@ namespace AICS.MacroMolecules
 
 		bool DoTransitionAtKineticRate (StateTransition transition)
 		{
-			UnityEvent eventToDo = GetEventToDo( transition );
-			if (eventToDo != null)
+			if (!transition.PassesConditions())
+			{
+				return false;
+			}
+			if (transition.eventToDo != null)
 			{
 				transition.attempts++;
 				if (transition.ShouldHappen())
 				{
-					eventToDo.Invoke();
+					transition.eventToDo.Invoke();
 					transition.successes++;
 					currentState = GetStateForID( transition.finalStateID );
 					return true;
 				}
 			}
 			return false;
-		}
-
-		UnityEvent GetEventToDo (StateTransition transition)
-		{
-			bool pass;
-			foreach (ConditionalEvent conditionalEvent in transition.conditionalEvents)
-			{
-				if (conditionalEvent.PassesConditions())
-				{
-					return conditionalEvent.eventToDo;
-				}
-			}
-			return null;
 		}
 
 		State GetStateForID (int id)
