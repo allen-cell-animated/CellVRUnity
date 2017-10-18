@@ -16,6 +16,7 @@ namespace AICS.MacroMolecules
 			moleculeToFind = _moleculeToFind;
 			transform.localPosition = Vector3.zero;
 			GetComponent<SphereCollider>().radius = radius;
+			name = _moleculeToFind.ToString() + "Detector";
 			return this;
 		}
 

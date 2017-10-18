@@ -14,6 +14,8 @@ namespace AICS.MacroMolecules
 
 		bool parentToBoundMolecule { get; }
 
+		void Bind();
+
 		void MoveMoleculeToBindingPosition();
 	}
 }

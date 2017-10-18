@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class Conditional : MolecularComponent
+	public class Conditional : MolecularComponent, IConditional
 	{
 		public bool Pass ()
 		{

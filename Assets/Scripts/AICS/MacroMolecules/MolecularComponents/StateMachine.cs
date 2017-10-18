@@ -10,6 +10,7 @@ namespace AICS.MacroMolecules
 	{
 		public string name;
 		public int id;
+		public bool startState;
 		public StateTransition[] transitions;
 
 		public void CalculateObservedRates (float secondsSinceStart)
@@ -99,6 +100,18 @@ namespace AICS.MacroMolecules
 	{
 		public State currentState;
 		public List<State> states;
+
+		void Start ()
+		{
+			foreach (State state in states)
+			{
+				if (state.startState)
+				{
+					currentState = state;
+					return;
+				}
+			}
+		}
 
 		public void DoSimulationStep ()
 		{

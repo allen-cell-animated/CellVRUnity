@@ -126,7 +126,7 @@ namespace AICS.MacroMolecules
 		{
 			foreach (IBind binder in binders)
 			{
-				if (binder.boundMoleculeBinder.molecule == other)
+				if (binder.boundMoleculeBinder != null && binder.boundMoleculeBinder.molecule == other)
 				{
 					return true;
 				}

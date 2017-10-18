@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class MoleculeFinderConditional : Conditional
+	public class FinderConditional : Conditional
 	{
 		public MoleculeType typeToFind;
 		public float searchRadius = 15f;
@@ -73,6 +73,11 @@ namespace AICS.MacroMolecules
 		}
 
 		protected virtual IBind PickFromValidBinders ()
+		{
+			return GetRandomBinder();
+		}
+
+		protected IBind GetRandomBinder ()
 		{
 			return validBinders[validBinders.GetRandomIndex()];
 		}

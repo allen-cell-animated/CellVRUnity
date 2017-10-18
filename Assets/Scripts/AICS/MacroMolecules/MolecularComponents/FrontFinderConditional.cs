@@ -33,15 +33,20 @@ namespace AICS.MacroMolecules
 		}
 	}
 
-	public class FrontMoleculeFinderConditional : MoleculeFinderConditional 
+	public class FrontFinderConditional : FinderConditional 
 	{
 		public Direction forwardDirection = Direction.forward;
 		public Direction upDirection = Direction.up;
-		public Transform centerTransform;
+		public Molecule centerMolecule;
 
 		List<BinderAngle> graphedBinders = new List<BinderAngle>();
 
 		protected override IBind PickFromValidBinders ()
+		{
+			return GetFrontBinder();
+		}
+
+		protected IBind GetFrontBinder ()
 		{
 			GraphMolecules();
 			return graphedBinders[graphedBinders.GetExponentialRandomIndex()].binder;
@@ -59,12 +64,12 @@ namespace AICS.MacroMolecules
 		float GetMoleculeAngleFromForward (Molecule _molecule)
 		{
 			// Get angle in degrees from forward vector projected on plane passing through transform and perpendicular to up vector
-			Vector3 toMolecule = _molecule.transform.position - centerTransform.position;
-			Vector3 normal = Helpers.GetLocalDirection( upDirection, centerTransform );
+			Vector3 toMolecule = _molecule.transform.position - centerMolecule.transform.position;
+			Vector3 normal = Helpers.GetLocalDirection( upDirection, centerMolecule.transform );
 			Vector3 projectionToNormal = Vector3.Dot( toMolecule, normal ) * normal;
 			Vector3 moleculeDirectionInMotorPlane = (toMolecule - projectionToNormal).normalized;
 
-			return Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, centerTransform ), moleculeDirectionInMotorPlane ) ) * Mathf.Rad2Deg;
+			return Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, centerMolecule.transform ), moleculeDirectionInMotorPlane ) ) * Mathf.Rad2Deg;
 		}
 	}
 }

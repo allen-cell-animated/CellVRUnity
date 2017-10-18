@@ -6,13 +6,13 @@ namespace AICS.MacroMolecules
 {
 	public class MoleculeBinder : MolecularComponent, IBind
 	{
-		public MoleculeFinderConditional moleculeFinder;
+		public FinderConditional moleculeFinder;
 		public bool _parentToBoundMolecule;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
 		public IBind _boundMoleculeBinder;
 
-		public MoleculeType typeToBind
+		public virtual MoleculeType typeToBind
 		{
 			get
 			{
