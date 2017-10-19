@@ -17,7 +17,15 @@ namespace AICS.MacroMolecules
 		public override void UnParentFromBoundMolecule ()
 		{
 			assembly.UnParentFromBoundMolecule();
-			assembly.SetParentSchemeOnComponentRelease( this );
+			assembly.SetParentSchemeOnComponentRelease();
+		}
+
+		public override void SetToBindingOrientation (Vector3 position, Quaternion rotation)
+		{
+			assembly.transform.position = position;
+			assembly.transform.rotation = rotation;
+			transform.localPosition = Vector3.zero;
+			transform.localRotation = Quaternion.identity;
 		}
 	}
 }

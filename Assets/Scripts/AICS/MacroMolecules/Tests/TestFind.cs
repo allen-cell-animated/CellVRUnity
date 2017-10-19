@@ -3,43 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using AICS.MacroMolecules;
 
-public class TestFind : MonoBehaviour 
+namespace AICS
 {
-	public FinderConditional finder;
-	public MoleculeBinder binder;
-
-	bool initialized = false;
-
-	void Update () 
+	public class TestFind : TestComponent 
 	{
-		if (!initialized)
-		{
-			Init();
-		}
-		if (binder != null && binder.boundMoleculeBinder != null)
-		{
-			IntegrationTest.Pass();
-		}
-	}
+		public FinderConditional finder;
+		public MoleculeBinder binder;
 
-	void Init ()
-	{
-		if (finder == null)
+		protected override void Test ()
 		{
-			IntegrationTest.Fail( "No finder!" );
+			if (finder != null && binder != null && finder.Pass())
+			{
+				binder.Bind();
+			}
+			PassTest( binder != null && binder.boundMoleculeBinder != null );
 		}
-		else if (binder == null)
-		{
-			IntegrationTest.Fail( "No binder!" );
-		}
-		else if (!finder.Pass())
-		{
-			IntegrationTest.Fail( "finder found nothing!" );
-		}
-		else
-		{
-			binder.Bind();
-		}
-		initialized = true;
 	}
 }

@@ -3,46 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using AICS.MacroMolecules;
 
-public class TestFindFront : MonoBehaviour 
+namespace AICS
 {
-	public FrontFinderConditional finder;
-	public Molecule moleculeToFindMost;
-	public int attempts;
-
-	int n = 0;
-	int foundGoal;
-	int foundOther;
-
-	void Update ()
+	public class TestFindFront : TestComponent 
 	{
-		while (n < attempts)
-		{
-			AttemptToFind();
-			n++;
-		}
+		public FrontFinderConditional finder;
+		public Molecule moleculeToFindMost;
+		public int attempts;
 
-		if (foundGoal > foundOther)
-		{
-			IntegrationTest.Pass();
-		}
-		else
-		{
-			IntegrationTest.Fail();
-		}
-	}
+		int n = 0;
+		int foundGoal;
+		int foundOther;
 
-	void AttemptToFind ()
-	{
-		if (finder != null)
+		protected override void Test ()
 		{
-			IBind found = finder.Find();
-			if (found != null && found.molecule == moleculeToFindMost)
+			while (n < attempts)
 			{
-				foundGoal++;
+				AttemptToFind();
+				n++;
 			}
-			else 
+
+			PassTest(foundGoal > foundOther);
+		}
+
+		void AttemptToFind ()
+		{
+			if (finder != null)
 			{
-				foundOther++;
+				IBind found = finder.Find();
+				if (found != null && found.molecule == moleculeToFindMost)
+				{
+					foundGoal++;
+				}
+				else 
+				{
+					foundOther++;
+				}
 			}
 		}
 	}

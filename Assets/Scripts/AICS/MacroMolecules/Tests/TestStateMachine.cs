@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using AICS.MacroMolecules;
 
-public class TestStateMachine : MonoBehaviour 
+namespace AICS
 {
-	public StateMachine stateMachine;
-	public int goalStateID;
-
-	void Update () 
+	public class TestStateMachine : TestComponent 
 	{
-		if (stateMachine.currentState.id == goalStateID)
+		public StateMachine stateMachine;
+		public int goalStateID;
+
+		protected override void Test ()
 		{
-			IntegrationTest.Pass();
+			if (stateMachine.currentState.id == goalStateID)
+			{
+				IntegrationTest.Pass();
+			}
 		}
 	}
 }

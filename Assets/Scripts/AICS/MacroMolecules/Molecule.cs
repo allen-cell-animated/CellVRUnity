@@ -57,6 +57,11 @@ namespace AICS.MacroMolecules
 			return list;
 		}
 
+		public List<Leash> GetLeashes ()
+		{
+			return GetMolecularComponents<Leash>();
+		}
+
 		// --------------------------------------------------------------------------------------------------- Setup
 
 		List<ISetup> _setterUppers;
@@ -142,6 +147,12 @@ namespace AICS.MacroMolecules
 		public virtual void UnParentFromBoundMolecule ()
 		{
 			transform.SetParent( null );
+		}
+
+		public virtual void SetToBindingOrientation (Vector3 position, Quaternion rotation)
+		{
+			transform.position = position;
+			transform.rotation = rotation;
 		}
 
 		// --------------------------------------------------------------------------------------------------- Movement

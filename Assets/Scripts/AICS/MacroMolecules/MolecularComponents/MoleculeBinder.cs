@@ -73,8 +73,8 @@ namespace AICS.MacroMolecules
 
 		public void MoveMoleculeToBindingPosition ()
 		{
-			transform.rotation = boundMoleculeBinder.molecule.transform.rotation * Quaternion.Euler( bindingRotation );
-			molecule.SetPosition( boundMoleculeBinder.molecule.transform.TransformPoint( bindingPosition ) );
+			molecule.SetToBindingOrientation( boundMoleculeBinder.molecule.transform.TransformPoint( bindingPosition ), 
+				boundMoleculeBinder.molecule.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 
 		public void Release ()
