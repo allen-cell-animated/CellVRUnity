@@ -6,27 +6,61 @@ namespace AICS.MacroMolecules
 {
 	public class AssemblyMolecule : Molecule 
 	{
+		public ComponentMolecule rootComponent;
 		public List<ComponentMolecule> componentMolecules = new List<ComponentMolecule>();
-		public ComponentMolecule defaultParent;
 
-		public void SetParentSchemeOnComponentBind (ComponentMolecule _molecule)
+		public void UpdateParentScheme ()
 		{
-			_molecule.transform.SetParent( transform );
-			SetParentRecursively( _molecule, null );
+			List<ComponentMolecule> parentedComponents = GetParentedComponents();
+			if (parentedComponents.Count == 0)
+			{
+				if (rootComponent != null)
+				{
+					rootComponent.transform.SetParent( transform );
+					SetParentRecursively( rootComponent, null );
+				}
+			}
+			else if (parentedComponents.Count == 1)
+			{
+				parentedComponents[0].transform.SetParent( transform );
+				SetParentRecursively( parentedComponents[0], null );
+			}
+			else
+			{
+				ComponentMolecule componentClosestToRoot = GetComponentClosestToRoot( parentedComponents );
+				//todo
+			}
 		}
 
-		public void SetParentSchemeOnComponentRelease ()
+		List<ComponentMolecule> GetParentedComponents ()
 		{
-			if (defaultParent != null)
+			List<ComponentMolecule> parentedComponents = new List<ComponentMolecule>();
+			foreach (ComponentMolecule component in componentMolecules)
 			{
-				defaultParent.transform.SetParent( transform );
-				SetParentRecursively( defaultParent, null );
+				if (component.GetParentedBinder() != null)
+				{
+					parentedComponents.Add( component );
+				}
 			}
+			return parentedComponents;
+		}
+
+		ComponentMolecule GetComponentClosestToRoot (List<ComponentMolecule> parentedComponents)
+		{
+			List<int> branchesToRoot = new List<int>();
+			foreach (ComponentMolecule component in parentedComponents)
+			{
+				foreach (Leash leash in component.leashes)
+				{
+					// is root in this branch? check recursively
+				}
+			}
+			return null;
 		}
 
 		void SetParentRecursively (Molecule parent, Molecule grandparent)
 		{
-			List<Leash> leashes = parent.GetLeashes();
+			List<Leash> leashes = parent.leashes;
 			foreach (Leash leash in leashes)
 			{
 				if (leash.attachedMolecule != grandparent)

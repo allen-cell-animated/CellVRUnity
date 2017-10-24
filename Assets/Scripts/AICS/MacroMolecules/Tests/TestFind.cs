@@ -10,13 +10,15 @@ namespace AICS
 		public FinderConditional finder;
 		public MoleculeBinder binder;
 
-		protected override void Test ()
+		protected override void TestOnce ()
 		{
 			if (finder != null && binder != null && finder.Pass())
 			{
 				binder.Bind();
 			}
-			PassTest( binder != null && binder.boundMoleculeBinder != null );
+			PassTest( binder != null && binder.boundBinder != null );
 		}
+
+		protected override void TestUntilPass () {}
 	}
 }

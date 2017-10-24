@@ -4,31 +4,19 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class MoleculeBinder : MolecularComponent, IBind
+	public class MoleculeBinder : MolecularComponent
 	{
 		public FinderConditional moleculeFinder;
 		public bool _parentToBoundMolecule;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
-		public IBind _boundMoleculeBinder;
+		public MoleculeBinder boundBinder;
 
 		public virtual MoleculeType typeToBind
 		{
 			get
 			{
 				return moleculeFinder.typeToFind;
-			}
-		}
-
-		public IBind boundMoleculeBinder
-		{
-			get
-			{
-				return _boundMoleculeBinder;
-			}
-			set
-			{
-				_boundMoleculeBinder = value;
 			}
 		}
 
@@ -42,44 +30,38 @@ namespace AICS.MacroMolecules
 
 		public void Bind ()
 		{
-			IBind otherBinder = GetMoleculeToBind();
+			MoleculeBinder otherBinder = GetMoleculeToBind();
 			if (otherBinder != null)
 			{
 				DoBind( otherBinder );
 			}
 		}
 
-		protected virtual IBind GetMoleculeToBind ()
+		protected virtual MoleculeBinder GetMoleculeToBind ()
 		{
 			return moleculeFinder.lastBinderFound;
 		}
 
-		protected virtual void DoBind (IBind otherBinder)
+		protected virtual void DoBind (MoleculeBinder otherBinder)
 		{
-			boundMoleculeBinder = otherBinder;
-			boundMoleculeBinder.boundMoleculeBinder = this;
+			boundBinder = otherBinder;
+			boundBinder.boundBinder = this;
 
 			if (parentToBoundMolecule)
 			{
-				molecule.ParentToBoundMolecule( boundMoleculeBinder.molecule );
-				MoveMoleculeToBindingPosition();
+				molecule.ParentToBoundMolecule( boundBinder.molecule );
+				molecule.SetToBindingOrientation( this );
 			}
-			else if (boundMoleculeBinder.parentToBoundMolecule)
+			else if (boundBinder.parentToBoundMolecule)
 			{
-				boundMoleculeBinder.molecule.ParentToBoundMolecule( molecule );
-				boundMoleculeBinder.MoveMoleculeToBindingPosition();
+				boundBinder.molecule.ParentToBoundMolecule( molecule );
+				boundBinder.molecule.SetToBindingOrientation( boundBinder );
 			}
-		}
-
-		public void MoveMoleculeToBindingPosition ()
-		{
-			molecule.SetToBindingOrientation( boundMoleculeBinder.molecule.transform.TransformPoint( bindingPosition ), 
-				boundMoleculeBinder.molecule.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 
 		public void Release ()
 		{
-			if (boundMoleculeBinder != null && ReadyToRelease())
+			if (boundBinder != null && ReadyToRelease())
 			{
 				DoRelease();
 			}
@@ -92,19 +74,19 @@ namespace AICS.MacroMolecules
 
 		protected virtual void DoRelease ()
 		{
-			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundMoleculeBinder.molecule.transform.position).normalized;
+			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundBinder.molecule.transform.position).normalized;
 
 			if (parentToBoundMolecule)
 			{
 				molecule.UnParentFromBoundMolecule();
 			}
-			else if (boundMoleculeBinder.parentToBoundMolecule)
+			else if (boundBinder.parentToBoundMolecule)
 			{
-				boundMoleculeBinder.molecule.UnParentFromBoundMolecule();
+				boundBinder.molecule.UnParentFromBoundMolecule();
 			}
 
-			boundMoleculeBinder.boundMoleculeBinder = null;
-			boundMoleculeBinder = null;
+			boundBinder.boundBinder = null;
+			boundBinder = null;
 
 			molecule.MoveIfValid( awayFromBoundMolecule );
 		}

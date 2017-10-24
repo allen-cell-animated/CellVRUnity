@@ -9,10 +9,10 @@ namespace AICS.MacroMolecules
 		public MoleculeType typeToFind;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
-		public IBind lastBinderFound;
+		public MoleculeBinder lastBinderFound;
 
 		MoleculeDetector detector;
-		protected List<IBind> validBinders = new List<IBind>();
+		protected List<MoleculeBinder> validBinders = new List<MoleculeBinder>();
 
 		List<Molecule> potentialMolecules
 		{
@@ -45,10 +45,10 @@ namespace AICS.MacroMolecules
 			return lastBinderFound != null;
 		}
 
-		public IBind Find ()
+		public MoleculeBinder Find ()
 		{
 			validBinders.Clear();
-			IBind otherBinder = null;
+			MoleculeBinder otherBinder = null;
 			foreach (Molecule m in potentialMolecules)
 			{
 				if (!molecule.IsBoundToOther( m ))
@@ -67,17 +67,17 @@ namespace AICS.MacroMolecules
 			return null;
 		}
 
-		protected virtual IBind GetValidBinder (Molecule other)
+		protected virtual MoleculeBinder GetValidBinder (Molecule other)
 		{
-			return other.GetOpenBinder( molecule.type );
+			return other.GetOpenBinder( molecule.type ) as MoleculeBinder;
 		}
 
-		protected virtual IBind PickFromValidBinders ()
+		protected virtual MoleculeBinder PickFromValidBinders ()
 		{
 			return GetRandomBinder();
 		}
 
-		protected IBind GetRandomBinder ()
+		protected MoleculeBinder GetRandomBinder ()
 		{
 			return validBinders[validBinders.GetRandomIndex()];
 		}

@@ -11,21 +11,23 @@ namespace AICS
 		public ComponentMolecule moleculeToBind;
 		public ComponentMolecule defaultParentsParentWhenBound;
 
-		protected override void Test ()
+		protected override void TestOnce ()
 		{
-			PassTest( TestBind() && TestRelease() );
+//			PassTest( TestBind() && TestRelease() );
 		}
 
-		bool TestBind ()
-		{
-			assembly.SetParentSchemeOnComponentBind( moleculeToBind );
-			return moleculeToBind.transform.parent == assembly.transform && assembly.defaultParent.transform.parent == defaultParentsParentWhenBound.transform;
-		}
+//		bool TestBind ()
+//		{
+//			assembly.SetParentSchemeOnComponentBind( moleculeToBind );
+//			return moleculeToBind.transform.parent == assembly.transform && assembly.defaultParent.transform.parent == defaultParentsParentWhenBound.transform;
+//		}
+//
+//		bool TestRelease ()
+//		{
+//			assembly.SetParentSchemeOnComponentRelease( moleculeToBind );
+//			return assembly.defaultParent.transform.parent == assembly.transform;
+//		}
 
-		bool TestRelease ()
-		{
-			assembly.SetParentSchemeOnComponentRelease();
-			return assembly.defaultParent.transform.parent == assembly.transform;
-		}
+		protected override void TestUntilPass () {}
 	}
 }

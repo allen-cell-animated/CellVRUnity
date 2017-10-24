@@ -7,10 +7,10 @@ namespace AICS.MacroMolecules
 	[System.Serializable]
 	public class BinderAngle : System.IComparable<BinderAngle>
 	{
-		public IBind binder;
+		public MoleculeBinder binder;
 		public float angle;
 
-		public BinderAngle (IBind _binder, float _angle)
+		public BinderAngle (MoleculeBinder _binder, float _angle)
 		{
 			binder = _binder;
 			angle = _angle;
@@ -41,12 +41,12 @@ namespace AICS.MacroMolecules
 
 		List<BinderAngle> graphedBinders = new List<BinderAngle>();
 
-		protected override IBind PickFromValidBinders ()
+		protected override MoleculeBinder PickFromValidBinders ()
 		{
 			return GetFrontBinder();
 		}
 
-		protected IBind GetFrontBinder ()
+		protected MoleculeBinder GetFrontBinder ()
 		{
 			GraphMolecules();
 			return graphedBinders[graphedBinders.GetExponentialRandomIndex()].binder;
@@ -54,7 +54,7 @@ namespace AICS.MacroMolecules
 
 		void GraphMolecules ()
 		{
-			foreach (IBind binder in validBinders)
+			foreach (MoleculeBinder binder in validBinders)
 			{
 				graphedBinders.Add( new BinderAngle( binder, GetMoleculeAngleFromForward( binder.molecule ) ) );
 			}

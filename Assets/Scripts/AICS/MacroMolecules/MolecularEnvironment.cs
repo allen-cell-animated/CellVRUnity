@@ -54,6 +54,13 @@ namespace AICS.MacroMolecules
 			Gizmos.DrawWireCube( transform.position, size );
 		}
 
+		public bool PointIsInBounds (Vector3 point)
+		{
+			return point.x < transform.position.x + size.x / 2f && point.x > transform.position.x - size.x / 2f
+				&& point.y < transform.position.y + size.y / 2f && point.y > transform.position.y - size.y / 2f
+				&& point.z < transform.position.z + size.z / 2f && point.z > transform.position.z - size.z / 2f;
+		}
+
 		void Start ()
 		{
 			CreateResolutionNodes();

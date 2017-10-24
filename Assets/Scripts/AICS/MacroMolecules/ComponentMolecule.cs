@@ -11,19 +11,20 @@ namespace AICS.MacroMolecules
 		public override void ParentToBoundMolecule (Molecule _boundMolecule)
 		{
 			assembly.ParentToBoundMolecule( _boundMolecule );
-			assembly.SetParentSchemeOnComponentBind( this );
+			assembly.UpdateParentScheme();
 		}
 
 		public override void UnParentFromBoundMolecule ()
 		{
 			assembly.UnParentFromBoundMolecule();
-			assembly.SetParentSchemeOnComponentRelease();
+			assembly.UpdateParentScheme();
 		}
 
-		public override void SetToBindingOrientation (Vector3 position, Quaternion rotation)
+		public override void SetToBindingOrientation (MoleculeBinder binder)
 		{
-			assembly.transform.position = position;
-			assembly.transform.rotation = rotation;
+			Debug.Log( name + " " + binder.boundBinder.molecule.name + " " + binder.bindingPosition );
+			assembly.transform.position = binder.boundBinder.molecule.transform.TransformPoint( binder.bindingPosition );
+			assembly.transform.rotation = binder.boundBinder.molecule.transform.rotation * Quaternion.Euler( binder.bindingRotation );
 			transform.localPosition = Vector3.zero;
 			transform.localRotation = Quaternion.identity;
 		}

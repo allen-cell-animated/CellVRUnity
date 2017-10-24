@@ -28,6 +28,14 @@ namespace AICS.MacroMolecules
 				transition.Reset();
 			}
 		}
+
+		public void EnterState ()
+		{
+			foreach (StateTransition transition in transitions)
+			{
+				transition.EnterStartState();
+			}
+		}
 	}
 
 	[System.Serializable]
@@ -38,12 +46,16 @@ namespace AICS.MacroMolecules
 		public int finalStateID;
 		public int attempts;
 		public int successes;
+		public bool useRate = true;
 		public float theoreticalRate;
+		public float timeToTransition;
 		public float observedRate;
 		public Conditional[] conditionals;
 		public UnityEvent eventToDo;
 
-		public bool observedRateTooHigh
+		float startTime;
+
+		bool observedRateTooHigh
 		{
 			get
 			{
@@ -51,7 +63,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public bool observedRateTooLow
+		bool observedRateTooLow
 		{
 			get
 			{
@@ -59,17 +71,32 @@ namespace AICS.MacroMolecules
 			}
 		}
 
+		public void EnterStartState ()
+		{
+			if (!useRate)
+			{
+				startTime = Time.time;
+			}
+		}
+
 		public bool ShouldHappen ()
 		{
-			if (observedRateTooLow)
+			if (useRate)
 			{
-				return true;
+				if (observedRateTooLow)
+				{
+					return true;
+				}
+				if (observedRateTooHigh)
+				{
+					return false;
+				}
+				return Random.value <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsSinceStart * 1E-9f / attempts;
 			}
-			if (observedRateTooHigh)
+			else
 			{
-				return false;
+				return Time.time - startTime >= timeToTransition;
 			}
-			return Random.value <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsSinceStart * 1E-9f / attempts;
 		}
 
 		public bool PassesConditions ()
@@ -82,6 +109,12 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return true;
+		}
+
+		public void DoTransition ()
+		{
+			eventToDo.Invoke();
+			successes++;
 		}
 
 		public void CalculateObservedRate (float secondsSinceStart)
@@ -146,9 +179,9 @@ namespace AICS.MacroMolecules
 				transition.attempts++;
 				if (transition.ShouldHappen())
 				{
-					transition.eventToDo.Invoke();
-					transition.successes++;
+					transition.DoTransition();
 					currentState = GetStateForID( transition.finalStateID );
+					currentState.EnterState();
 					return true;
 				}
 			}

@@ -16,7 +16,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected override IBind GetMoleculeToBind ()
+		protected override MoleculeBinder GetMoleculeToBind ()
 		{
 			return null;
 		}

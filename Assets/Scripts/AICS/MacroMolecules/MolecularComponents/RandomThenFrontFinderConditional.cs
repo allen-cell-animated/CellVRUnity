@@ -14,7 +14,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected override IBind PickFromValidBinders ()
+		protected override MoleculeBinder PickFromValidBinders ()
 		{
 			if (centerMoleculeIsBound)
 			{

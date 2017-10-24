@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AICS.Microtubule;
-using System.ComponentModel.Design;
 
 namespace AICS.MacroMolecules
 {
@@ -57,11 +56,6 @@ namespace AICS.MacroMolecules
 			return list;
 		}
 
-		public List<Leash> GetLeashes ()
-		{
-			return GetMolecularComponents<Leash>();
-		}
-
 		// --------------------------------------------------------------------------------------------------- Setup
 
 		List<ISetup> _setterUppers;
@@ -91,35 +85,40 @@ namespace AICS.MacroMolecules
 		{
 			get
 			{
-				foreach (IBind binder in binders)
-				{
-					if (binder.boundMoleculeBinder != null && binder.parentToBoundMolecule)
-					{
-						return true;
-					}
-				}
-				return false;
+				return GetParentedBinder() != null;
 			}
 		}
 
-		List<IBind> _binders;
-		List<IBind> binders
+		public MoleculeBinder GetParentedBinder ()
+		{
+			foreach (MoleculeBinder binder in binders)
+			{
+				if (binder.boundBinder != null && binder.parentToBoundMolecule)
+				{
+					return binder;
+				}
+			}
+			return null;
+		}
+
+		List<MoleculeBinder> _binders;
+		List<MoleculeBinder> binders
 		{
 			get
 			{
 				if (_binders == null)
 				{
-					_binders = GetMolecularComponents<IBind>();
+					_binders = GetMolecularComponents<MoleculeBinder>();
 				}
 				return _binders;
 			}
 		}
 
-		public IBind GetOpenBinder (MoleculeType _type)
+		public MoleculeBinder GetOpenBinder (MoleculeType _type)
 		{
-			foreach (IBind binder in binders)
+			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.typeToBind == _type && binder.boundMoleculeBinder == null)
+				if (binder.typeToBind == _type && binder.boundBinder == null)
 				{
 					return binder;
 				}
@@ -129,9 +128,9 @@ namespace AICS.MacroMolecules
 
 		public bool IsBoundToOther (Molecule other)
 		{
-			foreach (IBind binder in binders)
+			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.boundMoleculeBinder != null && binder.boundMoleculeBinder.molecule == other)
+				if (binder.boundBinder != null && binder.boundBinder.molecule == other)
 				{
 					return true;
 				}
@@ -149,10 +148,21 @@ namespace AICS.MacroMolecules
 			transform.SetParent( null );
 		}
 
-		public virtual void SetToBindingOrientation (Vector3 position, Quaternion rotation)
+		public virtual void SetToBindingOrientation (MoleculeBinder binder)
 		{
-			transform.position = position;
-			transform.rotation = rotation;
+			transform.position = binder.boundBinder.molecule.transform.TransformPoint( binder.bindingPosition );
+			transform.rotation = binder.boundBinder.molecule.transform.rotation * Quaternion.Euler( binder.bindingRotation );
+		}
+
+		public void ResetToBindingOrientation ()
+		{
+			MoleculeBinder parentedBinder = GetParentedBinder();
+			if (parentedBinder != null)
+			{
+				Debug.Log( name + " reset binder for " + parentedBinder.typeToBind );
+				SetToBindingOrientation( parentedBinder );
+				UnityEditor.EditorApplication.isPaused = true;
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Movement
@@ -175,6 +185,19 @@ namespace AICS.MacroMolecules
 					_moveValidators = GetMolecularComponents<IValidateMoves>();
 				}
 				return _moveValidators;
+			}
+		}
+
+		List<Leash> _leashes;
+		public List<Leash> leashes
+		{
+			get
+			{
+				if (_leashes == null)
+				{
+					_leashes = GetMolecularComponents<Leash>();
+				}
+				return _leashes;
 			}
 		}
 

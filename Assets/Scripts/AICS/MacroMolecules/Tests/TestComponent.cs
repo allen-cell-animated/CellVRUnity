@@ -13,12 +13,15 @@ namespace AICS
 		{
 			if (!tested)
 			{
-				Test();
+				TestOnce();
 				tested = true;
 			}
+			TestUntilPass();
 		}
 
-		protected abstract void Test ();
+		protected abstract void TestOnce ();
+
+		protected abstract void TestUntilPass ();
 
 		protected void PassTest (bool condition)
 		{

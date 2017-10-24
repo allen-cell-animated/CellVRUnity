@@ -15,7 +15,7 @@ namespace AICS
 		int foundGoal;
 		int foundOther;
 
-		protected override void Test ()
+		protected override void TestOnce ()
 		{
 			while (n < attempts)
 			{
@@ -30,7 +30,7 @@ namespace AICS
 		{
 			if (finder != null)
 			{
-				IBind found = finder.Find();
+				MoleculeBinder found = finder.Find();
 				if (found != null && found.molecule == moleculeToFindMost)
 				{
 					foundGoal++;
@@ -41,5 +41,7 @@ namespace AICS
 				}
 			}
 		}
+
+		protected override void TestUntilPass () {}
 	}
 }
