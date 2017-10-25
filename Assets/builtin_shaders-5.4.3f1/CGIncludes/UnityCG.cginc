@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 // Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
 
 #ifndef UNITY_CG_INCLUDED
@@ -118,7 +120,7 @@ inline half3 LinearToGammaSpace (half3 linRGB)
 inline float4 UnityObjectToClipPos( in float3 pos )
 {
 #ifdef UNITY_USE_PREMULTIPLIED_MATRICES
-	return mul(UNITY_MATRIX_MVP, float4(pos, 1.0));
+	return UnityObjectToClipPos(float4(pos, 1.0));
 #else
 	// More efficient than computing M*VP matrix product
 	return mul(UNITY_MATRIX_VP, mul(unity_ObjectToWorld, float4(pos, 1.0)));

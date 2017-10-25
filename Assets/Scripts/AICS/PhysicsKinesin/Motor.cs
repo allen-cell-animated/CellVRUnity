@@ -188,7 +188,7 @@ namespace AICS.PhysicsKinesin
 			get {
 				if (_colliderRenderers == null)
 				{
-					_colliderRenderers = transform.FindChild( "Collider" ).GetComponentsInChildren<MeshRenderer>();
+					_colliderRenderers = transform.Find( "Collider" ).GetComponentsInChildren<MeshRenderer>();
 				}
 				return _colliderRenderers;
 			}

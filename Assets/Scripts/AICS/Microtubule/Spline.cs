@@ -247,7 +247,7 @@ namespace AICS.Microtubule
 			{
 				if (_normalTransform == null)
 				{
-					_normalTransform = transform.FindChild( "Normal" );
+					_normalTransform = transform.Find( "Normal" );
 					if (_normalTransform == null)
 					{
 						_normalTransform = new GameObject( "Normal" ).transform;

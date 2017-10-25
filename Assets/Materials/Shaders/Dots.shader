@@ -1,4 +1,6 @@
-﻿Shader "Custom/Dots"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/Dots"
 {
     Properties
     {
@@ -47,7 +49,7 @@
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
-                OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
+                OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord - fixed2(0.5, 0.5);
                 OUT.color = IN.color * _Color;
                 return OUT;

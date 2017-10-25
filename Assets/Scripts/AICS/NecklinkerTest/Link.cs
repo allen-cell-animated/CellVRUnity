@@ -109,7 +109,7 @@ namespace AICS.Necklinker
 			get {
 				if (_meshRenderer == null)
 				{
-					_meshRenderer = transform.FindChild( "Sphere" ).GetComponent<MeshRenderer>();
+					_meshRenderer = transform.Find( "Sphere" ).GetComponent<MeshRenderer>();
 				}
 				return _meshRenderer;
 			}
