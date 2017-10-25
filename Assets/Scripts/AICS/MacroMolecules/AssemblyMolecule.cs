@@ -6,36 +6,37 @@ namespace AICS.MacroMolecules
 {
 	public class AssemblyMolecule : Molecule 
 	{
-		public ComponentMolecule rootComponent;
+		public Molecule rootComponent;
 		public List<ComponentMolecule> componentMolecules = new List<ComponentMolecule>();
 
 		public void UpdateParentScheme ()
 		{
-			List<ComponentMolecule> parentedComponents = GetParentedComponents();
+			List<Molecule> parentedComponents = GetParentedComponents();
 			if (parentedComponents.Count == 0)
 			{
 				if (rootComponent != null)
 				{
 					rootComponent.transform.SetParent( transform );
-					SetParentRecursively( rootComponent, null );
+					SetParent( rootComponent, null );
 				}
 			}
 			else if (parentedComponents.Count == 1)
 			{
 				parentedComponents[0].transform.SetParent( transform );
-				SetParentRecursively( parentedComponents[0], null );
+				SetParent( parentedComponents[0], null );
 			}
 			else
 			{
-				ComponentMolecule componentClosestToRoot = GetComponentClosestToRoot( parentedComponents );
 				//todo
+				Molecule parentedComponentClosestToRoot = GetComponentClosestToRoot( parentedComponents );
+
 			}
 		}
 
-		List<ComponentMolecule> GetParentedComponents ()
+		List<Molecule> GetParentedComponents ()
 		{
-			List<ComponentMolecule> parentedComponents = new List<ComponentMolecule>();
-			foreach (ComponentMolecule component in componentMolecules)
+			List<Molecule> parentedComponents = new List<Molecule>();
+			foreach (Molecule component in componentMolecules)
 			{
 				if (component.GetParentedBinder() != null)
 				{
@@ -45,20 +46,60 @@ namespace AICS.MacroMolecules
 			return parentedComponents;
 		}
 
-		ComponentMolecule GetComponentClosestToRoot (List<ComponentMolecule> parentedComponents)
+		Molecule GetComponentClosestToRoot (List<Molecule> components)
 		{
-			List<int> branchesToRoot = new List<int>();
-			foreach (ComponentMolecule component in parentedComponents)
+			float n, min = Mathf.Infinity;
+			Molecule closestComponent;
+			foreach (Molecule component in components)
 			{
-				foreach (Leash leash in component.leashes)
+				n = GetMinBranchesToRoot( component, null );
+				if (n < min)
 				{
-					// is root in this branch? check recursively
+					closestComponent = component;
+					min = n;
 				}
 			}
-			return null;
+			return closestComponent;
 		}
 
-		void SetParentRecursively (Molecule parent, Molecule grandparent)
+		float GetMinBranchesToRoot (Molecule parent, Molecule grandparent)
+		{
+			if (parent == rootComponent)
+			{
+				return 0;
+			}
+
+			float n, min = Mathf.Infinity;
+			foreach (Leash leash in parent.leashes)
+			{
+				if (leash.attachedMolecule != grandparent)
+				{
+					n = GetMinBranchesToRoot( leash.attachedMolecule, parent );
+					if (n < min)
+					{
+						min = n;
+					}
+				}
+			}
+			return min + 1f;
+		}
+
+		bool BranchContainsComponent (Leash leash, Molecule componentToFind)
+		{
+			foreach (Leash l in leash.attachedMolecule.leashes)
+			{
+				if (l.attachedMolecule != leash.molecule)
+				{
+					if (l.attachedMolecule == componentToFind)
+					{
+						return true;
+					}
+
+				}
+			}
+		}
+
+		void SetParent (Molecule parent, Molecule grandparent)
 		{
 			List<Leash> leashes = parent.leashes;
 			foreach (Leash leash in leashes)
@@ -66,7 +107,7 @@ namespace AICS.MacroMolecules
 				if (leash.attachedMolecule != grandparent)
 				{
 					leash.attachedMolecule.transform.SetParent( parent.transform );
-					SetParentRecursively( leash.attachedMolecule, parent );
+					SetParent( leash.attachedMolecule, parent );
 				}
 			}
 		}
