@@ -119,19 +119,20 @@ namespace AICS.MotorProteins
 
 		protected abstract bool IsValidMove (Vector3 moveStep);
 
-		void OnTriggerStay (Collider other)
-		{
-			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
-			{
-				ExitCollision( other.transform.position );
-			}
-		}
-
-		void ExitCollision (Vector3 otherPosition)
-		{
-			Vector3 moveStep = 0.1f * (transform.position - otherPosition);
-			MoveIfValid( moveStep );
-		}
+//		void OnTriggerStay (Collider other)
+//		{
+//			Debug.Log( name );
+//			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
+//			{
+//				ExitCollision( other.transform.position );
+//			}
+//		}
+//
+//		void ExitCollision (Vector3 otherPosition)
+//		{
+//			Vector3 moveStep = 0.1f * (transform.position - otherPosition);
+//			MoveIfValid( moveStep );
+//		}
 
 		protected void DoInRandomOrder (Kinetic[] kinetics)
 		{
