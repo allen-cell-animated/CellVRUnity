@@ -469,7 +469,7 @@ namespace AICS.MotorProteins.Kinesin
 			lastSetToBindingPositionTime = Time.time;
 			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
-			body.isKinematic = true;
+		    body.isKinematic = true;
 		}
 
 		bool ReleaseTubulin (Kinetic kinetic)
