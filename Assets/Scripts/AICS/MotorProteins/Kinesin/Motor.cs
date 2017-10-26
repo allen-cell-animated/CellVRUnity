@@ -4,6 +4,7 @@ using UnityEngine;
 using AICS.Microtubule;
 using System.IO;
 using AICS.UI;
+using AICS.PhysicsKinesin;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -21,14 +22,15 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public MotorState state = MotorState.KD;
 		public float bindingRotationTolerance = 30f;
-		public GameObject ATP;
-		public GameObject ADP;
-		public GameObject Pi;
+//		public GameObject ATP;
+//		public GameObject ADP;
+//		public GameObject Pi;
 		public bool needToSwitchToStrong;
 		public StateIndicator stateIndicatorUI;
 		public Direction forwardDirection;
 		public Direction upDirection;
 		public Kinetics kinetics;
+		public Transform atpBindingSite;
 
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
@@ -36,6 +38,7 @@ namespace AICS.MotorProteins.Kinesin
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
 		public Color tubulinFlashColor;
+		Nucleotide boundNucleotide;
 
 		MoleculeGraph<Tubulin> tubulinGraph;
 
@@ -253,21 +256,27 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool BindATP (Kinetic kinetic)
 		{
-			if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
-
-			SetState( (MotorState)kinetic.finalStateIndex );
-			ATP.SetActive( true );
-			kinesin.hips.StartSnap( this );
-			return true;
+			if (FindAndBindATP())
+			{
+				if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
+				SetState( (MotorState)kinetic.finalStateIndex );
+				kinesin.hips.StartSnap( this );
+				return true;
+			}
+			return false;
 		}
 
 		bool ReleaseATP (Kinetic kinetic)
 		{
-			if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
+			if (boundNucleotide != null)
+			{
+				if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
 
-			SetState( (MotorState)kinetic.finalStateIndex );
-			ATP.SetActive( false );
-			return true;
+				SetState( (MotorState)kinetic.finalStateIndex );
+				DoNucleotideRelease();
+				return true;
+			}
+			return false;
 		}
 
 		bool HydrolyzeATP (Kinetic kinetic)
@@ -275,9 +284,10 @@ namespace AICS.MotorProteins.Kinesin
 			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
 
 			SetState( (MotorState)kinetic.finalStateIndex );
-			ATP.SetActive( false );
-			ADP.SetActive( true );
-			Pi.SetActive( true );
+			if (boundNucleotide != null)
+			{
+				boundNucleotide.Hydrolyze();
+			}
 			otherMotor.SwitchToStrong();
 			return true;
 		}
@@ -292,7 +302,10 @@ namespace AICS.MotorProteins.Kinesin
 			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
 
 			SetState( (MotorState)kinetic.finalStateIndex );
-			Pi.SetActive( false );
+			if (boundNucleotide != null)
+			{
+				boundNucleotide.ReleasePi();
+			}
 			return true;
 		}
 
@@ -303,10 +316,55 @@ namespace AICS.MotorProteins.Kinesin
 				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
 
 				SetState( (MotorState)kinetic.finalStateIndex );
-				ADP.SetActive( false );
+				DoNucleotideRelease();
 				return true;
 			}
 			return false;
+		}
+
+		// --------------------------------------------------------------------------------------------------- Nucleotide binding
+
+		bool FindAndBindATP ()
+		{
+			boundNucleotide = kinesin.atpGenerator.GetClosestATPToPoint( atpBindingSite.position );
+			if (boundNucleotide != null)
+			{
+				DoNucleotideBind();
+				return true;
+			}
+			return false;
+		}
+
+		void DoNucleotideBind ()
+		{
+			boundNucleotide.transform.SetParent( atpBindingSite );
+			boundNucleotide.transform.localPosition = Vector3.zero;
+			boundNucleotide.transform.localRotation = Quaternion.identity;
+			boundNucleotide.isBusy = true;
+			boundNucleotide.GetComponent<Rigidbody>().isKinematic = true;
+//			Rigidbody body = boundNucleotide.GetComponent<Rigidbody>();
+//			if (body != null) 
+//			{
+//				Destroy( body );
+//			}
+		}
+
+		void DoNucleotideRelease ()
+		{
+			if (boundNucleotide != null)
+			{
+//				if (!boundNucleotide.GetComponent<Rigidbody>())
+//				{
+//					Rigidbody body = boundNucleotide.gameObject.AddComponent<Rigidbody>();
+//					body.useGravity = false;
+//					body.mass = nucleotide.mass;
+//					body.drag = 5f;
+//				}
+				boundNucleotide.GetComponent<Rigidbody>().isKinematic = false;
+				boundNucleotide.transform.SetParent( boundNucleotide.parent );
+				boundNucleotide.isBusy = false;
+				boundNucleotide = null;
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Random walk
@@ -400,7 +458,7 @@ namespace AICS.MotorProteins.Kinesin
 				if (t != null && TubulinIsValid( t ))
 				{
 					molecules.Add( ma );
-					t.Flash( tubulinFlashColor );
+//					t.Flash( tubulinFlashColor );
 				}
 			}
 
@@ -507,9 +565,9 @@ namespace AICS.MotorProteins.Kinesin
 			needToSwitchToStrong = false;
 			tubulin = null;
 			lastReleaseTime = -1f;
-			ATP.SetActive( false );
-			ADP.SetActive( true );
-			Pi.SetActive( false );
+//			ATP.SetActive( false );
+//			ADP.SetActive( true );
+//			Pi.SetActive( false );
 			kinetics.Reset();
 			tubulinGraph.Clear();
 

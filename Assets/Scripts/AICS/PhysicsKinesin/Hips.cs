@@ -54,13 +54,13 @@ namespace AICS.PhysicsKinesin
 			}
 		}
 
-		MoleculeGenerator _moleculeGenerator;
-		MoleculeGenerator moleculeGenerator
+		NucleotideGenerator _moleculeGenerator;
+		NucleotideGenerator moleculeGenerator
 		{
 			get {
 				if (_moleculeGenerator == null)
 				{
-					_moleculeGenerator = GetComponent<MoleculeGenerator>();
+					_moleculeGenerator = GetComponent<NucleotideGenerator>();
 				}
 				return _moleculeGenerator;
 			}

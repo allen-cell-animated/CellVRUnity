@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace AICS.PhysicsKinesin
 {
-	public class MoleculeGenerator : MonoBehaviour 
+	public class NucleotideGenerator : MonoBehaviour
 	{
 		[Tooltip("radius in nm")]
 		public float generationRadius = 10f;
 		[Tooltip("concentration in mM")]
 		public float concentration = 5f;
-		public Molecule moleculePrefab;
+		public Nucleotide moleculePrefab;
 
-		List<Molecule> molecules = new List<Molecule>();
+		List<Nucleotide> molecules = new List<Nucleotide>();
 		float n;
 		Transform moleculeParent;
 		float moleculeMass = -1f;
@@ -81,7 +81,7 @@ namespace AICS.PhysicsKinesin
 		{
 			Vector3 position = transform.position + generationRadius * Random.insideUnitSphere;
 
-			List<Molecule> hiddenMolecules = molecules.FindAll( m => m.hidden );
+			List<Nucleotide> hiddenMolecules = molecules.FindAll( m => m.hidden );
 			if (hiddenMolecules.Count > 0)
 			{
 				hiddenMolecules[0].transform.position = position;
@@ -90,7 +90,7 @@ namespace AICS.PhysicsKinesin
 			}
 			else
 			{
-				Molecule molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Molecule;
+				Nucleotide molecule = Instantiate( moleculePrefab, position, Random.rotation ) as Nucleotide;
 				molecule.parent = moleculeParent;
 				molecule.transform.SetParent( moleculeParent );
 				molecule.name = moleculePrefab.name + n;
@@ -110,7 +110,7 @@ namespace AICS.PhysicsKinesin
 			if (moleculeMass >= 0 && (mass < moleculeMass - 0.1f || mass > moleculeMass + 0.1f))
 			{
 				moleculeMass = mass;
-				foreach (Molecule molecule in molecules)
+				foreach (Nucleotide molecule in molecules)
 				{
 					if (molecule.body != null)
 					{
@@ -118,6 +118,25 @@ namespace AICS.PhysicsKinesin
 					}
 				}
 			}
+		}
+
+		public Nucleotide GetClosestATPToPoint (Vector3 point)
+		{
+			float d, min = Mathf.Infinity;
+			Nucleotide closest = null;
+			foreach (Nucleotide molecule in molecules)
+			{
+				if ((molecule as Nucleotide).isATP)
+				{
+					d = Vector3.Distance( molecule.transform.position, point );
+					if (d < min)
+					{
+						min = d;
+						closest = molecule;
+					}
+				}
+			}
+			return closest;
 		}
 	}
 }

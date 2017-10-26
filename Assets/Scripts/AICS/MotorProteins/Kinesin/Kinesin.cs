@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AICS.Microtubule;
+using AICS.PhysicsKinesin;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -24,6 +25,7 @@ namespace AICS.MotorProteins.Kinesin
 		public float averageWalkingSpeed; // μm/s
 		public Tubulin lastTubulin;
 		public KineticRates kineticRates;
+		public NucleotideGenerator atpGenerator;
 
 //		Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
 //		float lastQueuedTime;

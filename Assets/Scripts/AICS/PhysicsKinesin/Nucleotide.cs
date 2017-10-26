@@ -7,20 +7,9 @@ namespace AICS.PhysicsKinesin
 	public class Nucleotide : Molecule
 	{
 		public bool isATP;
-		public Color ATPColor;
-		public Color ADPColor;
-
-		MeshRenderer _meshRenderer;
-		MeshRenderer meshRenderer
-		{
-			get {
-				if (_meshRenderer == null)
-				{
-					_meshRenderer = GetComponent<MeshRenderer>();
-				}
-				return _meshRenderer;
-			}
-		}
+		public GameObject ATP;
+		public GameObject ADP;
+		public GameObject Pi;
 
 		Collider _collider;
 		Collider theCollider
@@ -48,29 +37,88 @@ namespace AICS.PhysicsKinesin
 
 		void Start ()
 		{
-			meshRenderer.material.color = ATPColor;
+			DoReset();
 		}
 
 		public void Hydrolyze ()
 		{
 			isATP = false;
-			meshRenderer.material.color = ADPColor;
+
+			DestroyDisplay( ATP );
+
+			GameObject ADPprefab = Resources.Load( "Nucleotides/ADP" ) as GameObject;
+			ADP = Instantiate( ADPprefab, transform ) as GameObject;
+			ADP.transform.localPosition = Vector3.zero;
+			ADP.transform.localRotation = Quaternion.identity;
+
+			GameObject PiPrefab = Resources.Load( "Nucleotides/Pi" ) as GameObject;
+			Pi = Instantiate( PiPrefab, transform ) as GameObject;
+			Pi.transform.localPosition = Vector3.zero;
+			Pi.transform.localRotation = Quaternion.identity;
+		}
+
+		public void ReleasePi ()
+		{
+			if (Pi != null)
+			{
+				Pi.transform.SetParent( parent );
+				Pi.GetComponent<RandomForces>().enabled = true;
+				Pi.GetComponent<Rigidbody>().isKinematic = false;
+				Invoke( "DestroyPi", 5f );
+			}
+		}
+
+		void DestroyPi ()
+		{
+			DestroyDisplay( Pi );
 		}
 
 		protected override void Hide ()
 		{
-			meshRenderer.enabled = theCollider.enabled = randomForces.enabled = false;
+			theCollider.enabled = randomForces.enabled = false;
+			SetDisplayActive( ATP, false );
+			SetDisplayActive( ADP, false );
+			SetDisplayActive( Pi, false );
 		}
 
 		protected override void Show ()
 		{
-			meshRenderer.enabled = theCollider.enabled = randomForces.enabled = true;
+			theCollider.enabled = randomForces.enabled = true;
+			SetDisplayActive( ATP, true );
+			SetDisplayActive( ADP, true );
+			SetDisplayActive( Pi, true );
 		}
 
-		protected override void Reset ()
+		void SetDisplayActive (GameObject display, bool active)
+		{
+			if (display != null)
+			{
+				display.SetActive( active );
+			}
+		}
+
+		protected override void DoReset ()
 		{
 			isATP = true;
-			meshRenderer.material.color = ATPColor;
+
+			if (ATP == null)
+			{
+				GameObject ATPprefab = Resources.Load( "Nucleotides/ATP" ) as GameObject;
+				ATP = Instantiate( ATPprefab, transform ) as GameObject;
+				ATP.transform.localPosition = Vector3.zero;
+				ATP.transform.localRotation = Quaternion.identity;
+			}
+
+			DestroyDisplay( ADP );
+			DestroyDisplay( Pi );
+		}
+
+		void DestroyDisplay (GameObject display)
+		{
+			if (display != null)
+			{
+				Destroy( display );
+			}
 		}
 	}
 }

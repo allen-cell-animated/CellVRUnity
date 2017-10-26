@@ -53,10 +53,10 @@ namespace AICS.PhysicsKinesin
 
 		public void Regenerate ()
 		{
-			Reset();
+			DoReset();
 			ToggleHidden( false );
 		}
 
-		protected abstract void Reset ();
+		protected abstract void DoReset ();
 	}
 }
