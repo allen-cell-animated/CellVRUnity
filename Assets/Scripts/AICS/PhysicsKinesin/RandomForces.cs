@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AICS.MotorProteins;
 
 namespace AICS.PhysicsKinesin
 {
@@ -55,7 +56,7 @@ namespace AICS.PhysicsKinesin
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
 				float meanForce = Mathf.Min( 100f, body.mass ) * timeInterval * 2100f 
-					* Mathf.Sqrt( 20f * 1E-4f * 100000f ); 
+					* Mathf.Sqrt( 20f * 1E-4f * MolecularEnvironment.Instance.nanosecondsPerStep ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanForce); // random exponential distribution
 			}
 		}
@@ -65,7 +66,7 @@ namespace AICS.PhysicsKinesin
 			get {
 				// mass * time interval * multiplier * sqrt( diffusion coefficient * time step (ps) )
 				float meanTorque = Mathf.Min( 100f, body.mass ) * timeInterval * 1500f 
-					* Mathf.Sqrt( 20f * 1E-4f * 100000f ); 
+					* Mathf.Sqrt( 20f * 1E-4f * MolecularEnvironment.Instance.nanosecondsPerStep ); 
 				return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / meanTorque); // random exponential distribution
 			}
 		}

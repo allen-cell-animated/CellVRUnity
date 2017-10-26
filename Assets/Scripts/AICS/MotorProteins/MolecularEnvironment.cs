@@ -62,7 +62,7 @@ namespace AICS.MotorProteins
 		void Update ()
 		{
 			//CalculateFrameRate();
-
+			UpdateTimePerStep();
 			for (int i = 0; i < stepsPerFrame; i++)
 			{
 				if (!pause)
