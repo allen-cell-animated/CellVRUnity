@@ -9,10 +9,14 @@ namespace AICS
 		public Transform[] points;
 		public ParticleSystem emitter;
 
+		Material material;
 		ParticleSystem.Particle[] particles;
+		List<Vector4> particlePositions;
 
 		void Start () 
 		{
+			material = emitter.GetComponent<ParticleSystemRenderer>().sharedMaterial;
+			particlePositions = new List<Vector4>();
 			EmitParticlePerPoint();
 		}
 
@@ -20,7 +24,7 @@ namespace AICS
 		{
 			ParticleSystem.EmitParams parameters = new ParticleSystem.EmitParams();
 			parameters.velocity = Vector3.zero;
-			parameters.startSize = 1f;
+			parameters.startSize = 10f;
 			parameters.startLifetime = Mathf.Infinity;
 			parameters.startColor = Color.white;
 
@@ -37,6 +41,7 @@ namespace AICS
 		void Update () 
 		{
 			UpdateParticlePositions();
+			UpdateShader();
 		}
 
 		void UpdateParticlePositions ()
@@ -47,6 +52,18 @@ namespace AICS
 				particles[i].position = points[particles[i].randomSeed].position;
 			}
 			emitter.SetParticles( particles, particles.Length );
+		}
+
+		void UpdateShader ()
+		{
+			particlePositions.Clear();
+
+			for (int i = 0; i < particles.Length; i++)
+			{
+				particlePositions.Add( particles[i].position );
+			}
+
+			material.SetVectorArray( "_ParticlesPos", particlePositions );
 		}
 	}
 }

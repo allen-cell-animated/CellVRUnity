@@ -20,8 +20,8 @@ namespace AICS.MotorProteins
 		[SerializeField] protected List<Molecule> bindingPartners = new List<Molecule>();
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
 		float lastMoveStepNanoseconds;
-		Vector3 startPosition;
-		Vector3 goalPosition;
+		Vector3 startMovePosition;
+		Vector3 goalMovePosition;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -50,12 +50,12 @@ namespace AICS.MotorProteins
 			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastMoveStepNanoseconds) / nanosecondsPerRandomStep;
 			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f)
 			{
-				startPosition = transform.position;
-				goalPosition = transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) );
+				startMovePosition = transform.position;
+				goalMovePosition = transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) );
 				lastMoveStepNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			}
 
-			Vector3 moveStep = Vector3.zero;// Vector3.Lerp( startPosition, goalPosition, t ) - transform.position;
+			Vector3 moveStep = Vector3.zero;// Vector3.Lerp( startMovePosition, goalMovePosition, t ) - transform.position;
 
 			if (interactsWithOthers)
 			{
