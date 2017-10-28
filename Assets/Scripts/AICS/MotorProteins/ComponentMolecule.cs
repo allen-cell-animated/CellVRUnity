@@ -9,6 +9,7 @@ namespace AICS.MotorProteins
 	public abstract class ComponentMolecule : DynamicMolecule 
 	{
 		public AssemblyMolecule assembly;
+		public bool ignoreInternalCollisions = false;
 		public bool dynamicStepSize = true;
 		public bool dynamicLeash = true;
 		public float minDistanceFromParent = 2f;

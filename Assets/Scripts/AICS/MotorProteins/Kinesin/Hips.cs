@@ -61,14 +61,20 @@ namespace AICS.MotorProteins.Kinesin
 			if (!bound)
 			{
 				Rotate();
-				for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
+
+				int i = 0;
+				bool retry = false;
+				bool success = false;
+				while (!success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
 				{
-					if (Move())
-					{
-						return;
-					}
+					success = Move( retry );
+					retry = true;
+					i++;
 				}
-				Jitter( 0.1f );
+				if (!success)
+				{
+					Jitter( 0.1f );
+				}
 			}
 			else
 			{

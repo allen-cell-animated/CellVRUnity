@@ -142,6 +142,7 @@ namespace AICS.MotorProteins.Kinesin
 					molecule.Reset();
 				}
 			}
+			atpGenerator.DoReset();
 		}
 
 		void FinishReset ()

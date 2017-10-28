@@ -34,8 +34,16 @@ namespace AICS.MotorProteins.Kinesin
 		}
 
 		public override void DoRandomWalk () 
-		{ 
-			Move();		
+		{
+			int i = 0;
+			bool retry = false;
+			bool success = false;
+			while (!success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
+			{
+				success = Move( retry );
+				retry = true;
+				i++;
+			}
 		}
 
 		protected override void InteractWithBindingPartners () { }

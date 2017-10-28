@@ -120,5 +120,10 @@ namespace AICS.PhysicsKinesin
 				Destroy( display );
 			}
 		}
+
+		public void Restart ()
+		{
+			randomForces.DoReset();
+		}
 	}
 }

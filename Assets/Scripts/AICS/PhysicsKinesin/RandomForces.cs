@@ -9,10 +9,10 @@ namespace AICS.PhysicsKinesin
 	{
 		public bool addForce = true;
 		public bool addTorque = true;
+		public float nanosecondsPerStep = 500000f;
 
-		float minTimeBetweenImpulses = 0.03f;
-		float maxTimeBetweenImpulses = 0.05f;
-		float lastTime = -1f;
+		float lastNanoseconds = 0;
+		float lastTime = 0;
 		float timeInterval;
 
 		Rigidbody _rigidbody;
@@ -27,15 +27,13 @@ namespace AICS.PhysicsKinesin
 			}
 		}
 
-		void Start ()
-		{
-			SetTimeInterval();
-		}
-
 		void FixedUpdate () 
 		{
-			if (body != null && Time.time - lastTime > timeInterval)
+			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastNanoseconds) / nanosecondsPerStep;
+			if (body != null && (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f))
 			{
+				timeInterval = Time.time - lastTime;
+
 				body.velocity = body.angularVelocity = Vector3.zero;
 				if (addForce)
 				{
@@ -46,7 +44,7 @@ namespace AICS.PhysicsKinesin
 					body.AddTorque( Helpers.GetRandomVector( torqueMagnitude ) );
 				}
 
-				SetTimeInterval();
+				lastNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 				lastTime = Time.time;
 			}
 		}
@@ -71,9 +69,9 @@ namespace AICS.PhysicsKinesin
 			}
 		}
 
-		void SetTimeInterval ()
+		public void DoReset ()
 		{
-			timeInterval = Random.Range( minTimeBetweenImpulses, maxTimeBetweenImpulses );
+			lastNanoseconds = 0;
 		}
 	}
 }

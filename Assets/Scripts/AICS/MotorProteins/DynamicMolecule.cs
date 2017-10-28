@@ -22,6 +22,9 @@ namespace AICS.MotorProteins
 		float lastMoveStepNanoseconds;
 		Vector3 startMovePosition;
 		Vector3 goalMovePosition;
+		float lastRotateStepNanoseconds;
+		Quaternion startMoveRotation;
+		Quaternion goalMoveRotation;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -42,20 +45,28 @@ namespace AICS.MotorProteins
 
 		protected void Rotate ()
 		{
-			transform.rotation *= Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) );
+			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastRotateStepNanoseconds) / nanosecondsPerRandomStep;
+			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f)
+			{
+				startMoveRotation = transform.rotation;
+				goalMoveRotation = transform.rotation * Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) );
+				lastRotateStepNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+			}
+
+			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, t );
 		}
 
-		protected bool Move () 
+		protected bool Move (bool retry = false) 
 		{
 			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastMoveStepNanoseconds) / nanosecondsPerRandomStep;
-			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f)
+			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f || retry)
 			{
 				startMovePosition = transform.position;
 				goalMovePosition = transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) );
 				lastMoveStepNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			}
 
-			Vector3 moveStep = Vector3.zero;// Vector3.Lerp( startMovePosition, goalMovePosition, t ) - transform.position;
+			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, t ) - transform.position;
 
 			if (interactsWithOthers)
 			{

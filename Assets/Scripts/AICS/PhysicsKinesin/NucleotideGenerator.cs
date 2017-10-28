@@ -138,5 +138,13 @@ namespace AICS.PhysicsKinesin
 			}
 			return closest;
 		}
+
+		public void DoReset ()
+		{
+			foreach (Nucleotide molecule in molecules)
+			{
+				molecule.Restart();
+			}
+		}
 	}
 }
