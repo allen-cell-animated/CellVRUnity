@@ -137,7 +137,7 @@ namespace AICS.MotorProteins
 
 		void UpdateTimePerStep ()
 		{
-			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
+			nanosecondsPerStep = 1E9f * Mathf.Max( 0.01f, Time.deltaTime ) / (timeMultiplier * stepsPerFrame);
 		}
 
 		public void Reset ()

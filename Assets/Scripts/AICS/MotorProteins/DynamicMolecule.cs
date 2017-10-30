@@ -15,16 +15,22 @@ namespace AICS.MotorProteins
 		public bool exitCollisions = true;
 		public float bindingRadius;
 		public bool interactsWithOthers;
-		public float nanosecondsPerRandomStep = 1000f;
 
 		[SerializeField] protected List<Molecule> bindingPartners = new List<Molecule>();
 		protected List<Molecule> collidingMolecules = new List<Molecule>();
-		float lastMoveStepNanoseconds;
+
 		Vector3 startMovePosition;
 		Vector3 goalMovePosition;
-		float lastRotateStepNanoseconds;
 		Quaternion startMoveRotation;
 		Quaternion goalMoveRotation;
+		public bool moving = false;
+		float startMovingNanoseconds;
+		float moveDuration;
+		float moveSpeed = 0.000005f;
+		public bool rotating = false;
+		float startRotatingNanoseconds;
+		float rotateDuration;
+		float rotateSpeed = 0.000005f;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -42,31 +48,106 @@ namespace AICS.MotorProteins
 		}
 
 		public abstract void DoRandomWalk ();
-
-		protected void Rotate ()
+		protected Vector3 lastPosition;
+		public float d;
+		int n = 0;
+		protected void Animate ()
 		{
-			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastRotateStepNanoseconds) / nanosecondsPerRandomStep;
-			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f)
+			d = (d * n + Vector3.Distance( transform.position, lastPosition )) / (n + 1f);
+			lastPosition = transform.position;
+			n++;
+			if (moving)
 			{
-				startMoveRotation = transform.rotation;
-				goalMoveRotation = transform.rotation * Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) );
-				lastRotateStepNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration );
 			}
-
-			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, t );
+			if (rotating)
+			{
+				AnimateRotation( (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration );
+			}
 		}
 
-		protected bool Move (bool retry = false) 
+		protected void RotateRandomly ()
 		{
-			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - lastMoveStepNanoseconds) / nanosecondsPerRandomStep;
+			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration;
+			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f)
+			{
+				StartRotation( Quaternion.identity, true );
+			}
+			else 
+			{
+				AnimateRotation( t );
+			}
+		}
+
+		protected void RotateTo (Quaternion goalRotation)
+		{
+			StartRotation( goalRotation, false );
+			rotating = true;
+		}
+
+		void StartRotation (Quaternion goalRotation, bool random)
+		{
+			startMoveRotation = transform.rotation;
+			goalMoveRotation = (random ? transform.rotation * Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) ) : goalRotation);
+			rotateDuration = Mathf.Abs( Quaternion.Angle( startMoveRotation, goalMoveRotation ) ) / rotateSpeed;
+			if (rotateDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
+			{
+				AnimateRotation( 1f );
+			}
+			else
+			{
+				startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+			}
+		}
+
+		void AnimateRotation (float t)
+		{
+			if (rotating && t >= 1f)
+			{
+				rotating = false;
+			}
+			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, Mathf.Min( 1f, t ) );
+		}
+
+		protected bool MoveRandomly (bool retry = false) 
+		{
+			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration;
 			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f || retry)
 			{
-				startMovePosition = transform.position;
-				goalMovePosition = transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) );
-				lastMoveStepNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+				return StartMove( Vector3.zero, true );
 			}
+			else
+			{
+				return AnimateMove( t );
+			}
+		}
 
-			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, t ) - transform.position;
+		protected void MoveTo (Vector3 goalPosition)
+		{
+			StartMove( goalPosition, false );
+			moving = true;
+		}
+
+		bool StartMove (Vector3 goalPosition, bool random)
+		{
+			startMovePosition = transform.position;
+			goalMovePosition = (random ? transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) ) : goalPosition);
+			moveDuration = Vector3.Distance( startMovePosition, goalMovePosition ) / moveSpeed;
+			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
+			{
+				return AnimateMove( 1f );
+			}
+			startMovingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+			return true;
+		}
+
+		bool AnimateMove (float t) 
+		{
+			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Min( 1f, t ) ) - transform.position;
+			if (moving && t >= 1f)
+			{
+				moving = false;
+			}
 
 			if (interactsWithOthers)
 			{
@@ -142,20 +223,29 @@ namespace AICS.MotorProteins
 
 		protected abstract bool IsValidMove (Vector3 moveStep);
 
-//		void OnTriggerStay (Collider other)
-//		{
-//			Debug.Log( name );
-//			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
-//			{
-//				ExitCollision( other.transform.position );
-//			}
-//		}
-//
-//		void ExitCollision (Vector3 otherPosition)
-//		{
-//			Vector3 moveStep = 0.1f * (transform.position - otherPosition);
-//			MoveIfValid( moveStep );
-//		}
+		void OnTriggerStay (Collider other)
+		{
+			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
+			{
+				ExitCollision( other.transform.position );
+			}
+		}
+
+		void ExitCollision (Vector3 otherPosition)
+		{
+			if (!exiting)
+			{
+				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
+				exiting = true;
+				Invoke( "FinishExit", 1f );
+			}
+		}
+
+		bool exiting = false;
+		void FinishExit ()
+		{
+			exiting = false;
+		}
 
 		protected void DoInRandomOrder (Kinetic[] kinetics)
 		{

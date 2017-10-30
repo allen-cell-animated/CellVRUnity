@@ -40,7 +40,7 @@ namespace AICS.MotorProteins.Kinesin
 			bool success = false;
 			while (!success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
 			{
-				success = Move( retry );
+				success = MoveRandomly( retry );
 				retry = true;
 				i++;
 			}

@@ -34,12 +34,13 @@ namespace AICS.MotorProteins.Kinesin
 
 		Vector3 bindingPosition = new Vector3( 0, 4.53f, 0 );
 		Vector3 bindingRotation = new Vector3( 0, 0, 0 );
-		Tubulin tubulin;
+		public Tubulin tubulin;
 		float lastReleaseTime = -1f;
 		float lastSetToBindingPositionTime = -1f;
 		public Color tubulinFlashColor;
-		Nucleotide boundNucleotide;
-
+		public Nucleotide boundNucleotide;
+		MotorState finalBindState;
+		public bool binding = false;
 		MoleculeGraph<Tubulin> tubulinGraph;
 
 		Kinesin kinesin
@@ -85,7 +86,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
 			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, upDirection );
-
+			lastPosition = transform.position;
 			for (int i = 0; i < 6; i++)
 			{
 				count.Add( 0 );
@@ -169,15 +170,24 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 			count[(int)state]++;
-			DoRandomWalk();
 
-			if (needToSwitchToStrong)
+			if (!binding)
 			{
-				TryToSwitchToStrong();
+				DoRandomWalk();
+
+				if (needToSwitchToStrong)
+				{
+					TryToSwitchToStrong();
+				}
+
+				DoInRandomOrder( eventsForState[state] );
+			}
+			else if (!moving && !rotating)
+			{
+				FinishTubulinBind();
 			}
 
-			DoInRandomOrder( eventsForState[state] );
-
+			Animate();
 			kinetics.CalculateObservedRates();
 		}
 
@@ -373,26 +383,18 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (!bound)
 			{
-				Rotate();
+				RotateRandomly();
 
 				int i = 0;
 				bool retry = false;
 				bool success = false;
 				while (!bound && !success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
 				{
-					success = Move( retry );
-					if (logEvents) { Debug.Log( i ); }
+					success = MoveRandomly( retry );
 					retry = true;
 					i++;
 				}
 
-//				for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
-//				{
-//					if (Move() || bound)
-//					{
-//						return;
-//					}
-//				}
 				if (!success)
 				{
 					Jitter( 0.1f );
@@ -419,12 +421,12 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool BindTubulin (Kinetic kinetic)
 		{
-			if (!bound && (Time.time - lastReleaseTime > 0.1f || needToSwitchToStrong))
+			if (!bound && !otherMotor.binding && (Time.time - lastReleaseTime > 0.1f || needToSwitchToStrong))
 			{
 				Tubulin t = FindTubulin();
 				if (t != null)
 				{
-					DoTubulinBind( t, kinetic );
+//					StartTubulinBind( t, kinetic );
 					return true;
 				}
 			}
@@ -529,20 +531,50 @@ namespace AICS.MotorProteins.Kinesin
 //			return 0;
 		}
 
-		void DoTubulinBind (Tubulin _tubulin, Kinetic kinetic)
+		void StartTubulinBind (Tubulin _tubulin, Kinetic kinetic)
 		{
-			if (logEvents) { Debug.Log( name + " BIND --------------------------------" ); }
+			if (logEvents) { Debug.Log( name + " start BIND --------------------------------" ); }
 
-			SetState( (MotorState)kinetic.finalStateIndex );
+			binding = true;
+			finalBindState = (MotorState)kinetic.finalStateIndex;
 			tubulin = _tubulin;
 			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
-			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
-			SetPosition( tubulin.transform.TransformPoint( bindingPosition ) );
+
+			meshRenderer.material.color = tubulinFlashColor;
+			tubulin.Flash( tubulinFlashColor );
+			MoveTo( tubulin.transform.TransformPoint( bindingPosition ) );
+			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
+		}
+
+		void OnCollisionEnter (Collision collision)
+		{
+			if (binding && collision.collider.tag == "Player")
+			{
+				CancelTubulinBind();
+			}
+		}
+
+		void CancelTubulinBind ()
+		{
+			if (tubulin != null)
+			{
+				tubulin.hasMotorBound = false;
+			}
+			binding = false;
+		}
+
+		void FinishTubulinBind ()
+		{
+			if (logEvents) { Debug.Log( name + " finish BIND --------------------------------" ); }
+
+			SetState( finalBindState );
+			meshRenderer.material.color = color;
 			lastSetToBindingPositionTime = Time.time;
-			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
+//			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
-		    body.isKinematic = true;
+			body.isKinematic = true;
+			binding = false;
 		}
 
 		bool ReleaseTubulin (Kinetic kinetic)
@@ -552,7 +584,7 @@ namespace AICS.MotorProteins.Kinesin
 				if (logEvents) { Debug.Log( name + " RELEASE --------------------------------" ); }
 
 				SetState( (MotorState)kinetic.finalStateIndex );
-				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
+//				kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 				lastReleaseTime = Time.time;
 				if (tubulin != null)
 				{

@@ -47,9 +47,9 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (snapping)
 			{
-				UpdateSnap();
+//				UpdateSnap();
 			}
-			DoRandomWalk();
+//			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }
@@ -60,14 +60,14 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (!bound)
 			{
-				Rotate();
+				RotateRandomly();
 
 				int i = 0;
 				bool retry = false;
 				bool success = false;
-				while (!success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
+				while (!success && i < 3f * MolecularEnvironment.Instance.maxIterationsPerStep)
 				{
-					success = Move( retry );
+					success = MoveRandomly( retry );
 					retry = true;
 					i++;
 				}
@@ -86,14 +86,15 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
-			{
-				snappingArcPositions = CalculateSnapArcPositions( motor );
-				lastSnappingPivot = motor;
-				currentSnapStep = 0;
-				state = HipsState.Free;
-				snapping = true;
-			}
+//			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
+//			{
+//				Debug.Log( "SNAP " + motor.name );
+//				snappingArcPositions = CalculateSnapArcPositions( motor );
+//				lastSnappingPivot = motor;
+//				currentSnapStep = 0;
+//				state = HipsState.Free;
+//				snapping = true;
+//			}
 		}
 
 		Vector3[] CalculateSnapArcPositions (Motor motor)
@@ -161,9 +162,11 @@ namespace AICS.MotorProteins.Kinesin
 			Vector3 toGoal = snappingArcPositions[currentSnapStep] - transform.position;
 			if (Time.time - lastSnapStepTime >= timePerSnapStep && MoveIfValid( toGoal ))
 			{
+				Debug.Log( "snapping" );
 				currentSnapStep++;
 				if (currentSnapStep >= snappingArcPositions.Length)
 				{
+					Debug.Log( "FINISH SNAP" );
 					state = HipsState.Locked;
 					snapping = false;
 				}
@@ -171,6 +174,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			else
 			{
+				Debug.Log( "trying to snap" );
 				MoveIfValid( 0.1f * toGoal );
 			}
 		}
