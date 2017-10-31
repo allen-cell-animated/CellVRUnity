@@ -26,11 +26,11 @@ namespace AICS.MotorProteins
 		public bool moving = false;
 		float startMovingNanoseconds;
 		float moveDuration;
-		float moveSpeed = 0.000005f;
+		float moveSpeed = 0.00005f;
 		public bool rotating = false;
 		float startRotatingNanoseconds;
 		float rotateDuration;
-		float rotateSpeed = 0.000005f;
+		float rotateSpeed = 0.0005f;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -48,14 +48,9 @@ namespace AICS.MotorProteins
 		}
 
 		public abstract void DoRandomWalk ();
-		protected Vector3 lastPosition;
-		public float d;
-		int n = 0;
+
 		protected void Animate ()
 		{
-			d = (d * n + Vector3.Distance( transform.position, lastPosition )) / (n + 1f);
-			lastPosition = transform.position;
-			n++;
 			if (moving)
 			{
 				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration );

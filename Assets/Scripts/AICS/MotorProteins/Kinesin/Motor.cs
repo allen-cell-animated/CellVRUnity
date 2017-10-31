@@ -86,7 +86,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
 			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, upDirection );
-			lastPosition = transform.position;
 			for (int i = 0; i < 6; i++)
 			{
 				count.Add( 0 );

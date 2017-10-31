@@ -49,7 +49,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 //				UpdateSnap();
 			}
-//			DoRandomWalk();
+			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }
@@ -71,6 +71,7 @@ namespace AICS.MotorProteins.Kinesin
 					retry = true;
 					i++;
 				}
+
 				if (!success)
 				{
 					Jitter( 0.1f );
