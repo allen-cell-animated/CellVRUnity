@@ -49,11 +49,11 @@ namespace AICS.MotorProteins
 
 		public abstract void DoRandomWalk ();
 
-		protected void Animate ()
+		protected void Animate (bool forceMove = false)
 		{
 			if (moving)
 			{
-				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration );
+				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration, forceMove );
 			}
 			if (rotating)
 			{
@@ -136,7 +136,7 @@ namespace AICS.MotorProteins
 			return true;
 		}
 
-		bool AnimateMove (float t) 
+		bool AnimateMove (float t, bool forceMove = false) 
 		{
 			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Min( 1f, t ) ) - transform.position;
 			if (moving && t >= 1f)
@@ -149,10 +149,15 @@ namespace AICS.MotorProteins
 				CheckForBindingPartner( moveStep );
 			}
 
-			if (!bound)
+			if (!bound || forceMove)
 			{
-				if (!WillCollideOnMove( moveStep ))
+				if (!WillCollideOnMove( moveStep ) || forceMove)
 				{
+					if (forceMove)
+					{
+						IncrementPosition( moveStep );
+						return true;
+					}
 					return MoveIfValid( moveStep );
 				}
 			}
@@ -220,10 +225,10 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
-			{
-				ExitCollision( other.transform.position );
-			}
+//			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
+//			{
+//				ExitCollision( other.transform.position );
+//			}
 		}
 
 		void ExitCollision (Vector3 otherPosition)

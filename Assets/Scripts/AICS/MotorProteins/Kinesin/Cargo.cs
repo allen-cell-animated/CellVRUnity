@@ -8,6 +8,7 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public Transform anchor;
 		public float maxAngleFromUp = 30f;
+		public float snapSpeed = 1f;
 
 		Kinesin kinesin
 		{
@@ -73,7 +74,7 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					Vector3 axis = Vector3.Cross( upFromAnchor, anchorToPosition.normalized ).normalized;
 					Vector3 goalPosition = anchor.position + anchorToPosition.magnitude * (Quaternion.AngleAxis( angle, axis ) * upFromAnchor);
-					transform.position += 3f * meanStepSize * (goalPosition - transform.position).normalized;
+					transform.position += snapSpeed * (goalPosition - transform.position).normalized;
 				}
 			}
 		}
