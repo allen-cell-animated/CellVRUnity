@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Microtubule
+namespace AICS.MT
 {
 	public class Microtubule : MonoBehaviour 
 	{
@@ -147,6 +147,17 @@ namespace AICS.Microtubule
 				return tubulin.GetComponent<Tubulin>();
 			}
 			return null;
+		}
+
+		public void DoReset ()
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				foreach (Tubulin t in GetTubulins( i ))
+				{
+					t.DoCustomReset();
+				}
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AICS.MotorProteins;
 
-namespace AICS.Microtubule
+namespace AICS.MT
 {
 	public class Tubulin : Molecule
 	{
@@ -28,6 +28,9 @@ namespace AICS.Microtubule
 
 		public override void DoCustomSimulation () { }
 
-		public override void DoCustomReset () { }
+		public override void DoCustomReset () 
+		{
+			hasMotorBound = false;
+		}
 	}
 }

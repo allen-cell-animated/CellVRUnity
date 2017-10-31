@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Microtubule;
 
 namespace AICS.MotorProteins
 {
@@ -31,6 +30,7 @@ namespace AICS.MotorProteins
 		float startRotatingNanoseconds;
 		float rotateDuration;
 		float rotateSpeed = 0.0005f;
+		bool exiting = false;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -225,10 +225,10 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-//			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
-//			{
-//				ExitCollision( other.transform.position );
-//			}
+			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
+			{
+				ExitCollision( other.transform.position );
+			}
 		}
 
 		void ExitCollision (Vector3 otherPosition)
@@ -241,7 +241,6 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		bool exiting = false;
 		void FinishExit ()
 		{
 			exiting = false;

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Microtubule;
+using AICS.MT;
 using System.IO;
 using AICS.UI;
 using AICS.PhysicsKinesin;
@@ -41,7 +41,7 @@ namespace AICS.MotorProteins.Kinesin
 		public Nucleotide boundNucleotide;
 		MotorState finalBindState;
 		public bool binding = false;
-		MoleculeGraph<Tubulin> tubulinGraph;
+		public TubulinGraph tubulinGraph;
 
 		Kinesin kinesin
 		{
@@ -85,7 +85,7 @@ namespace AICS.MotorProteins.Kinesin
 		void Start ()
 		{
 			kinetics = new Kinetics( kinesin.kineticRates );
-			tubulinGraph = new MoleculeGraph<Tubulin>( forwardDirection, upDirection );
+			tubulinGraph = new TubulinGraph( forwardDirection, upDirection );
 			for (int i = 0; i < 6; i++)
 			{
 				count.Add( 0 );
@@ -463,14 +463,18 @@ namespace AICS.MotorProteins.Kinesin
 			return null;
 		}
 
-		public List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+		public List<TubulinAngle> molecules = new List<TubulinAngle>();
 
 		Tubulin GetTubulinAroundOtherMotor ()
 		{
 			molecules.Clear();
-			foreach (MoleculeAngle ma in otherMotor.tubulinGraph.molecules)
+			foreach (TubulinAngle ma in otherMotor.tubulinGraph.molecules)
 			{
 				Tubulin t = ma.molecule as Tubulin;
+//				if (t != null)
+//				{
+//					t.Flash( tubulinFlashColor );
+//				}
 				if (t != null && TubulinIsValid( t ))
 				{
 					molecules.Add( ma );
@@ -480,8 +484,8 @@ namespace AICS.MotorProteins.Kinesin
 
 			if (molecules.Count > 0)
 			{
-				molecules.Sort();
-				return molecules[GetExponentialRandomIndex( molecules.Count )].molecule as Tubulin;
+//				molecules.Sort();
+				return molecules[0].molecule as Tubulin;
 			}
 			return null;
 		}
@@ -506,7 +510,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
 			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-			return _tubulin.tubulinType == 1 && !_tubulin.hasMotorBound && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t )
+			return _tubulin.tubulinType == 1 && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t ) && !_tubulin.hasMotorBound 
 		}
 
 		bool CloseToBindingOrientation (Tubulin _tubulin)
@@ -525,9 +529,7 @@ namespace AICS.MotorProteins.Kinesin
 		int GetExponentialRandomIndex (int n)
 		{
 			float i = Mathf.Clamp( -Mathf.Log10( Random.Range( Mathf.Epsilon, 1f ) ) / 2f, 0, 1f );
-//			Debug.Log( (Mathf.CeilToInt( i * n ) - 1) + " / " + n );
 			return Mathf.CeilToInt( i * n ) - 1;
-//			return 0;
 		}
 
 		void StartTubulinBind (Tubulin _tubulin, Kinetic kinetic)
@@ -575,6 +577,7 @@ namespace AICS.MotorProteins.Kinesin
 			lastSetToBindingPositionTime = Time.time;
 			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
+			if (logEvents) { Debug.Log( name + " set tubulin graph, 0 = " + tubulinGraph.molecules[0].molecule.name ); }
 			body.isKinematic = true;
 			binding = false;
 		}
@@ -593,6 +596,10 @@ namespace AICS.MotorProteins.Kinesin
 					tubulin.hasMotorBound = false;
 					Vector3 fromTubulin = (transform.position - tubulin.transform.position).normalized;
 					MoveIfValid( fromTubulin );
+				}
+				else
+				{
+					Debug.Log( "tubulin null" );
 				}
 				kinesin.hips.SetFree( this );
 				tubulinGraph.Clear();
@@ -619,6 +626,8 @@ namespace AICS.MotorProteins.Kinesin
 //			Pi.SetActive( false );
 			kinetics.Reset();
 			tubulinGraph.Clear();
+			body.isKinematic = false;
+			binding = moving = rotating = false;
 
 			for (int i = 0; i < 6; i++)
 			{

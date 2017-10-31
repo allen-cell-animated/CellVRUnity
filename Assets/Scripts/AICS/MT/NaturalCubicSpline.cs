@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AICS.Microtubule
+namespace AICS.MT
 {
 	public class CubicSplinePosition
 	{

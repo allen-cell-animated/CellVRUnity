@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using AICS.MT;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -9,6 +10,7 @@ namespace AICS.MotorProteins.Kinesin
 	{
 		public bool countFrameRate;
 		public Kinesin kinesin;
+		public Microtubule microtubule;
 		public FollowLookZoomCamera cameraController;
 
 		public Parameter[] rates;
@@ -155,6 +157,7 @@ namespace AICS.MotorProteins.Kinesin
 		public void Reset ()
 		{
 			kinesin.Reset();
+			microtubule.DoReset();
 			MolecularEnvironment.Instance.Reset();
 			cameraController.LookAtTarget();
 		}

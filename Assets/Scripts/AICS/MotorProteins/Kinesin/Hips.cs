@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Microtubule;
 
 namespace AICS.MotorProteins.Kinesin
 {
@@ -49,7 +48,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				UpdateSnap();
 			}
-			DoRandomWalk();
+//			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }

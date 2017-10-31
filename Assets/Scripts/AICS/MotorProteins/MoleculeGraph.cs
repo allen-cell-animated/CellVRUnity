@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using AICS.MT;
 
 namespace AICS.MotorProteins
 {
 	[System.Serializable]
-	public class MoleculeAngle : IComparable<MoleculeAngle>
+	public class TubulinAngle : IComparable<TubulinAngle>
 	{
-		public Molecule molecule;
+		public Tubulin molecule;
 		public float angle;
 
-		public MoleculeAngle (Molecule _molecule, float _angle)
+		public TubulinAngle (Tubulin _molecule, float _angle)
 		{
 			molecule = _molecule;
 			angle = _angle;
 		}
 
-		public int CompareTo (MoleculeAngle other)
+		public int CompareTo (TubulinAngle other)
 		{
 			if (other.angle > angle)
 			{
@@ -35,9 +36,9 @@ namespace AICS.MotorProteins
 	}
 
 	[System.Serializable]
-	public class MoleculeGraph<T> where T : Molecule
+	public class TubulinGraph
 	{
-		public List<MoleculeAngle> molecules = new List<MoleculeAngle>();
+		public List<TubulinAngle> molecules = new List<TubulinAngle>();
 
 		Direction forwardDirection;
 		Direction upDirection;
@@ -51,24 +52,23 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		public MoleculeGraph (Direction _forwardDirection, Direction _upDirection)
+		public TubulinGraph (Direction _forwardDirection, Direction _upDirection)
 		{
 			forwardDirection = _forwardDirection;
 			upDirection = _upDirection;
 		}
 
-		public void SetMolecules (List<T> _molecules, Transform centerTransform)
+		public void SetMolecules (List<Tubulin> _molecules, Transform centerTransform)
 		{
 			Clear();
 			lastCenterTransform = centerTransform;
-			Molecule molecule;
 			float angle;
-			foreach (T m in _molecules)
+			foreach (Tubulin m in _molecules)
 			{
-				molecule = m as Molecule;
-				angle = GetMoleculeAngleFromForward( molecule );
-				molecules.Add( new MoleculeAngle( molecule, angle ) );
+				angle = GetMoleculeAngleFromForward( m );
+				molecules.Add( new TubulinAngle( m, angle ) );
 			}
+			molecules.Sort();
 		}
 
 		// Get angle in degrees from forward vector projected on plane passing through transform and perpendicular to up vector

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Microtubule;
+using AICS.MT;
 using AICS.PhysicsKinesin;
 
 namespace AICS.MotorProteins.Kinesin

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AICS.Microtubule;
 
 namespace AICS.MotorProteins
 {
@@ -16,23 +15,29 @@ namespace AICS.MotorProteins
 		public Quaternion startRotation;
 		public int resetFrames;
 
-		public MeshRenderer meshRenderer;
+		public MeshRenderer[] meshRenderers;
 		protected Color color;
 
 		public void Flash (Color _flashColor)
 		{
-			if (meshRenderer != null) 
-			{ 
-				meshRenderer.material.color = _flashColor;
-				Invoke( "EndFlash", 0.5f );
+			foreach (MeshRenderer meshRenderer in meshRenderers)
+			{
+				if (meshRenderer != null) 
+				{ 
+					meshRenderer.material.color = _flashColor;
+				}
 			}
+			Invoke( "EndFlash", 0.5f );
 		}
 
 		void EndFlash ()
 		{
-			if (meshRenderer != null) 
-			{ 
-				meshRenderer.material.color = color;
+			foreach (MeshRenderer meshRenderer in meshRenderers)
+			{
+				if (meshRenderer != null) 
+				{ 
+					meshRenderer.material.color = color;
+				}
 			}
 		}
 
@@ -45,7 +50,7 @@ namespace AICS.MotorProteins
 		{
 			startPosition = transform.position;
 			startRotation = transform.rotation;
-			if (meshRenderer != null) { color = meshRenderer.material.color; }
+			if (meshRenderers.Length > 0 && meshRenderers[0] != null) { color = meshRenderers[0].material.color; }
 			OnAwake();
 		}
 
