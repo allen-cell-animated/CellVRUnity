@@ -225,7 +225,7 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause && other.GetComponent<PhysicsKinesin.Nucleotide>() == null)
+			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
 			{
 				ExitCollision( other.transform.position );
 			}

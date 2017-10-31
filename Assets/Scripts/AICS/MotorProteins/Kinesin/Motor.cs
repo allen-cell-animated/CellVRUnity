@@ -548,13 +548,13 @@ namespace AICS.MotorProteins.Kinesin
 			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 
-//		void OnCollisionEnter (Collision collision)
-//		{
-//			if (binding && collision.collider.tag == "Player")
-//			{
-//				CancelTubulinBind();
-//			}
-//		}
+		void OnCollisionEnter (Collision collision)
+		{
+			if (binding && collision.collider.tag == "Player")
+			{
+				CancelTubulinBind();
+			}
+		}
 
 		void CancelTubulinBind ()
 		{

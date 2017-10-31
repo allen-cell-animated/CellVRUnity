@@ -48,7 +48,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				UpdateSnap();
 			}
-//			DoRandomWalk();
+			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }

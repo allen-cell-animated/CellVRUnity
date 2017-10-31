@@ -136,7 +136,26 @@ public class ViveController : MonoBehaviour
 				OnDPadDownPressed();
 			}
 		}
-	}
+        if (controller.GetPress(EVRButtonId.k_EButton_SteamVR_Touchpad))
+        {
+            if (dPadHovering[(int)DPadDirection.Up])
+            {
+                OnDPadUpStay();
+            }
+            else if (dPadHovering[(int)DPadDirection.Left])
+            {
+                OnDPadLeftStay();
+            }
+            else if (dPadHovering[(int)DPadDirection.Right])
+            {
+                OnDPadRightStay();
+            }
+            else if (dPadHovering[(int)DPadDirection.Down])
+            {
+                OnDPadDownStay();
+            }
+        }
+    }
 
 	void GetTrigger ()
 	{
@@ -168,7 +187,15 @@ public class ViveController : MonoBehaviour
 
 	public virtual void OnDPadDownPressed () { }
 
-	public virtual void OnTriggerDown () { }
+    public virtual void OnDPadUpStay() { }
+
+    public virtual void OnDPadLeftStay() { }
+
+    public virtual void OnDPadRightStay() { }
+
+    public virtual void OnDPadDownStay() { }
+
+    public virtual void OnTriggerDown () { }
 
 	public virtual void OnTriggerStay () { }
 }
