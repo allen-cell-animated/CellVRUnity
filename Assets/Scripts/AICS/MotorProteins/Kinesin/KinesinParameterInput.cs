@@ -184,6 +184,36 @@ namespace AICS.MotorProteins.Kinesin
 
 				averageWalkingSpeed.SetDisplay( kinesin.averageWalkingSpeed );
 			}
+
+			if (Input.GetKeyDown( KeyCode.A ))
+			{
+				Motor motor = kinesin.motors.Find( m => m.binding );
+				if (motor != null)
+				{
+					motor.CancelTubulinBind();
+				}
+			}
+			if (Input.GetKeyDown( KeyCode.R ))
+			{
+				Debug.Log("RESET!!!");
+				Reset();
+			}
+			if (Input.GetKey( KeyCode.Period ))
+			{
+				ChangeTime( 0.9f );
+			}
+			if (Input.GetKey( KeyCode.Comma ))
+			{
+				ChangeTime( 1.1f );
+			}
+		}
+
+		float minTimeMultiplier = 1f;
+		float maxTimeMultiplier = 10000f;
+		void ChangeTime (float delta)
+		{
+			float timeMultiplier = Mathf.Clamp( MolecularEnvironment.Instance.timeMultiplier * delta, minTimeMultiplier, maxTimeMultiplier );
+			MolecularEnvironment.Instance.SetTime( timeMultiplier );
 		}
 	}
 }

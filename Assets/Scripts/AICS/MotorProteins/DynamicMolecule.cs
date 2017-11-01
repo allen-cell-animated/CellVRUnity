@@ -31,6 +31,7 @@ namespace AICS.MotorProteins
 		float rotateDuration;
 		float rotateSpeed = 0.0005f;
 		bool exiting = false;
+		public bool binding = false;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -127,6 +128,17 @@ namespace AICS.MotorProteins
 		{
 			startMovePosition = transform.position;
 			goalMovePosition = (random ? transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) ) : goalPosition);
+
+			if (logEvents)
+			{
+				GameObject a = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+				a.transform.position = startMovePosition;
+				a.name = name + " start";
+				GameObject b = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+				b.transform.position = goalMovePosition;
+				b.name = name + " goal";
+			}
+
 			moveDuration = Vector3.Distance( startMovePosition, goalMovePosition ) / moveSpeed;
 			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
@@ -155,6 +167,7 @@ namespace AICS.MotorProteins
 				{
 					if (forceMove)
 					{
+						Debug.Log( name + " force move " + (resetFrames == 0) );
 						IncrementPosition( moveStep );
 						return true;
 					}
@@ -225,7 +238,7 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound && exitCollisions && !MolecularEnvironment.Instance.pause)
+			if (!bound && !binding && exitCollisions && !MolecularEnvironment.Instance.pause)
 			{
 				ExitCollision( other.transform.position );
 			}
