@@ -207,7 +207,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		float minTimeMultiplier = 100f;
+		float minTimeMultiplier = 1f;
 		float maxTimeMultiplier = 10000f;
 		void ChangeTime (float delta)
 		{

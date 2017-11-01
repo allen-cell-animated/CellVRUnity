@@ -30,6 +30,7 @@ namespace AICS.MotorProteins
 		public float startRotatingNanoseconds;
 		public float rotateDuration;
 		float rotateSpeed = 0.0005f;
+		float totalRotationAngle;
 		bool exiting = false;
 		public bool binding = false;
 
@@ -52,13 +53,13 @@ namespace AICS.MotorProteins
 
 		protected void Animate (bool forceMove = false)
 		{
-			if (moving)
-			{
-				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration, forceMove );
-			}
 			if (rotating)
 			{
 				AnimateRotation( (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration );
+			}
+			if (moving)
+			{
+				AnimateMove( (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration, forceMove );
 			}
 		}
 
@@ -78,18 +79,22 @@ namespace AICS.MotorProteins
 		protected void RotateTo (Quaternion goalRotation)
 		{
 			StartRotation( goalRotation, false );
-			rotating = true;
 		}
 
 		void StartRotation (Quaternion goalRotation, bool random)
 		{
 			startMoveRotation = transform.rotation;
 			goalMoveRotation = (random ? transform.rotation * Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) ) : goalRotation);
-			rotateDuration = Mathf.Abs( Quaternion.Angle( startMoveRotation, goalMoveRotation ) ) / rotateSpeed;
+			totalRotationAngle = Mathf.Abs( Quaternion.Angle( startMoveRotation, goalMoveRotation ) );
+			rotateDuration = totalRotationAngle / rotateSpeed;
 			startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			if (rotateDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
 				AnimateRotation( 1f );
+			}
+			else
+			{
+				rotating = true;
 			}
 		}
 
@@ -99,7 +104,7 @@ namespace AICS.MotorProteins
 			{
 				rotating = false;
 			}
-			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, Mathf.Min( 1f, t ) );
+			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, Mathf.Clamp( t, 0, 1f ) ) * Quaternion.Euler( Helpers.GetRandomVector( 0.05f * totalRotationAngle ) );
 		}
 
 		protected bool MoveRandomly (bool retry = false) 
@@ -118,7 +123,6 @@ namespace AICS.MotorProteins
 		protected void MoveTo (Vector3 goalPosition)
 		{
 			StartMove( goalPosition, false );
-			moving = true;
 		}
 
 		bool StartMove (Vector3 goalPosition, bool random)
@@ -131,12 +135,17 @@ namespace AICS.MotorProteins
 			{
 				return AnimateMove( 1f );
 			}
+			else 
+			{
+				moving = true;
+			}
 			return true;
 		}
 
 		bool AnimateMove (float t, bool forceMove = false) 
 		{
-			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Min( 1f, t ) ) - transform.position;
+			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Clamp( t, 0, 1f ) ) - transform.position;
+			moveStep += Helpers.GetRandomVector( 0.5f * moveStep.magnitude );
 			if (moving && t >= 1f)
 			{
 				moving = false;
