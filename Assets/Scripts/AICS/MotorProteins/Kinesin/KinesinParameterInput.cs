@@ -195,7 +195,6 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			if (Input.GetKeyDown( KeyCode.R ))
 			{
-				Debug.Log("RESET!!!");
 				Reset();
 			}
 			if (Input.GetKey( KeyCode.Period ))
@@ -208,7 +207,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		float minTimeMultiplier = 1f;
+		float minTimeMultiplier = 100f;
 		float maxTimeMultiplier = 10000f;
 		void ChangeTime (float delta)
 		{

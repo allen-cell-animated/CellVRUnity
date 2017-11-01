@@ -23,12 +23,12 @@ namespace AICS.MotorProteins
 		Quaternion startMoveRotation;
 		Quaternion goalMoveRotation;
 		public bool moving = false;
-		float startMovingNanoseconds;
-		float moveDuration;
+		public float startMovingNanoseconds;
+		public float moveDuration;
 		float moveSpeed = 0.00005f;
 		public bool rotating = false;
-		float startRotatingNanoseconds;
-		float rotateDuration;
+		public float startRotatingNanoseconds;
+		public float rotateDuration;
 		float rotateSpeed = 0.0005f;
 		bool exiting = false;
 		public bool binding = false;
@@ -86,13 +86,10 @@ namespace AICS.MotorProteins
 			startMoveRotation = transform.rotation;
 			goalMoveRotation = (random ? transform.rotation * Quaternion.Euler( Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanRotation ) ) ) : goalRotation);
 			rotateDuration = Mathf.Abs( Quaternion.Angle( startMoveRotation, goalMoveRotation ) ) / rotateSpeed;
+			startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			if (rotateDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
 				AnimateRotation( 1f );
-			}
-			else
-			{
-				startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			}
 		}
 
@@ -128,23 +125,12 @@ namespace AICS.MotorProteins
 		{
 			startMovePosition = transform.position;
 			goalMovePosition = (random ? transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) ) : goalPosition);
-
-			if (logEvents)
-			{
-				GameObject a = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-				a.transform.position = startMovePosition;
-				a.name = name + " start";
-				GameObject b = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-				b.transform.position = goalMovePosition;
-				b.name = name + " goal";
-			}
-
 			moveDuration = Vector3.Distance( startMovePosition, goalMovePosition ) / moveSpeed;
+			startMovingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
 				return AnimateMove( 1f );
 			}
-			startMovingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			return true;
 		}
 
@@ -167,7 +153,6 @@ namespace AICS.MotorProteins
 				{
 					if (forceMove)
 					{
-						Debug.Log( name + " force move " + (resetFrames == 0) );
 						IncrementPosition( moveStep );
 						return true;
 					}
@@ -238,21 +223,21 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-			if (!bound && !binding && exitCollisions && !MolecularEnvironment.Instance.pause)
-			{
-				ExitCollision( other.transform.position );
-			}
+//			if (!bound && !binding && exitCollisions && !MolecularEnvironment.Instance.pause)
+//			{
+//				ExitCollision( other.transform.position );
+//			}
 		}
 
-		void ExitCollision (Vector3 otherPosition)
-		{
-			if (!exiting)
-			{
-				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
-				exiting = true;
-				Invoke( "FinishExit", 1f );
-			}
-		}
+//		void ExitCollision (Vector3 otherPosition)
+//		{
+//			if (!exiting)
+//			{
+//				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
+//				exiting = true;
+//				Invoke( "FinishExit", 1f );
+//			}
+//		}
 
 		void FinishExit ()
 		{

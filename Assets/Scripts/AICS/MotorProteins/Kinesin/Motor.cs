@@ -186,13 +186,12 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					FinishTubulinBind();
 				}
-
+					
 				Animate( binding );
 				kinetics.CalculateObservedRates();
 			}
 			else
 			{
-				Debug.Log( name + "reset frames = " + resetFrames );
 				body.isKinematic = binding = moving = rotating = false;
 			}
 		}
@@ -274,7 +273,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (FindAndBindATP())
 			{
-				if (logEvents) { Debug.Log( name + " bind ATP --------------------------------" ); }
+				if (logEvents) { Debug.Log( name + " bind ATP" ); }
 				SetState( (MotorState)kinetic.finalStateIndex );
 				kinesin.hips.StartSnap( this );
 				return true;
@@ -286,7 +285,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (boundNucleotide != null)
 			{
-				if (logEvents) { Debug.Log( name + " release ATP --------------------------------" ); }
+				if (logEvents) { Debug.Log( name + " release ATP" ); }
 
 				SetState( (MotorState)kinetic.finalStateIndex );
 				DoNucleotideRelease();
@@ -297,7 +296,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool HydrolyzeATP (Kinetic kinetic)
 		{
-			if (logEvents) { Debug.Log( name + " hydrolyze --------------------------------" ); }
+			if (logEvents) { Debug.Log( name + " hydrolyze" ); }
 
 			SetState( (MotorState)kinetic.finalStateIndex );
 			if (boundNucleotide != null)
@@ -315,7 +314,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool ReleasePhosphate (Kinetic kinetic)
 		{
-			if (logEvents) { Debug.Log( name + " release Pi --------------------------------" ); }
+			if (logEvents) { Debug.Log( name + " release Pi" ); }
 
 			SetState( (MotorState)kinetic.finalStateIndex );
 			if (boundNucleotide != null)
@@ -329,7 +328,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (!otherMotor.stateIsStrong)
 			{
-				if (logEvents) { Debug.Log( name + " release ADP --------------------------------" ); }
+				if (logEvents) { Debug.Log( name + " release ADP" ); }
 
 				SetState( (MotorState)kinetic.finalStateIndex );
 				DoNucleotideRelease();
@@ -443,7 +442,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (otherMotor.tubulinGraph.empty)
 			{
-				return GetRandomValidTubulin();
+				return GetClosestValidTubulin();
 			}
 			else
 			{
@@ -451,23 +450,25 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		Tubulin GetRandomValidTubulin ()
+		Tubulin GetClosestValidTubulin ()
 		{
 			List<Tubulin> tubulins = GetTubulins();
-			List<Tubulin> validTubulins = new List<Tubulin>();
+
+			float d, minDistance = Mathf.Infinity;
+			Tubulin closest = null;
 			foreach (Tubulin t in tubulins)
 			{
-				if (TubulinIsValid( t ) && !t.hasMotorBound )
+				if (TubulinIsValid( t ) && !t.hasMotorBound)
 				{
-					validTubulins.Add( t );
+					d = Vector3.Distance( t.transform.position, transform.position );
+					if (d < minDistance)
+					{
+						minDistance = d;
+						closest = t;
+					}
 				}
 			}
-
-			if (validTubulins.Count > 0)
-			{
-				return validTubulins[GetRandomIndex( validTubulins.Count )];
-			}
-			return null;
+			return closest;
 		}
 
 		public List<TubulinAngle> molecules = new List<TubulinAngle>();
@@ -545,7 +546,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.lastTubulin = tubulin;
 			tubulin.hasMotorBound = true;
 
-			meshRenderers[0].material.color = tubulinFlashColor;
+			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			MoveTo( tubulin.transform.TransformPoint( bindingPosition ) );
 			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
@@ -560,12 +561,12 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void CancelTubulinBind ()
 		{
-			Debug.Log( name + " cancel BIND --------------------------------" );
+			if (logEvents) { Debug.Log( name + " cancel BIND --------------------------------" ); }
 			if (tubulin != null)
 			{
 				tubulin.hasMotorBound = false;
 			}
-			meshRenderers[0].material.color = color;
+			kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 			lastReleaseTime = Time.time;
 			binding = false;
 		}
@@ -575,13 +576,10 @@ namespace AICS.MotorProteins.Kinesin
 			if (logEvents) { Debug.Log( name + " finish BIND --------------------------------" ); }
 
 			SetState( finalBindState );
-			meshRenderers[0].material.color = color;
 			SetPosition( tubulin.transform.TransformPoint( bindingPosition ) );
 			transform.rotation = tubulin.transform.rotation * Quaternion.Euler( bindingRotation );
 			lastSetToBindingPositionTime = Time.time;
-			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
-			if (logEvents) { Debug.Log( name + " set tubulin graph, 0 = " + tubulinGraph.molecules[0].molecule.name ); }
 			body.isKinematic = true;
 			binding = false;
 		}
@@ -601,10 +599,6 @@ namespace AICS.MotorProteins.Kinesin
 					Vector3 fromTubulin = (transform.position - tubulin.transform.position).normalized;
 					MoveIfValid( fromTubulin );
 				}
-				else
-				{
-					Debug.Log( "tubulin null" );
-				}
 				kinesin.hips.SetFree( this );
 				tubulinGraph.Clear();
 				body.isKinematic = false;
@@ -619,7 +613,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomReset ()
 		{
-			if (logEvents) { Debug.Log( name + " reset --------------------------------" ); }
+			if (logEvents) { Debug.Log( name + " reset" ); }
 
 			SetState( MotorState.KD );
 			needToSwitchToStrong = false;
