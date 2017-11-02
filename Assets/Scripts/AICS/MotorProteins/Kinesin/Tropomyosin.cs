@@ -50,7 +50,7 @@ namespace AICS.MotorProteins.Kinesin
 
 			//scale
 //			transform.GetChild( 0 ).localScale = new Vector3( 1f, length / 2f, 1f );
-			capsuleCollider.height = length;
+//			capsuleCollider.height = length;
 		}
 
 		public override void DoRandomWalk () { }
