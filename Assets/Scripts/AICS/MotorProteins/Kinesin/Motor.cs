@@ -63,6 +63,19 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
+		Collider _collider;
+		Collider theCollider
+		{
+			get
+			{
+				if (_collider == null)
+				{
+					_collider = GetComponent<Collider>();
+				}
+				return _collider;
+			}
+		}
+
 		void SetState (MotorState newState)
 		{
 			state = newState;
@@ -192,7 +205,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			else
 			{
-				body.isKinematic = binding = moving = rotating = false;
+				body.isKinematic = theCollider.isTrigger = binding = moving = rotating = false;
 			}
 		}
 
@@ -551,17 +564,41 @@ namespace AICS.MotorProteins.Kinesin
 			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 
+		// we can get collision events while the motor is still binding and its rigidbody is not yet kinematic
 		void OnCollisionEnter (Collision collision)
 		{
-			if (binding && collision.collider.tag == "Player")
+			if (collision.collider.tag == "Player")
 			{
-				CancelTubulinBind();
+				if (binding)
+				{
+					Kinetic k = kinetics.GetKinetic( (int)state, (int)state - 2 );
+					k.events--;
+					CancelTubulinBind();
+				}
+			}
+		}
+
+		// once the motor is bound and rigidbody is kinematic, only get trigger events
+		void OnTriggerEnter (Collider other)
+		{
+			if (other.tag == "Player")
+			{
+				if (bound && !stateIsStrong)
+				{
+					Kinetic k = kinetics.GetKinetic( (int)state, (int)state + 2 );
+					k.attempts++;
+					if (ReleaseTubulin( k ))
+					{
+						k.events++;
+					}
+				}
 			}
 		}
 
 		public void CancelTubulinBind ()
 		{
 			if (logEvents) { Debug.Log( name + " cancel BIND --------------------------------" ); }
+
 			if (tubulin != null)
 			{
 				tubulin.hasMotorBound = false;
@@ -581,6 +618,7 @@ namespace AICS.MotorProteins.Kinesin
 			lastSetToBindingPositionTime = Time.time;
 			tubulinGraph.SetMolecules( GetTubulins(), transform );
 			body.isKinematic = true;
+			theCollider.isTrigger = true;
 			binding = false;
 		}
 
@@ -602,6 +640,7 @@ namespace AICS.MotorProteins.Kinesin
 				kinesin.hips.SetFree( this );
 				tubulinGraph.Clear();
 				body.isKinematic = false;
+				theCollider.isTrigger = false;
 				return true;
 			}
 			return false;
@@ -625,6 +664,7 @@ namespace AICS.MotorProteins.Kinesin
 			kinetics.Reset();
 			tubulinGraph.Clear();
 			body.isKinematic = false;
+			theCollider.isTrigger = false;
 			binding = moving = rotating = false;
 
 			for (int i = 0; i < 6; i++)

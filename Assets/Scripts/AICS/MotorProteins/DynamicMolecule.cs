@@ -232,21 +232,21 @@ namespace AICS.MotorProteins
 
 		void OnTriggerStay (Collider other)
 		{
-//			if (!bound && !binding && exitCollisions && !MolecularEnvironment.Instance.pause)
-//			{
-//				ExitCollision( other.transform.position );
-//			}
+			if (!bound && !binding && exitCollisions && !MolecularEnvironment.Instance.pause)
+			{
+				ExitCollision( other.transform.position );
+			}
 		}
 
-//		void ExitCollision (Vector3 otherPosition)
-//		{
-//			if (!exiting)
-//			{
-//				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
-//				exiting = true;
-//				Invoke( "FinishExit", 1f );
-//			}
-//		}
+		void ExitCollision (Vector3 otherPosition)
+		{
+			if (!exiting)
+			{
+				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
+				exiting = true;
+				Invoke( "FinishExit", 1f );
+			}
+		}
 
 		void FinishExit ()
 		{
