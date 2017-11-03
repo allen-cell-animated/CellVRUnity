@@ -23,13 +23,13 @@ namespace AICS.MotorProteins
 		Quaternion startMoveRotation;
 		Quaternion goalMoveRotation;
 		public bool moving = false;
-		public float startMovingNanoseconds;
-		public float moveDuration;
+		float startMovingNanoseconds;
+		float moveDuration;
 		float moveSpeed = 0.00005f;
 		public bool rotating = false;
-		public float startRotatingNanoseconds;
-		public float rotateDuration;
-		float rotateSpeed = 0.0005f;
+		protected float startRotatingNanoseconds = -100f;
+		protected float rotateDuration = 1f;
+		protected float rotateSpeed = 0.0005f;
 		float totalRotationAngle;
 		bool exiting = false;
 		public bool binding = false;

@@ -44,11 +44,11 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
-			if (snapping)
-			{
-				UpdateSnap();
-			}
-			DoRandomWalk();
+//			if (snapping)
+//			{
+//				UpdateSnap();
+//			}
+//			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }

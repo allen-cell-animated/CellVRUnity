@@ -6,21 +6,16 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class Tropomyosin : LinkerComponentMolecule 
 	{
-		public Hips hips;
 		public Cargo cargo;
+		public Transform previousTransform;
+		public bool stickToCargo;
+		public float maxAngle = 25f;
 
-		CapsuleCollider _capsuleCollider;
-		CapsuleCollider capsuleCollider
-		{
-			get 
-			{
-				if (_capsuleCollider == null)
-				{
-					_capsuleCollider = GetComponent<CapsuleCollider>();
-				}
-				return _capsuleCollider;
-			}
-		}
+		float t = 0;
+		bool bending = false;
+		Quaternion pushedRotation;
+		Quaternion defaultRotation;
+		Quaternion randomRotation;
 
 		public override bool bound
 		{
@@ -34,23 +29,60 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
-			PositionBetweenHipsAndCargo();
+			SetPosition( previousTransform.position );
+
+			t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration;
+			defaultRotation = Quaternion.LookRotation( previousTransform.position - cargo.transform.position );
+			if (!stickToCargo && (t < 1f || bending))
+			{
+				SetRotation();
+			}
+			else
+			{
+				RotateAmbiently();
+			}
 		}
 
-		void PositionBetweenHipsAndCargo ()
+		void SetRotation ()
 		{
-			Vector3 hipsToCargo = cargo.transform.position - hips.transform.position;
-			float length = hipsToCargo.magnitude - cargo.radius;
+			if (t >= 1f)
+			{
+				if (bending)
+				{
+					startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+					bending = false;
+				}
+			}
+			else
+			{
+				transform.rotation = Quaternion.Slerp( defaultRotation, pushedRotation, (bending ? t : 1f - t) );
+			}
+		}
 
-			//position
-			SetPosition( hips.transform.position + (hips.radius + (length / 2f)) * hipsToCargo.normalized );
+		void OnTriggerEnter (Collider other)
+		{
+			if (!stickToCargo)
+			{
+				VelocityWatcher otherVelocity = other.GetComponent<VelocityWatcher>();
+				if (otherVelocity != null)
+				{
+					StartLinkRotation( Vector3.ClampMagnitude( otherVelocity.velocity, maxAngle ) );
+				}
+			}
+		}
 
-			//rotation
-			transform.LookAt( hips.transform );
+		void StartLinkRotation (Vector3 offset)
+		{
+			pushedRotation = Quaternion.LookRotation( (previousTransform.position - offset) - cargo.transform.position );
+			rotateDuration = Mathf.Abs( Quaternion.Angle( defaultRotation, pushedRotation ) ) / rotateSpeed;
+			startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+			bending = true;
+		}
 
-			//scale
-//			transform.GetChild( 0 ).localScale = new Vector3( 1f, length / 2f, 1f );
-//			capsuleCollider.height = length;
+		void RotateAmbiently ()
+		{
+			transform.rotation = defaultRotation;
+//			transform.rotation = Quaternion.RotateTowards(  );
 		}
 
 		public override void DoRandomWalk () { }
