@@ -6,14 +6,26 @@ using AICS.Cell;
 public class CellViveHead : MonoBehaviour
 {
     public SteamVR_LoadLevel levelLoader;
+    public List<CellViveController> controllers = new List<CellViveController>();
+
+    bool canSwitchScene
+    {
+        get
+        {
+            return controllers.Find( c => c.scaling ) == null;
+        }
+    }
 
     void OnTriggerEnter (Collider other)
     {
-        Cell cell = other.GetComponent<Cell>();
-        if (cell != null)
+        if (canSwitchScene)
         {
-            Debug.Log("entered cell");
-            levelLoader.Trigger();
+            Cell cell = other.GetComponent<Cell>();
+            if (cell != null)
+            {
+                Debug.Log("entered cell");
+                levelLoader.Trigger();
+            }
         }
     }
 }
