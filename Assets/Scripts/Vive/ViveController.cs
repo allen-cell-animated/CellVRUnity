@@ -161,13 +161,17 @@ public class ViveController : MonoBehaviour
 	{
 		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
 		{
-			OnTriggerDown();
+			OnTriggerPull();
 		}
         if (controller.GetPress(SteamVR_Controller.ButtonMask.Trigger))
         {
-            OnTriggerStay();
+            OnTriggerHold();
         }
-	}
+        if (controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            OnTriggerRelease();
+        }
+    }
 
 	public virtual void OnDPadUpEnter () { }
 
@@ -195,7 +199,9 @@ public class ViveController : MonoBehaviour
 
     public virtual void OnDPadDownStay() { }
 
-    public virtual void OnTriggerDown () { }
+    public virtual void OnTriggerPull () { }
 
-	public virtual void OnTriggerStay () { }
+	public virtual void OnTriggerHold () { }
+
+    public virtual void OnTriggerRelease() { }
 }

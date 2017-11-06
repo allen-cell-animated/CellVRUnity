@@ -44,7 +44,7 @@ public class KinesinViveController : ViveController
         MolecularEnvironment.Instance.SetTime( timeMultiplier );
     }
 
-    public override void OnTriggerDown()
+    public override void OnTriggerPull()
     {
         DoReset();
     }
