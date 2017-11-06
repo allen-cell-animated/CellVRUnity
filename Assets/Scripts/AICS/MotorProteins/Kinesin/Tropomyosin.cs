@@ -9,13 +9,14 @@ namespace AICS.MotorProteins.Kinesin
 		public Cargo cargo;
 		public Transform previousTransform;
 		public bool stickToCargo;
-		public float maxAngle = 25f;
+		public float pushPower = 0.2f;
+		public float ambientPower = 0.01f;
 
 		float t = 0;
 		bool bending = false;
+		Quaternion startBendingRotation;
 		Quaternion pushedRotation;
 		Quaternion defaultRotation;
-		Quaternion randomRotation;
 
 		public override bool bound
 		{
@@ -55,7 +56,14 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			else
 			{
-				transform.rotation = Quaternion.Slerp( defaultRotation, pushedRotation, (bending ? t : 1f - t) );
+				if (bending)
+				{
+					transform.rotation = Quaternion.Slerp( startBendingRotation, pushedRotation, t );
+				}
+				else
+				{
+					transform.rotation = Quaternion.Slerp( pushedRotation, defaultRotation, t );
+				}
 			}
 		}
 
@@ -66,23 +74,24 @@ namespace AICS.MotorProteins.Kinesin
 				VelocityWatcher otherVelocity = other.GetComponent<VelocityWatcher>();
 				if (otherVelocity != null)
 				{
-					StartLinkRotation( Vector3.ClampMagnitude( otherVelocity.velocity, maxAngle ) );
+					StartLinkRotation( transform.position - otherVelocity.displacement, pushPower );
 				}
 			}
 		}
 
-		void StartLinkRotation (Vector3 offset)
+		void RotateAmbiently ()
 		{
-			pushedRotation = Quaternion.LookRotation( (previousTransform.position - offset) - cargo.transform.position );
+			StartLinkRotation( transform.position + Helpers.GetRandomVector( 1f ), ambientPower );
+		}
+
+		void StartLinkRotation (Vector3 offset, float power)
+		{
+			Vector3 localOffset = transform.InverseTransformPoint( offset );
+			startBendingRotation = transform.rotation;
+			pushedRotation = Quaternion.LookRotation( transform.forward - power * new Vector3( localOffset.x, localOffset.y, 0 ).normalized );
 			rotateDuration = Mathf.Abs( Quaternion.Angle( defaultRotation, pushedRotation ) ) / rotateSpeed;
 			startRotatingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			bending = true;
-		}
-
-		void RotateAmbiently ()
-		{
-			transform.rotation = defaultRotation;
-//			transform.rotation = Quaternion.RotateTowards(  );
 		}
 
 		public override void DoRandomWalk () { }

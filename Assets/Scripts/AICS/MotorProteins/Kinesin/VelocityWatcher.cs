@@ -9,7 +9,7 @@ namespace AICS.MotorProteins.Kinesin
 		Vector3 currentPosition;
 		Vector3 lastPosition;
 
-		public Vector3 velocity
+		public Vector3 displacement
 		{
 			get
 			{
