@@ -4,12 +4,26 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using AICS.Cell;
 
+public enum CellViveControllerState
+{
+    Idle,
+    HoldingCell,
+    Scaling
+}
+
 public class CellViveController : ViveController
 {
+    public CellViveControllerState state;
     public CellViveController otherController;
-    public Cell currentCell;
-    public bool holdingCell = false;
-    public bool scaling = false;
+    public Cell hoveredCell;
+
+    public Cell draggedCell
+    {
+        get
+        {
+            return GetComponentInChildren<Cell>();
+        }
+    }
 
     float startControllerDistance;
     Vector3 startCellScale;
@@ -21,40 +35,60 @@ public class CellViveController : ViveController
         Cell cell = other.GetComponent<Cell>();
         if (cell != null)
         {
-            currentCell = cell;
+            hoveredCell = cell;
         }
     }
 
     void OnTriggerExit (Collider other)
     {
         Cell cell = other.GetComponent<Cell>();
-        if (cell != null && currentCell == cell)
+        if (cell != null && hoveredCell == cell)
         {
-            currentCell = null;
+            hoveredCell = null;
         }
     }
 
     public override void OnTriggerPull () 
 	{
-        if (otherController.currentCell != null)
+        if (state == CellViveControllerState.Idle)
         {
-            startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
-            startCellScale = otherController.currentCell.transform.localScale;
-            scaling = true;
-        }
-        else if (currentCell != null)
-        {
-            currentCell.transform.SetParent( transform );
-            holdingCell = true;
+            if (otherController.state == CellViveControllerState.HoldingCell)
+            {
+                StartScaling();
+            }
+            else
+            {
+                PickupCell();
+            }
         }
     }
 
     public override void OnTriggerHold ()
     {
-        if (scaling)
+        if (state == CellViveControllerState.Scaling && otherController.state == CellViveControllerState.HoldingCell)
         {
-            float d = Vector3.Distance(transform.position, otherController.transform.position);
-            otherController.currentCell.transform.localScale = ClampScale( (d / startControllerDistance) * startCellScale );
+            UpdateScale();
+        }
+    }
+
+    public override void OnTriggerRelease()
+    {
+        if (state == CellViveControllerState.Scaling)
+        {
+            StopScaling();
+        }
+        else if (state == CellViveControllerState.HoldingCell)
+        {
+            ReleaseCell();
+        }
+    }
+
+    public void SwitchToPrimary()
+    {
+        if (state == CellViveControllerState.Scaling)
+        {
+            StopScaling();
+            PickupCell();
         }
     }
 
@@ -74,16 +108,49 @@ public class CellViveController : ViveController
         }
     }
 
-    public override void OnTriggerRelease () 
-	{
-        if (scaling)
+    void PickupCell ()
+    {
+        if (hoveredCell != null)
         {
-            scaling = false;
+            hoveredCell.transform.SetParent( transform );
+            state = CellViveControllerState.HoldingCell;
         }
-        else if (currentCell != null)
+    }
+
+    void ReleaseCell ()
+    {
+        Cell cell = draggedCell;
+        if (cell != null)
         {
-            currentCell.transform.SetParent( null );
-            holdingCell = false;
+            cell.transform.SetParent( null );
         }
+        state = CellViveControllerState.Idle;
+        otherController.SwitchToPrimary();
+    }
+
+    void StartScaling ()
+    {
+        Cell cell = otherController.draggedCell;
+        if (cell != null)
+        {
+            startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
+            startCellScale = cell.transform.localScale;
+            state = CellViveControllerState.Scaling;
+        }
+    }
+
+    void UpdateScale ()
+    {
+        Cell cell = otherController.draggedCell;
+        if (cell != null)
+        {
+            float d = Vector3.Distance( transform.position, otherController.transform.position );
+            cell.transform.localScale = ClampScale( (d / startControllerDistance) * startCellScale );
+        }
+    }
+
+    void StopScaling ()
+    {
+        state = CellViveControllerState.Idle;
     }
 }
