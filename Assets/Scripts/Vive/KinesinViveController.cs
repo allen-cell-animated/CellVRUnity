@@ -10,22 +10,66 @@ public class KinesinViveController : ViveController
 {
     public Kinesin kinesin;
     public Microtubule microtubule;
+    public SteamVR_PlayArea playArea;
+    public KinesinViveController otherController;
+    public SteamVR_LoadLevel levelLoader;
     public float minTimeMultiplier = 1f;
     public float maxTimeMultiplier = 10000f;
+    public float scaleMultiplier = 0.1f;
+    public float minScale = 10f;
+    public float maxScale = 30f;
+    public bool holdingTrigger = false;
 
-    public override void OnDPadUpEnter()
+    bool scaling = false;
+    float startControllerDistance;
+    float startScale;
+
+    public override void OnTriggerPull()
     {
-
+        holdingTrigger = true;
+        if (otherController.holdingTrigger)
+        {
+            StartScaling();
+        }
     }
 
-    public override void OnDPadDownEnter()
+    public override void OnTriggerHold()
     {
-
+        if (scaling)
+        {
+            UpdateScale();
+        }
     }
 
-    public override void OnDPadExit()
+    public override void OnTriggerRelease()
     {
+        holdingTrigger = false;
+        otherController.StopScaling();
+        StopScaling();
+    }
 
+    void StartScaling()
+    {
+        startControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ),
+            playArea.transform.InverseTransformPoint( otherController.transform.position ) );
+        startScale = playArea.transform.localScale.x;
+        scaling = true;
+    }
+
+    void UpdateScale()
+    {
+        float d = startControllerDistance / Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ), 
+            playArea.transform.InverseTransformPoint( otherController.transform.position ) ) * startScale;
+        if (d > maxScale)
+        {
+            levelLoader.Trigger();
+        }
+        playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
+    }
+
+    void StopScaling()
+    {
+        scaling = false;
     }
 
     public override void OnDPadUpStay()
@@ -37,16 +81,11 @@ public class KinesinViveController : ViveController
     {
         ChangeTime( 1.1f );
     }
-
+    
     void ChangeTime (float delta)
     {
         float timeMultiplier = Mathf.Clamp( MolecularEnvironment.Instance.timeMultiplier * delta, minTimeMultiplier, maxTimeMultiplier );
         MolecularEnvironment.Instance.SetTime( timeMultiplier );
-    }
-
-    public override void OnTriggerPull()
-    {
-        DoReset();
     }
 
     void DoReset()
