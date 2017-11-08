@@ -253,7 +253,7 @@ namespace AICS.MotorProteins
 			exiting = false;
 		}
 
-		protected void DoInRandomOrder (Kinetic[] kinetics)
+		protected bool DoInRandomOrder (Kinetic[] kinetics)
 		{
 			if (kinetics.Length > 0)
 			{
@@ -262,10 +262,11 @@ namespace AICS.MotorProteins
 				{
 					if (DoEventAtKineticRate( kinetics[i] ))
 					{
-						return;
+						return true;
 					}
 				}
 			}
+			return false;
 		}
 
 		protected bool DoEventAtKineticRate (Kinetic kinetic)

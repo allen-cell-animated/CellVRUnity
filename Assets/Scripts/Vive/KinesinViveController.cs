@@ -90,7 +90,7 @@ public class KinesinViveController : ViveController
 
     void DoReset()
     {
-        kinesin.Reset();
+        kinesin.DoReset();
         microtubule.DoReset();
         MolecularEnvironment.Instance.Reset();
     }

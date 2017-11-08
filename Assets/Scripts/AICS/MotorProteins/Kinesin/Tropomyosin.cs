@@ -40,7 +40,8 @@ namespace AICS.MotorProteins.Kinesin
 			}
 			else
 			{
-				RotateAmbiently();
+				transform.rotation = defaultRotation;
+//				RotateAmbiently();
 			}
 		}
 

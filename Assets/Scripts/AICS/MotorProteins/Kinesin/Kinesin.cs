@@ -134,12 +134,12 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomReset ()
 		{
 			SetHipsAsParent();
-			hips.Reset();
+			hips.DoReset();
 			foreach (Molecule molecule in componentMolecules)
 			{
 				if (molecule != hips)
 				{
-					molecule.Reset();
+					molecule.DoReset();
 				}
 			}
 			atpGenerator.DoReset();

@@ -23,8 +23,9 @@ namespace AICS.MotorProteins.Kinesin
 		float timePerSnapStep = 0.1f;
 		float lastSnapStepTime = -1f;
 		public Motor lastSnappingPivot;
+		float StartMeanStepSize;
 
-		Kinesin kinesin
+		public Kinesin kinesin
 		{
 			get
 			{
@@ -40,15 +41,18 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		protected override void OnAwake () { }
+		protected override void OnAwake () 
+		{
+			StartMeanStepSize = meanStepSize;
+		}
 
 		public override void DoCustomSimulation ()
 		{
-//			if (snapping)
-//			{
-//				UpdateSnap();
-//			}
-//			DoRandomWalk();
+			if (snapping)
+			{
+				UpdateSnap();
+			}
+			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }
@@ -93,6 +97,7 @@ namespace AICS.MotorProteins.Kinesin
 				currentSnapStep = 0;
 				state = HipsState.Free;
 				snapping = true;
+				meanStepSize = 0.3f * StartMeanStepSize;
 			}
 		}
 
@@ -159,20 +164,23 @@ namespace AICS.MotorProteins.Kinesin
 		void UpdateSnap ()
 		{
 			Vector3 toGoal = snappingArcPositions[currentSnapStep] - transform.position;
-			if (Time.time - lastSnapStepTime >= timePerSnapStep && MoveIfValid( toGoal ))
-			{
+//			if (Time.time - lastSnapStepTime >= timePerSnapStep)// && MoveIfValid( toGoal ))
+//			{
+				IncrementPosition( toGoal );
 				currentSnapStep++;
 				if (currentSnapStep >= snappingArcPositions.Length)
 				{
 					state = HipsState.Locked;
+					meanStepSize = StartMeanStepSize;
 					snapping = false;
 				}
-				lastSnapStepTime = Time.time;
-			}
-			else
-			{
-				MoveIfValid( 0.1f * toGoal );
-			}
+//				lastSnapStepTime = Time.time;
+//			}
+//			else
+//			{
+//				Debug.Log( "tiny snap" );
+//				bool b = MoveIfValid( 0.1f * toGoal );
+//			}
 		}
 
 		public void SetFree (Motor releasedMotor)
@@ -180,6 +188,7 @@ namespace AICS.MotorProteins.Kinesin
 			if (lastSnappingPivot == releasedMotor)
 			{
 				snapping = false;
+				meanStepSize = StartMeanStepSize;
 				state = HipsState.Free;
 			}
 		}

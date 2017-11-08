@@ -89,7 +89,7 @@ namespace AICS.MotorProteins
 			return Vector3.Distance( transform.position, other.transform.position + moveStep ) <= radius + other.radius;
 		}
 
-		public void Reset ()
+		public void DoReset ()
 		{
 			transform.position = startPosition;
 			transform.rotation = startRotation;

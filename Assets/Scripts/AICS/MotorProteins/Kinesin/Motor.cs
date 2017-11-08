@@ -41,6 +41,7 @@ namespace AICS.MotorProteins.Kinesin
 		public Nucleotide boundNucleotide;
 		MotorState finalBindState;
 		public TubulinGraph tubulinGraph;
+		bool justChangedState = false;
 
 		Kinesin kinesin
 		{
@@ -79,7 +80,7 @@ namespace AICS.MotorProteins.Kinesin
 		void SetState (MotorState newState)
 		{
 			state = newState;
-			stateIndicatorUI.GoToState( (int)state );
+//			stateIndicatorUI.GoToState( (int)state );
 		}
 
 		protected override void OnAwake () { }
@@ -193,7 +194,14 @@ namespace AICS.MotorProteins.Kinesin
 						TryToSwitchToStrong();
 					}
 
-					DoInRandomOrder( eventsForState[state] );
+					if (Random.value <= (justChangedState ? 0.2f : 1f))
+					{
+						justChangedState = DoInRandomOrder( eventsForState[state] );
+					}
+					else
+					{
+						justChangedState = false;
+					}
 				}
 				else if (!moving && !rotating)
 				{
