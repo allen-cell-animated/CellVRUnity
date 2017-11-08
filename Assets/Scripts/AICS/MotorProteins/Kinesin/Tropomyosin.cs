@@ -31,18 +31,19 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 			SetPosition( previousTransform.position );
+			transform.rotation = Quaternion.LookRotation( previousTransform.position - cargo.transform.position );
 
-			t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration;
-			defaultRotation = Quaternion.LookRotation( previousTransform.position - cargo.transform.position );
-			if (!stickToCargo && (t < 1f || bending))
-			{
-				SetRotation();
-			}
-			else
-			{
-				transform.rotation = defaultRotation;
+//			t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startRotatingNanoseconds) / rotateDuration;
+//			defaultRotation = Quaternion.LookRotation( previousTransform.position - cargo.transform.position );
+//			if (!stickToCargo && (t < 1f || bending))
+//			{
+//				SetRotation();
+//			}
+//			else
+//			{
+//				transform.rotation = defaultRotation;
 //				RotateAmbiently();
-			}
+//			}
 		}
 
 		void SetRotation ()

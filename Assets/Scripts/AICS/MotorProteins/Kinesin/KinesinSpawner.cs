@@ -7,6 +7,7 @@ namespace AICS.MotorProteins.Kinesin
 	public class KinesinSpawner : MonoBehaviour 
 	{
 		public Kinesin kinesinPrefab;
+		public bool spawn = true;
 		public int numberOfKinesins = 5;
 		public float waitTimeBetweenSpawns = 15f;
 		public KinesinParameterInput parameterSetter;
@@ -16,7 +17,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		void Update ()
 		{
-			if (kinesins.Count < numberOfKinesins && Time.time - lastSpawnTime >= waitTimeBetweenSpawns)
+			if (spawn && kinesins.Count < numberOfKinesins && Time.time - lastSpawnTime >= waitTimeBetweenSpawns)
 			{
 				Spawn();
 				lastSpawnTime = Time.time;
@@ -35,7 +36,6 @@ namespace AICS.MotorProteins.Kinesin
 			if (kinesins.Contains( kinesin ))
 			{
 				kinesins.Remove( kinesin );
-				Spawn();
 			}
 		}
 	}

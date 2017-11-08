@@ -16,6 +16,7 @@ namespace AICS.PhysicsKinesin
 		float n;
 		Transform moleculeParent;
 		float moleculeMass = -1f;
+		bool destroyed = false;
 
 		int _number = -1;
 		int number
@@ -49,8 +50,11 @@ namespace AICS.PhysicsKinesin
 
 		void Update ()
 		{
-			CheckBounds();
-			CheckConcentration();
+			if (!destroyed)
+			{
+				CheckBounds();
+				CheckConcentration();
+			}
 		}
 
 		void CheckBounds ()
@@ -145,6 +149,16 @@ namespace AICS.PhysicsKinesin
 			{
 				molecule.Restart();
 			}
+		}
+
+		public void DestroyAll ()
+		{
+			destroyed = true;
+			foreach (Nucleotide molecule in molecules)
+			{
+				Destroy( molecule.gameObject );
+			}
+			Destroy( moleculeParent.gameObject );
 		}
 	}
 }
