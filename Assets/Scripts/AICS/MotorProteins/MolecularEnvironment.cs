@@ -56,7 +56,7 @@ namespace AICS.MotorProteins
 
 		void Start ()
 		{
-			CreateResolutionNodes();
+//			CreateResolutionNodes();
 		}
 
 		void Update ()

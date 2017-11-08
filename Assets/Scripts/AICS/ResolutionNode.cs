@@ -32,7 +32,7 @@ namespace AICS.MotorProteins
 			if (obj != null && !objectsInNode.Contains( obj ))
 			{
 				objectsInNode.Add( obj );
-				obj.SetLOD( currentLOD );
+//				obj.SetLOD( currentLOD );
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace AICS.MotorProteins
 		{
 			foreach (ResolutionManager obj in objectsInNode)
 			{
-				obj.SetLOD( newLOD );
+//				obj.SetLOD( newLOD );
 			}
 			currentLOD = newLOD;
 		}

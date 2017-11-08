@@ -7,19 +7,33 @@ namespace AICS
 	public class ResolutionManager : MonoBehaviour 
 	{
 		public GameObject[] lods;
+		public float[] LODDistances;
 		public int currentLOD = 0;
+		public float distance;
 
-		public void SetLOD (int newLOD)
+		void Start ()
 		{
-			if (currentLOD >= 0)
+			SetLOD();
+		}
+
+		void SetLOD ()
+		{
+			distance = Vector3.Distance( transform.position, Camera.main.transform.position );
+
+			if (distance > LODDistances[currentLOD])
 			{
 				lods[currentLOD].SetActive( false );
 			}
-			if (newLOD >= 0)
+
+			for (int i = 0; i < LODDistances.Length; i++)
 			{
-				lods[newLOD].SetActive( true );
+				if (distance <= LODDistances[i])
+				{
+					lods[i].SetActive( true );
+					currentLOD = i;
+					return;
+				}
 			}
-			currentLOD = newLOD;
 		}
 	}
 }
