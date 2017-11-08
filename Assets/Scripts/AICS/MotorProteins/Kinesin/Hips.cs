@@ -97,7 +97,7 @@ namespace AICS.MotorProteins.Kinesin
 				currentSnapStep = 0;
 				state = HipsState.Free;
 				snapping = true;
-				meanStepSize = 0.3f * StartMeanStepSize;
+				meanStepSize = 0.5f * StartMeanStepSize;
 			}
 		}
 

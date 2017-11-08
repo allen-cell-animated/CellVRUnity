@@ -261,8 +261,9 @@ namespace AICS.MT
 
 		Quaternion CalculateRotation (Vector3 position, Vector3 tangent)
 		{
-			float angle = 180f * Mathf.Acos( Vector3.Dot( normalTransform.forward, tangent ) ) / Mathf.PI;
-			Vector3 axis = Vector3.Normalize( Vector3.Cross( normalTransform.forward, tangent ) );
+			float dot = Mathf.Clamp( Vector3.Dot( normalTransform.forward.normalized, tangent ), -1f + Mathf.Epsilon, 1f - Mathf.Epsilon );
+			float angle = 180f * Mathf.Acos( dot ) / Mathf.PI;
+			Vector3 axis = Vector3.Normalize( Vector3.Cross( normalTransform.forward.normalized, tangent ) );
 			normalTransform.RotateAround( position, axis, angle );
 			return normalTransform.rotation;
 		}
@@ -307,7 +308,7 @@ namespace AICS.MT
 			Quaternion startRotation = calculatedPoints[splinePosition.pointIndex].rotation;
 			Quaternion endRotation = calculatedPoints[splinePosition.pointIndex + 1].rotation;
 			normalTransform.rotation = Quaternion.Slerp( startRotation, endRotation, splinePosition.sectionT );
-			return normalTransform.up;
+			return normalTransform.up.normalized;
 		}
 	}
 }
