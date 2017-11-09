@@ -20,7 +20,7 @@ namespace AICS.MotorProteins.Kinesin
 		}
 	}
 
-	public class Kinesin : AssemblyMolecule 
+	public class Kinesin : AssemblyMolecule, IWalkSplines
 	{
 		public float averageWalkingSpeed; // μm/s
 		public Tubulin lastTubulin;
@@ -30,6 +30,9 @@ namespace AICS.MotorProteins.Kinesin
 //		Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
 //		float lastQueuedTime;
 //		CachedMotorEvent[] lastQueuedMotorEvents = new CachedMotorEvent[2];
+
+		public float t { get; set; }
+		public Microtubule microtubule { get; set; }
 
 		Hips _hips;
 		public Hips hips

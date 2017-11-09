@@ -6,6 +6,7 @@ namespace AICS.MT
 {
 	public class Microtubule : MonoBehaviour 
 	{
+		public bool makeTubulins = true;
 		public float radius = 9f;
 		public int tubulinsPerTurn = 13;
 		public Tubulin[] tubulinPrefabs = new Tubulin[2];
@@ -66,7 +67,7 @@ namespace AICS.MT
 
 		void Update ()
 		{
-			if (spline != null && (!placedTubulins || spline.UpdateSpline()))
+			if (makeTubulins && spline != null && (!placedTubulins || spline.UpdateSpline()))
 			{
 				PlaceTubulins();
 			}
