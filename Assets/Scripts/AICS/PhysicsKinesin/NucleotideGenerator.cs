@@ -11,10 +11,10 @@ namespace AICS.PhysicsKinesin
 		[Tooltip("concentration in mM")]
 		public float concentration = 5f;
 		public Nucleotide moleculePrefab;
+		public Transform moleculeParent;
 
 		List<Nucleotide> molecules = new List<Nucleotide>();
 		float n;
-		Transform moleculeParent;
 		float moleculeMass = -1f;
 		bool destroyed = false;
 
@@ -38,9 +38,6 @@ namespace AICS.PhysicsKinesin
 				enabled = false;
 				return;
 			}
-
-			moleculeParent = new GameObject( moleculePrefab.name + "Parent" ).transform;
-			moleculeParent.position = Vector3.zero;
 
 			if (moleculePrefab.body != null)
 			{
@@ -158,7 +155,6 @@ namespace AICS.PhysicsKinesin
 			{
 				Destroy( molecule.gameObject );
 			}
-			Destroy( moleculeParent.gameObject );
 		}
 	}
 }

@@ -59,6 +59,7 @@ namespace AICS.MotorProteins.Kinesin
 				rotation = Quaternion.LookRotation( position + tangent, normal );
 			}
 			IWalkSplines obj = Instantiate( prefabs[Random.Range( 0, prefabs.Length )], position, rotation ).GetComponent<IWalkSplines>();
+			obj.transform.SetParent( transform );
 			SetupObject( obj, t );
 		}
 
