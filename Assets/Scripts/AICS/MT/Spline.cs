@@ -27,6 +27,7 @@ namespace AICS.MT
 		public float updateTolerance = 0.1f;
 		public bool drawCurve;
 		public Color lineColor = new Color( 1f, 0, 1f );
+		public float lineWidth = 1f;
 		public Transform[] points;
 		public SplinePoint[] calculatedPoints;
 
@@ -165,7 +166,7 @@ namespace AICS.MT
 				lines[index] = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
 				lines[index].material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
 				lines[index].startColor = lines[index].endColor = lineColor;
-				lines[index].startWidth = lines[index].endWidth = 1f;
+				lines[index].startWidth = lines[index].endWidth = lineWidth;
 				lines[index].transform.SetParent( transform );
 			}
 			lines[index].transform.position = start;
