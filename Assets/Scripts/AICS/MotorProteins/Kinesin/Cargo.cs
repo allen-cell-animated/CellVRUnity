@@ -9,6 +9,12 @@ namespace AICS.MotorProteins.Kinesin
 		public Transform anchor;
 		public float maxAngleFromUp = 30f;
 		public float snapSpeed = 1f;
+		public Vector3 defaultUp;
+
+		Vector3 pushDirection;
+		float pushAmount = 1f;
+		float pushTime = -10000f;
+		float pushDuration = 1f;
 
 		Kinesin kinesin
 		{
@@ -31,6 +37,7 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 			SnapToBounds();
+			UpdatePush();
 			DoRandomWalk();
 		}
 
@@ -57,6 +64,17 @@ namespace AICS.MotorProteins.Kinesin
 			ClampAngle();
 		}
 
+		bool UpdatePush ()
+		{
+			float t = (Time.time - pushTime) / pushDuration;
+			if (t < 1f)
+			{
+				IncrementPosition( Vector3.Lerp( pushAmount * pushDirection, Vector3.zero, t ) );
+				return true;
+			}
+			return false;
+		}
+
 		void ClampDistance ()
 		{
 			Vector3 anchorToPosition = transform.position - anchor.position;
@@ -70,7 +88,7 @@ namespace AICS.MotorProteins.Kinesin
 				Vector3 upFromAnchor = kinesin.lastTubulin.transform.up;
 				Vector3 anchorToPosition = transform.position - anchor.position;
 				float angle = Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToPosition.normalized ) );
-				if (180f * angle / Mathf.PI > maxAngleFromUp)
+				if (Mathf.Rad2Deg * angle > maxAngleFromUp)
 				{
 					Vector3 axis = Vector3.Cross( upFromAnchor, anchorToPosition.normalized ).normalized;
 					Vector3 goalPosition = anchor.position + anchorToPosition.magnitude * (Quaternion.AngleAxis( angle, axis ) * upFromAnchor);
@@ -103,6 +121,12 @@ namespace AICS.MotorProteins.Kinesin
 			Vector3 upFromAnchor = kinesin.lastTubulin.transform.up;
 			Vector3 anchorToNewPosition = (transform.position + moveStep - anchor.position).normalized;
 			return 180f * Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToNewPosition ) ) / Mathf.PI;
+		}
+
+		public void Push (Vector3 point, Vector3 force)
+		{
+			pushDirection = force.normalized;
+			pushTime = Time.time;
 		}
 	}
 }
