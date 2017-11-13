@@ -133,6 +133,7 @@ namespace AICS.MotorProteins
 			startMovingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
 			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
+				moving = true;
 				return AnimateMove( 1f );
 			}
 			else 
@@ -149,6 +150,7 @@ namespace AICS.MotorProteins
 			if (moving && t >= 1f)
 			{
 				moving = false;
+				OnFinishMove();
 			}
 
 			if (interactsWithOthers)
@@ -170,6 +172,8 @@ namespace AICS.MotorProteins
 			}
 			return false;
 		}
+
+		protected virtual void OnFinishMove () { }
 
 		void CheckForBindingPartner (Vector3 moveStep)
 		{

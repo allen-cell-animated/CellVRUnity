@@ -11,10 +11,7 @@ namespace AICS.MotorProteins.Kinesin
 		public float snapSpeed = 1f;
 		public Vector3 defaultUp;
 
-		Vector3 pushDirection;
-		float pushAmount = 1f;
-		float pushTime = -10000f;
-		float pushDuration = 1f;
+		public bool pushing = false;
 
 		Kinesin kinesin
 		{
@@ -37,8 +34,10 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 			SnapToBounds();
-			UpdatePush();
-			DoRandomWalk();
+			if (!pushing)
+			{
+				DoRandomWalk();
+			}
 		}
 
 		public override void DoRandomWalk () 
@@ -62,17 +61,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			ClampDistance();
 			ClampAngle();
-		}
-
-		bool UpdatePush ()
-		{
-			float t = (Time.time - pushTime) / pushDuration;
-			if (t < 1f)
-			{
-				IncrementPosition( Vector3.Lerp( pushAmount * pushDirection, Vector3.zero, t ) );
-				return true;
-			}
-			return false;
 		}
 
 		void ClampDistance ()
@@ -125,8 +113,15 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void Push (Vector3 point, Vector3 force)
 		{
-			pushDirection = force.normalized;
-			pushTime = Time.time;
+			Vector3 goalPosition = transform.position + 10f * force;
+			Vector3 anchorToGoal = goalPosition - anchor.position;
+			pushing = true;
+			MoveTo( anchor.position + Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );
+		}
+
+		protected override void OnFinishMove () 
+		{
+			pushing = false;
 		}
 	}
 }

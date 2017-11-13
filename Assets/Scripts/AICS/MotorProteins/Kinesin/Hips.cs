@@ -12,6 +12,7 @@ namespace AICS.MotorProteins.Kinesin
 
 	public class Hips : LinkerComponentMolecule 
 	{
+		public bool frozen = false;
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 9000f; // degrees per simulated second
@@ -48,11 +49,14 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
-			if (snapping)
+			if (!frozen)
 			{
-				UpdateSnap();
+				if (snapping)
+				{
+					UpdateSnap();
+				}
+				DoRandomWalk();
 			}
-			DoRandomWalk();
 		}
 
 		protected override void InteractWithBindingPartners () { }
