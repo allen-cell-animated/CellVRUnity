@@ -240,7 +240,10 @@ namespace AICS.MotorProteins
 			{
 				ExitCollision( other.transform.position );
 			}
-		}
+            CustomOnTriggerStay(other);
+        }
+
+        protected virtual void CustomOnTriggerStay (Collider other) { }
 
 		void ExitCollision (Vector3 otherPosition)
 		{

@@ -17,10 +17,20 @@ public class BuzzOnCollision : MonoBehaviour
 			}
 			return _deviceIndex;
 		}
-	}
+    }
 
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter (Collision collision)
     {
-		SteamVR_Controller.Input( deviceIndex ).TriggerHapticPulse( pulseLength );
+        Buzz();
+    }
+
+    void OnTriggerEnter (Collider other)
+    {
+        Buzz();
+    }
+
+    void Buzz ()
+    {
+        SteamVR_Controller.Input(deviceIndex).TriggerHapticPulse(pulseLength);
     }
 }

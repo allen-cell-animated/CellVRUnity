@@ -26,7 +26,7 @@ namespace AICS.MotorProteins.Kinesin
 			transform.rotation = Quaternion.LookRotation( previousTransform.position - cargo.transform.position );
 		}
 
-		void OnTriggerEnter (Collider other)
+        protected override void CustomOnTriggerStay (Collider other)
 		{
 			VelocityWatcher otherVelocity = other.GetComponent<VelocityWatcher>();
 			if (otherVelocity != null)
