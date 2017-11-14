@@ -21,10 +21,9 @@ namespace AICS.MotorProteins.Kinesin
 		Vector3[] snappingArcPositions;
 		int currentSnapStep = 0;
 		public bool snapping;
-		float timePerSnapStep = 0.1f;
-		float lastSnapStepTime = -1f;
 		public Motor lastSnappingPivot;
 		float StartMeanStepSize;
+		float degreesPerSnapStep = 30f;
 
 		public Kinesin kinesin
 		{
@@ -51,10 +50,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (!frozen)
 			{
-				if (snapping)
-				{
-					UpdateSnap();
-				}
 				DoRandomWalk();
 			}
 		}
@@ -94,15 +89,23 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
+			UnityEngine.Profiling.Profiler.BeginSample( "HipsSnap" );
 			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
 			{
 				snappingArcPositions = CalculateSnapArcPositions( motor );
+				foreach (Vector3 pos in snappingArcPositions)
+				{
+					GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = pos;
+				}
+				UnityEditor.EditorApplication.isPaused = true;
 				lastSnappingPivot = motor;
 				currentSnapStep = 0;
 				state = HipsState.Free;
 				snapping = true;
 				meanStepSize = 0.5f * StartMeanStepSize;
+				MoveTo( snappingArcPositions[0], true );
 			}
+			UnityEngine.Profiling.Profiler.EndSample();
 		}
 
 		Vector3[] CalculateSnapArcPositions (Motor motor)
@@ -118,14 +121,14 @@ namespace AICS.MotorProteins.Kinesin
 				if (angle > 90f)
 				{
 					Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * motor.transform.up;
-					float angleToNorthPole = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ), -1f, 1f ) );
-					float angleNorthPoleToSnapped = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
-					int steps = Mathf.RoundToInt( (angleToNorthPole + angleNorthPoleToSnapped) / ((snapSpeed / MolecularEnvironment.Instance.timeMultiplier) * timePerSnapStep) );
 
+					float angleToNorthPole = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ), -1f, 1f ) );
 					Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole, 
-						Mathf.Max( Mathf.RoundToInt( steps * angleToNorthPole / (angleToNorthPole + angleNorthPoleToSnapped) ), 1 ) );
+						Mathf.Max( Mathf.RoundToInt( angleToNorthPole / degreesPerSnapStep ), 1 ) );
+					
+					float angleNorthPoleToSnapped = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
 					Vector3[] arcPositions2 = CalculateArcPositions( motor.transform.position, motorToNorthPole, motorToSnappedPosition, 
-						Mathf.Max( Mathf.RoundToInt( steps * angleNorthPoleToSnapped / (angleToNorthPole + angleNorthPoleToSnapped) ), 1 ) );
+						Mathf.Max( Mathf.RoundToInt( angleNorthPoleToSnapped / degreesPerSnapStep ), 1 ) );
 
 					arcPositions = new Vector3[ arcPositions1.Length + arcPositions2.Length ];
 					arcPositions1.CopyTo( arcPositions, 0 );
@@ -133,7 +136,7 @@ namespace AICS.MotorProteins.Kinesin
 				}
 				else 
 				{
-					int steps = Mathf.Max( Mathf.RoundToInt( angle / ((snapSpeed / MolecularEnvironment.Instance.timeMultiplier) * timePerSnapStep) ), 1 );
+					int steps = Mathf.Max( Mathf.RoundToInt( angle / degreesPerSnapStep ), 1 );
 					arcPositions = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToSnappedPosition, steps );
 				}
 				return arcPositions;
@@ -165,33 +168,28 @@ namespace AICS.MotorProteins.Kinesin
 			return arcPositions;
 		}
 
-		void UpdateSnap ()
+		protected override void OnFinishMove () 
 		{
-			Vector3 toGoal = snappingArcPositions[currentSnapStep] - transform.position;
-//			if (Time.time - lastSnapStepTime >= timePerSnapStep)// && MoveIfValid( toGoal ))
-//			{
-				IncrementPosition( toGoal );
-				currentSnapStep++;
-				if (currentSnapStep >= snappingArcPositions.Length)
+			if (snapping)
+			{
+				Debug.Log( currentSnapStep + " / " + snappingArcPositions.Length );
+				if (currentSnapStep + 1 < snappingArcPositions.Length)
 				{
-					state = HipsState.Locked;
-					meanStepSize = StartMeanStepSize;
-					snapping = false;
+					currentSnapStep++;
+					MoveTo( snappingArcPositions[currentSnapStep], true );
 				}
-//				lastSnapStepTime = Time.time;
-//			}
-//			else
-//			{
-//				Debug.Log( "tiny snap" );
-//				bool b = MoveIfValid( 0.1f * toGoal );
-//			}
+				else
+				{
+					snapping = moving = false;
+				}
+			}
 		}
 
 		public void SetFree (Motor releasedMotor)
 		{
 			if (lastSnappingPivot == releasedMotor)
 			{
-				snapping = false;
+				snapping = moving = false;
 				meanStepSize = StartMeanStepSize;
 				state = HipsState.Free;
 			}

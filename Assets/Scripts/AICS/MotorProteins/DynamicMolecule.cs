@@ -120,12 +120,12 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		protected void MoveTo (Vector3 goalPosition)
+		protected void MoveTo (Vector3 goalPosition, bool forceMove = false)
 		{
-			StartMove( goalPosition, false );
+			StartMove( goalPosition, false, forceMove );
 		}
 
-		bool StartMove (Vector3 goalPosition, bool random)
+		bool StartMove (Vector3 goalPosition, bool random, bool forceMove = false)
 		{
 			startMovePosition = transform.position;
 			goalMovePosition = (random ? transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) ) : goalPosition);
@@ -134,7 +134,7 @@ namespace AICS.MotorProteins
 			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
 				moving = true;
-				return AnimateMove( 1f );
+				return AnimateMove( 1f, forceMove );
 			}
 			else 
 			{
