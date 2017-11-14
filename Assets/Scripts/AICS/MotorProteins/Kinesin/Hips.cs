@@ -19,7 +19,7 @@ namespace AICS.MotorProteins.Kinesin
 		public bool doSnap = true;
 
 		Vector3[] snappingArcPositions;
-		int currentSnapStep = 0;
+		public int currentSnapStep = 0;
 		public bool snapping;
 		public Motor lastSnappingPivot;
 		float StartMeanStepSize;
@@ -50,7 +50,14 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (!frozen)
 			{
-				DoRandomWalk();
+				if (!snapping)
+				{
+					DoRandomWalk();
+				}
+				else 
+				{
+					Animate( true );
+				}
 			}
 		}
 
@@ -89,15 +96,9 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			UnityEngine.Profiling.Profiler.BeginSample( "HipsSnap" );
 			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
 			{
 				snappingArcPositions = CalculateSnapArcPositions( motor );
-				foreach (Vector3 pos in snappingArcPositions)
-				{
-					GameObject.CreatePrimitive(PrimitiveType.Sphere).transform.position = pos;
-				}
-				UnityEditor.EditorApplication.isPaused = true;
 				lastSnappingPivot = motor;
 				currentSnapStep = 0;
 				state = HipsState.Free;
@@ -105,7 +106,6 @@ namespace AICS.MotorProteins.Kinesin
 				meanStepSize = 0.5f * StartMeanStepSize;
 				MoveTo( snappingArcPositions[0], true );
 			}
-			UnityEngine.Profiling.Profiler.EndSample();
 		}
 
 		Vector3[] CalculateSnapArcPositions (Motor motor)
@@ -122,13 +122,8 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * motor.transform.up;
 
-					float angleToNorthPole = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToCurrentPosition.normalized, motorToNorthPole.normalized ), -1f, 1f ) );
-					Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole, 
-						Mathf.Max( Mathf.RoundToInt( angleToNorthPole / degreesPerSnapStep ), 1 ) );
-					
-					float angleNorthPoleToSnapped = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( motorToNorthPole.normalized, motorToSnappedPosition.normalized ), -1f, 1f ) );
-					Vector3[] arcPositions2 = CalculateArcPositions( motor.transform.position, motorToNorthPole, motorToSnappedPosition, 
-						Mathf.Max( Mathf.RoundToInt( angleNorthPoleToSnapped / degreesPerSnapStep ), 1 ) );
+					Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole );
+					Vector3[] arcPositions2 = CalculateArcPositions( motor.transform.position, motorToNorthPole, motorToSnappedPosition );
 
 					arcPositions = new Vector3[ arcPositions1.Length + arcPositions2.Length ];
 					arcPositions1.CopyTo( arcPositions, 0 );
@@ -136,8 +131,7 @@ namespace AICS.MotorProteins.Kinesin
 				}
 				else 
 				{
-					int steps = Mathf.Max( Mathf.RoundToInt( angle / degreesPerSnapStep ), 1 );
-					arcPositions = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToSnappedPosition, steps );
+					arcPositions = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToSnappedPosition );
 				}
 				return arcPositions;
 			}
@@ -152,17 +146,18 @@ namespace AICS.MotorProteins.Kinesin
 			return strongMotor.transform.position + Mathf.Min( snapPosition, maxDistanceFromParent ) * -strongMotor.transform.right;
 		}
 
-		Vector3[] CalculateArcPositions (Vector3 pivotPosition, Vector3 startLocalPosition, Vector3 goalLocalPosition, int steps)
+		Vector3[] CalculateArcPositions (Vector3 pivotPosition, Vector3 startLocalPosition, Vector3 goalLocalPosition)
 		{
-			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude) / steps;
-			float dAngle = (180f / Mathf.PI) * Mathf.Acos( Mathf.Clamp( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ), -1f, 1f ) ) / steps;
+			float totalAngle = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ), -1f, 1f ) );
+			int steps = Mathf.Max( Mathf.RoundToInt( totalAngle / degreesPerSnapStep ), 1 );
+			float dAngle = totalAngle / steps;
+			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude);
 			Vector3 axis = Vector3.Cross( startLocalPosition.normalized, goalLocalPosition.normalized ).normalized;
 			Vector3[] arcPositions = new Vector3[steps];
 
 			for (int i = 0; i < steps - 1; i++)
 			{
-				arcPositions[i] = pivotPosition + (startLocalPosition.magnitude + (i + 1f) * dLength) 
-					* (Quaternion.AngleAxis( (i + 1f) * dAngle, axis ) * startLocalPosition.normalized);
+				arcPositions[i] = pivotPosition + (startLocalPosition.magnitude + (i + 1f) * dLength) * (Quaternion.AngleAxis( (i + 1f) * dAngle, axis ) * startLocalPosition.normalized);
 			}
 			arcPositions[arcPositions.Length - 1] = pivotPosition + goalLocalPosition;
 			return arcPositions;
@@ -172,7 +167,6 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (snapping)
 			{
-				Debug.Log( currentSnapStep + " / " + snappingArcPositions.Length );
 				if (currentSnapStep + 1 < snappingArcPositions.Length)
 				{
 					currentSnapStep++;

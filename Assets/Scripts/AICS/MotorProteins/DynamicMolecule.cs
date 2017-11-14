@@ -145,13 +145,9 @@ namespace AICS.MotorProteins
 
 		bool AnimateMove (float t, bool forceMove = false) 
 		{
+			bool success = false;
 			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Clamp( t, 0, 1f ) ) - transform.position;
 			moveStep += Helpers.GetRandomVector( 0.5f * moveStep.magnitude );
-			if (moving && t >= 1f)
-			{
-				moving = false;
-				OnFinishMove();
-			}
 
 			if (interactsWithOthers)
 			{
@@ -165,12 +161,21 @@ namespace AICS.MotorProteins
 					if (forceMove)
 					{
 						IncrementPosition( moveStep );
-						return true;
+						success = true;
 					}
-					return MoveIfValid( moveStep );
+					else
+					{
+						success = MoveIfValid( moveStep );
+					}
 				}
 			}
-			return false;
+
+			if (moving && t >= 1f)
+			{
+				moving = false;
+				OnFinishMove();
+			}
+			return success;
 		}
 
 		protected virtual void OnFinishMove () { }

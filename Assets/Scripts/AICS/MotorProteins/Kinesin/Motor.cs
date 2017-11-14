@@ -532,49 +532,49 @@ namespace AICS.MotorProteins.Kinesin
 			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 
-//		// we can get collision events while the motor is still binding and its rigidbody is not yet kinematic
-//		void OnCollisionEnter (Collision collision)
-//		{
-//			if (collision.collider.tag == "Player")
-//			{
-//				if (binding)
-//				{
-//					Kinetic k = kinetics.GetKinetic( (int)state, (int)state - 2 );
-//					k.events--;
-//					CancelTubulinBind();
-//				}
-//			}
-//		}
-//
-//		// once the motor is bound and rigidbody is kinematic, only get trigger events
-//		void OnTriggerEnter (Collider other)
-//		{
-//			if (other.tag == "Player")
-//			{
-//				if (bound && !stateIsStrong)
-//				{
-//					Kinetic k = kinetics.GetKinetic( (int)state, (int)state + 2 );
-//					k.attempts++;
-//					if (ReleaseTubulin( k ))
-//					{
-//						k.events++;
-//					}
-//				}
-//			}
-//		}
-//
-//		public void CancelTubulinBind ()
-//		{
-//			if (logEvents) { Debug.Log( name + " cancel BIND" ); }
-//
-//			if (tubulin != null)
-//			{
-//				tubulin.hasMotorBound = false;
-//			}
-//			kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
-//			lastReleaseTime = Time.time;
-//			binding = false;
-//		}
+		// we can get collision events while the motor is still binding and its rigidbody is not yet kinematic
+		void OnCollisionEnter (Collision collision)
+		{
+			if (collision.collider.tag == "Player")
+			{
+				if (binding)
+				{
+					Kinetic k = kinetics.GetKinetic( (int)state, (int)state - 2 );
+					k.events--;
+					CancelTubulinBind();
+				}
+			}
+		}
+
+		// once the motor is bound and rigidbody is kinematic, only get trigger events
+		void OnTriggerEnter (Collider other)
+		{
+			if (other.tag == "Player")
+			{
+				if (bound && !stateIsStrong)
+				{
+					Kinetic k = kinetics.GetKinetic( (int)state, (int)state + 2 );
+					k.attempts++;
+					if (ReleaseTubulin( k ))
+					{
+						k.events++;
+					}
+				}
+			}
+		}
+
+		public void CancelTubulinBind ()
+		{
+			if (logEvents) { Debug.Log( name + " cancel BIND" ); }
+
+			if (tubulin != null)
+			{
+				tubulin.hasMotorBound = false;
+			}
+			kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
+			lastReleaseTime = Time.time;
+			binding = false;
+		}
 
 		void FinishTubulinBind ()
 		{
