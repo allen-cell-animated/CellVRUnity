@@ -10,7 +10,7 @@ namespace AICS.MotorProteins.Kinesin
 		public bool followPosition = true;
 		public bool followRotation = true;
 
-		void Update () 
+		public void Follow () 
 		{
 			if (followPosition)
 			{

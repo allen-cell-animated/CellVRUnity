@@ -17,12 +17,12 @@ namespace AICS.MotorProteins.Kinesin
 		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 9000f; // degrees per simulated second
 		public bool doSnap = true;
+		public Follower follower;
 
 		Vector3[] snappingArcPositions;
 		public int currentSnapStep = 0;
 		public bool snapping;
 		public Motor lastSnappingPivot;
-		float StartMeanStepSize;
 		float degreesPerSnapStep = 30f;
 
 		public Kinesin kinesin
@@ -41,10 +41,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		protected override void OnAwake () 
-		{
-			StartMeanStepSize = meanStepSize;
-		}
+		protected override void OnAwake () { }
 
 		public override void DoCustomSimulation ()
 		{
@@ -58,6 +55,7 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					Animate( true );
 				}
+				follower.Follow();
 			}
 		}
 
@@ -103,7 +101,6 @@ namespace AICS.MotorProteins.Kinesin
 				currentSnapStep = 0;
 				state = HipsState.Free;
 				snapping = true;
-				meanStepSize = 0.5f * StartMeanStepSize;
 				MoveTo( snappingArcPositions[0], true );
 			}
 		}
@@ -184,7 +181,6 @@ namespace AICS.MotorProteins.Kinesin
 			if (lastSnappingPivot == releasedMotor)
 			{
 				snapping = moving = false;
-				meanStepSize = StartMeanStepSize;
 				state = HipsState.Free;
 			}
 		}

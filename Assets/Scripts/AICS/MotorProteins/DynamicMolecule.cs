@@ -33,6 +33,8 @@ namespace AICS.MotorProteins
 		float totalRotationAngle;
 		bool exiting = false;
 		public bool binding = false;
+		public float moveRandomness = 0.9f;
+		public float rotateRandomness = 1f;
 
 		Rigidbody _body;
 		protected Rigidbody body
@@ -104,7 +106,8 @@ namespace AICS.MotorProteins
 			{
 				rotating = false;
 			}
-			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, Mathf.Clamp( t, 0, 1f ) ) * Quaternion.Euler( Helpers.GetRandomVector( 0.05f * totalRotationAngle ) );
+			transform.rotation = Quaternion.Slerp( startMoveRotation, goalMoveRotation, Mathf.Clamp( t, 0, 1f ) ) 
+				* Quaternion.Euler( Helpers.GetRandomVector( rotateRandomness * totalRotationAngle ) );
 		}
 
 		protected bool MoveRandomly (bool retry = false) 
@@ -147,7 +150,7 @@ namespace AICS.MotorProteins
 		{
 			bool success = false;
 			Vector3 moveStep = Vector3.Lerp( startMovePosition, goalMovePosition, Mathf.Clamp( t, 0, 1f ) ) - transform.position;
-			moveStep += Helpers.GetRandomVector( 0.5f * moveStep.magnitude );
+			moveStep += Helpers.GetRandomVector( moveRandomness * moveStep.magnitude );
 
 			if (interactsWithOthers)
 			{

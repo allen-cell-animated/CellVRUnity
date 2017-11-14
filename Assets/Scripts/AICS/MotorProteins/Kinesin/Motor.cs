@@ -197,10 +197,6 @@ namespace AICS.MotorProteins.Kinesin
 						justChangedState = false;
 					}
 				}
-				else if (!moving && !rotating)
-				{
-					FinishTubulinBind();
-				}
 					
 				Animate( binding );
 				kinetics.CalculateObservedRates();
@@ -574,6 +570,14 @@ namespace AICS.MotorProteins.Kinesin
 			kinesin.SetParentSchemeOnComponentRelease( this as ComponentMolecule );
 			lastReleaseTime = Time.time;
 			binding = false;
+		}
+
+		protected override void OnFinishMove () 
+		{
+			if (binding) 
+			{
+				FinishTubulinBind();
+			}
 		}
 
 		void FinishTubulinBind ()
