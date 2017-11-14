@@ -19,7 +19,7 @@ namespace AICS
 
 		void SpawnAll ()
 		{
-			List<Vector3> positions = GetPointsOnSphere( Mathf.RoundToInt( number / crowding ) );
+			List<Vector3> positions = GetPointsOnSphere( Mathf.Max( number, Mathf.RoundToInt( number / Mathf.Clamp( crowding, 0.1f, 1f ) ) ) );
 			for (int i = 0; i < number; i++)
 			{
 				int index = Random.Range( 0, positions.Count );
@@ -40,17 +40,15 @@ namespace AICS
 			List<Vector3> points = new List<Vector3>();
 			float inc = Mathf.PI * (3f - Mathf.Sqrt( 5f ));
 			float off = 2f / n;
-			float x = 0, y = 0, z = 0, theta = 0, phi = 0;
+			float y = 0, r = 0, phi = 0;
 
-			for (var k = 0; k < n; k++)
+			for (var i = 0; i < n; i++)
 			{
-				phi = k * inc;
-				theta = k * inc / 2f;
-				x = Mathf.Sin( theta ) * Mathf.Cos( phi );
-				y = Mathf.Sin( theta ) * Mathf.Sin( phi );
-				z = Mathf.Cos( theta );
+				y = i * off - 1f + (off / 2f);
+				r = Mathf.Sqrt( 1f - y * y );
+				phi = i * inc;
 
-				points.Add( shellRadius * new Vector3( x, y, z ) );
+				points.Add( shellRadius * new Vector3( r * Mathf.Cos( phi ), y, r * Mathf.Sin( phi ) ) );
 			}
 			return points;
 		}
