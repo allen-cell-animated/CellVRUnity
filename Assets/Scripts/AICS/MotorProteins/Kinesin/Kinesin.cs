@@ -20,19 +20,12 @@ namespace AICS.MotorProteins.Kinesin
 		}
 	}
 
-	public class Kinesin : AssemblyMolecule, IWalkSplines
+	public class Kinesin : AssemblyMolecule
 	{
 		public float averageWalkingSpeed; // μm/s
 		public Tubulin lastTubulin;
 		public KineticRates kineticRates;
 		public NucleotideGenerator atpGenerator;
-
-//		Queue<CachedMotorEvent> eventQueue = new Queue<CachedMotorEvent>();
-//		float lastQueuedTime;
-//		CachedMotorEvent[] lastQueuedMotorEvents = new CachedMotorEvent[2];
-
-		public float t { get; set; }
-		public Microtubule microtubule { get; set; }
 
 		Hips _hips;
 		public Hips hips
@@ -82,34 +75,6 @@ namespace AICS.MotorProteins.Kinesin
 				return false;
 			}
 		}
-
-//		void IncreaseCache (float nanosecondsToAdd)
-//		{
-//			float goalTime = lastQueuedTime + nanosecondsToAdd;
-//			while (lastQueuedTime < goalTime)
-//			{
-//				lastQueuedTime = CalculateCache();
-//			}
-//		}
-//
-//		float CalculateCache () 
-//		{ 
-//			float firstEventNanoseconds = Mathf.Infinity;
-//			int firstEventIndex = 0;
-//			for (int i = 0; i < lastQueuedMotorEvents.Length; i++)
-//			{
-//				CachedMotorEvent lastEvent = lastQueuedMotorEvents[i];
-//				Kinetic k = Motor.GetNextEvent( lastEvent.finalState );
-//				float t = Motor.GetEventNanoseconds( k );
-//				if (t < firstEventNanoseconds)
-//				{
-//					firstEventNanoseconds = t;
-//					firstEventIndex = i;
-//				}
-////				lastQueuedMotorEvents[i] = new CachedMotorEvent( lastEvent.finalState,  );
-//			}
-//			return 0;
-//		}
 
 		void Update ()
 		{

@@ -46,9 +46,9 @@ namespace AICS.MotorProteins.Kinesin
 		void Start ()
 		{
 			positions = new Vector3[n];
-			foreach (Vector3 position in positions)
+			for (int i = 0; i < n; i++)
 			{
-				position = transform.position;
+				positions[i] = transform.position;
 			}
 		}
 
