@@ -32,21 +32,18 @@ namespace AICS.MT
 			if (t >= 1f)
 			{
 				t = 0;
-				sprite.gameObject.SetActive( false );
 			}
 
 			sprite.DoUpdate();
 			PlaceOnMicrotubule();
-
-			if (t == 0)
-			{
-				sprite.gameObject.SetActive( true );
-			}
+			DoAdditionalUpdate();
 		}
 
 		void PlaceOnMicrotubule ()
 		{
 			transform.position = microtubule.spline.GetPosition( t ) + Helpers.GetRandomVector( jitter / MolecularEnvironment.Instance.timeMultiplier );
 		}
+
+		protected virtual void DoAdditionalUpdate () { }
 	}
 }

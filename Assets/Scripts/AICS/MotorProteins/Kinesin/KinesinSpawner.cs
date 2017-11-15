@@ -5,8 +5,75 @@ using AICS.MT;
 
 namespace AICS.MotorProteins.Kinesin
 {
+//	public class KinesinVesiclePair
+//	{
+//		public Kinesin kinesin;
+//		public Vesicle vesicle;
+//	}
+
 	public class KinesinSpawner : MonoBehaviour 
 	{
+		public Kinesin kinesinPrefab;
+		public KinesinVesicle vesiclePrefab;
+		public Microtubule microtubule;
+		public KinesinParameterInput parameterSetter;
+		public float number;
+		public Vector2 kinesinRange = new Vector2( 0.3f, 0.6f );
+
+		void Start ()
+		{
+			for (int i = 0; i < number; i++)
+			{
+				Spawn( ((float)i + Random.value) / (float)number );
+			}
+		}
+
+		public void Spawn (float t)
+		{
+			Vector3 tangent = microtubule.spline.GetTangent( t );
+			Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );
+			Vector3 position = microtubule.spline.GetPosition( t );
+			Quaternion rotation = Quaternion.LookRotation( position + tangent, normal );
+
+			if (t > kinesinRange.x && t < kinesinRange.y) // spawn as kinesin
+			{
+				position += 14.5f * normal;
+				Kinesin kinesin = Instantiate( kinesinPrefab, position, rotation ) as Kinesin;
+				kinesin.transform.SetParent( transform );
+				parameterSetter.InitKinesin( kinesin );
+			}
+			else // spawn as vesicle
+			{
+				KinesinVesicle vesicle = Instantiate( vesiclePrefab, position, rotation ) as KinesinVesicle;
+				vesicle.transform.SetParent( transform );
+				vesicle.t = t;
+				vesicle.microtubule = microtubule;
+			}
+		}
+
+		public void ConvertToKinesin (KinesinVesicle vesicle)
+		{
+
+		}
+
+		public void ConvertToVesicle (Kinesin kinesin)
+		{
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //		public GameObject[] prefabs;
 //		public Microtubule microtubule;
 //		public int number = 5;

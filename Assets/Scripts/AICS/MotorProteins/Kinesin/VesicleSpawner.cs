@@ -29,7 +29,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		public void Spawn (float t)
+		void Spawn (float t)
 		{
 			Vector3 tangent = microtubule.spline.GetTangent( t );
 			Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );

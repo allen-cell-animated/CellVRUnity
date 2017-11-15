@@ -17,7 +17,6 @@ namespace AICS
 			{
 				Animator animator = GetComponentInChildren<Animator>();
 				animator.Play( Random.value < 0.5f ? "forward" : "reverse", -1, Random.value );
-//				animator.SetBool( "Play", true );
 			}
 		}
 	}
