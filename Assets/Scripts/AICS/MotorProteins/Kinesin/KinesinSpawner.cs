@@ -18,48 +18,48 @@ namespace AICS.MotorProteins.Kinesin
 
 		void Start ()
 		{
-			Place( transform, kinesinRange.x, 0 );
-//			for (int i = 0; i < number; i++)
-//			{
-//				Spawn( ((float)i + Random.value) / (float)number );
-//			}
-			Spawn( 0.65f );
+			Place( transform, kinesinRange.x, 0, 0 );
+			for (int i = 0; i < number; i++)
+			{
+				Spawn( ((float)i + Random.value) / (float)number );
+			}
 		}
 
 		public void Spawn (float t)
 		{
 			if (t > kinesinRange.x && t < kinesinRange.y) // spawn as kinesin
 			{
-				SpawnKinesin( t );
+				SpawnKinesin( t, Random.Range( 30f, 150f ) );
 			}
 			else // spawn as vesicle
 			{
-				vesicles.Add( SpawnVesicle( t ) );
+				vesicles.Add( SpawnVesicle( t, Random.Range( 30f, 150f ) ) );
 			}
 		}
 
-		Kinesin SpawnKinesin (float t)
+		Kinesin SpawnKinesin (float t, float normalRotation)
 		{
 			Kinesin kinesin = Instantiate( kinesinPrefab, transform ) as Kinesin;
-			Place( kinesin.transform, t, 14.5f );
+			Place( kinesin.transform, t, 14.5f, normalRotation );
 			parameterSetter.InitKinesin( kinesin );
 			return kinesin;
 		}
 
-		KinesinVesicle SpawnVesicle (float t)
+		KinesinVesicle SpawnVesicle (float t, float normalRotation)
 		{
 			KinesinVesicle vesicle = Instantiate( vesiclePrefab, transform ) as KinesinVesicle;
-			Place( vesicle.transform, t, 0 );
+			Place( vesicle.transform, t, 0, normalRotation );
 			vesicle.t = t;
+			vesicle.normalRotation = normalRotation;
 			vesicle.microtubule = microtubule;
 			vesicle.spawner = this;
 			return vesicle;
 		}
 
-		void Place (Transform obj, float t, float normalOffset)
+		void Place (Transform obj, float t, float normalOffset, float normalRotation)
 		{
 			Vector3 tangent = microtubule.spline.GetTangent( t );
-			Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );
+			Vector3 normal = Quaternion.AngleAxis( normalRotation, tangent ) * microtubule.spline.GetNormal( t );
 			Vector3 position = microtubule.spline.GetPosition( t ) + normalOffset * normal;
 			Quaternion rotation = Quaternion.LookRotation( position + tangent, normal );
 
@@ -80,8 +80,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void ConvertToKinesin (KinesinVesicle vesicle)
 		{
-			Debug.Log( "convert to kinesin" );
-			vesicle.kinesin = SpawnKinesin( vesicle.t );
+			vesicle.kinesin = SpawnKinesin( vesicle.t, vesicle.normalRotation );
 			vesicle.kinesin.vesicle = vesicle;
 
 			vesicle.gameObject.SetActive( false );
@@ -91,21 +90,30 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (kinesin.vesicle == null)
 			{
-				Debug.Log( "create vesicle" );
-				kinesin.vesicle = SpawnVesicle( kinesinRange.x );
+				kinesin.vesicle = SpawnVesicle( kinesinRange.x, GetKinesinNormalRotation( kinesin ) );
 				kinesin.vesicle.kinesin = kinesin;
+				kinesin.vesicle.sprite.position = kinesin.cargo.transform.position;
+				kinesin.vesicle.sprite.rotation = kinesin.cargo.transform.rotation;
 				vesicles.Add( kinesin.vesicle );
 			}
 			else
 			{
-				Debug.Log( "convert to vesicle" );
-				Place( kinesin.vesicle.transform, kinesinRange.x, 0 );
+				Place( kinesin.vesicle.transform, kinesinRange.x, 0, GetKinesinNormalRotation( kinesin ) );
 				kinesin.vesicle.t = kinesinRange.x;
+				kinesin.vesicle.sprite.position = kinesin.cargo.transform.position;
+				kinesin.vesicle.sprite.rotation = kinesin.cargo.transform.rotation;
 				kinesin.vesicle.gameObject.SetActive( true );
 			}
 
 			kinesin.atpGenerator.DestroyAll();
 			Destroy( kinesin.gameObject );
+		}
+
+		float GetKinesinNormalRotation (Kinesin kinesin)
+		{
+			Vector3 mtToCargo = kinesin.cargo.transform.position - microtubule.spline.GetPosition( kinesinRange.x );
+			Vector3 mtNormal = microtubule.spline.GetNormal( kinesinRange.x );
+			return Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( mtNormal, mtToCargo.normalized ), -1f, 1f ) );
 		}
 
 		void OnTriggerEnter (Collider other)

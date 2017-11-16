@@ -9,6 +9,8 @@ namespace AICS.MT
 	{
 		public KinesinSpawner spawner;
 		public Kinesin kinesin;
+		public float normalRotation;
+		public Transform sprite;
 
 		protected override void DoAdditionalUpdate () 
 		{

@@ -26,6 +26,7 @@ namespace AICS.MotorProteins.Kinesin
 		public Tubulin lastTubulin;
 		public KineticRates kineticRates;
 		public NucleotideGenerator atpGenerator;
+		public Cargo cargo;
 		public KinesinVesicle vesicle;
 
 		Hips _hips;
