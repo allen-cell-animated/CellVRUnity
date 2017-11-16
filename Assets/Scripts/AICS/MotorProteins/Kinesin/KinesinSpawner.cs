@@ -23,7 +23,7 @@ namespace AICS.MotorProteins.Kinesin
 //			{
 //				Spawn( ((float)i + Random.value) / (float)number );
 //			}
-			Spawn( 0.35f );
+			Spawn( 0.65f );
 		}
 
 		public void Spawn (float t)

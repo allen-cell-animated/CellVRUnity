@@ -491,7 +491,7 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			Vector3 _bindingPosition = _tubulin.transform.TransformPoint( bindingPosition );
 			float hipsDistance = Vector3.Distance( _bindingPosition, kinesin.hips.transform.position );
-			return _tubulin.tubulinType == 1 && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t ) && !_tubulin.hasMotorBound 
+			return _tubulin.canBind && _tubulin.tubulinType == 1 && hipsDistance <= maxDistanceFromParent; // && CloseToBindingOrientation( t ) && !_tubulin.hasMotorBound 
 		}
 
 		bool CloseToBindingOrientation (Tubulin _tubulin)

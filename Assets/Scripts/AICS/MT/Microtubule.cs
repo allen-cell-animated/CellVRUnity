@@ -65,7 +65,7 @@ namespace AICS.MT
 			}
 		}
 
-		void Update ()
+		void Start ()
 		{
 			if (makeTubulins && spline != null && (!placedTubulins || spline.UpdateSpline()))
 			{
@@ -145,7 +145,7 @@ namespace AICS.MT
 				Tubulin tubulin = Instantiate( tubulinPrefabs[type], GetTubulinParent( (direction < 0) ? 0 : 1 ) );
 				tubulin.name = tubulinPrefabs[type].name + "_" + index;
 
-				return tubulin.GetComponent<Tubulin>();
+				return tubulin;
 			}
 			return null;
 		}

@@ -9,6 +9,7 @@ namespace AICS.MT
 	{
 		public int tubulinType = -1;
 		public bool hasMotorBound;
+		public bool canBind = true;
 
 		public override bool bound
 		{
@@ -23,6 +24,7 @@ namespace AICS.MT
 		public void Place (Vector3 position, Vector3 lookDirection, Vector3 normal)
 		{
 			transform.localPosition = position;
+			canBind = (position.y >= 0);
 			transform.LookAt( transform.position + lookDirection, normal );
 		}
 
