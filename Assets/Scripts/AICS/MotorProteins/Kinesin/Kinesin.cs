@@ -29,6 +29,10 @@ namespace AICS.MotorProteins.Kinesin
 		public Cargo cargo;
 		public KinesinVesicle vesicle;
 
+		public ResolutionManagerStatic[] resolutionManagers;
+		public float resolutionUpdateInterval = 5f;
+		float lastTime = -10000f;
+
 		Hips _hips;
 		public Hips hips
 		{
@@ -88,6 +92,15 @@ namespace AICS.MotorProteins.Kinesin
 			if (resetFrames > 0)
 			{
 				FinishReset();
+			}
+
+			if (Time.time - lastTime >= resolutionUpdateInterval)
+			{
+				foreach (ResolutionManagerStatic resolutionManager in resolutionManagers)
+				{
+					resolutionManager.SetLOD();
+				}
+				lastTime = Time.time;
 			}
 
 			CalculateWalkingSpeed();

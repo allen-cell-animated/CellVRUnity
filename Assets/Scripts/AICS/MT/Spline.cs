@@ -34,12 +34,13 @@ namespace AICS.MT
 		void Start ()
 		{
 			lastPointPositions = null;
-		}
-
-		void Update ()
-		{
 			UpdateSpline();
 		}
+
+//		void Update ()
+//		{
+//			
+//		}
 
 		public bool UpdateSpline ()
 		{

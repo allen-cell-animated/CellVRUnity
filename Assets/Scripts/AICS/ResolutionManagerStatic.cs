@@ -17,7 +17,7 @@ namespace AICS
 			SetLOD();
 		}
 
-		void SetLOD ()
+		public void SetLOD ()
 		{
 			distance = Vector3.Distance( transform.position, Camera.main.transform.position );
 
