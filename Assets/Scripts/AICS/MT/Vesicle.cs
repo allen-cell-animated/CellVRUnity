@@ -9,9 +9,8 @@ namespace AICS.MT
 	{
 		public float speed = 1f;
 		public float jitter = 1f;
-
-		public Microtubule microtubule { get; set; }
-		public float t { get; set; }
+		public Microtubule microtubule;
+		public float t;
 
 		AmbientSprite _sprite;
 		AmbientSprite sprite
@@ -28,10 +27,10 @@ namespace AICS.MT
 
 		public void DoUpdate () 
 		{
-			t += speed / (100f * MolecularEnvironment.Instance.timeMultiplier);
-			if (t >= 1f)
+			t -= speed / (100f * MolecularEnvironment.Instance.timeMultiplier);
+			if (t <= 0)
 			{
-				t = 0;
+				t = 1f;
 			}
 
 			sprite.DoUpdate();

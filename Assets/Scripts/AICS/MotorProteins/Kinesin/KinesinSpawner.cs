@@ -5,12 +5,6 @@ using AICS.MT;
 
 namespace AICS.MotorProteins.Kinesin
 {
-//	public class KinesinVesiclePair
-//	{
-//		public Kinesin kinesin;
-//		public Vesicle vesicle;
-//	}
-
 	public class KinesinSpawner : MonoBehaviour 
 	{
 		public Kinesin kinesinPrefab;
@@ -20,165 +14,107 @@ namespace AICS.MotorProteins.Kinesin
 		public float number;
 		public Vector2 kinesinRange = new Vector2( 0.3f, 0.6f );
 
+		public List<KinesinVesicle> vesicles = new List<KinesinVesicle>();
+
 		void Start ()
 		{
-			for (int i = 0; i < number; i++)
-			{
-				Spawn( ((float)i + Random.value) / (float)number );
-			}
+			Place( transform, kinesinRange.x, 0 );
+//			for (int i = 0; i < number; i++)
+//			{
+//				Spawn( ((float)i + Random.value) / (float)number );
+//			}
+			Spawn( 0.35f );
 		}
 
 		public void Spawn (float t)
 		{
-			Vector3 tangent = microtubule.spline.GetTangent( t );
-			Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );
-			Vector3 position = microtubule.spline.GetPosition( t );
-			Quaternion rotation = Quaternion.LookRotation( position + tangent, normal );
-
 			if (t > kinesinRange.x && t < kinesinRange.y) // spawn as kinesin
 			{
-				position += 14.5f * normal;
-				Kinesin kinesin = Instantiate( kinesinPrefab, position, rotation ) as Kinesin;
-				kinesin.transform.SetParent( transform );
-				parameterSetter.InitKinesin( kinesin );
+				SpawnKinesin( t );
 			}
 			else // spawn as vesicle
 			{
-				KinesinVesicle vesicle = Instantiate( vesiclePrefab, position, rotation ) as KinesinVesicle;
-				vesicle.transform.SetParent( transform );
-				vesicle.t = t;
-				vesicle.microtubule = microtubule;
+				vesicles.Add( SpawnVesicle( t ) );
+			}
+		}
+
+		Kinesin SpawnKinesin (float t)
+		{
+			Kinesin kinesin = Instantiate( kinesinPrefab, transform ) as Kinesin;
+			Place( kinesin.transform, t, 14.5f );
+			parameterSetter.InitKinesin( kinesin );
+			return kinesin;
+		}
+
+		KinesinVesicle SpawnVesicle (float t)
+		{
+			KinesinVesicle vesicle = Instantiate( vesiclePrefab, transform ) as KinesinVesicle;
+			Place( vesicle.transform, t, 0 );
+			vesicle.t = t;
+			vesicle.microtubule = microtubule;
+			vesicle.spawner = this;
+			return vesicle;
+		}
+
+		void Place (Transform obj, float t, float normalOffset)
+		{
+			Vector3 tangent = microtubule.spline.GetTangent( t );
+			Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );
+			Vector3 position = microtubule.spline.GetPosition( t ) + normalOffset * normal;
+			Quaternion rotation = Quaternion.LookRotation( position + tangent, normal );
+
+			obj.position = position;
+			obj.rotation = rotation;
+		}
+
+		void Update ()
+		{
+			foreach (KinesinVesicle vesicle in vesicles)
+			{
+				if (vesicle.gameObject.activeSelf)
+				{
+					vesicle.DoUpdate();
+				}
 			}
 		}
 
 		public void ConvertToKinesin (KinesinVesicle vesicle)
 		{
+			Debug.Log( "convert to kinesin" );
+			vesicle.kinesin = SpawnKinesin( vesicle.t );
+			vesicle.kinesin.vesicle = vesicle;
 
+			vesicle.gameObject.SetActive( false );
 		}
 
 		public void ConvertToVesicle (Kinesin kinesin)
 		{
+			if (kinesin.vesicle == null)
+			{
+				Debug.Log( "create vesicle" );
+				kinesin.vesicle = SpawnVesicle( kinesinRange.x );
+				kinesin.vesicle.kinesin = kinesin;
+				vesicles.Add( kinesin.vesicle );
+			}
+			else
+			{
+				Debug.Log( "convert to vesicle" );
+				Place( kinesin.vesicle.transform, kinesinRange.x, 0 );
+				kinesin.vesicle.t = kinesinRange.x;
+				kinesin.vesicle.gameObject.SetActive( true );
+			}
 
+			kinesin.atpGenerator.DestroyAll();
+			Destroy( kinesin.gameObject );
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//		public GameObject[] prefabs;
-//		public Microtubule microtubule;
-//		public int number = 5;
-//		public float waitTimeBetweenSpawns = 15f;
-//		public float radialOffset = 14.5f;
-//		public List<GameObject> spawnedObjects = new List<GameObject>();
-//		public Transform end;
-//		public float destroyInterval = 10f;
-//		public float destroyDistance = 20f;
-//
-//		bool needToPreWarm = true;
-//		float lastSpawnTime = -10000f;
-//		float lastDestroyTime = -10000f;
-//
-//		void Update ()
-//		{
-//			CheckSpawn();
-//			CheckDestroy();
-//		}
-//
-//		void CheckSpawn ()
-//		{
-//			if (needToPreWarm || Time.time - lastSpawnTime >= waitTimeBetweenSpawns)
-//			{
-//				int i = 0;
-//				float t = 0;
-//				while (spawnedObjects.Count < number)
-//				{
-//					if (needToPreWarm) 
-//					{
-//						t = (float)i / (float)number + Random.value / (float)number;
-//						i++;
-//					}
-//					Spawn( t );
-//				}
-//				lastSpawnTime = Time.time;
-//				needToPreWarm = false;
-//			}
-//		}
-//
-//		public void Spawn (float t)
-//		{
-//			Vector3 position = transform.position;
-//			Quaternion rotation = transform.rotation;
-//			if (needToPreWarm)
-//			{
-//				Vector3 tangent = microtubule.spline.GetTangent( t );
-//				Vector3 normal = Quaternion.AngleAxis( Random.Range( 0, 359f ), tangent ) * microtubule.spline.GetNormal( t );
-//				position = microtubule.spline.GetPosition( t ) + radialOffset * normal;
-//				rotation = Quaternion.LookRotation( position + tangent, normal );
-//			}
-//			IWalkSplines obj = Instantiate( prefabs[Random.Range( 0, prefabs.Length )], position, rotation ).GetComponent<IWalkSplines>();
-//			obj.transform.SetParent( transform );
-//			SetupObject( obj, t );
-//		}
-//
-//		protected virtual void SetupObject (IWalkSplines obj, float t) 
-//		{
-//			obj.t = t;
-//			obj.microtubule = microtubule;
-//			spawnedObjects.Add( obj.gameObject );
-//		}
-//
-//		void CheckDestroy ()
-//		{
-//			if (Time.time - lastDestroyTime >= destroyInterval)
-//			{
-//				for (int i = 0; i < spawnedObjects.Count; i++)
-//				{
-//					if (Vector3.Distance( spawnedObjects[i].transform.position, end.position ) < destroyDistance)
-//					{
-//						DoDestruction( spawnedObjects[i] );
-//						return;
-//					}
-//				}
-//				lastDestroyTime = Time.time;
-//			}
-//		}
-//
-//		void DoDestruction (GameObject obj) 
-//		{
-//			if (spawnedObjects.Contains( obj ))
-//			{
-//				spawnedObjects.Remove( obj );
-//			}
-//			DoCustomDestruction( obj );
-//			Destroy( obj );
-//		}
-//
-//		protected virtual void DoCustomDestruction (GameObject obj) { }
-//
-//		public KinesinParameterInput parameterSetter;
-//
-//		protected override void SetupObject (IWalkSplines obj, float t)
-//		{
-//			Kinesin kinesin = obj as Kinesin;
-//			parameterSetter.InitKinesin( kinesin );
-//			spawnedObjects.Add( kinesin.hips.gameObject );
-//		}
-//
-//		protected override void DoCustomDestruction (GameObject obj) 
-//		{
-//			Kinesin kinesin = obj.GetComponent<Hips>().kinesin;
-//			kinesin.atpGenerator.DestroyAll();
-//			Destroy( kinesin.gameObject );
-//		}
+		void OnTriggerEnter (Collider other)
+		{
+			Hips hips = other.GetComponent<Hips>();
+			if (hips != null)
+			{
+				ConvertToVesicle( hips.kinesin );
+			}
+		}
 	}
 }

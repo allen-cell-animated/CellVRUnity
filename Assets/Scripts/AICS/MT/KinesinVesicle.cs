@@ -8,6 +8,7 @@ namespace AICS.MT
 	public class KinesinVesicle : Vesicle
 	{
 		public KinesinSpawner spawner;
+		public Kinesin kinesin;
 
 		protected override void DoAdditionalUpdate () 
 		{
