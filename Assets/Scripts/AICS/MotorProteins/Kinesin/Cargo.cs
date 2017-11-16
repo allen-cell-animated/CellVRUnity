@@ -10,6 +10,7 @@ namespace AICS.MotorProteins.Kinesin
 		public float maxAngleFromUp = 30f;
 		public float snapSpeed = 1f;
 		public Vector3 defaultUp;
+		public AmbientSprite sprite;
 
 		public bool pushing = false;
 
@@ -37,6 +38,10 @@ namespace AICS.MotorProteins.Kinesin
 			if (!pushing)
 			{
 				DoRandomWalk();
+			}
+			if (sprite.gameObject.activeSelf)
+			{
+				sprite.DoUpdate();
 			}
 		}
 
