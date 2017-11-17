@@ -1,0 +1,236 @@
+fileFormatVersion: 2
+guid: 4591312d079db4c7496f43bb945bfa1c
+timeCreated: 1510880771
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Sweep
+    100004: Sweep_2
+    100006: Sweep_2_MeshPart0
+    100008: Sweep_2_MeshPart1
+    100010: Sweep_2_MeshPart10
+    100012: Sweep_2_MeshPart11
+    100014: Sweep_2_MeshPart12
+    100016: Sweep_2_MeshPart13
+    100018: Sweep_2_MeshPart2
+    100020: Sweep_2_MeshPart3
+    100022: Sweep_2_MeshPart4
+    100024: Sweep_2_MeshPart5
+    100026: Sweep_2_MeshPart6
+    100028: Sweep_2_MeshPart7
+    100030: Sweep_2_MeshPart8
+    100032: Sweep_2_MeshPart9
+    100034: Sweep_MeshPart0
+    100036: Sweep_MeshPart1
+    100038: Sweep_MeshPart10
+    100040: Sweep_MeshPart11
+    100042: Sweep_MeshPart12
+    100044: Sweep_MeshPart13
+    100046: Sweep_MeshPart2
+    100048: Sweep_MeshPart3
+    100050: Sweep_MeshPart4
+    100052: Sweep_MeshPart5
+    100054: Sweep_MeshPart6
+    100056: Sweep_MeshPart7
+    100058: Sweep_MeshPart8
+    100060: Sweep_MeshPart9
+    400000: //RootNode
+    400002: Sweep
+    400004: Sweep_2
+    400006: Sweep_2_MeshPart0
+    400008: Sweep_2_MeshPart1
+    400010: Sweep_2_MeshPart10
+    400012: Sweep_2_MeshPart11
+    400014: Sweep_2_MeshPart12
+    400016: Sweep_2_MeshPart13
+    400018: Sweep_2_MeshPart2
+    400020: Sweep_2_MeshPart3
+    400022: Sweep_2_MeshPart4
+    400024: Sweep_2_MeshPart5
+    400026: Sweep_2_MeshPart6
+    400028: Sweep_2_MeshPart7
+    400030: Sweep_2_MeshPart8
+    400032: Sweep_2_MeshPart9
+    400034: Sweep_MeshPart0
+    400036: Sweep_MeshPart1
+    400038: Sweep_MeshPart10
+    400040: Sweep_MeshPart11
+    400042: Sweep_MeshPart12
+    400044: Sweep_MeshPart13
+    400046: Sweep_MeshPart2
+    400048: Sweep_MeshPart3
+    400050: Sweep_MeshPart4
+    400052: Sweep_MeshPart5
+    400054: Sweep_MeshPart6
+    400056: Sweep_MeshPart7
+    400058: Sweep_MeshPart8
+    400060: Sweep_MeshPart9
+    2300000: Sweep_2_MeshPart0
+    2300002: Sweep_2_MeshPart1
+    2300004: Sweep_2_MeshPart10
+    2300006: Sweep_2_MeshPart11
+    2300008: Sweep_2_MeshPart12
+    2300010: Sweep_2_MeshPart13
+    2300012: Sweep_2_MeshPart2
+    2300014: Sweep_2_MeshPart3
+    2300016: Sweep_2_MeshPart4
+    2300018: Sweep_2_MeshPart5
+    2300020: Sweep_2_MeshPart6
+    2300022: Sweep_2_MeshPart7
+    2300024: Sweep_2_MeshPart8
+    2300026: Sweep_2_MeshPart9
+    2300028: Sweep_MeshPart0
+    2300030: Sweep_MeshPart1
+    2300032: Sweep_MeshPart10
+    2300034: Sweep_MeshPart11
+    2300036: Sweep_MeshPart12
+    2300038: Sweep_MeshPart13
+    2300040: Sweep_MeshPart2
+    2300042: Sweep_MeshPart3
+    2300044: Sweep_MeshPart4
+    2300046: Sweep_MeshPart5
+    2300048: Sweep_MeshPart6
+    2300050: Sweep_MeshPart7
+    2300052: Sweep_MeshPart8
+    2300054: Sweep_MeshPart9
+    3300000: Sweep_2_MeshPart0
+    3300002: Sweep_2_MeshPart1
+    3300004: Sweep_2_MeshPart10
+    3300006: Sweep_2_MeshPart11
+    3300008: Sweep_2_MeshPart12
+    3300010: Sweep_2_MeshPart13
+    3300012: Sweep_2_MeshPart2
+    3300014: Sweep_2_MeshPart3
+    3300016: Sweep_2_MeshPart4
+    3300018: Sweep_2_MeshPart5
+    3300020: Sweep_2_MeshPart6
+    3300022: Sweep_2_MeshPart7
+    3300024: Sweep_2_MeshPart8
+    3300026: Sweep_2_MeshPart9
+    3300028: Sweep_MeshPart0
+    3300030: Sweep_MeshPart1
+    3300032: Sweep_MeshPart10
+    3300034: Sweep_MeshPart11
+    3300036: Sweep_MeshPart12
+    3300038: Sweep_MeshPart13
+    3300040: Sweep_MeshPart2
+    3300042: Sweep_MeshPart3
+    3300044: Sweep_MeshPart4
+    3300046: Sweep_MeshPart5
+    3300048: Sweep_MeshPart6
+    3300050: Sweep_MeshPart7
+    3300052: Sweep_MeshPart8
+    3300054: Sweep_MeshPart9
+    4300000: Sweep_MeshPart0
+    4300002: Sweep_MeshPart1
+    4300004: Sweep_MeshPart2
+    4300006: Sweep_MeshPart3
+    4300008: Sweep_MeshPart4
+    4300010: Sweep_MeshPart5
+    4300012: Sweep_MeshPart6
+    4300014: Sweep_MeshPart7
+    4300016: Sweep_MeshPart8
+    4300018: Sweep_MeshPart9
+    4300020: Sweep_MeshPart10
+    4300022: Sweep_MeshPart11
+    4300024: Sweep_MeshPart12
+    4300026: Sweep_MeshPart13
+    4300028: Sweep_2_MeshPart0
+    4300030: Sweep_2_MeshPart1
+    4300032: Sweep_2_MeshPart2
+    4300034: Sweep_2_MeshPart3
+    4300036: Sweep_2_MeshPart4
+    4300038: Sweep_2_MeshPart5
+    4300040: Sweep_2_MeshPart6
+    4300042: Sweep_2_MeshPart7
+    4300044: Sweep_2_MeshPart8
+    4300046: Sweep_2_MeshPart9
+    4300048: Sweep_2_MeshPart10
+    4300050: Sweep_2_MeshPart11
+    4300052: Sweep_2_MeshPart12
+    4300054: Sweep_2_MeshPart13
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 222c78870d1f042d99ccca2353fdb998, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 10
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
