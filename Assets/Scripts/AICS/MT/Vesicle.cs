@@ -7,8 +7,8 @@ namespace AICS.MT
 {
 	public class Vesicle : MonoBehaviour
 	{
-		public float speed = 1f;
-		public float jitter = 1f;
+		float speed = 0.03f;
+		float jitter = 2f;
 		public Microtubule microtubule;
 		public float t;
 
@@ -27,7 +27,7 @@ namespace AICS.MT
 
 		public void DoUpdate () 
 		{
-			t -= speed / (100f * MolecularEnvironment.Instance.timeMultiplier);
+			t -= speed / (100f + 0.9f * MolecularEnvironment.Instance.timeMultiplier);
 			if (t <= 0)
 			{
 				t = 1f;
@@ -40,7 +40,7 @@ namespace AICS.MT
 
 		void PlaceOnMicrotubule ()
 		{
-			transform.position = microtubule.spline.GetPosition( t ) + Helpers.GetRandomVector( jitter / MolecularEnvironment.Instance.timeMultiplier );
+			transform.position = microtubule.spline.GetPosition( t ) + Helpers.GetRandomVector( jitter / (100f + 0.9f * MolecularEnvironment.Instance.timeMultiplier) );
 		}
 
 		protected virtual void DoAdditionalUpdate () { }
