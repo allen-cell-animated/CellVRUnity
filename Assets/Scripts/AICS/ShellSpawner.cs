@@ -8,7 +8,7 @@ namespace AICS
 	{
 		public GameObject prefab;
 		public int number = 10;
-		public float shellRadius = 50f;
+		public Vector2 shellRadius = new Vector2( 500f, 1000f );
 		public float crowding = 0.75f;
 		public Vector2 scaleRange = new Vector2( 500f, 1000f );
 
@@ -48,7 +48,7 @@ namespace AICS
 				r = Mathf.Sqrt( 1f - y * y );
 				phi = i * inc;
 
-				points.Add( shellRadius * new Vector3( r * Mathf.Cos( phi ), y, r * Mathf.Sin( phi ) ) );
+				points.Add( Random.Range( shellRadius.x, shellRadius.y ) * new Vector3( r * Mathf.Cos( phi ), y, r * Mathf.Sin( phi ) ) );
 			}
 			return points;
 		}
