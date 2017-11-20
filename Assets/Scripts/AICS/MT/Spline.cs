@@ -11,13 +11,15 @@ namespace AICS.MT
 		public Vector3 tangent;
 		public Quaternion rotation;
 		public float arcLength;
+		public float t;
 
-		public SplinePoint (Vector3 _position, Vector3 _tangent, Quaternion _rotation, float _arcLength)
+		public SplinePoint (Vector3 _position, Vector3 _tangent, Quaternion _rotation, float _arcLength, float _t)
 		{
 			position = _position;
 			tangent = _tangent;
 			rotation = _rotation;
 			arcLength = _arcLength;
+			t = _t;
 		}
 	}
 
@@ -124,55 +126,42 @@ namespace AICS.MT
 
 		// ---------------------------------------------- Drawing
 
-		protected List<LineRenderer> lines = new List<LineRenderer>();
+		protected LineRenderer line;
 
 		void UpdateDraw ()
 		{
 			if (drawCurve)
 			{
-				ClearExtraLines();
+				ClearLine();
 				Draw();
 			}
 		}
 
 		void Draw ()
 		{
-			for (int i = 0; i < calculatedPoints.Length - 1; i++)
+			line = new LineRenderer();
+			line = new GameObject( "line", new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
+			line.material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
+			line.startColor = line.endColor = lineColor;
+			line.startWidth = line.endWidth = lineWidth;
+			line.positionCount = calculatedPoints.Length;
+			line.transform.SetParent( transform );
+			line.transform.position = calculatedPoints[0].position;
+
+			Vector3[] points = new Vector3[calculatedPoints.Length];
+			for (int i = 0; i < calculatedPoints.Length; i++)
 			{
-				DrawSegment( i, calculatedPoints[i].position, calculatedPoints[i + 1].position );
+				points[i] = calculatedPoints[i].position;
 			}
+			line.SetPositions( points );
 		}
 
-		protected void ClearExtraLines ()
+		protected void ClearLine ()
 		{
-			if (lines.Count > calculatedPoints.Length) 
-			{ 
-				int currentN = lines.Count;
-				for (int i = calculatedPoints.Length; i < currentN; i++)
-				{
-					Destroy( lines[i].gameObject );
-				}
-				lines.RemoveRange( calculatedPoints.Length, lines.Count - calculatedPoints.Length );
-			}
-		}
-
-		protected void DrawSegment (int index, Vector3 start, Vector3 end)
-		{
-			if (index >= lines.Count)
+			if (line != null)
 			{
-				lines.Add( null );
+				Destroy( line.gameObject );
 			}
-			if (lines[index] == null)
-			{
-				lines[index] = new GameObject( "line" + index, new System.Type[]{ typeof(LineRenderer) } ).GetComponent<LineRenderer>();
-				lines[index].material = new Material( Shader.Find( "Particles/Alpha Blended Premultiply" ) );
-				lines[index].startColor = lines[index].endColor = lineColor;
-				lines[index].startWidth = lines[index].endWidth = lineWidth;
-				lines[index].transform.SetParent( transform );
-			}
-			lines[index].transform.position = start;
-			lines[index].SetPosition( 0, start );
-			lines[index].SetPosition( 1, end );
 		}
 
 		void OnDrawGizmos ()
@@ -230,7 +219,7 @@ namespace AICS.MT
 					{
 						arcLength = Vector3.Distance( position, calculatedPoints[k - 1].position );
 					}
-					calculatedPoints[k] = new SplinePoint( position, tangent, CalculateRotation( position, tangent ), arcLength );
+					calculatedPoints[k] = new SplinePoint( position, tangent, CalculateRotation( position, tangent ), arcLength, t );
 					k++;
 				}
 			}
