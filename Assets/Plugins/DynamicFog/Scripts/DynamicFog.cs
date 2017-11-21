@@ -153,7 +153,7 @@ namespace DynamicFogAndMist
 												}
 								}
 
-								[SerializeField, Range (0.01f, 1)]
+								[SerializeField, Range (0.0001f, 1)]
 								float _noiseScale = 0.1f;
 
 								public float noiseScale {
@@ -218,7 +218,7 @@ namespace DynamicFogAndMist
 												}
 								}
 
-								[SerializeField, Range (0, 500)]
+								[SerializeField, Range (0, 5000)]
 								float _height = 1f;
 
 								public float height {
@@ -231,8 +231,8 @@ namespace DynamicFogAndMist
 												}
 								}
 
-								[SerializeField, Range (0, 500)]
-								float _maxHeight = 100f;
+								[SerializeField, Range (0, 5000)]
+								float _maxHeight = 5000f;
 
 								public float maxHeight {
 												get { return _maxHeight; }
