@@ -20,13 +20,13 @@ public class KinesinViveController : ViveController
     public float minScale = 15f;
     public float maxScale = 80f;
 	public float startFadeScale = 50f;
+    public float scaleSpeed = 0.1f;
     public bool holdingTrigger = false;
 
     bool scaling = false;
     float startControllerDistance;
     float startScale;
 	Color faderColor;
-	float lastD = 80f;
 
 	void Start ()
 	{
@@ -69,22 +69,15 @@ public class KinesinViveController : ViveController
     {
 		float currentControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ), 
 			playArea.transform.InverseTransformPoint( otherController.transform.position ) );
-		float d = startControllerDistance * startScale / (startControllerDistance + 0.01f * (currentControllerDistance - startControllerDistance));
+		float d = startControllerDistance * startScale / (startControllerDistance + scaleSpeed * (currentControllerDistance - startControllerDistance));
+
         if (d > maxScale)
         {
             levelLoader.Trigger();
         }
         playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
 
-		if (d >= lastD)
-		{
-			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - minScale) / (maxScale - minScale) );
-		}
-		else
-		{
-			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, 0 );
-		}
-		lastD = d;
+        fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
     }
 
     void StopScaling()
