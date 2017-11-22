@@ -67,8 +67,9 @@ public class KinesinViveController : ViveController
 
     void UpdateScale()
     {
-        float d = startControllerDistance / Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ), 
-            playArea.transform.InverseTransformPoint( otherController.transform.position ) ) * startScale;
+		float currentControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ), 
+			playArea.transform.InverseTransformPoint( otherController.transform.position ) );
+		float d = startControllerDistance * startScale / (startControllerDistance + 0.01f * (currentControllerDistance - startControllerDistance));
         if (d > maxScale)
         {
             levelLoader.Trigger();
