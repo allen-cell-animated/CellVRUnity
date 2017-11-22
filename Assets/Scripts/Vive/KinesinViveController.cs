@@ -13,16 +13,25 @@ public class KinesinViveController : ViveController
     public SteamVR_PlayArea playArea;
     public KinesinViveController otherController;
     public SteamVR_LoadLevel levelLoader;
+	public MeshRenderer fader;
     public float minTimeMultiplier = 1f;
     public float maxTimeMultiplier = 10000f;
     public float scaleMultiplier = 0.1f;
-    public float minScale = 10f;
-    public float maxScale = 30f;
+    public float minScale = 15f;
+    public float maxScale = 80f;
+	public float startFadeScale = 50f;
     public bool holdingTrigger = false;
 
     bool scaling = false;
     float startControllerDistance;
     float startScale;
+	Color faderColor;
+	float lastD = 80f;
+
+	void Start ()
+	{
+		faderColor = fader.material.color;
+	}
 
     public override void OnTriggerPull()
     {
@@ -65,6 +74,16 @@ public class KinesinViveController : ViveController
             levelLoader.Trigger();
         }
         playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
+
+		if (d >= lastD)
+		{
+			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - minScale) / (maxScale - minScale) );
+		}
+		else
+		{
+			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, 0 );
+		}
+		lastD = d;
     }
 
     void StopScaling()
