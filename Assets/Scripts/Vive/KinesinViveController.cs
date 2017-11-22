@@ -93,7 +93,8 @@ public class KinesinViveController : ViveController
 		else if (d >= fadeTextScale && !fadeText.activeSelf)
 		{
 			fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
-			fadeText.SetActive( true );
+            fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
+            fadeText.SetActive( true );
 		}
 	}
 
