@@ -199,7 +199,7 @@ namespace AICS.MotorProteins.Kinesin
 		}
 
 		float minTimeMultiplier = 1f;
-		float maxTimeMultiplier = 1000f;
+		float maxTimeMultiplier = 9000f;
 		void ChangeTime (float delta)
 		{
 			float timeMultiplier = Mathf.Clamp( MolecularEnvironment.Instance.timeMultiplier * delta, minTimeMultiplier, maxTimeMultiplier );

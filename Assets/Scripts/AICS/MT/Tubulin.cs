@@ -24,7 +24,11 @@ namespace AICS.MT
 		public void Place (Vector3 position, Vector3 lookDirection, Vector3 normal)
 		{
 			transform.localPosition = position;
-			canBind = (position.y >= 0);
+			canBind = (position.y >= 1f);
+			if (position.y <= -1f)
+			{
+				transform.GetChild( 0 ).gameObject.SetActive( false );
+			}
 			transform.LookAt( transform.position + lookDirection, normal );
 		}
 
