@@ -13,15 +13,15 @@ public class KinesinViveController : ViveController
     public SteamVR_PlayArea playArea;
     public KinesinViveController otherController;
     public SteamVR_LoadLevel levelLoader;
-	public Image fader;
+	public MeshRenderer fader;
 	public GameObject fadeText;
     public float minTimeMultiplier = 1f;
     public float maxTimeMultiplier = 10000f;
     public float scaleMultiplier = 0.1f;
     public float minScale = 15f;
-    public float maxScale = 80f;
-	public float startFadeScale = 60f;
-	public float fadeTextScale = 85f;
+    public float maxScale = 110f;
+	public float startFadeScale = 76f;
+	public float fadeTextScale = 95f;
     public float scaleSpeed = 0.1f;
     public bool holdingTrigger = false;
 
@@ -92,6 +92,7 @@ public class KinesinViveController : ViveController
 		}
 		else if (d >= fadeTextScale && !fadeText.activeSelf)
 		{
+			fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
 			fadeText.SetActive( true );
 		}
 	}
