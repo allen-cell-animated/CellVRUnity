@@ -6,15 +6,27 @@ namespace AICS
 {
 	public class ShellSpawner : MonoBehaviour 
 	{
+		public bool isDynamic = false;
 		public GameObject prefab;
 		public int number = 10;
 		public Vector2 shellRadius = new Vector2( 500f, 1000f );
 		public float crowding = 0.75f;
 		public Vector2 scaleRange = new Vector2( 500f, 1000f );
 
+		AmbientSprite[] sprites;
+
 		void Start () 
 		{
 			SpawnAll();
+
+			if (isDynamic)
+			{
+				sprites = GetComponentsInChildren<AmbientSprite>();
+				foreach (AmbientSprite sprite in sprites)
+				{
+					sprite.radius = shellRadius.y;
+				}
+			}
 		}
 
 		void SpawnAll ()
@@ -51,6 +63,17 @@ namespace AICS
 				points.Add( Random.Range( shellRadius.x, shellRadius.y ) * new Vector3( r * Mathf.Cos( phi ), y, r * Mathf.Sin( phi ) ) );
 			}
 			return points;
+		}
+
+		void Update ()
+		{
+			if (isDynamic)
+			{
+				foreach (AmbientSprite sprite in sprites)
+				{
+					sprite.DoUpdate();
+				}
+			}
 		}
 	}
 }

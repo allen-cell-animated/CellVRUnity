@@ -19,7 +19,7 @@ namespace AICS
 
 		public void SetLOD ()
 		{
-			distance = Vector3.Distance( transform.position, Camera.main.transform.position );
+			distance = Vector3.Magnitude( transform.position );
 
 			if ((currentLOD > 0 && distance <= LODDistances[currentLOD - 1]) || (currentLOD < LODDistances.Length && distance > LODDistances[currentLOD]))
 			{
