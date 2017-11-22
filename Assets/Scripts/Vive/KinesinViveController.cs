@@ -15,6 +15,7 @@ public class KinesinViveController : ViveController
     public SteamVR_LoadLevel levelLoader;
 	public MeshRenderer fader;
 	public GameObject fadeText;
+	public TimeUI timeUI;
     public float minTimeMultiplier = 1f;
     public float maxTimeMultiplier = 10000f;
     public float scaleMultiplier = 0.1f;
@@ -33,6 +34,9 @@ public class KinesinViveController : ViveController
 	void Start ()
 	{
 		faderColor = fader.material.color;
+		timeUI.minTimeMultiplier = minTimeMultiplier;
+		timeUI.maxTimeMultiplier = maxTimeMultiplier;
+		timeUI.Set( MolecularEnvironment.Instance.timeMultiplier );
 	}
 
     public override void OnTriggerPull()
@@ -117,6 +121,7 @@ public class KinesinViveController : ViveController
     {
         float timeMultiplier = Mathf.Clamp( MolecularEnvironment.Instance.timeMultiplier * delta, minTimeMultiplier, maxTimeMultiplier );
         MolecularEnvironment.Instance.SetTime( timeMultiplier );
+		timeUI.Set( timeMultiplier );
     }
 
     void DoReset()
