@@ -23,8 +23,8 @@ public class TimeUI : MonoBehaviour
 	void SetFill (float value)
 	{
 		float h = fillMaxHeight * (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier);
-		fill.offsetMin = new Vector2( -fillWidth / 2f, -h / 2f );
-		fill.offsetMax = new Vector2( fillWidth / 2f, h / 2f );
+		fill.anchoredPosition = new Vector2( 0, -h / 2f );
+		fill.sizeDelta = new Vector2( fillWidth, h );
 	}
 
 	string FormatNumber (float value)
