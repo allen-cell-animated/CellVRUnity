@@ -22,8 +22,8 @@ public class TimeUI : MonoBehaviour
 
 	void SetFill (float value)
 	{
-		float h = fillMaxHeight * (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier);
-		fill.anchoredPosition = new Vector2( 0, -h / 2f );
+		float h = fillMaxHeight * (1 - (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier));
+		fill.anchoredPosition = new Vector2( 0, -(fillMaxHeight - h) / 2f );
 		fill.sizeDelta = new Vector2( fillWidth, h );
 	}
 
