@@ -22,9 +22,8 @@ public class TimeUI : MonoBehaviour
 
 	void SetFill (float value)
 	{
-		float p = (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier);
-		fill.rect.height = p * fillMaxHeight;
-		fill.rect.y = -fill.rect.height / 2f;
+		float h = fillMaxHeight * (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier);
+		fill.rect.Set( 0, -h / 2f, fillWidth, h );
 	}
 
 	string FormatNumber (float value)
