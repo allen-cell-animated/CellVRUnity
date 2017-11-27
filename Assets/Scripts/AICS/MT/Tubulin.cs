@@ -25,7 +25,7 @@ namespace AICS.MT
 		{
 			transform.localPosition = position;
 			canBind = (position.y >= 1f);
-			if (position.y <= -1f)
+			if (position.y <= -1f || position.magnitude > 500f)
 			{
 				transform.GetChild( 0 ).gameObject.SetActive( false );
 			}
