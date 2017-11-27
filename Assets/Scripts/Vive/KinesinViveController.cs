@@ -63,7 +63,6 @@ public class KinesinViveController : ViveController
             StartScaling();
         }
 		theCollider.enabled = true;
-		UpdateButtonLabels();
     }
 
     public override void OnTriggerHold()
@@ -80,7 +79,6 @@ public class KinesinViveController : ViveController
         otherController.StopScaling();
         StopScaling();
 		theCollider.enabled = false;
-		UpdateButtonLabels();
     }
 
     void StartScaling()
@@ -126,6 +124,11 @@ public class KinesinViveController : ViveController
     {
         scaling = false;
     }
+
+	void Update ()
+	{
+		UpdateButtonLabels();
+	}
 
     public override void OnDPadUpStay()
     {
