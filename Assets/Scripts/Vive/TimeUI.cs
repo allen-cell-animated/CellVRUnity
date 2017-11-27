@@ -10,7 +10,7 @@ public class TimeUI : MonoBehaviour
 	[HideInInspector] public float minTimeMultiplier;
 	[HideInInspector] public float maxTimeMultiplier;
 
-	float fillMaxHeight = 1.2f;
+	float fillMaxHeight = 2.4f;
 	int significantFigures = 2;
 
 	public void Set (float timeMultiplier) 
@@ -21,7 +21,7 @@ public class TimeUI : MonoBehaviour
 
 	void SetFill (float value)
 	{
-		float h = fillMaxHeight * (1 - (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier));
+		float h = fillMaxHeight * (1f - (Mathf.Log10( value ) - Mathf.Log10( minTimeMultiplier )) / (Mathf.Log10( maxTimeMultiplier ) - Mathf.Log10( minTimeMultiplier )));
 		fill.localPosition = new Vector3( -2.5f, -(fillMaxHeight - h) / 2f, 0 );
 		fill.localScale = new Vector3( 1f, h, 1f );
 	}

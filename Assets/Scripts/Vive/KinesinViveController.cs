@@ -45,9 +45,12 @@ public class KinesinViveController : ViveController
 	void Start ()
 	{
 		faderColor = fader.material.color;
-		timeUI.minTimeMultiplier = minTimeMultiplier;
-		timeUI.maxTimeMultiplier = maxTimeMultiplier;
-		timeUI.Set( MolecularEnvironment.Instance.timeMultiplier );
+		if (timeUI != null)
+		{
+			timeUI.minTimeMultiplier = minTimeMultiplier;
+			timeUI.maxTimeMultiplier = maxTimeMultiplier;
+			timeUI.Set( MolecularEnvironment.Instance.timeMultiplier );
+		}
 		theCollider = GetComponent<Collider>();
 		theCollider.enabled = false;
 	}
@@ -126,12 +129,18 @@ public class KinesinViveController : ViveController
 
     public override void OnDPadUpStay()
     {
-        ChangeTime( 0.9f );
+		if (timeUI != null)
+		{
+	        ChangeTime( 0.9f );
+		}
     }
 
     public override void OnDPadDownStay()
     {
-        ChangeTime( 1.1f );
+		if (timeUI != null)
+		{
+	        ChangeTime( 1.1f );
+		}
     }
     
     void ChangeTime (float delta)
