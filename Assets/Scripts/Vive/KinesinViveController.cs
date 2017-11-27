@@ -30,6 +30,7 @@ public class KinesinViveController : ViveController
     float startControllerDistance;
     float startScale;
 	Color faderColor;
+	Collider theCollider;
 
 	void Start ()
 	{
@@ -37,6 +38,8 @@ public class KinesinViveController : ViveController
 		timeUI.minTimeMultiplier = minTimeMultiplier;
 		timeUI.maxTimeMultiplier = maxTimeMultiplier;
 		timeUI.Set( MolecularEnvironment.Instance.timeMultiplier );
+		theCollider = GetComponent<Collider>();
+		theCollider.enabled = false;
 	}
 
     public override void OnTriggerPull()
@@ -46,6 +49,7 @@ public class KinesinViveController : ViveController
         {
             StartScaling();
         }
+		theCollider.enabled = true;
     }
 
     public override void OnTriggerHold()
@@ -61,6 +65,7 @@ public class KinesinViveController : ViveController
         holdingTrigger = false;
         otherController.StopScaling();
         StopScaling();
+		theCollider.enabled = false;
     }
 
     void StartScaling()
