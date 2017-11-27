@@ -22,7 +22,7 @@ public class TimeUI : MonoBehaviour
 	void SetFill (float value)
 	{
 		float h = fillMaxHeight * (1 - (value - minTimeMultiplier) / (maxTimeMultiplier - minTimeMultiplier));
-		fill.localPosition = new Vector3( 2.5f, -(fillMaxHeight - h) / 2f, 0 );
+		fill.localPosition = new Vector3( -2.5f, -(fillMaxHeight - h) / 2f, 0 );
 		fill.localScale = new Vector3( 1f, h, 1f );
 	}
 

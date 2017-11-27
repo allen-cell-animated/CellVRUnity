@@ -25,12 +25,22 @@ public class KinesinViveController : ViveController
 	public float fadeTextScale = 95f;
     public float scaleSpeed = 0.1f;
     public bool holdingTrigger = false;
+	public GameObject pushButtonLabel;
+	public GameObject scaleButtonLabel;
 
     bool scaling = false;
     float startControllerDistance;
     float startScale;
 	Color faderColor;
 	Collider theCollider;
+
+	bool idle 
+	{
+		get
+		{
+			return !scaling && !holdingTrigger;
+		}
+	}
 
 	void Start ()
 	{
@@ -50,6 +60,7 @@ public class KinesinViveController : ViveController
             StartScaling();
         }
 		theCollider.enabled = true;
+		UpdateButtonLabels();
     }
 
     public override void OnTriggerHold()
@@ -66,6 +77,7 @@ public class KinesinViveController : ViveController
         otherController.StopScaling();
         StopScaling();
 		theCollider.enabled = false;
+		UpdateButtonLabels();
     }
 
     void StartScaling()
@@ -128,6 +140,37 @@ public class KinesinViveController : ViveController
         MolecularEnvironment.Instance.SetTime( timeMultiplier );
 		timeUI.Set( timeMultiplier );
     }
+
+	void UpdateButtonLabels ()
+	{
+		if (idle && otherController.idle)
+		{
+			ShowLabel( pushButtonLabel, true );
+			ShowLabel( scaleButtonLabel, false );
+		}
+		else if (idle && otherController.holdingTrigger)
+		{
+			ShowLabel( pushButtonLabel, false );
+			ShowLabel( scaleButtonLabel, true );
+		}
+		else
+		{
+			ShowLabel( pushButtonLabel, false );
+			ShowLabel( scaleButtonLabel, false );
+		}
+	}
+
+	void ShowLabel (GameObject label, bool show)
+	{
+		if (show && !label.activeSelf)
+		{
+			label.SetActive( true );
+		}
+		else if (!show && label.activeSelf)
+		{
+			label.SetActive( false );
+		}
+	}
 
     void DoReset()
     {
