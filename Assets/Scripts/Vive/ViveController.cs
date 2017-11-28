@@ -68,6 +68,11 @@ public class ViveController : MonoBehaviour
 	{
 		dPadPosition = controller.GetAxis();
 
+		if (controller.GetPressUp( EVRButtonId.k_EButton_SteamVR_Touchpad ))
+		{
+			GetDPadExit();
+		}
+
 		if (dPadPosition.y > 0.4f)
 		{
 			if (!dPadHovering[(int)DPadDirection.Up])

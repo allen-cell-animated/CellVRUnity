@@ -95,7 +95,9 @@ public class KinesinViveController : ViveController
             playArea.transform.InverseTransformPoint( otherController.transform.position ) );
         startScale = playArea.transform.localScale.x;
 		pushIndicator.SetActive( false );
+		theCollider.enabled = false;
 		otherController.pushIndicator.SetActive( false );
+		otherController.theCollider.enabled = false;
 		scaleLine.gameObject.SetActive( true );
 		SetLine();
         scaling = true;
@@ -147,10 +149,12 @@ public class KinesinViveController : ViveController
 		if (holdingTrigger)
 		{
 			pushIndicator.SetActive( true );
+			theCollider.enabled = true;
 		}
 		if (otherController.holdingTrigger)
 		{
 			otherController.pushIndicator.SetActive( true );
+			theCollider.enabled = true;
 		}
     }
 
