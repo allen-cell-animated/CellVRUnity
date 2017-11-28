@@ -65,11 +65,11 @@ public class KinesinViveController : ViveController
     {
         holdingTrigger = true;
 		pushIndicator.SetActive( true );
+		theCollider.enabled = true;
         if (otherController.holdingTrigger)
         {
             StartScaling();
         }
-		theCollider.enabled = true;
     }
 
     public override void OnTriggerHold()
@@ -85,8 +85,6 @@ public class KinesinViveController : ViveController
         holdingTrigger = false;
         otherController.StopScaling();
         StopScaling();
-		theCollider.enabled = false;
-		pushIndicator.SetActive( false );
     }
 
     void StartScaling()
