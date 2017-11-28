@@ -16,6 +16,10 @@ public class CellViveController : ViveController
     public CellViveControllerState state;
     public CellViveController otherController;
     public Cell hoveredCell;
+	public LineRenderer scaleLine;
+	public GameObject grabButtonLabel;
+	public GameObject scaleButtonLabel;
+	public GameObject labelLine;
 
     public Cell draggedCell
     {
@@ -29,6 +33,12 @@ public class CellViveController : ViveController
     Vector3 startCellScale;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.08f );
     Vector3 maxScale = new Vector3( 2.5f, 2.5f, 1f );
+	Vector3[] linePoints = new Vector3[2];
+
+	void Start ()
+	{
+		scaleLine.gameObject.SetActive( false );
+	}
 
     void OnTriggerEnter (Collider other)
     {
@@ -136,8 +146,17 @@ public class CellViveController : ViveController
             startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
             startCellScale = cell.transform.localScale;
             state = CellViveControllerState.Scaling;
+			scaleLine.gameObject.SetActive( true );
+			SetLine();
         }
     }
+
+	void SetLine ()
+	{
+		linePoints[0] = transform.position;
+		linePoints[1] = otherController.transform.position;
+		scaleLine.SetPositions( linePoints );
+	}
 
     void UpdateScale ()
     {
@@ -152,5 +171,45 @@ public class CellViveController : ViveController
     void StopScaling ()
     {
         state = CellViveControllerState.Idle;
-    }
+		scaleLine.gameObject.SetActive( false );
+	}
+
+	protected override void DoUpdate ()
+	{
+		UpdateButtonLabels();
+	}
+
+	void UpdateButtonLabels ()
+	{
+		if (state == CellViveControllerState.Idle && otherController.state == CellViveControllerState.Idle)
+		{
+			ShowLabel( grabButtonLabel, true );
+			ShowLabel( scaleButtonLabel, false );
+			ShowLabel( labelLine, true );
+		}
+		else if (state == CellViveControllerState.Idle && otherController.state == CellViveControllerState.HoldingCell)
+		{
+			ShowLabel( grabButtonLabel, false );
+			ShowLabel( scaleButtonLabel, true );
+			ShowLabel( labelLine, true );
+		}
+		else
+		{
+			ShowLabel( grabButtonLabel, false );
+			ShowLabel( scaleButtonLabel, false );
+			ShowLabel( labelLine, false );
+		}
+	}
+
+	void ShowLabel (GameObject label, bool show)
+	{
+		if (show && !label.activeSelf)
+		{
+			label.SetActive( true );
+		}
+		else if (!show && label.activeSelf)
+		{
+			label.SetActive( false );
+		}
+	}
 }
