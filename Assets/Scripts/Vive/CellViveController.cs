@@ -36,8 +36,8 @@ public class CellViveController : ViveController
 
     float startControllerDistance;
     Vector3 startCellScale;
-    Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.08f );
-    Vector3 maxScale = new Vector3( 2.5f, 2.5f, 1f );
+    Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
+    Vector3 maxScale = new Vector3( 2.5f, 2.5f, 2.5f );
 	Vector3[] linePoints = new Vector3[2];
 
     void OnTriggerEnter (Collider other)
@@ -215,22 +215,7 @@ public class CellViveController : ViveController
 		}
 	}
 
-	public override void OnDPadUpEnter () 
-	{
-		dPadHovering = true;
-	}
-
-	public override void OnDPadDownEnter () 
-	{
-		dPadHovering = true;
-	}
-
-	public override void OnDPadRightEnter () 
-	{
-		dPadHovering = true;
-	}
-
-	public override void OnDPadLeftEnter () 
+	public override void OnDPadEnter () 
 	{
 		dPadHovering = true;
 	}
@@ -240,45 +225,37 @@ public class CellViveController : ViveController
 		dPadHovering = false;
 	}
 
-	public override void OnDPadUpPressed () 
+	public override void OnDPadPressed () 
 	{
 		SwitchRepresentations();
 	}
 
-	public override void OnDPadLeftPressed () 
-	{
-		SwitchRepresentations();
-	}
-
-	public override void OnDPadRightPressed () 
-	{
-		SwitchRepresentations();
-	}
-
-	public override void OnDPadDownPressed () 
-	{
-		SwitchRepresentations();
-	}
-
+    public bool canSwitchReps = true;
 	bool volumeOn = false;
 	bool dPadHovering = false;
 
 	void SwitchRepresentations ()
 	{
-		volumeOn = !volumeOn;
-		foreach (Cell cell in cells)
-		{
-			cell.SetRepresentation( volumeOn ? "volume" : "surface" );
-		}
-		surfaceButtonLabel.SetActive( !volumeOn );
-		volumeButtonLabel.SetActive( volumeOn );
+        if (canSwitchReps)
+        {
+            volumeOn = !volumeOn;
+            foreach (Cell cell in cells)
+            {
+                cell.SetRepresentation(volumeOn ? "volume" : "surface");
+            }
+            surfaceButtonLabel.SetActive(!volumeOn);
+            volumeButtonLabel.SetActive(volumeOn);
+        }
 	}
 
 	void SetRepresentationButtons ()
 	{
-		surfaceButtonLabel.SetActive( !volumeOn && !dPadHovering );
-		surfaceButtonHoverLabel.SetActive( !volumeOn && dPadHovering );
-		volumeButtonLabel.SetActive( volumeOn && !dPadHovering );
-		volumeButtonHoverLabel.SetActive( volumeOn && dPadHovering );
+        if (canSwitchReps)
+        {
+            surfaceButtonLabel.SetActive(volumeOn && !dPadHovering);
+            surfaceButtonHoverLabel.SetActive(volumeOn && dPadHovering);
+            volumeButtonLabel.SetActive(!volumeOn && !dPadHovering);
+            volumeButtonHoverLabel.SetActive(!volumeOn && dPadHovering);
+        }
 	}
 }

@@ -68,12 +68,17 @@ public class ViveController : MonoBehaviour
 	{
 		dPadPosition = controller.GetAxis();
 
-		if (controller.GetTouchUp( EVRButtonId.k_EButton_SteamVR_Touchpad ))
+		if (controller.GetTouchDown( EVRButtonId.k_EButton_SteamVR_Touchpad ))
 		{
-			GetDPadExit();
+			OnDPadEnter();
 		}
 
-		if (dPadPosition.y > 0.4f)
+        if (controller.GetTouchUp(EVRButtonId.k_EButton_SteamVR_Touchpad))
+        {
+            GetDPadExit();
+        }
+
+        if (dPadPosition.y > 0.4f)
 		{
 			if (!dPadHovering[(int)DPadDirection.Up])
 			{
@@ -127,6 +132,7 @@ public class ViveController : MonoBehaviour
 	{
 		if (controller.GetPressUp(EVRButtonId.k_EButton_SteamVR_Touchpad))
 		{
+            OnDPadPressed();
 			if (dPadHovering[(int)DPadDirection.Up])
 			{
 				OnDPadUpPressed();
@@ -181,7 +187,9 @@ public class ViveController : MonoBehaviour
         }
     }
 
-	public virtual void OnDPadUpEnter () { }
+    public virtual void OnDPadEnter() { }
+
+    public virtual void OnDPadUpEnter () { }
 
 	public virtual void OnDPadLeftEnter () { }
 
@@ -191,7 +199,9 @@ public class ViveController : MonoBehaviour
 
 	public virtual void OnDPadExit () { }
 
-	public virtual void OnDPadUpPressed () { }
+    public virtual void OnDPadPressed() { }
+
+    public virtual void OnDPadUpPressed () { }
 
 	public virtual void OnDPadLeftPressed () { }
 
