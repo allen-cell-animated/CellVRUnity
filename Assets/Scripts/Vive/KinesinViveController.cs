@@ -57,7 +57,6 @@ public class KinesinViveController : ViveController
 		}
 		theCollider = GetComponent<Collider>();
 		theCollider.enabled = false;
-		scaleLine.gameObject.SetActive( false );
 		pushIndicator.SetActive( false );
 	}
 

@@ -35,14 +35,9 @@ public class CellViveController : ViveController
     Vector3 maxScale = new Vector3( 2.5f, 2.5f, 1f );
 	Vector3[] linePoints = new Vector3[2];
 
-	void Start ()
-	{
-		scaleLine.gameObject.SetActive( false );
-	}
-
     void OnTriggerEnter (Collider other)
     {
-        Cell cell = other.GetComponent<Cell>();
+        Cell cell = other.GetComponentInParent<Cell>();
         if (cell != null)
         {
             hoveredCell = cell;
@@ -51,7 +46,7 @@ public class CellViveController : ViveController
 
     void OnTriggerExit (Collider other)
     {
-        Cell cell = other.GetComponent<Cell>();
+		Cell cell = other.GetComponentInParent<Cell>();
         if (cell != null && hoveredCell == cell)
         {
             hoveredCell = null;
