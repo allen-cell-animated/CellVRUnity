@@ -28,6 +28,7 @@ public class KinesinViveController : ViveController
 	public GameObject pushButtonLabel;
 	public GameObject scaleButtonLabel;
 	public LineRenderer line;
+	public GameObject pushIndicator;
 
     bool scaling = false;
     float startControllerDistance;
@@ -56,6 +57,7 @@ public class KinesinViveController : ViveController
 		theCollider = GetComponent<Collider>();
 		theCollider.enabled = false;
 		line.gameObject.SetActive( false );
+		pushIndicator.SetActive( false );
 	}
 
     public override void OnTriggerPull()
@@ -66,6 +68,7 @@ public class KinesinViveController : ViveController
             StartScaling();
         }
 		theCollider.enabled = true;
+		pushIndicator.SetActive( true );
     }
 
     public override void OnTriggerHold()
@@ -82,6 +85,7 @@ public class KinesinViveController : ViveController
         otherController.StopScaling();
         StopScaling();
 		theCollider.enabled = false;
+		pushIndicator.SetActive( false );
     }
 
     void StartScaling()
@@ -142,6 +146,31 @@ public class KinesinViveController : ViveController
 	protected override void DoUpdate ()
 	{
 		UpdateButtonLabels();
+	}
+
+	public override void OnDPadUpEnter () 
+	{
+		timeUI.SetHover( TimeHoverState.Up );
+	}
+
+	public override void OnDPadDownEnter () 
+	{
+		timeUI.SetHover( TimeHoverState.Down );
+	}
+
+	public override void OnDPadRightEnter () 
+	{
+		timeUI.SetHover( TimeHoverState.None );
+	}
+
+	public override void OnDPadLeftEnter () 
+	{
+		timeUI.SetHover( TimeHoverState.None );
+	}
+
+	public override void OnDPadExit () 
+	{
+		timeUI.SetHover( TimeHoverState.None );
 	}
 
     public override void OnDPadUpStay()

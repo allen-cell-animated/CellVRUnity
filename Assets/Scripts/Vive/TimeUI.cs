@@ -3,15 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum TimeHoverState 
+{
+	None,
+	Up,
+	Down
+}
+
 public class TimeUI : MonoBehaviour 
 {
 	public Transform fill;
+	public Sprite idle;
+	public Sprite hoverUp;
+	public Sprite hoverDown;
 //	public Text text;
 	[HideInInspector] public float minTimeMultiplier;
 	[HideInInspector] public float maxTimeMultiplier;
 
 	float fillMaxHeight = 1.2f;
 	int significantFigures = 2;
+	SpriteRenderer spriteRenderer;
+
+	void Start ()
+	{
+		spriteRenderer = GetComponent<SpriteRenderer>();
+	}
 
 	public void Set (float timeMultiplier) 
 	{
@@ -24,6 +40,22 @@ public class TimeUI : MonoBehaviour
 		float h = fillMaxHeight * (1f - (Mathf.Log10( value ) - Mathf.Log10( minTimeMultiplier )) / (Mathf.Log10( maxTimeMultiplier ) - Mathf.Log10( minTimeMultiplier )));
 		fill.localPosition = new Vector3( -2.5f, -(fillMaxHeight - 2f * h) / 2f, 0 );
 		fill.localScale = new Vector3( 1f, h, 1f );
+	}
+
+	public void SetHover (TimeHoverState newState)
+	{
+		switch (newState) 
+		{
+		case TimeHoverState.Up :
+			spriteRenderer.sprite = hoverUp;
+			return;
+		case TimeHoverState.Down :
+			spriteRenderer.sprite = hoverDown;
+			return;
+		default :
+			spriteRenderer.sprite = idle;
+			return;
+		}
 	}
 
 //	string FormatNumber (float value)
