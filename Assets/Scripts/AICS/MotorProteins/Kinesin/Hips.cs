@@ -45,7 +45,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
-			if (!frozen)
+			if (!frozen && kinesin.hasBound)
 			{
 				if (!snapping)
 				{

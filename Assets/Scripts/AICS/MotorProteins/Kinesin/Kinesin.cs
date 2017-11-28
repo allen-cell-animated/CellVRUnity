@@ -32,6 +32,7 @@ namespace AICS.MotorProteins.Kinesin
 		public ResolutionManagerStatic[] resolutionManagers;
 		public float resolutionUpdateInterval = 5f;
 		float lastTime = -10000f;
+		public bool hasBound = false;
 
 		Hips _hips;
 		public Hips hips
@@ -126,6 +127,7 @@ namespace AICS.MotorProteins.Kinesin
 				}
 			}
 			atpGenerator.DoReset();
+			hasBound = false;
 		}
 
 		void FinishReset ()
@@ -153,6 +155,7 @@ namespace AICS.MotorProteins.Kinesin
 				otherMotor.transform.SetParent( hips.transform );
 			}
 			ResetComponentScale();
+			hasBound = true;
 		}
 
 		public override void SetParentSchemeOnComponentRelease (ComponentMolecule molecule)
