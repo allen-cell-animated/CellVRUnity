@@ -20,6 +20,11 @@ public class CellViveController : ViveController
 	public GameObject grabButtonLabel;
 	public GameObject scaleButtonLabel;
 	public GameObject labelLine;
+	public Cell[] cells;
+	public GameObject surfaceButtonLabel;
+	public GameObject volumeButtonLabel;
+	public GameObject surfaceButtonHoverLabel;
+	public GameObject volumeButtonHoverLabel;
 
     public Cell draggedCell
     {
@@ -173,31 +178,32 @@ public class CellViveController : ViveController
 	protected override void DoUpdate ()
 	{
 		UpdateButtonLabels();
+		SetRepresentationButtons();
 	}
 
 	void UpdateButtonLabels ()
 	{
 		if (state == CellViveControllerState.Idle && otherController.state == CellViveControllerState.Idle)
 		{
-			ShowLabel( grabButtonLabel, true );
-			ShowLabel( scaleButtonLabel, false );
-			ShowLabel( labelLine, true );
+			ShowObject( grabButtonLabel, true );
+			ShowObject( scaleButtonLabel, false );
+			ShowObject( labelLine, true );
 		}
 		else if (state == CellViveControllerState.Idle && otherController.state == CellViveControllerState.HoldingCell)
 		{
-			ShowLabel( grabButtonLabel, false );
-			ShowLabel( scaleButtonLabel, true );
-			ShowLabel( labelLine, true );
+			ShowObject( grabButtonLabel, false );
+			ShowObject( scaleButtonLabel, true );
+			ShowObject( labelLine, true );
 		}
 		else
 		{
-			ShowLabel( grabButtonLabel, false );
-			ShowLabel( scaleButtonLabel, false );
-			ShowLabel( labelLine, false );
+			ShowObject( grabButtonLabel, false );
+			ShowObject( scaleButtonLabel, false );
+			ShowObject( labelLine, false );
 		}
 	}
 
-	void ShowLabel (GameObject label, bool show)
+	void ShowObject (GameObject label, bool show)
 	{
 		if (show && !label.activeSelf)
 		{
@@ -207,5 +213,72 @@ public class CellViveController : ViveController
 		{
 			label.SetActive( false );
 		}
+	}
+
+	public override void OnDPadUpEnter () 
+	{
+		dPadHovering = true;
+	}
+
+	public override void OnDPadDownEnter () 
+	{
+		dPadHovering = true;
+	}
+
+	public override void OnDPadRightEnter () 
+	{
+		dPadHovering = true;
+	}
+
+	public override void OnDPadLeftEnter () 
+	{
+		dPadHovering = true;
+	}
+
+	public override void OnDPadExit () 
+	{
+		dPadHovering = false;
+	}
+
+	public override void OnDPadUpPressed () 
+	{
+		SwitchRepresentations();
+	}
+
+	public override void OnDPadLeftPressed () 
+	{
+		SwitchRepresentations();
+	}
+
+	public override void OnDPadRightPressed () 
+	{
+		SwitchRepresentations();
+	}
+
+	public override void OnDPadDownPressed () 
+	{
+		SwitchRepresentations();
+	}
+
+	bool volumeOn = false;
+	bool dPadHovering = false;
+
+	void SwitchRepresentations ()
+	{
+		volumeOn = !volumeOn;
+		foreach (Cell cell in cells)
+		{
+			cell.SetRepresentation( volumeOn ? "volume" : "surface" );
+		}
+		surfaceButtonLabel.SetActive( !volumeOn );
+		volumeButtonLabel.SetActive( volumeOn );
+	}
+
+	void SetRepresentationButtons ()
+	{
+		surfaceButtonLabel.SetActive( !volumeOn && !dPadHovering );
+		surfaceButtonHoverLabel.SetActive( !volumeOn && dPadHovering );
+		volumeButtonLabel.SetActive( volumeOn && !dPadHovering );
+		volumeButtonHoverLabel.SetActive( volumeOn && dPadHovering );
 	}
 }
