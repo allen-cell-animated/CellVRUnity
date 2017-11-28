@@ -35,19 +35,19 @@ public class CellViveHead : MonoBehaviour
     {
         if (canSwitchScene)
         {
-			currentCell = other.GetComponent<Cell>();
+			currentCell = other.GetComponentInParent<Cell>();
 			if (currentCell != null)
             {
-				StartFade();
+                StartFade();
             }
         }
 	}
 
 	void OnTriggerExit (Collider other)
-	{
-		if (fading && other.GetComponent<Cell>() == currentCell)
-		{
-			StopFade();
+    {
+        if (fading && other.GetComponentInParent<Cell>() == currentCell)
+        {
+            StopFade();
 			currentCell = null;
 		}
 	}

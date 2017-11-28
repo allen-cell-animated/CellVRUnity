@@ -46,7 +46,7 @@ public class CellViveController : ViveController
 
     void OnTriggerExit (Collider other)
     {
-		Cell cell = other.GetComponentInParent<Cell>();
+        Cell cell = other.GetComponentInParent<Cell>();
         if (cell != null && hoveredCell == cell)
         {
             hoveredCell = null;
