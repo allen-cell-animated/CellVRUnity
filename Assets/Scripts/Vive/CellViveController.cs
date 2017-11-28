@@ -165,6 +165,7 @@ public class CellViveController : ViveController
         {
             float d = Vector3.Distance( transform.position, otherController.transform.position );
             cell.transform.localScale = ClampScale( (d / startControllerDistance) * startCellScale );
+			SetLine();
         }
     }
 
