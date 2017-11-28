@@ -37,7 +37,10 @@ public class ViveController : MonoBehaviour
 	void Update ()
 	{
 		GetInput();
+		DoUpdate();
 	}
+
+	protected virtual void DoUpdate () { }
 
 	void GetInput ()
 	{

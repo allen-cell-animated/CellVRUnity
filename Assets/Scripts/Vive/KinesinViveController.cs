@@ -27,12 +27,14 @@ public class KinesinViveController : ViveController
     public bool holdingTrigger = false;
 	public GameObject pushButtonLabel;
 	public GameObject scaleButtonLabel;
+	public LineRenderer line;
 
     bool scaling = false;
     float startControllerDistance;
     float startScale;
 	Color faderColor;
 	Collider theCollider;
+	Vector3[] linePoints = new Vector3[2];
 
 	bool idle 
 	{
@@ -53,6 +55,7 @@ public class KinesinViveController : ViveController
 		}
 		theCollider = GetComponent<Collider>();
 		theCollider.enabled = false;
+		line.gameObject.SetActive( false );
 	}
 
     public override void OnTriggerPull()
@@ -86,8 +89,17 @@ public class KinesinViveController : ViveController
         startControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ),
             playArea.transform.InverseTransformPoint( otherController.transform.position ) );
         startScale = playArea.transform.localScale.x;
+		line.gameObject.SetActive( true );
+		SetLine();
         scaling = true;
     }
+
+	void SetLine ()
+	{
+		linePoints[0] = transform.position;
+		linePoints[1] = otherController.transform.position;
+		line.SetPositions( linePoints );
+	}
 
     void UpdateScale()
     {
@@ -102,6 +114,7 @@ public class KinesinViveController : ViveController
         playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
 
 		SetFadeUI( d );
+		SetLine();
     }
 
 	void SetFadeUI (float d)
@@ -123,9 +136,10 @@ public class KinesinViveController : ViveController
     void StopScaling()
     {
         scaling = false;
+		line.gameObject.SetActive( false );
     }
 
-	void Update ()
+	protected override void DoUpdate ()
 	{
 		UpdateButtonLabels();
 	}
