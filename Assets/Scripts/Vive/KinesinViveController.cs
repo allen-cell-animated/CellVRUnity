@@ -27,8 +27,9 @@ public class KinesinViveController : ViveController
     public bool holdingTrigger = false;
 	public GameObject pushButtonLabel;
 	public GameObject scaleButtonLabel;
-	public LineRenderer line;
+	public LineRenderer scaleLine;
 	public GameObject pushIndicator;
+	public GameObject labelLine;
 
     bool scaling = false;
     float startControllerDistance;
@@ -56,7 +57,7 @@ public class KinesinViveController : ViveController
 		}
 		theCollider = GetComponent<Collider>();
 		theCollider.enabled = false;
-		line.gameObject.SetActive( false );
+		scaleLine.gameObject.SetActive( false );
 		pushIndicator.SetActive( false );
 	}
 
@@ -95,7 +96,7 @@ public class KinesinViveController : ViveController
         startScale = playArea.transform.localScale.x;
 		pushIndicator.SetActive( false );
 		otherController.pushIndicator.SetActive( false );
-		line.gameObject.SetActive( true );
+		scaleLine.gameObject.SetActive( true );
 		SetLine();
         scaling = true;
     }
@@ -104,7 +105,7 @@ public class KinesinViveController : ViveController
 	{
 		linePoints[0] = transform.position;
 		linePoints[1] = otherController.transform.position;
-		line.SetPositions( linePoints );
+		scaleLine.SetPositions( linePoints );
 	}
 
     void UpdateScale()
@@ -142,7 +143,7 @@ public class KinesinViveController : ViveController
     void StopScaling()
     {
         scaling = false;
-		line.gameObject.SetActive( false );
+		scaleLine.gameObject.SetActive( false );
 		if (holdingTrigger)
 		{
 			pushIndicator.SetActive( true );
@@ -212,16 +213,19 @@ public class KinesinViveController : ViveController
 		{
 			ShowLabel( pushButtonLabel, true );
 			ShowLabel( scaleButtonLabel, false );
+			ShowLabel( labelLine, true );
 		}
 		else if (idle && otherController.holdingTrigger)
 		{
 			ShowLabel( pushButtonLabel, false );
 			ShowLabel( scaleButtonLabel, true );
+			ShowLabel( labelLine, true );
 		}
 		else
 		{
 			ShowLabel( pushButtonLabel, false );
 			ShowLabel( scaleButtonLabel, false );
+			ShowLabel( labelLine, false );
 		}
 	}
 
