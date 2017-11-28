@@ -11,6 +11,7 @@ public class CellViveHead : MonoBehaviour
 	public MeshRenderer fader;
 	public GameObject fadeText;
 	public GameObject uiCamera;
+	public Transform eyes;
 
 	bool fading = false;
 	Color faderColor;
@@ -60,6 +61,8 @@ public class CellViveHead : MonoBehaviour
 		fadeText.SetActive( true );
 		fader.gameObject.SetActive( true );
 		uiCamera.SetActive( true );
+		uiCamera.transform.position = eyes.position;
+		uiCamera.transform.rotation = eyes.rotation;
 
 		SetFader( 0 );
 

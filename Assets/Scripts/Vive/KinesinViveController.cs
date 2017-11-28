@@ -31,6 +31,7 @@ public class KinesinViveController : ViveController
 	public GameObject pushIndicator;
 	public GameObject labelLine;
 	public GameObject uiCamera;
+	public Transform eyes;
 
     bool scaling = false;
     float startControllerDistance;
@@ -145,6 +146,8 @@ public class KinesinViveController : ViveController
 			ShowObject( fader.gameObject, true );
 			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
 			ShowObject( uiCamera, true );
+			uiCamera.transform.position = eyes.position;
+			uiCamera.transform.rotation = eyes.rotation;
 		}
 	}
 

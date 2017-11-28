@@ -29,11 +29,11 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (t > kinesinRange.x && t < kinesinRange.y) // spawn as kinesin
 			{
-				SpawnKinesin( t, Random.Range( 30f, 150f ) );
+				SpawnKinesin( t, 0 );//Random.Range( 15f, 165f ) );
 			}
 			else // spawn as vesicle
 			{
-				vesicles.Add( SpawnVesicle( t, Random.Range( 30f, 150f ) ) );
+				vesicles.Add( SpawnVesicle( t, 0 ) );//Random.Range( 15f, 165f ) ) );
 			}
 		}
 
