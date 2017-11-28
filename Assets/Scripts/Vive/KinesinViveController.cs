@@ -30,6 +30,7 @@ public class KinesinViveController : ViveController
 	public LineRenderer scaleLine;
 	public GameObject pushIndicator;
 	public GameObject labelLine;
+	public GameObject uiCamera;
 
     bool scaling = false;
     float startControllerDistance;
@@ -127,17 +128,23 @@ public class KinesinViveController : ViveController
 
 	void SetFadeUI (float d)
 	{
-		fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
-
-		if (d < fadeTextScale && fadeText.activeSelf)
+		if (d < fadeTextScale)
 		{
-			fadeText.SetActive( false );
+			ShowObject( fadeText, false );
+			ShowObject( fader.gameObject, false );
+			ShowObject( uiCamera, false );
 		}
-		else if (d >= fadeTextScale && !fadeText.activeSelf)
+		else
 		{
-			fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
-            fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
-            fadeText.SetActive( true );
+			if (!fadeText.activeSelf)
+			{
+				fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
+	            fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
+	            fadeText.SetActive( true );
+			}
+			ShowObject( fader.gameObject, true );
+			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
+			ShowObject( uiCamera, true );
 		}
 	}
 
@@ -214,25 +221,25 @@ public class KinesinViveController : ViveController
 	{
 		if (idle && otherController.idle)
 		{
-			ShowLabel( pushButtonLabel, true );
-			ShowLabel( scaleButtonLabel, false );
-			ShowLabel( labelLine, true );
+			ShowObject( pushButtonLabel, true );
+			ShowObject( scaleButtonLabel, false );
+			ShowObject( labelLine, true );
 		}
 		else if (idle && otherController.holdingTrigger)
 		{
-			ShowLabel( pushButtonLabel, false );
-			ShowLabel( scaleButtonLabel, true );
-			ShowLabel( labelLine, true );
+			ShowObject( pushButtonLabel, false );
+			ShowObject( scaleButtonLabel, true );
+			ShowObject( labelLine, true );
 		}
 		else
 		{
-			ShowLabel( pushButtonLabel, false );
-			ShowLabel( scaleButtonLabel, false );
-			ShowLabel( labelLine, false );
+			ShowObject( pushButtonLabel, false );
+			ShowObject( scaleButtonLabel, false );
+			ShowObject( labelLine, false );
 		}
 	}
 
-	void ShowLabel (GameObject label, bool show)
+	void ShowObject (GameObject label, bool show)
 	{
 		if (show && !label.activeSelf)
 		{

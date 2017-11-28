@@ -10,6 +10,7 @@ public class CellViveHead : MonoBehaviour
     public List<CellViveController> controllers = new List<CellViveController>();
 	public MeshRenderer fader;
 	public GameObject fadeText;
+	public GameObject uiCamera;
 
 	bool fading = false;
 	Color faderColor;
@@ -58,6 +59,7 @@ public class CellViveHead : MonoBehaviour
 		fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
 		fadeText.SetActive( true );
 		fader.gameObject.SetActive( true );
+		uiCamera.SetActive( true );
 
 		SetFader( 0 );
 
@@ -87,6 +89,7 @@ public class CellViveHead : MonoBehaviour
 	{
 		fadeText.SetActive( false );
 		fader.gameObject.SetActive( false );
+		uiCamera.SetActive( false );
 		fading = false;
 	}
 
