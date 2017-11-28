@@ -85,6 +85,8 @@ public class KinesinViveController : ViveController
         holdingTrigger = false;
         otherController.StopScaling();
         StopScaling();
+		theCollider.enabled = false;
+		pushIndicator.SetActive( false );
     }
 
     void StartScaling()
