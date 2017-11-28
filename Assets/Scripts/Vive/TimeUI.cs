@@ -38,7 +38,7 @@ public class TimeUI : MonoBehaviour
 	void SetFill (float value)
 	{
 		float h = fillMaxHeight * (1f - (Mathf.Log10( value ) - Mathf.Log10( minTimeMultiplier )) / (Mathf.Log10( maxTimeMultiplier ) - Mathf.Log10( minTimeMultiplier )));
-		fill.localPosition = new Vector3( -2.5f, -(fillMaxHeight - 2f * h) / 2f, 0 );
+		fill.localPosition = new Vector3( -2.5f, -h / 2f, 0 );
 		fill.localScale = new Vector3( 1f, h, 1f );
 	}
 

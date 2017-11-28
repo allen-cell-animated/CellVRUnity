@@ -93,6 +93,8 @@ public class KinesinViveController : ViveController
         startControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ),
             playArea.transform.InverseTransformPoint( otherController.transform.position ) );
         startScale = playArea.transform.localScale.x;
+		pushIndicator.SetActive( false );
+		otherController.pushIndicator.SetActive( false );
 		line.gameObject.SetActive( true );
 		SetLine();
         scaling = true;
@@ -141,6 +143,14 @@ public class KinesinViveController : ViveController
     {
         scaling = false;
 		line.gameObject.SetActive( false );
+		if (holdingTrigger)
+		{
+			pushIndicator.SetActive( true );
+		}
+		if (otherController.holdingTrigger)
+		{
+			otherController.pushIndicator.SetActive( true );
+		}
     }
 
 	protected override void DoUpdate ()
