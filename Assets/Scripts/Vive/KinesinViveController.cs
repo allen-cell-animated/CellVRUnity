@@ -63,12 +63,12 @@ public class KinesinViveController : ViveController
     public override void OnTriggerPull()
     {
         holdingTrigger = true;
+		pushIndicator.SetActive( true );
         if (otherController.holdingTrigger)
         {
             StartScaling();
         }
 		theCollider.enabled = true;
-		pushIndicator.SetActive( true );
     }
 
     public override void OnTriggerHold()
