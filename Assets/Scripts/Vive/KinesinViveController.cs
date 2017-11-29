@@ -201,7 +201,7 @@ public class KinesinViveController : ViveController
     {
 		if (timeUI != null)
 		{
-	        ChangeTime( 0.9f );
+	        ChangeTime( 0.7f );
 		}
     }
 
@@ -209,7 +209,7 @@ public class KinesinViveController : ViveController
     {
 		if (timeUI != null)
 		{
-	        ChangeTime( 1.1f );
+	        ChangeTime( 1.3f );
 		}
     }
     

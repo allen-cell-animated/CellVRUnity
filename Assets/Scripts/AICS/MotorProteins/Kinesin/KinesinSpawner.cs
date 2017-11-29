@@ -75,6 +75,13 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					vesicle.DoUpdate();
 				}
+                else
+                {
+                    if (Time.time - vesicle.kinesin.startTime > 5f && !vesicle.kinesin.hasBound)
+                    {
+                        ConvertToVesicle(vesicle.kinesin);
+                    }
+                }
 			}
 		}
 

@@ -83,7 +83,13 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		void Update ()
+        public float startTime;
+        private void Start()
+        {
+            startTime = Time.time;
+        }
+
+        void Update ()
 		{
 			for (int i = 0; i < MolecularEnvironment.Instance.stepsPerFrame; i++)
 			{
@@ -104,7 +110,7 @@ namespace AICS.MotorProteins.Kinesin
 				lastTime = Time.time;
 			}
 
-			CalculateWalkingSpeed();
+            CalculateWalkingSpeed();
 		}
 
 		public override void DoCustomSimulation ()
