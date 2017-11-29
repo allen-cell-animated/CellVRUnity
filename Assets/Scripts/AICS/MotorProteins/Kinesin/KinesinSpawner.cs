@@ -29,11 +29,11 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (t > kinesinRange.x && t < kinesinRange.y) // spawn as kinesin
 			{
-				SpawnKinesin( t, 0 );//Random.Range( 15f, 165f ) );
+				SpawnKinesin( t, Random.Range( 0, 60f ) - 30f );
 			}
 			else // spawn as vesicle
 			{
-				vesicles.Add( SpawnVesicle( t, 0 ) );//Random.Range( 15f, 165f ) ) );
+				vesicles.Add( SpawnVesicle( t, Random.Range( 0, 60f ) - 30f ) );
 			}
 		}
 
@@ -111,6 +111,7 @@ namespace AICS.MotorProteins.Kinesin
 				kinesin.vesicle.sprite.transform.position = kinesin.cargo.transform.position;
 				kinesin.vesicle.sprite.transform.rotation = kinesin.cargo.transform.rotation;
 				kinesin.vesicle.gameObject.SetActive( true );
+				kinesin.vesicle.sprite.StartAnimation();
 			}
 
 			kinesin.atpGenerator.DestroyAll();

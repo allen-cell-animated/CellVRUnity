@@ -12,8 +12,26 @@ namespace AICS
 		public bool updateEveryFrame = false;
 		public float updateInterval = 1f;
 		public bool reverseZ = false;
+		public bool randomWalkAnimation = false;
 
 		float lastTime;
+		int forwardAnimationHash;
+		int reverseAnimationHash;
+		float lastSwitchTime;
+		float switchInterval;
+
+		Animator _animator;
+		Animator animator
+		{
+			get
+			{
+				if (_animator == null)
+				{
+					_animator = GetComponentInChildren<Animator>();
+				}
+				return _animator;
+			}
+		}
 
 		void Start () 
 		{
@@ -26,11 +44,25 @@ namespace AICS
 				StartAnimation();
 			}
 		}
-
+		string stateName;
+		float time;
 		public void StartAnimation ()
 		{
-			Animator animator = GetComponentInChildren<Animator>();
-			animator.Play( Random.value < 0.5f ? "forward" : "reverse", -1, Random.value );
+			stateName = Random.value < 0.5f ? "forward" : "reverse";
+			time = Random.value;
+			forwardAnimationHash = Animator.StringToHash( "forward" );
+			reverseAnimationHash = Animator.StringToHash( "reverse" );
+			animator.Play( stateName, -1, time );
+			lastSwitchTime = Time.time;
+			switchInterval = Random.Range( 0.2f, 1f );
+		}
+
+		public void ReverseAnimation ()
+		{
+			AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo( 0 );
+			animator.Play( state.IsName( "forward" ) ? reverseAnimationHash : forwardAnimationHash, -1, 1f - state.normalizedTime );
+			lastSwitchTime = Time.time;
+			switchInterval = Random.Range( 0.2f, 1f );
 		}
 
 		public void DoUpdate ()
@@ -43,6 +75,11 @@ namespace AICS
 				if (randomMotion)
 				{
 					MoveRandomly();
+				}
+
+				if (randomWalkAnimation && Time.time - lastSwitchTime > switchInterval)
+				{
+					ReverseAnimation();
 				}
 			}
 		}
