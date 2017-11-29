@@ -14,7 +14,6 @@ public class CellViveHead : MonoBehaviour
 
 	bool fading = false;
 	float fadeDuration = 2f;
-	float startFadeTime = -100f;
 	Cell currentCell;
 
     bool canSwitchScene
@@ -58,8 +57,7 @@ public class CellViveHead : MonoBehaviour
 
 		SteamVR_Fade.Start(Color.clear, 0f);
 		SteamVR_Fade.Start(Color.black, fadeDuration);
-
-		startFadeTime = Time.time;
+        
 		fading = true;
 	}
 
