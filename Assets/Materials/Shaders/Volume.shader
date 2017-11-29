@@ -106,7 +106,7 @@ Shader "Custom/Volume"
 			float bounds = float(pos[0] > 0.001 && pos[0] < 0.999 &&
 								 pos[1] > 0.001 && pos[1] < 0.999 &&
 								 pos[2] > 0.001 && pos[2] < 0.999 );
-			float2 loc0 = float2(pos.x / _Atlas_X, pos.y / _Atlas_Y);
+			float2 loc0 = float2(pos.x / _Atlas_X, (1.0 - pos.y) / _Atlas_Y);
 			float z = pos.z * _Slices;
 			float zfloor = floor(z);
 			float z0  = zfloor;
