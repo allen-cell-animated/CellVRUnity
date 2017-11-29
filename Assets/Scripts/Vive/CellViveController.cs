@@ -217,12 +217,12 @@ public class CellViveController : ViveController
 
 	public override void OnDPadEnter () 
 	{
-		dPadHovering = true;
+        hovering = true;
 	}
 
 	public override void OnDPadExit () 
 	{
-		dPadHovering = false;
+        hovering = false;
 	}
 
 	public override void OnDPadPressed () 
@@ -232,7 +232,7 @@ public class CellViveController : ViveController
 
     public bool canSwitchReps = true;
 	bool volumeOn = false;
-	bool dPadHovering = false;
+	bool hovering = false;
 
 	void SwitchRepresentations ()
 	{
@@ -252,10 +252,10 @@ public class CellViveController : ViveController
 	{
         if (canSwitchReps)
         {
-            surfaceButtonLabel.SetActive(volumeOn && !dPadHovering);
-            surfaceButtonHoverLabel.SetActive(volumeOn && dPadHovering);
-            volumeButtonLabel.SetActive(!volumeOn && !dPadHovering);
-            volumeButtonHoverLabel.SetActive(!volumeOn && dPadHovering);
+            surfaceButtonLabel.SetActive(volumeOn && !hovering);
+            surfaceButtonHoverLabel.SetActive(volumeOn && hovering);
+            volumeButtonLabel.SetActive(!volumeOn && !hovering);
+            volumeButtonHoverLabel.SetActive(!volumeOn && hovering);
         }
 	}
 }
