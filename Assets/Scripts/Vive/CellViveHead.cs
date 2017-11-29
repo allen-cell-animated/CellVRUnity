@@ -59,13 +59,20 @@ public class CellViveHead : MonoBehaviour
 		SteamVR_Fade.Start(Color.black, fadeDuration);
         
 		fading = true;
+        Invoke( "SwitchScene", fadeDuration );
 	}
 
 	void StopFade ()
 	{
 		fadeText.SetActive( false );
-		SteamVR_Fade.Start(Color.clear, 0f);
+        SteamVR_Fade.Start( Color.clear, fadeDuration );
 		uiCamera.SetActive( false );
 		fading = false;
+        CancelInvoke( "SwitchScene" );
 	}
+
+    void SwitchScene ()
+    {
+        levelLoader.Trigger();
+    }
 }

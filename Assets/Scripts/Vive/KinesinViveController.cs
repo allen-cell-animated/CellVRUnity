@@ -129,25 +129,30 @@ public class KinesinViveController : ViveController
 
 	void SetFadeUI (float d)
 	{
-		if (d < fadeTextScale)
+		if (d < startFadeScale)
 		{
-			ShowObject( fadeText, false );
 			ShowObject( fader.gameObject, false );
-			ShowObject( uiCamera, false );
 		}
 		else
 		{
-			if (!fadeText.activeSelf)
-			{
-				fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
-	            fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
-	            fadeText.SetActive( true );
-			}
-			ShowObject( fader.gameObject, true );
-			fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
-			ShowObject( uiCamera, true );
-			uiCamera.transform.position = eyes.position;
-			uiCamera.transform.rotation = eyes.rotation;
+            if (d < fadeTextScale)
+            {
+                ShowObject(uiCamera, false);
+            }
+            else
+            {
+                if (!uiCamera.activeSelf)
+                {
+                    uiCamera.transform.position = eyes.position;
+                    uiCamera.transform.rotation = eyes.rotation;
+                    ShowObject(uiCamera, true);
+                }
+            }
+            if (!uiCamera.activeSelf)
+            {
+                ShowObject(fader.gameObject, true);
+            }
+            fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, d < startFadeScale ? 0 : (d - startFadeScale) / (maxScale - startFadeScale) );
 		}
 	}
 
