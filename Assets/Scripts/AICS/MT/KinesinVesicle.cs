@@ -10,7 +10,7 @@ namespace AICS.MT
 		public KinesinSpawner spawner;
 		public Kinesin kinesin;
 		public float normalRotation;
-		public Transform sprite;
+		public AmbientSprite sprite;
 
 		protected override void DoAdditionalUpdate () 
 		{

@@ -11,6 +11,7 @@ namespace AICS
 		public bool animated = false;
 		public bool updateEveryFrame = false;
 		public float updateInterval = 1f;
+		public bool reverseZ = false;
 
 		float lastTime;
 
@@ -22,9 +23,14 @@ namespace AICS
 
 			if (animated)
 			{
-				Animator animator = GetComponentInChildren<Animator>();
-				animator.Play( Random.value < 0.5f ? "forward" : "reverse", -1, Random.value );
+				StartAnimation();
 			}
+		}
+
+		public void StartAnimation ()
+		{
+			Animator animator = GetComponentInChildren<Animator>();
+			animator.Play( Random.value < 0.5f ? "forward" : "reverse", -1, Random.value );
 		}
 
 		public void DoUpdate ()
@@ -43,7 +49,14 @@ namespace AICS
 
 		void LookAtCamera ()
 		{
-			transform.LookAt( Camera.main.transform.position );
+			if (reverseZ)
+			{
+				transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
+			}
+			else 
+			{
+				transform.LookAt( Camera.main.transform.position );
+			}
 		}
 
 		Vector3 startMovePosition;

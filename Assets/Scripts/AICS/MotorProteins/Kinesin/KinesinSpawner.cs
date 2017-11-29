@@ -53,6 +53,7 @@ namespace AICS.MotorProteins.Kinesin
 			vesicle.normalRotation = normalRotation;
 			vesicle.microtubule = microtubule;
 			vesicle.spawner = this;
+			vesicle.sprite.StartAnimation();
 			return vesicle;
 		}
 
@@ -99,16 +100,16 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				kinesin.vesicle = SpawnVesicle( kinesinRange.x, GetKinesinNormalRotation( kinesin ) );
 				kinesin.vesicle.kinesin = kinesin;
-				kinesin.vesicle.sprite.position = kinesin.cargo.transform.position;
-				kinesin.vesicle.sprite.rotation = kinesin.cargo.transform.rotation;
+				kinesin.vesicle.sprite.transform.position = kinesin.cargo.transform.position;
+				kinesin.vesicle.sprite.transform.rotation = kinesin.cargo.transform.rotation;
 				vesicles.Add( kinesin.vesicle );
 			}
 			else
 			{
 				Place( kinesin.vesicle.transform, kinesinRange.x, 0, GetKinesinNormalRotation( kinesin ) );
 				kinesin.vesicle.t = kinesinRange.x;
-				kinesin.vesicle.sprite.position = kinesin.cargo.transform.position;
-				kinesin.vesicle.sprite.rotation = kinesin.cargo.transform.rotation;
+				kinesin.vesicle.sprite.transform.position = kinesin.cargo.transform.position;
+				kinesin.vesicle.sprite.transform.rotation = kinesin.cargo.transform.rotation;
 				kinesin.vesicle.gameObject.SetActive( true );
 			}
 
