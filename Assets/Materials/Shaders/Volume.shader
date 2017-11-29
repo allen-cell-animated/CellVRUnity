@@ -8,9 +8,17 @@ Shader "Custom/Volume"
 	{
 		_TextureAtlas ("Texture Atlas", 2D) = "_TextureAtlas" {}
 		_TextureAtlasMask ("Texture Atlas Mask", 2D) = "_TextureAtlasMask" {}
+		_Atlas_X ("Atlas X Tiles", int) = 8
+		_Atlas_Y ("Atlas Y Tiles", int) = 6
+		_Slices ("Slices", int) = 46
 	}
 	SubShader 
 	{
+		Tags {
+            "Queue" = "Transparent"
+            "RenderType" = "Transparent" 
+        }
+        Blend One OneMinusSrcAlpha
 		Pass 
 		{
 		CGPROGRAM
@@ -39,6 +47,9 @@ Shader "Custom/Volume"
 		float2 uv;
 		sampler2D _TextureAtlasMask;
 		sampler2D _TextureAtlas;
+		int _Atlas_X = 8;
+		int _Atlas_Y = 6;
+		int _Slices = 46;
 
 		// constants
 		static const float3 AABB_CLIP_MIN = float3(-0.5, -0.5, -0.5);
@@ -46,9 +57,6 @@ Shader "Custom/Volume"
 		static const int BREAK_STEPS = 72;
 		static const float BRIGHTNESS = 1;
 		static const float DENS = 0.0820849986238988;
-		static const int ATLAS_X = 8;
-		static const int ATLAS_Y = 6;
-		static const int SLICES = 46;
 		static const float maskAlpha = 0;
 		static const float GAMMA_MIN = 0;
 		static const float GAMMA_MAX = 1;
@@ -98,14 +106,14 @@ Shader "Custom/Volume"
 			float bounds = float(pos[0] > 0.001 && pos[0] < 0.999 &&
 								 pos[1] > 0.001 && pos[1] < 0.999 &&
 								 pos[2] > 0.001 && pos[2] < 0.999 );
-			float2 loc0 = float2(pos.x / ATLAS_X, pos.y / ATLAS_Y);
-			float z = pos.z * SLICES;
+			float2 loc0 = float2(pos.x / _Atlas_X, pos.y / _Atlas_Y);
+			float z = pos.z * _Slices;
 			float zfloor = floor(z);
 			float z0  = zfloor;
 			float z1 = zfloor + 1.0;
-			z1 = clamp(z1, 0.0, SLICES);
-			float2 o0 = offsetFrontBack(z0, ATLAS_X, ATLAS_Y);
-			float2 o1 = offsetFrontBack(z1, ATLAS_X, ATLAS_Y);
+			z1 = clamp(z1, 0.0, _Slices);
+			float2 o0 = offsetFrontBack(z0, _Atlas_X, _Atlas_Y);
+			float2 o1 = offsetFrontBack(z1, _Atlas_X, _Atlas_Y);
 			o0 = clamp(o0, 0.0, 1.0) + loc0;
 			o1 = clamp(o1, 0.0, 1.0) + loc0;
 			o0.y = 1.0 - o0.y;
