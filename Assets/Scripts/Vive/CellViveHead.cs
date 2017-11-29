@@ -8,13 +8,11 @@ public class CellViveHead : MonoBehaviour
     public bool canSwitch = true;
     public SteamVR_LoadLevel levelLoader;
     public List<CellViveController> controllers = new List<CellViveController>();
-	public MeshRenderer fader;
 	public GameObject fadeText;
 	public GameObject uiCamera;
 	public Transform eyes;
 
 	bool fading = false;
-	Color faderColor;
 	float fadeDuration = 2f;
 	float startFadeTime = -100f;
 	Cell currentCell;
@@ -27,11 +25,6 @@ public class CellViveHead : MonoBehaviour
                 && controllers.Find( c => c.state == CellViveControllerState.HoldingCell ) != null;
         }
     }
-
-	void Start ()
-	{
-		faderColor = fader.material.color;
-	}
 
     void OnTriggerEnter (Collider other)
     {
@@ -59,60 +52,22 @@ public class CellViveHead : MonoBehaviour
 		fadeText.transform.position = Camera.main.transform.position + 300f * Camera.main.transform.forward;
 		fadeText.transform.rotation = Quaternion.LookRotation( fadeText.transform.position - Camera.main.transform.position );
 		fadeText.SetActive( true );
-		fader.gameObject.SetActive( true );
 		uiCamera.SetActive( true );
 		uiCamera.transform.position = eyes.position;
 		uiCamera.transform.rotation = eyes.rotation;
 
-		SetFader( 0 );
+		SteamVR_Fade.Start(Color.clear, 0f);
+		SteamVR_Fade.Start(Color.black, fadeDuration);
 
 		startFadeTime = Time.time;
 		fading = true;
 	}
 
-	void Update ()
-	{
-		if (fading) 
-		{
-			float t = (Time.time - startFadeTime) / fadeDuration;
-
-			if (t >= 1)
-			{
-				//StopFade();
-				//levelLoader.Trigger();
-			}
-			else
-			{
-				SetFader( t );
-			}
-		}
-	}
-
 	void StopFade ()
 	{
 		fadeText.SetActive( false );
-		fader.gameObject.SetActive( false );
+		SteamVR_Fade.Start(Color.clear, 0f);
 		uiCamera.SetActive( false );
 		fading = false;
 	}
-
-	void SetFader (float t)
-	{
-		fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, t );
-	}
-    float _fadeDuration = 2f;
-    private void FadeToWhite()
-    {
-        //set start color
-        SteamVR_Fade.Start(Color.clear, 0f);
-        //set and start fade to
-        SteamVR_Fade.Start(Color.white, _fadeDuration);
-    }
-    private void FadeFromWhite()
-    {
-        //set start color
-        SteamVR_Fade.Start(Color.white, 0f);
-        //set and start fade to
-        SteamVR_Fade.Start(Color.clear, _fadeDuration);
-    }
 }
