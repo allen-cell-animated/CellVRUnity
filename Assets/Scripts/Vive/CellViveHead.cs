@@ -78,8 +78,8 @@ public class CellViveHead : MonoBehaviour
 
 			if (t >= 1)
 			{
-				StopFade();
-				levelLoader.Trigger();
+				//StopFade();
+				//levelLoader.Trigger();
 			}
 			else
 			{
@@ -100,4 +100,19 @@ public class CellViveHead : MonoBehaviour
 	{
 		fader.material.color = new Color( faderColor.r, faderColor.g, faderColor.b, t );
 	}
+    float _fadeDuration = 2f;
+    private void FadeToWhite()
+    {
+        //set start color
+        SteamVR_Fade.Start(Color.clear, 0f);
+        //set and start fade to
+        SteamVR_Fade.Start(Color.white, _fadeDuration);
+    }
+    private void FadeFromWhite()
+    {
+        //set start color
+        SteamVR_Fade.Start(Color.white, 0f);
+        //set and start fade to
+        SteamVR_Fade.Start(Color.clear, _fadeDuration);
+    }
 }
