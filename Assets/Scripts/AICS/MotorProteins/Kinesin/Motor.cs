@@ -539,7 +539,11 @@ namespace AICS.MotorProteins.Kinesin
 					k.events--;
 					CancelTubulinBind();
 				}
-				MoveTo( transform.position - collision.collider.transform.position );
+				VelocityWatcher watcher = collision.collider.GetComponent<VelocityWatcher>();
+				if (watcher != null)
+				{
+					MoveTo( 10f * watcher.velocity );
+				}
 			}
 		}
 
@@ -557,7 +561,11 @@ namespace AICS.MotorProteins.Kinesin
 						k.events++;
 					}
 				}
-				MoveTo( transform.position - other.transform.position );
+				VelocityWatcher watcher = other.GetComponent<VelocityWatcher>();
+				if (watcher != null)
+				{
+					MoveTo( 10f * watcher.velocity );
+				}
 			}
 		}
 
