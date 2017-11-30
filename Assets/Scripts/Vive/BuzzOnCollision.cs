@@ -26,7 +26,11 @@ public class BuzzOnCollision : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
-		Debug.Log( "controller is touching " + other.name );
+		AICS.MotorProteins.Kinesin.Motor motor = other.GetComponent<AICS.MotorProteins.Kinesin.Motor>();
+		if (motor != null && motor.stateIsStrong)
+		{
+			Debug.Log( "controller is touching strong motor!" );
+		}
         Buzz();
     }
 

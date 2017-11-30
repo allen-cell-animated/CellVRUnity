@@ -11,7 +11,7 @@ public class CellViveHead : MonoBehaviour
 	public GameObject fadeText;
 	public GameObject uiCamera;
 	public Transform eyes;
-	public Cell[] cells;
+	public GameObject VRRig;
 
 	bool fading = false;
 	float fadeDuration = 2f;
@@ -74,8 +74,7 @@ public class CellViveHead : MonoBehaviour
 
     void SwitchScene ()
     {
-        if (cells[0] != null) { Destroy(cells[0].gameObject); }
-        if (cells[1] != null) { Destroy(cells[1].gameObject); }
         levelLoader.Trigger();
+		if (VRRig != null) { Destroy( VRRig ); }
     }
 }

@@ -111,7 +111,7 @@ namespace AICS.MotorProteins.Kinesin
 			}
 		}
 
-		bool stateIsStrong
+		public bool stateIsStrong
 		{
 			get
 			{
