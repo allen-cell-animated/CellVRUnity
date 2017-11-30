@@ -180,28 +180,29 @@ namespace AICS.MotorProteins.Kinesin
 		{
 			if (resetFrames == 0)
 			{
-				if (!binding)
+				if (Time.time - lastCollisionTime > 0.3f)
 				{
-					if (Time.time - lastCollisionTime > 1f)
+					if (!binding)
 					{
+						
 						DoRandomWalk();
-					}
 
-					if (needToSwitchToStrong)
-					{
-						TryToSwitchToStrong();
-					}
+						if (needToSwitchToStrong)
+						{
+							TryToSwitchToStrong();
+						}
 
-					if (Random.value <= (justChangedState ? 0.2f : 1f))
-					{
-						justChangedState = DoInRandomOrder( eventsForState[state] );
-					}
-					else
-					{
-						justChangedState = false;
+						if (Random.value <= (justChangedState ? 0.2f : 1f))
+						{
+							justChangedState = DoInRandomOrder( eventsForState[state] );
+						}
+						else
+						{
+							justChangedState = false;
+						}
 					}
 				}
-					
+						
 				Animate( binding );
 				kinetics.CalculateObservedRates();
 			}
