@@ -175,56 +175,78 @@ public class KinesinViveController : ViveController
 	protected override void DoUpdate ()
 	{
 		UpdateButtonLabels();
+        UpdateTime();
 	}
 
 	public override void OnDPadUpEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.Up );
-		if (timeUI != null)
-		{
-			ChangeTime( 0.8f );
-		}
-	}
+        currentTimeHover = TimeHoverState.Up;
+    }
 
 	public override void OnDPadDownEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.Down );
-		if (timeUI != null)
-		{
-			ChangeTime( 1.2f );
-		}
+        currentTimeHover = TimeHoverState.Down;
 	}
 
 	public override void OnDPadRightEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.None );
-	}
+        currentTimeHover = TimeHoverState.None;
+    }
 
 	public override void OnDPadLeftEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.None );
-	}
+        currentTimeHover = TimeHoverState.None;
+    }
 
 	public override void OnDPadExit () 
 	{
 		timeUI.SetHover( TimeHoverState.None );
-	}
+        currentTimeHover = TimeHoverState.None;
+    }
 
-//    public override void OnDPadUpStay()
-//    {
-//		if (timeUI != null)
-//		{
-//	        ChangeTime( 0.8f );
-//		}
-//    }
-//
-//    public override void OnDPadDownStay()
-//    {
-//		if (timeUI != null)
-//		{
-//	        ChangeTime( 1.2f );
-//		}
-//    }
+    TimeHoverState currentTimeHover = TimeHoverState.None;
+    public bool timeOnPress = true;
+
+    void UpdateTime ()
+    {
+        if (!timeOnPress)
+        {
+            if (currentTimeHover == TimeHoverState.Up)
+            {
+                if (timeUI != null)
+                {
+                    ChangeTime( 0.8f );
+                }
+            }
+            else if (currentTimeHover == TimeHoverState.Down)
+            {
+                if (timeUI != null)
+                {
+                    ChangeTime( 1.2f );
+                }
+            }
+        }
+    }
+
+    public override void OnDPadUpStay()
+    {
+		if (timeUI != null && timeOnPress)
+		{
+	        ChangeTime( 0.8f );
+		}
+    }
+
+    public override void OnDPadDownStay()
+    {
+		if (timeUI != null && timeOnPress)
+		{
+	        ChangeTime( 1.2f );
+		}
+    }
     
     void ChangeTime (float delta)
     {
