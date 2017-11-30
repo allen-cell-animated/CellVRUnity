@@ -44,7 +44,6 @@ Shader "Custom/Volume"
 			return o;
 		}
 
-		float2 uv;
 		sampler2D _TextureAtlasMask;
 		sampler2D _TextureAtlas;
 		int _Atlas_X = 8;
@@ -57,7 +56,7 @@ Shader "Custom/Volume"
 		static const int BREAK_STEPS = 72;
 		static const float BRIGHTNESS = 1;
 		static const float DENS = 0.0820849986238988;
-		static const float maskAlpha = 0;
+		//static const float maskAlpha = 0;
 		static const float GAMMA_MIN = 0;
 		static const float GAMMA_MAX = 1;
 		static const float GAMMA_SCALE = 1;
@@ -75,15 +74,18 @@ Shader "Custom/Volume"
 			tfar = smallest_tmax;
 			return (smallest_tmax > largest_tmin);
 		}
-
-		float rand (float2 co)
+		
+		float rand(float2 co)
 		{
-			float threadId = uv.x/(uv.y + 1.0);
-			float bigVal = threadId * 1299721.0 / 911.0;
-			float2 smallVal = float2(threadId * 7927.0 / 577.0, threadId * 104743.0 / 1039.0);
-			return frac(sin(dot(co, smallVal)) * bigVal);
+			//return 0.0;
+			float a = 12.9898;
+			float b = 78.233;
+			float c = 43758.5453;
+			float dt = dot(co.xy, float2(a, b));
+			float sn = fmod(dt, 3.14);
+			return frac(sin(sn) * c );
 		}
-
+		
 		float4 luma2Alpha (float4 col, float vmin, float vmax, float C)
 		{
 			float x = max(col[2], max(col[0], col[1]));
@@ -124,7 +126,7 @@ Shader "Custom/Volume"
 			float slice0Mask = tex2D(_TextureAtlasMask, o0).x;
 			float slice1Mask = tex2D(_TextureAtlasMask, o1).x;
 			float maskVal = lerp(slice0Mask, slice1Mask, t);
-			maskVal = lerp(maskVal, 1.0, maskAlpha);
+			//maskVal = lerp(maskVal, 1.0, maskAlpha);
 			float4 retval = lerp(slice0Color, slice1Color, t);
 			retval.rgb *= maskVal;
 			return bounds*retval; //bounds * 
@@ -183,8 +185,6 @@ Shader "Custom/Volume"
 		// The fragment shader, returns color as a float4
 		float4 frag (v2f In): COLOR
 		{
-			uv = In.pObj.xy;
-
 			float3 eyeRay_o = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1.0)).xyz;
 			float3 eyeRay_d = In.pObj - eyeRay_o;
 			float3 boxMin = AABB_CLIP_MIN;
