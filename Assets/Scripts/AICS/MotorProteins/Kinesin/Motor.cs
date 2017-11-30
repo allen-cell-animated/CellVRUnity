@@ -42,6 +42,7 @@ namespace AICS.MotorProteins.Kinesin
 		MotorState finalBindState;
 		public TubulinGraph tubulinGraph;
 		bool justChangedState = false;
+		float lastCollisionTime = -1000f;
 
 		Kinesin kinesin
 		{
@@ -181,7 +182,10 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				if (!binding)
 				{
-					DoRandomWalk();
+					if (Time.time - lastCollisionTime > 1f)
+					{
+						DoRandomWalk();
+					}
 
 					if (needToSwitchToStrong)
 					{
@@ -539,12 +543,7 @@ namespace AICS.MotorProteins.Kinesin
 					k.events--;
 					CancelTubulinBind();
 				}
-				VelocityWatcher watcher = collision.collider.GetComponent<VelocityWatcher>();
-				if (watcher != null)
-				{
-					Debug.Log( "collision velocity " + watcher.velocity );
-					MoveTo( 10f * watcher.velocity );
-				}
+				lastCollisionTime = Time.time;
 			}
 		}
 
@@ -562,12 +561,7 @@ namespace AICS.MotorProteins.Kinesin
 						k.events++;
 					}
 				}
-				VelocityWatcher watcher = other.GetComponent<VelocityWatcher>();
-				if (watcher != null)
-				{
-					Debug.Log( "trigger velocity " + watcher.velocity );
-					MoveTo( 1f * watcher.velocity );
-				}
+				lastCollisionTime = Time.time;
 			}
 		}
 
