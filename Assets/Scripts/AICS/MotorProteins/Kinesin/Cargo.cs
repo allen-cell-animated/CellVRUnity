@@ -121,14 +121,12 @@ namespace AICS.MotorProteins.Kinesin
 			Vector3 goalPosition = transform.position + 10f * force;
 			Vector3 anchorToGoal = goalPosition - anchor.position;
 			pushing = true;
-//            meshRenderers[0].material.color = Color.red;
-			MoveTo( anchor.position + Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );
+			MoveTo( anchor.position + anchorToGoal );// Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );
 		}
 
 		protected override void OnFinishMove () 
 		{
 			pushing = false;
-//            meshRenderers[0].material.color = color;
         }
 	}
 }
