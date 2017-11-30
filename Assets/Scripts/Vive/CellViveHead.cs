@@ -74,8 +74,8 @@ public class CellViveHead : MonoBehaviour
 
     void SwitchScene ()
     {
-		Destroy( cells[0].gameObject );
-		Destroy( cells[1].gameObject );
+        if (cells[0] != null) { Destroy(cells[0].gameObject); }
+        if (cells[1] != null) { Destroy(cells[1].gameObject); }
         levelLoader.Trigger();
     }
 }
