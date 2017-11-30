@@ -19,6 +19,7 @@ Shader "Custom/Volume"
             "RenderType" = "Transparent" 
         }
         Blend One OneMinusSrcAlpha
+		Cull Front
 		Pass 
 		{
 		CGPROGRAM
