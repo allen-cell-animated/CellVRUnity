@@ -180,11 +180,19 @@ public class KinesinViveController : ViveController
 	public override void OnDPadUpEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.Up );
+		if (timeUI != null)
+		{
+			ChangeTime( 0.8f );
+		}
 	}
 
 	public override void OnDPadDownEnter () 
 	{
 		timeUI.SetHover( TimeHoverState.Down );
+		if (timeUI != null)
+		{
+			ChangeTime( 1.2f );
+		}
 	}
 
 	public override void OnDPadRightEnter () 
@@ -202,21 +210,21 @@ public class KinesinViveController : ViveController
 		timeUI.SetHover( TimeHoverState.None );
 	}
 
-    public override void OnDPadUpStay()
-    {
-		if (timeUI != null)
-		{
-	        ChangeTime( 0.8f );
-		}
-    }
-
-    public override void OnDPadDownStay()
-    {
-		if (timeUI != null)
-		{
-	        ChangeTime( 1.2f );
-		}
-    }
+//    public override void OnDPadUpStay()
+//    {
+//		if (timeUI != null)
+//		{
+//	        ChangeTime( 0.8f );
+//		}
+//    }
+//
+//    public override void OnDPadDownStay()
+//    {
+//		if (timeUI != null)
+//		{
+//	        ChangeTime( 1.2f );
+//		}
+//    }
     
     void ChangeTime (float delta)
     {
