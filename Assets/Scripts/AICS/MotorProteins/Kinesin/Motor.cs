@@ -539,6 +539,7 @@ namespace AICS.MotorProteins.Kinesin
 					k.events--;
 					CancelTubulinBind();
 				}
+				MoveTo( transform.position - collision.collider.transform.position );
 			}
 		}
 
@@ -556,6 +557,7 @@ namespace AICS.MotorProteins.Kinesin
 						k.events++;
 					}
 				}
+				MoveTo( transform.position - other.transform.position );
 			}
 		}
 
