@@ -102,6 +102,7 @@ namespace AICS.MotorProteins.Kinesin
 				state = HipsState.Free;
 				snapping = true;
 				MoveTo( snappingArcPositions[0], true );
+				body.isKinematic = true;
 			}
 		}
 
@@ -182,6 +183,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				snapping = moving = false;
 				state = HipsState.Free;
+				body.isKinematic = false;
 			}
 		}
 
