@@ -26,6 +26,7 @@ public class BuzzOnCollision : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
+		Debug.Log( "controller is touching " + other.name );
         Buzz();
     }
 
