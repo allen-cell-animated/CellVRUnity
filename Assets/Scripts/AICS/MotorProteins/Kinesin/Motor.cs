@@ -542,6 +542,7 @@ namespace AICS.MotorProteins.Kinesin
 				VelocityWatcher watcher = collision.collider.GetComponent<VelocityWatcher>();
 				if (watcher != null)
 				{
+					Debug.Log( "collision velocity " + watcher.velocity );
 					MoveTo( 10f * watcher.velocity );
 				}
 			}
@@ -564,7 +565,8 @@ namespace AICS.MotorProteins.Kinesin
 				VelocityWatcher watcher = other.GetComponent<VelocityWatcher>();
 				if (watcher != null)
 				{
-					MoveTo( 10f * watcher.velocity );
+					Debug.Log( "trigger velocity " + watcher.velocity );
+					MoveTo( 1f * watcher.velocity );
 				}
 			}
 		}

@@ -6,8 +6,22 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class VelocityWatcher : MonoBehaviour 
 	{
+		public Transform objectToWatch;
+
 		int n = 4;
 		Vector3[] positions;
+
+		Vector3 position
+		{
+			get
+			{
+				if (objectToWatch != null)
+				{
+					return objectToWatch.position;
+				}
+				return transform.position;
+			}
+		}
 
 		public Vector3 displacement
 		{
@@ -48,7 +62,7 @@ namespace AICS.MotorProteins.Kinesin
 			positions = new Vector3[n];
 			for (int i = 0; i < n; i++)
 			{
-				positions[i] = transform.position;
+				positions[i] = position;
 			}
 		}
 
@@ -58,7 +72,7 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				positions[i] = positions[i + 1];
 			}
-			positions[n - 1] = transform.position;
+			positions[n - 1] = position;
 		}
 	}
 }
