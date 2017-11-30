@@ -25,10 +25,10 @@ public class KinesinViveController : ViveController
 	public float fadeTextScale = 95f;
     public float scaleSpeed = 0.1f;
     public bool holdingTrigger = false;
-	public GameObject pushButtonLabel;
+//	public GameObject pushButtonLabel;
 	public GameObject scaleButtonLabel;
 	public LineRenderer scaleLine;
-	public GameObject pushIndicator;
+//	public GameObject pushIndicator;
 	public GameObject labelLine;
 	public GameObject uiCamera;
 	public Transform eyes;
@@ -37,7 +37,7 @@ public class KinesinViveController : ViveController
     float startControllerDistance;
     float startScale;
 	Color faderColor;
-	Collider theCollider;
+//	Collider theCollider;
 	Vector3[] linePoints = new Vector3[2];
 
 	bool idle 
@@ -57,16 +57,16 @@ public class KinesinViveController : ViveController
 			timeUI.maxTimeMultiplier = maxTimeMultiplier;
 			timeUI.Set( MolecularEnvironment.Instance.timeMultiplier );
 		}
-		theCollider = GetComponent<Collider>();
-		theCollider.enabled = false;
-		pushIndicator.SetActive( false );
+//		theCollider = GetComponent<Collider>();
+//		theCollider.enabled = false;
+//		pushIndicator.SetActive( false );
 	}
 
     public override void OnTriggerPull()
     {
         holdingTrigger = true;
-		pushIndicator.SetActive( true );
-		theCollider.enabled = true;
+//		pushIndicator.SetActive( true );
+//		theCollider.enabled = true;
         if (otherController.holdingTrigger)
         {
             StartScaling();
@@ -86,8 +86,8 @@ public class KinesinViveController : ViveController
         holdingTrigger = false;
         otherController.StopScaling();
         StopScaling();
-		theCollider.enabled = false;
-		pushIndicator.SetActive( false );
+//		theCollider.enabled = false;
+//		pushIndicator.SetActive( false );
     }
 
     void StartScaling()
@@ -95,10 +95,10 @@ public class KinesinViveController : ViveController
         startControllerDistance = Vector3.Distance( playArea.transform.InverseTransformPoint( transform.position ),
             playArea.transform.InverseTransformPoint( otherController.transform.position ) );
         startScale = playArea.transform.localScale.x;
-		pushIndicator.SetActive( false );
-		theCollider.enabled = false;
-		otherController.pushIndicator.SetActive( false );
-		otherController.theCollider.enabled = false;
+//		pushIndicator.SetActive( false );
+//		theCollider.enabled = false;
+//		otherController.pushIndicator.SetActive( false );
+//		otherController.theCollider.enabled = false;
 		scaleLine.gameObject.SetActive( true );
 		SetLine();
         scaling = true;
@@ -160,16 +160,16 @@ public class KinesinViveController : ViveController
     {
         scaling = false;
 		scaleLine.gameObject.SetActive( false );
-		if (holdingTrigger)
-		{
-			pushIndicator.SetActive( true );
-			theCollider.enabled = true;
-		}
-		if (otherController.holdingTrigger)
-		{
-			otherController.pushIndicator.SetActive( true );
-			theCollider.enabled = true;
-		}
+//		if (holdingTrigger)
+//		{
+//			pushIndicator.SetActive( true );
+//			theCollider.enabled = true;
+//		}
+//		if (otherController.holdingTrigger)
+//		{
+//			otherController.pushIndicator.SetActive( true );
+//			theCollider.enabled = true;
+//		}
     }
 
 	protected override void DoUpdate ()
@@ -257,24 +257,8 @@ public class KinesinViveController : ViveController
 
 	void UpdateButtonLabels ()
 	{
-		if (idle && otherController.idle)
-		{
-			ShowObject( pushButtonLabel, true );
-			ShowObject( scaleButtonLabel, false );
-			ShowObject( labelLine, true );
-		}
-		else if (idle && otherController.holdingTrigger)
-		{
-			ShowObject( pushButtonLabel, false );
-			ShowObject( scaleButtonLabel, true );
-			ShowObject( labelLine, true );
-		}
-		else
-		{
-			ShowObject( pushButtonLabel, false );
-			ShowObject( scaleButtonLabel, false );
-			ShowObject( labelLine, false );
-		}
+		ShowObject( scaleButtonLabel, idle );
+		ShowObject( labelLine, idle );
 	}
 
 	void ShowObject (GameObject label, bool show)
