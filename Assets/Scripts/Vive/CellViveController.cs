@@ -46,6 +46,7 @@ public class CellViveController : ViveController
         if (cell != null)
         {
             hoveredCell = cell;
+			hoveredCell.SetOutline( true );
         }
     }
 
@@ -54,6 +55,7 @@ public class CellViveController : ViveController
         Cell cell = other.GetComponentInParent<Cell>();
         if (cell != null && hoveredCell == cell)
         {
+			hoveredCell.SetOutline( false );
             hoveredCell = null;
         }
     }
