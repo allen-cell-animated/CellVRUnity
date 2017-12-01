@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using AICS.MotorProteins;
 using AICS.MotorProteins.Kinesin;
 using AICS.MT;
+using UnityEngine.SceneManagement;
 
 public class KinesinViveController : ViveController
 {
@@ -119,6 +120,7 @@ public class KinesinViveController : ViveController
 
         if (d > maxScale)
         {
+			SceneManager.UnloadSceneAsync( 0 );
             levelLoader.Trigger();
         }
         playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
