@@ -1,0 +1,223 @@
+fileFormatVersion: 2
+guid: f65de540212194b64875d3436e90407d
+timeCreated: 1512093871
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: 143_374_227_477_5_47
+    100002: //RootNode
+    100004: 881_1
+    100006: 881_1_CellMembrane_1_metaball
+    100008: BetaActin
+    100010: CINEMA_4D_Editor
+    100012: Fibrilarin
+    100014: LaminB
+    100016: LaminB_MeshPart0
+    100018: LaminB_MeshPart1
+    100020: LaminB_MeshPart2
+    100022: Microtubule_Bundles
+    100024: Microtubule_Bundles_MeshPart0
+    100026: Microtubule_Bundles_MeshPart1
+    100028: Microtubule_Bundles_MeshPart2
+    100030: Microtubule_Bundles_MeshPart3
+    100032: Microtubule_singles
+    100034: Mitochondria
+    100036: Predicted
+    100038: Sec61Gaussian_ER
+    100040: Sweep
+    100042: Sweep_MeshPart0
+    100044: Sweep_MeshPart1
+    100046: Sweep_MeshPart2
+    400000: 143_374_227_477_5_47
+    400002: //RootNode
+    400004: 881_1
+    400006: 881_1_CellMembrane_1_metaball
+    400008: BetaActin
+    400010: CINEMA_4D_Editor
+    400012: Fibrilarin
+    400014: LaminB
+    400016: LaminB_MeshPart0
+    400018: LaminB_MeshPart1
+    400020: LaminB_MeshPart2
+    400022: Microtubule_Bundles
+    400024: Microtubule_Bundles_MeshPart0
+    400026: Microtubule_Bundles_MeshPart1
+    400028: Microtubule_Bundles_MeshPart2
+    400030: Microtubule_Bundles_MeshPart3
+    400032: Microtubule_singles
+    400034: Mitochondria
+    400036: Predicted
+    400038: Sec61Gaussian_ER
+    400040: Sweep
+    400042: Sweep_MeshPart0
+    400044: Sweep_MeshPart1
+    400046: Sweep_MeshPart2
+    2000000: CINEMA_4D_Editor
+    2300000: 881_1_CellMembrane_1_metaball
+    2300002: BetaActin
+    2300004: Fibrilarin
+    2300006: LaminB_MeshPart0
+    2300008: LaminB_MeshPart1
+    2300010: LaminB_MeshPart2
+    2300012: Microtubule_Bundles_MeshPart0
+    2300014: Microtubule_Bundles_MeshPart1
+    2300016: Microtubule_Bundles_MeshPart2
+    2300018: Microtubule_Bundles_MeshPart3
+    2300020: Microtubule_singles
+    2300022: Mitochondria
+    2300024: Sec61Gaussian_ER
+    2300026: Sweep_MeshPart0
+    2300028: Sweep_MeshPart1
+    2300030: Sweep_MeshPart2
+    3300000: 881_1_CellMembrane_1_metaball
+    3300002: BetaActin
+    3300004: Fibrilarin
+    3300006: LaminB_MeshPart0
+    3300008: LaminB_MeshPart1
+    3300010: LaminB_MeshPart2
+    3300012: Microtubule_Bundles_MeshPart0
+    3300014: Microtubule_Bundles_MeshPart1
+    3300016: Microtubule_Bundles_MeshPart2
+    3300018: Microtubule_Bundles_MeshPart3
+    3300020: Microtubule_singles
+    3300022: Mitochondria
+    3300024: Sec61Gaussian_ER
+    3300026: Sweep_MeshPart0
+    3300028: Sweep_MeshPart1
+    3300030: Sweep_MeshPart2
+    4300000: Microtubule_Bundles_MeshPart0
+    4300002: Microtubule_Bundles_MeshPart1
+    4300004: Microtubule_Bundles_MeshPart2
+    4300006: Microtubule_Bundles_MeshPart3
+    4300008: Microtubule_singles
+    4300010: BetaActin
+    4300012: Mitochondria
+    4300014: Fibrilarin
+    4300016: LaminB_MeshPart0
+    4300018: LaminB_MeshPart1
+    4300020: LaminB_MeshPart2
+    4300022: Sec61Gaussian_ER
+    4300024: Sweep_MeshPart0
+    4300026: Sweep_MeshPart1
+    4300028: Sweep_MeshPart2
+    4300030: 881_1_CellMembrane_1_metaball
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BActin
+    second: {fileID: 2100000, guid: 6fd12072848924159aa432e30ec00557, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cell Memb
+    second: {fileID: 2100000, guid: 2a240982e41ec47cab3f3091cc2c3908, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DNA
+    second: {fileID: 2100000, guid: ede7fac032b0144e4b332dccdddb7b0e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ER
+    second: {fileID: 2100000, guid: dc9102f40ea114e4ab001797da088ec8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fibrilarin
+    second: {fileID: 2100000, guid: e0e64d49f1d3d41af8be820c296a57d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat
+    second: {fileID: 2100000, guid: 6ad140808d9ad4c07b2f2fd3fb25003d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mitochondria
+    second: {fileID: 2100000, guid: ff974b4b4869a4126af1ebe4b9b5cb4a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tubulin
+    second: {fileID: 2100000, guid: 5e00c94267d1f427da94a812f7e8d65b, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 10
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

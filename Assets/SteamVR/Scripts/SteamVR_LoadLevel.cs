@@ -442,13 +442,7 @@ public class SteamVR_LoadLevel : MonoBehaviour
 		_active = null;
 
 		SteamVR_Events.Loading.Send(false);
-		if (OnLoad != null)
-		{
-			OnLoad();
-		}
 	}
-
-	public static SteamVRLoadEvent OnLoad;
 
 	// Helper to create (or reuse if possible) each of our different overlay types.
 	ulong GetOverlayHandle(string overlayName, Transform transform, float widthInMeters = 1.0f)

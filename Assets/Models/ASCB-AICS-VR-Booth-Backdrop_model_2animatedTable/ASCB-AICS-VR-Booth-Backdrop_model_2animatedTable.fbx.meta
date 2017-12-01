@@ -1,0 +1,339 @@
+fileFormatVersion: 2
+guid: a69eefcf0dab14a91a5c8c738fb10d7a
+timeCreated: 1512093828
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: ASCB_AICS_Booth_Backdrop_model_1_toC4D_1
+    100004: Camera
+    100006: Cap_1
+    100008: Cap_2
+    100010: Carpet
+    100012: Ceiling
+    100014: Cube
+    100016: Cube_2
+    100018: Cube_3
+    100020: Cube_4
+    100022: Cylinder
+    100024: Cylinder_2
+    100026: Extrude
+    100028: Extrude_2
+    100030: Floating_Table_Flying_V
+    100032: Floating_Table_Leg_Master
+    100034: Floating_Table_Leg_Master_Instance
+    100036: Floating_Table_Leg_Master_Instance_2
+    100038: Floating_Table_Leg_Master_Instance_3
+    100040: Floor
+    100042: Glass_Frame
+    100044: Glass_Frame_2
+    100046: Hider_Floating_Table_master_1
+    100048: Light
+    100050: Light_1
+    100052: Light_2
+    100054: Light_3
+    100056: Metal_Top
+    100058: Metal_Top_2
+    100060: Path_1
+    100062: Path_2
+    100064: Path_3
+    100066: Rounding_1
+    100068: Rounding_2
+    100070: Subdivision_Surface
+    100072: Subdivision_Surface_2
+    100074: Subdivision_Surface_3
+    100076: Subdivision_Surface_4
+    100078: TableLegMaster
+    100080: TableLegMaster_2
+    100082: TableLegMaster_3
+    100084: TableLegMaster_4
+    100086: Torus
+    100088: Torus_1
+    100090: Torus_1_2
+    100092: Torus_1_3
+    100094: Torus_1_4
+    100096: Torus_2
+    100098: Torus_3
+    100100: Torus_4
+    100102: Torus_5
+    100104: Torus_6
+    100106: Torus_7
+    100108: Torus_8
+    100110: Wall_Light___KEUCO___Reflex
+    100112: Wall_Light___KEUCO___Reflex_1
+    100114: Wall_Mount
+    100116: Wall_Mount_2
+    100118: WoodFloor
+    400000: //RootNode
+    400002: ASCB_AICS_Booth_Backdrop_model_1_toC4D_1
+    400004: Camera
+    400006: Cap_1
+    400008: Cap_2
+    400010: Carpet
+    400012: Ceiling
+    400014: Cube
+    400016: Cube_2
+    400018: Cube_3
+    400020: Cube_4
+    400022: Cylinder
+    400024: Cylinder_2
+    400026: Extrude
+    400028: Extrude_2
+    400030: Floating_Table_Flying_V
+    400032: Floating_Table_Leg_Master
+    400034: Floating_Table_Leg_Master_Instance
+    400036: Floating_Table_Leg_Master_Instance_2
+    400038: Floating_Table_Leg_Master_Instance_3
+    400040: Floor
+    400042: Glass_Frame
+    400044: Glass_Frame_2
+    400046: Hider_Floating_Table_master_1
+    400048: Light
+    400050: Light_1
+    400052: Light_2
+    400054: Light_3
+    400056: Metal_Top
+    400058: Metal_Top_2
+    400060: Path_1
+    400062: Path_2
+    400064: Path_3
+    400066: Rounding_1
+    400068: Rounding_2
+    400070: Subdivision_Surface
+    400072: Subdivision_Surface_2
+    400074: Subdivision_Surface_3
+    400076: Subdivision_Surface_4
+    400078: TableLegMaster
+    400080: TableLegMaster_2
+    400082: TableLegMaster_3
+    400084: TableLegMaster_4
+    400086: Torus
+    400088: Torus_1
+    400090: Torus_1_2
+    400092: Torus_1_3
+    400094: Torus_1_4
+    400096: Torus_2
+    400098: Torus_3
+    400100: Torus_4
+    400102: Torus_5
+    400104: Torus_6
+    400106: Torus_7
+    400108: Torus_8
+    400110: Wall_Light___KEUCO___Reflex
+    400112: Wall_Light___KEUCO___Reflex_1
+    400114: Wall_Mount
+    400116: Wall_Mount_2
+    400118: WoodFloor
+    2000000: Camera
+    2300000: Cap_1
+    2300002: Cap_2
+    2300004: Carpet
+    2300006: Ceiling
+    2300008: Cube
+    2300010: Cube_2
+    2300012: Cube_3
+    2300014: Cube_4
+    2300016: Cylinder
+    2300018: Cylinder_2
+    2300020: Extrude
+    2300022: Extrude_2
+    2300024: Glass_Frame
+    2300026: Glass_Frame_2
+    2300028: Metal_Top
+    2300030: Metal_Top_2
+    2300032: Rounding_1
+    2300034: Rounding_2
+    2300036: Torus
+    2300038: Torus_2
+    2300040: Torus_3
+    2300042: Torus_4
+    2300044: Torus_5
+    2300046: Torus_6
+    2300048: Torus_7
+    2300050: Torus_8
+    2300052: Wall_Mount
+    2300054: Wall_Mount_2
+    2300056: WoodFloor
+    3300000: Cap_1
+    3300002: Cap_2
+    3300004: Carpet
+    3300006: Ceiling
+    3300008: Cube
+    3300010: Cube_2
+    3300012: Cube_3
+    3300014: Cube_4
+    3300016: Cylinder
+    3300018: Cylinder_2
+    3300020: Extrude
+    3300022: Extrude_2
+    3300024: Glass_Frame
+    3300026: Glass_Frame_2
+    3300028: Metal_Top
+    3300030: Metal_Top_2
+    3300032: Rounding_1
+    3300034: Rounding_2
+    3300036: Torus
+    3300038: Torus_2
+    3300040: Torus_3
+    3300042: Torus_4
+    3300044: Torus_5
+    3300046: Torus_6
+    3300048: Torus_7
+    3300050: Torus_8
+    3300052: Wall_Mount
+    3300054: Wall_Mount_2
+    3300056: WoodFloor
+    4300000: Carpet
+    4300002: WoodFloor
+    4300004: Cube
+    4300006: Torus
+    4300008: Torus_2
+    4300010: Cube_2
+    4300012: Torus_3
+    4300014: Torus_4
+    4300016: Cube_3
+    4300018: Torus_5
+    4300020: Torus_6
+    4300022: Extrude
+    4300024: Rounding_1
+    4300026: Cap_1
+    4300028: Rounding_2
+    4300030: Cap_2
+    4300032: Cube_4
+    4300034: Torus_7
+    4300036: Torus_8
+    4300038: Ceiling
+    4300040: Glass_Frame
+    4300042: Cylinder
+    4300044: Metal_Top
+    4300046: Wall_Mount
+    4300048: Glass_Frame_2
+    4300050: Cylinder_2
+    4300052: Metal_Top_2
+    4300054: Wall_Mount_2
+    4300056: Extrude_2
+    7400000: CINEMA_4D_Main
+    9500000: //RootNode
+    10800000: Light
+    10800002: Light_1
+    10800004: Light_2
+    10800006: Light_3
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass-Simple
+    second: {fileID: 2100000, guid: 1080e155d3ad1403ca3c64c17eab395a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass-Thick-blue
+    second: {fileID: 2100000, guid: 1cb3ff641695d4a8a8b4824e2131cf6a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat
+    second: {fileID: 2100000, guid: 43385aa0d8da74d9ba31fadf6c83ea12, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat.1
+    second: {fileID: 2100000, guid: 3a0fc216cdc634182a107696b04494d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat.4
+    second: {fileID: 2100000, guid: c90e6ab0c506048908d2be779845a9d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat.5
+    second: {fileID: 2100000, guid: 9ca3e6133b37147c5a8cbd5c4c4d738e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal - Chrome
+    second: {fileID: 2100000, guid: 719810ebb32ee42deac036b743baa6fa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rauchglas
+    second: {fileID: 2100000, guid: 5c9391293e3af451abc328a8b479fb6f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
