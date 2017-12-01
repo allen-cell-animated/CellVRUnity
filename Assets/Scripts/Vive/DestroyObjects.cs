@@ -1,26 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DestroyObjects : MonoBehaviour 
 {
 	public string[] namesOfObjectsToDestroy;
 
-	static DestroyObjects _Instance;
-	public static DestroyObjects Instance
+	void OnEnable()
 	{
-		get
-		{
-			if (_Instance == null)
-			{
-				_Instance = GameObject.FindObjectOfType<DestroyObjects>();
-			}
-			return _Instance;
-		}
+		SceneManager.sceneLoaded += OnLevelFinishedLoading;
 	}
 
-	public void DoDestroy () 
+	void OnDisable()
 	{
+		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+	}
+
+	void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
+	{
+		Debug.Log( scene.name + " loaded" );
 		for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
 		{
 			GameObject obj = GameObject.Find( namesOfObjectsToDestroy[i] );

@@ -442,7 +442,6 @@ public class SteamVR_LoadLevel : MonoBehaviour
 		_active = null;
 
 		SteamVR_Events.Loading.Send(false);
-		DestroyObjects.Instance.DoDestroy();
 	}
 
 	// Helper to create (or reuse if possible) each of our different overlay types.
