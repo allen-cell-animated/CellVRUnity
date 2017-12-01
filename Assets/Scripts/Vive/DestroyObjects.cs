@@ -3,32 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public delegate void SteamVRLoadEvent ();
+
 public class DestroyObjects : MonoBehaviour 
 {
 	public string[] namesOfObjectsToDestroy;
 
 	void OnEnable()
 	{
-		SteamVR_Events.Loading += OnLevelFinishedLoading;
+		SteamVR_LoadLevel.OnLoad += OnLevelFinishedLoading;
 	}
 
 	void OnDisable()
 	{
-		SteamVR_Events.Loading -= OnLevelFinishedLoading;
+		SteamVR_LoadLevel.OnLoad -= OnLevelFinishedLoading;
 	}
 
-	void OnLevelFinishedLoading (bool loading)
+	void OnLevelFinishedLoading ()
 	{
-		if (!loading)
+		Debug.Log( "destroy!" );
+		for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
 		{
-			for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
+			GameObject obj = GameObject.Find( namesOfObjectsToDestroy[i] );
+			if (obj != null)
 			{
-				GameObject obj = GameObject.Find( namesOfObjectsToDestroy[i] );
-				if (obj != null)
-				{
-					Debug.Log( "destroying " + obj.name );
-					Destroy( obj );
-				}
+				Debug.Log( "destroying " + obj.name );
+				Destroy( obj );
 			}
 		}
 	}
