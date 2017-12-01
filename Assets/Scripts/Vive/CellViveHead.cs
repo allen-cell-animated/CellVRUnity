@@ -75,6 +75,6 @@ public class CellViveHead : MonoBehaviour
     void SwitchScene ()
     {
         levelLoader.Trigger();
-		if (VRRig != null) { Destroy( VRRig ); }
+		//if (VRRig != null) { Destroy( VRRig ); }
     }
 }
