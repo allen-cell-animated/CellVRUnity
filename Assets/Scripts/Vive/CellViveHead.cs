@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AICS.Cell;
-using UnityEngine.SceneManagement;
 
 public class CellViveHead : MonoBehaviour
 {
@@ -75,7 +74,18 @@ public class CellViveHead : MonoBehaviour
 
     void SwitchScene ()
     {
-		SceneManager.UnloadSceneAsync( 1 );
+		SceneLoader[] loaders = GameObject.FindObjectsOfType<SceneLoader>();
+		for (int i = 0; i < 10; i++)
+		{
+			if (i >= loaders.Length)
+			{
+				break;
+			}
+			if (loaders[i] != null && loaders[i].gameObject != levelLoader.gameObject)
+			{
+				Destroy( loaders[i].gameObject );
+			}
+		}
         levelLoader.Trigger();
     }
 }

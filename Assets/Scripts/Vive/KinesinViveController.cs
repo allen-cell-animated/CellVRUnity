@@ -120,7 +120,18 @@ public class KinesinViveController : ViveController
 
         if (d > maxScale)
         {
-			SceneManager.UnloadSceneAsync( 0 );
+			SceneLoader[] loaders = GameObject.FindObjectsOfType<SceneLoader>();
+			for (int i = 0; i < 10; i++)
+			{
+				if (i >= loaders.Length)
+				{
+					break;
+				}
+				if (loaders[i] != null && loaders[i].gameObject != levelLoader.gameObject)
+				{
+					Destroy( loaders[i].gameObject );
+				}
+			}
             levelLoader.Trigger();
         }
         playArea.transform.localScale = Mathf.Clamp( d, minScale, maxScale ) * Vector3.one;
