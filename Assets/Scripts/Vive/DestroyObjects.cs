@@ -9,24 +9,26 @@ public class DestroyObjects : MonoBehaviour
 
 	void OnEnable()
 	{
-		SceneManager.sceneLoaded += OnLevelFinishedLoading;
+		SteamVR_Events.Loading += OnLevelFinishedLoading;
 	}
 
 	void OnDisable()
 	{
-		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+		SteamVR_Events.Loading -= OnLevelFinishedLoading;
 	}
 
-	void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
+	void OnLevelFinishedLoading (bool loading)
 	{
-		Debug.Log( scene.name + " loaded" );
-		for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
+		if (!loading)
 		{
-			GameObject obj = GameObject.Find( namesOfObjectsToDestroy[i] );
-			if (obj != null)
+			for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
 			{
-				Debug.Log( "destroying " + obj.name );
-				Destroy( obj );
+				GameObject obj = GameObject.Find( namesOfObjectsToDestroy[i] );
+				if (obj != null)
+				{
+					Debug.Log( "destroying " + obj.name );
+					Destroy( obj );
+				}
 			}
 		}
 	}
