@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class DestroyOtherVive : MonoBehaviour 
 {
-	SteamVR_PlayArea playArea;
-
-
 	void Start () 
 	{
 		SteamVR_PlayArea[] vives = GetComponents<SteamVR_PlayArea>();
-		for (int i = 0; i < 2; i++)
+		Debug.Log( "found " + vives.Length + " vives" );
+		for (int i = 0; i < 10; i++)
 		{
 			if (i > vives.Length - 1)
 			{
@@ -18,6 +16,7 @@ public class DestroyOtherVive : MonoBehaviour
 			}
 			if (vives[i].gameObject != gameObject)
 			{
+				Debug.Log( "destroying vive #" + i );
 				Destroy( vives[i].gameObject );
 			}
 		}
