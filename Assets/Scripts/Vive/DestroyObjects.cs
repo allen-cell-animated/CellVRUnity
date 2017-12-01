@@ -6,7 +6,20 @@ public class DestroyObjects : MonoBehaviour
 {
 	public string[] namesOfObjectsToDestroy;
 
-	void Start () 
+	static DestroyObjects _Instance;
+	public static DestroyObjects Instance
+	{
+		get
+		{
+			if (_Instance == null)
+			{
+				_Instance = GameObject.FindObjectOfType<DestroyObjects>();
+			}
+			return _Instance;
+		}
+	}
+
+	public void DoDestroy () 
 	{
 		for (int i = 0; i < namesOfObjectsToDestroy.Length; i++)
 		{
