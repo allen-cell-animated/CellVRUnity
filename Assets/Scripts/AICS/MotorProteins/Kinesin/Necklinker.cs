@@ -31,9 +31,15 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
+//			Jitter( 0.1f );
+//			PositionBetweenParents();
+//			PlaceVisualization();
+		}
+
+		void LateUpdate ()
+		{
 			Jitter( 0.1f );
 			PositionBetweenParents();
-//			PlaceVisualization();
 		}
 
 		void PositionBetweenParents ()

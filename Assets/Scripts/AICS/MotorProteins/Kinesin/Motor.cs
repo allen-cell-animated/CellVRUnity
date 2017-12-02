@@ -43,6 +43,7 @@ namespace AICS.MotorProteins.Kinesin
 		public TubulinGraph tubulinGraph;
 		bool justChangedState = false;
 		float lastCollisionTime = -1000f;
+		int stepsSinceRelease = 5;
 
 		Kinesin kinesin
 		{
@@ -53,7 +54,7 @@ namespace AICS.MotorProteins.Kinesin
 		}
 
 		Motor _otherMotor;
-		Motor otherMotor
+		public Motor otherMotor
 		{
 			get
 			{
@@ -184,7 +185,7 @@ namespace AICS.MotorProteins.Kinesin
 				{
 					if (!binding)
 					{
-						
+						DoRandomRotation();
 						DoRandomWalk();
 
 						if (needToSwitchToStrong)
@@ -366,25 +367,38 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 
+		void DoRandomRotation ()
+		{
+			if (!bound && !rotating)
+			{
+				RotateRandomly();
+			}
+		}
+
 		public override void DoRandomWalk ()
 		{
 			if (!bound)
 			{
-				RotateRandomly();
-
-				int i = 0;
-				bool retry = false;
-				bool success = false;
-				while (!bound && !success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
+				if (!moving)
 				{
-					success = MoveRandomly( retry );
-					retry = true;
-					i++;
-				}
+					int i = 0;
+					bool retry = false;
+					bool success = false;
+					while (!bound && !success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
+					{
+						success = MoveRandomly( retry );
+						retry = true;
+						i++;
+					}
 
-				if (!success)
-				{
-					Jitter( 0.1f );
+					if (!success)
+					{
+						Jitter( 0.1f );
+					}
+					else
+					{
+						stepsSinceRelease++;
+					}
 				}
 			}
 			else 
@@ -408,7 +422,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		bool BindTubulin (Kinetic kinetic)
 		{
-			if (!bound && !binding && !otherMotor.binding && (Time.time - lastReleaseTime > 0.5f || needToSwitchToStrong))
+			if (!bound && !binding && !otherMotor.binding && stepsSinceRelease >= 3 && (Time.time - lastReleaseTime > 0.5f || needToSwitchToStrong))
 			{
 				Tubulin t = FindTubulin();
 				if (t != null)
@@ -620,6 +634,7 @@ namespace AICS.MotorProteins.Kinesin
 				tubulinGraph.Clear();
 				body.isKinematic = false;
 				theCollider.isTrigger = false;
+				stepsSinceRelease = 0;
 				return true;
 			}
 			return false;

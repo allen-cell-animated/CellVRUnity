@@ -14,9 +14,26 @@ namespace AICS.MotorProteins
 		public Vector3 startPosition;
 		public Quaternion startRotation;
 		public int resetFrames;
+		public MoleculeType[] typesToIgnoreCollisionsWith;
 
 		public MeshRenderer[] meshRenderers;
 		protected Color color;
+
+		public bool ShouldIgnoreCollision (Molecule other)
+		{
+			if (typesToIgnoreCollisionsWith == null)
+			{
+				return false;
+			}
+			foreach (MoleculeType t in typesToIgnoreCollisionsWith)
+			{
+				if (other.type == t)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public void Flash (Color _flashColor)
 		{

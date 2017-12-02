@@ -26,7 +26,7 @@ namespace AICS.MotorProteins
 		{
 			foreach (ComponentMolecule m in componentMolecules)
 			{
-				if (m as Molecule != molecule && !m.ignoreInternalCollisions)
+				if (m as Molecule != molecule && !m.ignoreInternalCollisions && molecule.ShouldIgnoreCollision( m as Molecule ))
 				{
 					if (m.OtherWillCollide( molecule, moveStep ))
 					{

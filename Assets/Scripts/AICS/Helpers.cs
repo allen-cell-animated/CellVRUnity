@@ -186,7 +186,7 @@ namespace AICS
 
 		public static float SampleExponentialDistribution (float mean)
 		{
-			return Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean);
+			return Mathf.Max( 0.8f * mean, Mathf.Log( Random.Range( float.Epsilon, 1f ) ) / (-1f / mean) );
 		}
 
 		public static float SampleNormalDistribution (float mean, float standardDeviation)

@@ -115,7 +115,12 @@ namespace AICS.MotorProteins
 			float t = (MolecularEnvironment.Instance.nanosecondsSinceStart - startMovingNanoseconds) / moveDuration;
 			if (MolecularEnvironment.Instance.nanosecondsSinceStart == 0 || t >= 1f || retry)
 			{
-				return StartMove( Vector3.zero, true );
+				Vector3 moveStep = StartMove( Vector3.zero, true );
+				if (moveStep != Vector3.zero)
+				{
+					return StartMove( -moveStep, false ) == Vector3.zero;
+				}
+				return true;
 			}
 			else
 			{
@@ -128,22 +133,26 @@ namespace AICS.MotorProteins
 			StartMove( goalPosition, false, forceMove );
 		}
 
-		bool StartMove (Vector3 goalPosition, bool random, bool forceMove = false)
+		Vector3 StartMove (Vector3 goalPosition, bool random, bool forceMove = false)
 		{
 			startMovePosition = transform.position;
-			goalMovePosition = (random ? transform.position + Helpers.GetRandomVector( Helpers.SampleExponentialDistribution( meanStepSize ) ) : goalPosition);
+			Vector3 moveStep = Helpers.GetRandomVector( random ? Helpers.SampleExponentialDistribution( meanStepSize ) : (goalPosition - transform.position).magnitude );
+			goalMovePosition = (random ? transform.position + moveStep : goalPosition);
 			moveDuration = Vector3.Distance( startMovePosition, goalMovePosition ) / moveSpeed;
 			startMovingNanoseconds = MolecularEnvironment.Instance.nanosecondsSinceStart;
+			bool moved = true;
 			if (moveDuration <= MolecularEnvironment.Instance.nanosecondsPerStep)
 			{
 				moving = true;
-				return AnimateMove( 1f, forceMove );
+				moved = AnimateMove( 1f, forceMove );
+//				if (moved) { Debug.Log( name + " " + (random ? "random " : "") + "step size = " + moveStep.magnitude ); }
 			}
 			else 
 			{
 				moving = true;
 			}
-			return true;
+//			Debug.Log( name + " " + (random ? "random" : "") + " step size = " + moveStep.magnitude );
+			return (!moved ? moveStep : Vector3.zero);
 		}
 
 		bool AnimateMove (float t, bool forceMove = false) 
@@ -257,7 +266,7 @@ namespace AICS.MotorProteins
 		{
 			if (!exiting)
 			{
-				MoveTo( transform.position + 0.1f * (transform.position - otherPosition) );
+				MoveTo( transform.position + 0.5f * (transform.position - otherPosition), true );
 				exiting = true;
 				Invoke( "FinishExit", 1f );
 			}

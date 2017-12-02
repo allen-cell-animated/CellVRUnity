@@ -118,6 +118,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void Push (Vector3 point, Vector3 force)
 		{
+			Debug.Log( "cargo push" );
 			Vector3 goalPosition = transform.position + 10f * force;
 			Vector3 anchorToGoal = goalPosition - anchor.position;
 			pushing = true;

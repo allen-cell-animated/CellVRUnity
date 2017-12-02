@@ -24,6 +24,7 @@ namespace AICS.MotorProteins.Kinesin
 		public bool snapping;
 		public Motor lastSnappingPivot;
 		float degreesPerSnapStep = 30f;
+		bool justMoved = false;
 
 		public Kinesin kinesin
 		{
@@ -45,16 +46,19 @@ namespace AICS.MotorProteins.Kinesin
 
 		public override void DoCustomSimulation ()
 		{
+			justMoved = false;
 			if (!frozen && kinesin.hasBound)
 			{
-				if (!snapping)
+				if (snapping)
 				{
-					DoRandomWalk();
+					UpdateSnap();
 				}
 				else 
 				{
-					Animate( true );
+					DoRandomRotation();
+					DoRandomWalk();
 				}
+				Animate( snapping );
 				follower.Follow();
 			}
 		}
@@ -63,25 +67,34 @@ namespace AICS.MotorProteins.Kinesin
 
 		// --------------------------------------------------------------------------------------------------- Random walk
 
+		void DoRandomRotation ()
+		{
+			if (!bound && !rotating)
+			{
+				RotateRandomly();
+			}
+		}
+
 		public override void DoRandomWalk ()
 		{
 			if (!bound)
 			{
-				RotateRandomly();
-
-				int i = 0;
-				bool retry = false;
-				bool success = false;
-				while (!success && i < 3f * MolecularEnvironment.Instance.maxIterationsPerStep)
+				if (!moving)
 				{
-					success = MoveRandomly( retry );
-					retry = true;
-					i++;
-				}
+					int i = 0;
+					bool retry = false;
+					bool success = false;
+					while (!success && i < MolecularEnvironment.Instance.maxIterationsPerStep)
+					{
+						success = MoveRandomly( retry );
+						retry = true;
+						i++;
+					}
 
-				if (!success)
-				{
-					Jitter( 0.1f );
+					if (!success)
+					{
+						Jitter( 0.1f );
+					}
 				}
 			}
 			else
@@ -94,13 +107,18 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked))
+			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked) && !motor.otherMotor.bound)
 			{
+				if (motor.otherMotor.binding)
+				{
+					motor.otherMotor.CancelTubulinBind();
+				}
 				snappingArcPositions = CalculateSnapArcPositions( motor );
 				lastSnappingPivot = motor;
 				currentSnapStep = 0;
-				state = HipsState.Free;
+				state = HipsState.Locked;
 				snapping = true;
+				justMoved = true;
 				MoveTo( snappingArcPositions[0], true );
 				body.isKinematic = true;
 			}
@@ -118,7 +136,7 @@ namespace AICS.MotorProteins.Kinesin
 				Vector3[] arcPositions = null;
 				if (angle > 90f)
 				{
-					Vector3 motorToNorthPole = (motorToCurrentPosition.magnitude + motorToSnappedPosition.magnitude) / 2f * motor.transform.up;
+					Vector3 motorToNorthPole = 3f * motor.transform.up;
 
 					Vector3[] arcPositions1 = CalculateArcPositions( motor.transform.position, motorToCurrentPosition, motorToNorthPole );
 					Vector3[] arcPositions2 = CalculateArcPositions( motor.transform.position, motorToNorthPole, motorToSnappedPosition );
@@ -149,7 +167,7 @@ namespace AICS.MotorProteins.Kinesin
 			float totalAngle = Mathf.Rad2Deg * Mathf.Acos( Mathf.Clamp( Vector3.Dot( startLocalPosition.normalized, goalLocalPosition.normalized ), -1f, 1f ) );
 			int steps = Mathf.Max( Mathf.RoundToInt( totalAngle / degreesPerSnapStep ), 1 );
 			float dAngle = totalAngle / steps;
-			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude);
+			float dLength = (goalLocalPosition.magnitude - startLocalPosition.magnitude) / steps;
 			Vector3 axis = Vector3.Cross( startLocalPosition.normalized, goalLocalPosition.normalized ).normalized;
 			Vector3[] arcPositions = new Vector3[steps];
 
@@ -161,19 +179,21 @@ namespace AICS.MotorProteins.Kinesin
 			return arcPositions;
 		}
 
-		protected override void OnFinishMove () 
+//		protected override void OnFinishMove () { }
+
+		void UpdateSnap ()
 		{
-			if (snapping)
+			if (currentSnapStep + 1 < snappingArcPositions.Length)
 			{
-				if (currentSnapStep + 1 < snappingArcPositions.Length)
+				if (!moving)
 				{
 					currentSnapStep++;
 					MoveTo( snappingArcPositions[currentSnapStep], true );
 				}
-				else
-				{
-					snapping = moving = false;
-				}
+			}
+			else
+			{
+				snapping = moving = false;
 			}
 		}
 
