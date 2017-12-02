@@ -116,10 +116,10 @@ namespace AICS.MotorProteins.Kinesin
 			return 180f * Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToNewPosition ) ) / Mathf.PI;
 		}
 
-		public void Push (Vector3 point, Vector3 force)
+		public void Push (Vector3 force)
 		{
-			Debug.Log( "cargo push" );
-			Vector3 goalPosition = transform.position + 10f * force;
+			Debug.Log( "cargo push " + force.magnitude );
+			Vector3 goalPosition = transform.position + 1f * force;
 			Vector3 anchorToGoal = goalPosition - anchor.position;
 			pushing = true;
 			MoveTo( anchor.position + anchorToGoal );// Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );

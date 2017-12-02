@@ -31,7 +31,7 @@ namespace AICS.MotorProteins.Kinesin
 			VelocityWatcher otherVelocity = other.GetComponent<VelocityWatcher>();
 			if (otherVelocity != null)
 			{
-				cargo.Push( other.transform.position, otherVelocity.displacement );
+				cargo.Push( otherVelocity.displacement );
 			}
 		}
 

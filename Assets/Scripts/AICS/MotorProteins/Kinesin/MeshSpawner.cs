@@ -36,7 +36,7 @@ namespace AICS.MotorProteins.Kinesin
 //			Vector3 normal = spline.GetNormal( t );
 			Vector3 position = spline.GetPosition( t );
 //			Debug.Log( position );
-			Quaternion rotation = Quaternion.Euler( new Vector3( -24f, 90f, 90f ) );// * Quaternion.LookRotation( normal, position + tangent );
+			Quaternion rotation = Quaternion.Euler( new Vector3( -30f, 90f, 90f ) );// * Quaternion.LookRotation( normal, position + tangent );
 
 			GameObject obj = Instantiate( prefab, transform ) as GameObject;
 			obj.transform.position = new Vector3( 0, 0, position.z );

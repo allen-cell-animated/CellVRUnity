@@ -16,7 +16,6 @@ namespace AICS.MotorProteins.Kinesin
 		public HipsState state = HipsState.Free;
 		public float snapPosition = 5.5f; // nm in front of motor pivot
 		public float snapSpeed = 9000f; // degrees per simulated second
-		public bool doSnap = true;
 		public Follower follower;
 
 		Vector3[] snappingArcPositions;
@@ -59,8 +58,8 @@ namespace AICS.MotorProteins.Kinesin
 					DoRandomWalk();
 				}
 				Animate( snapping );
-				follower.Follow();
 			}
+			follower.Follow();
 		}
 
 		protected override void InteractWithBindingPartners () { }
@@ -107,7 +106,7 @@ namespace AICS.MotorProteins.Kinesin
 
 		public void StartSnap (Motor motor)
 		{
-			if (doSnap && !(motor == lastSnappingPivot && state == HipsState.Locked) && !motor.otherMotor.bound)
+			if (!frozen && !(motor == lastSnappingPivot && state == HipsState.Locked) && !motor.otherMotor.bound)
 			{
 				if (motor.otherMotor.binding)
 				{

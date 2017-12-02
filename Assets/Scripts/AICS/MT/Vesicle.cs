@@ -7,7 +7,7 @@ namespace AICS.MT
 {
 	public class Vesicle : MonoBehaviour
 	{
-		float speed = 0.03f;
+		float speed = 0.02f;
 		float jitter = 200f;
 		public Microtubule microtubule;
 		public float t;
