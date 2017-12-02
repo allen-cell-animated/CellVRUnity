@@ -55,6 +55,8 @@ namespace AICS.PhysicsKinesin
 			Pi = Instantiate( PiPrefab, transform ) as GameObject;
 			Pi.transform.localPosition = Vector3.zero;
 			Pi.transform.localRotation = Quaternion.identity;
+
+            shouldHide = true;
 		}
 
 		public void ReleasePi ()

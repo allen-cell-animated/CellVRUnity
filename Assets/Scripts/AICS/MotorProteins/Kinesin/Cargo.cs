@@ -14,6 +14,19 @@ namespace AICS.MotorProteins.Kinesin
 
 		public bool pushing = false;
 
+        Mover _mover;
+        Mover mover
+        {
+            get
+            {
+                if (_mover == null)
+                {
+                    _mover = GetComponent<Mover>();
+                }
+                return _mover;
+            }
+        }
+
 		Kinesin kinesin
 		{
 			get
@@ -115,14 +128,23 @@ namespace AICS.MotorProteins.Kinesin
 			Vector3 anchorToNewPosition = (transform.position + moveStep - anchor.position).normalized;
 			return 180f * Mathf.Acos( Vector3.Dot( upFromAnchor, anchorToNewPosition ) ) / Mathf.PI;
 		}
+        float lastTime = -100f;
+        private void Update()
+        {
+            if (Time.time - lastTime > 1f)
+            {
+                //Push(5f * Vector3.right);
+                lastTime = Time.time;
+            }
+        }
 
-		public void Push (Vector3 force)
+        public void Push (Vector3 force)
 		{
 			Debug.Log( "cargo push " + force.magnitude );
-			Vector3 goalPosition = transform.position + 1f * force;
-			Vector3 anchorToGoal = goalPosition - anchor.position;
+			Vector3 goalPosition = transform.position + 100f * force;
 			pushing = true;
-			MoveTo( anchor.position + anchorToGoal );// Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );
+            mover.MoveToWithSpeed(goalPosition, 100f, OnFinishMove);
+			//MoveTo( anchor.position + anchorToGoal );// Mathf.Clamp( anchorToGoal.magnitude, minDistanceFromParent, maxDistanceFromParent ) * anchorToGoal.normalized );
 		}
 
 		protected override void OnFinishMove () 

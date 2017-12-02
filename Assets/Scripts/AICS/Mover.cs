@@ -16,7 +16,7 @@ namespace AICS
 		float speed;
 		CompletionDelegate callback;
 
-		public void MoveToOverDuration (Vector3 _goalPosition, float _duration, CompletionDelegate _callback)
+		public void MoveToOverDuration (Vector3 _goalPosition, float _duration, CompletionDelegate _callback = null)
 		{
 			callback = _callback;
 			speed = 1f / _duration;
@@ -24,7 +24,7 @@ namespace AICS
 			MoveTo( _goalPosition );
 		}
 
-		public void MoveToWithSpeed (Vector3 _goalPosition, float _speed, CompletionDelegate _callback)
+		public void MoveToWithSpeed (Vector3 _goalPosition, float _speed, CompletionDelegate _callback = null)
 		{
 			callback = _callback;
 			float distance = Vector3.Distance(transform.position, _goalPosition);
@@ -50,7 +50,10 @@ namespace AICS
 				{
 					t = 1f;
 					moving = false;
-					callback();
+                    if (callback != null)
+                    {
+                        callback();
+                    }
 				}
 
 				transform.position = Vector3.Lerp( startPosition, goalPosition, t );
