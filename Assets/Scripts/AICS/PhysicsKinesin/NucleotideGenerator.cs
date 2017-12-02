@@ -70,7 +70,7 @@ namespace AICS.PhysicsKinesin
 
 		void CheckConcentration ()
 		{
-			int n = molecules.FindAll( m => !m.hidden && !m.shouldHide ).Count;
+			int n = molecules.FindAll( m => !m.hidden && !m.shouldHide && m.isATP ).Count;
 			while (n < number)
 			{
 				AddMolecule();

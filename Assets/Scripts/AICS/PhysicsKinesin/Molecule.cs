@@ -29,7 +29,7 @@ namespace AICS.PhysicsKinesin
 			if (!isBusy && shouldHide)
 			{
 				shouldHide = false;
-				hidden = true;
+//				hidden = true;
 				ToggleHidden( true );
 			}
 		}

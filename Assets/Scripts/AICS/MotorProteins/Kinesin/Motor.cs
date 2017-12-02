@@ -339,7 +339,7 @@ namespace AICS.MotorProteins.Kinesin
 			boundNucleotide.transform.localPosition = Vector3.zero;
 			boundNucleotide.transform.localRotation = Quaternion.identity;
 			boundNucleotide.isBusy = true;
-			boundNucleotide.GetComponent<Rigidbody>().isKinematic = true;
+			boundNucleotide.body.isKinematic = true;
 //			Rigidbody body = boundNucleotide.GetComponent<Rigidbody>();
 //			if (body != null) 
 //			{
@@ -358,9 +358,10 @@ namespace AICS.MotorProteins.Kinesin
 //					body.mass = nucleotide.mass;
 //					body.drag = 5f;
 //				}
-				boundNucleotide.GetComponent<Rigidbody>().isKinematic = false;
+				boundNucleotide.body.isKinematic = false;
 				boundNucleotide.transform.SetParent( boundNucleotide.parent );
 				boundNucleotide.isBusy = false;
+				boundNucleotide.body.AddForce( 5f * (boundNucleotide.transform.position - transform.position) );
 				boundNucleotide = null;
 			}
 		}
