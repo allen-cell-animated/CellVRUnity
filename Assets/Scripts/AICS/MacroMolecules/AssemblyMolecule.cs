@@ -49,7 +49,7 @@ namespace AICS.MacroMolecules
 		Molecule GetComponentClosestToRoot (List<Molecule> components)
 		{
 			float n, min = Mathf.Infinity;
-			Molecule closestComponent;
+			Molecule closestComponent = null;
 			foreach (Molecule component in components)
 			{
 				n = GetMinBranchesToRoot( component, null );
@@ -62,7 +62,7 @@ namespace AICS.MacroMolecules
 			return closestComponent;
 		}
 
-		float GetMinBranchesToRoot (Molecule parent, Molecule grandparent)
+		public float GetMinBranchesToRoot (Molecule parent, Molecule grandparent)
 		{
 			if (parent == rootComponent)
 			{
@@ -94,9 +94,9 @@ namespace AICS.MacroMolecules
 					{
 						return true;
 					}
-
 				}
 			}
+			return false;
 		}
 
 		void SetParent (Molecule parent, Molecule grandparent)
