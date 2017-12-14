@@ -66,7 +66,10 @@ namespace AICS.MotorProteins
 			foreach (Tubulin m in _molecules)
 			{
 				angle = GetMoleculeAngleFromForward( m );
-				molecules.Add( new TubulinAngle( m, angle ) );
+				if (angle == 0)
+				{
+					molecules.Add( new TubulinAngle( m, angle ) );
+				}
 			}
 			molecules.Sort();
 		}
@@ -79,7 +82,16 @@ namespace AICS.MotorProteins
 			Vector3 projectionToNormal = Vector3.Dot( toMolecule, normal ) * normal;
 			Vector3 moleculeDirectionInMotorPlane = (toMolecule - projectionToNormal).normalized;
 
-			return Mathf.Acos( Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, lastCenterTransform ), moleculeDirectionInMotorPlane ) ) * Mathf.Rad2Deg;
+			float dot = Vector3.Dot( Helpers.GetLocalDirection( forwardDirection, lastCenterTransform ), moleculeDirectionInMotorPlane );
+			if (dot > 1f - float.Epsilon)
+			{
+				return 0;
+			}
+			else if (dot < -1f + float.Epsilon)
+			{
+				return 180f;
+			}
+			return Mathf.Acos( dot ) * Mathf.Rad2Deg;
 		}
 
 		public void Clear ()

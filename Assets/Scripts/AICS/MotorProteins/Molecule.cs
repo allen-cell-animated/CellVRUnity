@@ -44,7 +44,7 @@ namespace AICS.MotorProteins
 					meshRenderer.material.color = _flashColor;
 				}
 			}
-			Invoke( "EndFlash", 0.5f );
+			Invoke( "EndFlash", 0.1f );
 		}
 
 		void EndFlash ()
