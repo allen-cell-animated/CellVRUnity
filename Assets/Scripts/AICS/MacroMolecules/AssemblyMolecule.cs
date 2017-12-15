@@ -27,9 +27,34 @@ namespace AICS.MacroMolecules
 			}
 			else
 			{
-				//todo
 				Molecule parentedComponentClosestToRoot = GetComponentClosestToRoot( parentedComponents );
 
+				foreach (Leash leash in rootComponent.leashes)
+				{
+					Molecule nextToClosest = leash.GetComponentClosestTo( parentedComponentClosestToRoot );
+					if (nextToClosest != null)
+					{
+						nextToClosest.transform.SetParent( parentedComponentClosestToRoot.transform );
+						SetParent( nextToClosest, parentedComponentClosestToRoot ); 
+					}
+				}
+
+				foreach (Molecule parentedComponent in parentedComponents)
+				{
+					parentedComponent.transform.SetParent( transform );
+					SetParent( parentedComponent, GetAttachedMoleculeTowardRoot( parentedComponent ) );
+				}
+			}
+		}
+
+		Molecule GetAttachedMoleculeTowardRoot (Molecule parent)
+		{
+			foreach (Leash leash in parent.leashes)
+			{
+				if (leash.GetComponentClosestTo( rootComponent ) != null)
+				{
+					return leash.attachedMolecule;
+				}
 			}
 		}
 
@@ -48,11 +73,22 @@ namespace AICS.MacroMolecules
 
 		Molecule GetComponentClosestToRoot (List<Molecule> components)
 		{
-			float n, min = Mathf.Infinity;
+			int n, min = (int)Mathf.Infinity;
 			Molecule closestComponent = null;
 			foreach (Molecule component in components)
 			{
-				n = GetMinBranchesToRoot( component, null );
+				if (component == rootComponent)
+				{
+					n = 0;
+				}
+				else 
+				{
+					foreach (Leash leash in component.leashes)
+					{
+						n = leash.GetMinBranchesToComponent( rootComponent ) + 1;
+					}
+				}
+
 				if (n < min)
 				{
 					closestComponent = component;
@@ -62,47 +98,9 @@ namespace AICS.MacroMolecules
 			return closestComponent;
 		}
 
-		public float GetMinBranchesToRoot (Molecule parent, Molecule grandparent)
-		{
-			if (parent == rootComponent)
-			{
-				return 0;
-			}
-
-			float n, min = Mathf.Infinity;
-			foreach (Leash leash in parent.leashes)
-			{
-				if (leash.attachedMolecule != grandparent)
-				{
-					n = GetMinBranchesToRoot( leash.attachedMolecule, parent );
-					if (n < min)
-					{
-						min = n;
-					}
-				}
-			}
-			return min + 1f;
-		}
-
-		bool BranchContainsComponent (Leash leash, Molecule componentToFind)
-		{
-			foreach (Leash l in leash.attachedMolecule.leashes)
-			{
-				if (l.attachedMolecule != leash.molecule)
-				{
-					if (l.attachedMolecule == componentToFind)
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
 		void SetParent (Molecule parent, Molecule grandparent)
 		{
-			List<Leash> leashes = parent.leashes;
-			foreach (Leash leash in leashes)
+			foreach (Leash leash in parent.leashes)
 			{
 				if (leash.attachedMolecule != grandparent)
 				{

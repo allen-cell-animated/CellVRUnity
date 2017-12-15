@@ -113,4 +113,78 @@ public class AssemblyParentingSchemeTests
 
 		yield return null;
 	}
+
+	[UnityTest]
+	public IEnumerator DoubleBindTest1 ()
+	{
+		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
+
+		GameObject staticMolecule1 = GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject;
+		GameObject staticMolecule2 = GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject;
+		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindAssemblyMolecule1" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		GameObject molecule1 = assembly.transform.GetChild( 0 ).GetChild( 0 ).gameObject;
+		GameObject molecule2 = assembly.transform.GetChild( 0 ).GetChild( 1 ).gameObject;
+
+		yield return new WaitForSeconds( 5.1f );
+
+		//molecule1 is bound
+		Assert.IsTrue( molecule1.transform.parent == assembly.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule1.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.rootComponent.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		//both molecules are bound
+		Assert.IsTrue( molecule1.transform.parent == assembly.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule1.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		//molecule1 is released leaving only molecule2 bound
+		Assert.IsTrue( molecule1.transform.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule2.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		yield return null;
+	}
+
+	[UnityTest]
+	public IEnumerator DoubleBindTest2 ()
+	{
+		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
+
+		GameObject staticMolecule1 = GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject;
+		GameObject staticMolecule2 = GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject;
+		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindAssemblyMolecule2" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		GameObject molecule5 = assembly.transform.GetChild( 0 ).GetChild( 2 ).GetChild( 0 ).gameObject;
+		GameObject molecule2 = assembly.transform.GetChild( 0 ).GetChild( 0 ).gameObject;
+
+		yield return new WaitForSeconds( 5.1f );
+
+		//molecule5 is bound
+		Assert.IsTrue( molecule5.transform.parent == assembly.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent.parent == molecule5.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.rootComponent.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		//both molecules are bound
+		Assert.IsTrue( molecule5.transform.parent == assembly.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule2.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		//molecule5 is released leaving only molecule2 bound
+		Assert.IsTrue( molecule5.transform.parent.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule2.transform );
+		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+
+		yield return new WaitForSeconds( 5f );
+
+		yield return null;
+	}
 }

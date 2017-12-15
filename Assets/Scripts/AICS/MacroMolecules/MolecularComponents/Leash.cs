@@ -37,5 +37,47 @@ namespace AICS.MacroMolecules
 				maxDistanceFromParent = max;
 			}
 		}
+
+		public Molecule GetComponentClosestTo (Molecule componentToFind)
+		{
+			foreach (Leash leash in attachedMolecule.leashes)
+			{
+				if (leash.attachedMolecule != molecule)
+				{
+					if (leash.attachedMolecule == componentToFind)
+					{
+						return leash.molecule;
+					}
+					Molecule m = leash.GetComponentClosestTo( componentToFind );
+					if (m != null)
+					{
+						return m;
+					}
+				}
+			}
+			return null;
+		}
+
+		public int GetMinBranchesToComponent (Molecule componentToFind)
+		{
+			if (attachedMolecule == componentToFind)
+			{
+				return 0;
+			}
+
+			int n, min = (int)Mathf.Infinity;
+			foreach (Leash leash in attachedMolecule.leashes)
+			{
+				if (leash.attachedMolecule != molecule)
+				{
+					n = leash.GetMinBranchesToComponent( componentToFind );
+					if (n < min)
+					{
+						min = n;
+					}
+				}
+			}
+			return min + 1;
+		}
 	}
 }
