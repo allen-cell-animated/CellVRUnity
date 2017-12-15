@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 using UnityEngine.TestTools;
 using AICS.MacroMolecules;
 
-public class BranchingAssemblyMoleculeTests
+public class AssemblyParentingSchemeTests
 {
 	[UnityTest]
 	public IEnumerator BranchesToRootTest1 ()
