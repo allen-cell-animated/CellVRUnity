@@ -27,11 +27,11 @@ namespace AICS
 		{
 			if (condition)
 			{
-				IntegrationTest.Pass();
+//				IntegrationTest.Pass();
 			}
 			else
 			{
-				IntegrationTest.Fail();
+//				IntegrationTest.Fail();
 			}
 		}
 	}

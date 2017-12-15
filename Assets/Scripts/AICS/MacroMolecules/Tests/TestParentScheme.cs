@@ -18,11 +18,11 @@ namespace AICS
 			{
 				if (goalParent.parent == assembly.transform)
 				{
-					IntegrationTest.Pass();
+//					IntegrationTest.Pass();
 				}
 				else
 				{
-					IntegrationTest.Fail();
+//					IntegrationTest.Fail();
 				}
 			}
 		}

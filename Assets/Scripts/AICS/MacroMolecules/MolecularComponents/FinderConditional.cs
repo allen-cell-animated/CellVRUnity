@@ -45,7 +45,7 @@ namespace AICS.MacroMolecules
 			return lastBinderFound != null;
 		}
 
-		public MoleculeBinder Find ()
+		public virtual MoleculeBinder Find ()
 		{
 			validBinders.Clear();
 			MoleculeBinder otherBinder = null;

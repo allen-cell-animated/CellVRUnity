@@ -76,6 +76,9 @@ namespace AICS.MacroMolecules
 		{
 			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundBinder.molecule.transform.position).normalized;
 
+			boundBinder.boundBinder = null;
+			boundBinder = null;
+
 			if (parentToBoundMolecule)
 			{
 				molecule.UnParentFromBoundMolecule();
@@ -84,9 +87,6 @@ namespace AICS.MacroMolecules
 			{
 				boundBinder.molecule.UnParentFromBoundMolecule();
 			}
-
-			boundBinder.boundBinder = null;
-			boundBinder = null;
 
 			molecule.MoveIfValid( awayFromBoundMolecule );
 		}

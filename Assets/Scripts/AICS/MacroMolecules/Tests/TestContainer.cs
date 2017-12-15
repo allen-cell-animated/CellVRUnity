@@ -18,12 +18,12 @@ namespace AICS
 			{
 				if (!MolecularEnvironment.Instance.PointIsInBounds( molecule.transform.position ))
 				{
-					IntegrationTest.Fail();
+//					IntegrationTest.Fail();
 				}
 			}
 			else
 			{
-				IntegrationTest.Pass();
+//				IntegrationTest.Pass();
 			}
 		}
 	}

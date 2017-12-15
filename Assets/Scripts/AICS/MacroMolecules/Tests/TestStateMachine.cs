@@ -14,7 +14,7 @@ namespace AICS
 		{
 			if (stateMachine.currentState.id == goalStateID)
 			{
-				IntegrationTest.Pass();
+//				IntegrationTest.Pass();
 			}
 		}
 

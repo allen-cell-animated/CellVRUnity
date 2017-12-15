@@ -22,7 +22,6 @@ namespace AICS.MacroMolecules
 
 		public override void SetToBindingOrientation (MoleculeBinder binder)
 		{
-			Debug.Log( name + " " + binder.boundBinder.molecule.name + " " + binder.bindingPosition );
 			assembly.transform.position = binder.boundBinder.molecule.transform.TransformPoint( binder.bindingPosition );
 			assembly.transform.rotation = binder.boundBinder.molecule.transform.rotation * Quaternion.Euler( binder.bindingRotation );
 			transform.localPosition = Vector3.zero;
