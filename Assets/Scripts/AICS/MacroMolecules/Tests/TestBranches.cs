@@ -22,7 +22,7 @@ namespace AICS
 		{
 			foreach (ComponentBranches component in branchesToRoot)
 			{
-				b = assembly.GetMinBranchesToRoot( component.molecule, null );
+				b = 0;//assembly.GetMinBranchesToRoot( component.molecule, null );
 				if (b != component.branches)
 				{
 					Debug.Log( component.molecule.name + " branches != " + b ); 

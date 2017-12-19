@@ -8,24 +8,75 @@ namespace AICS.MacroMolecules
 	{
 		public Molecule rootComponent;
 		public List<ComponentMolecule> componentMolecules = new List<ComponentMolecule>();
+		public int boundComponents = 0;
+
+		public override void ParentToBoundMolecule (Molecule _bindingMolecule)
+		{
+			if (boundComponents == 0)
+			{
+				base.ParentToBoundMolecule( _bindingMolecule );
+			}
+		}
+
+		public override void UnParentFromBoundMolecule (Molecule _releasingMolecule)
+		{
+			if (boundComponents == 1)
+			{
+				base.UnParentFromBoundMolecule( _releasingMolecule );
+			}
+			else if (boundComponents > 1)
+			{
+				List<Molecule> parentedComponents = GetParentedComponents();
+				parentedComponents.Remove( _releasingMolecule );
+				base.ParentToBoundMolecule( parentedComponents[parentedComponents.GetRandomIndex()] );
+			}
+		}
+
+		public override void SetToBindingOrientation (MoleculeBinder binder)
+		{
+			int n = transform.childCount;
+			Transform[] children = new Transform[n];
+			Vector3[] positions = new Vector3[n];
+			Quaternion[] rotations = new Quaternion[n];
+
+			int i = 0;
+			foreach (Transform child in transform)
+			{
+				children[i] = child;
+				positions[i] = child.position;
+				rotations[i] = child.rotation;
+				i++;
+			}
+
+			transform.position = binder.boundBinder.molecule.transform.TransformPoint( binder.bindingPosition );
+			transform.rotation = binder.boundBinder.molecule.transform.rotation * Quaternion.Euler( binder.bindingRotation );
+
+			for (int j = 0; j < n; j++)
+			{
+				children[j].position = positions[j];
+				children[j].rotation = rotations[j];
+			}
+		}
 
 		public void UpdateParentScheme ()
 		{
 			List<Molecule> parentedComponents = GetParentedComponents();
-			if (parentedComponents.Count == 0)
+			boundComponents = parentedComponents.Count;
+			Debug.Log( "set parenting scheme " + boundComponents );
+			if (boundComponents == 0)
 			{
 				if (rootComponent != null)
 				{
 					rootComponent.transform.SetParent( transform );
-					SetParent( rootComponent, null );
+					ParentAllAttachedMoleculesTo( rootComponent, null );
 				}
 			}
-			else if (parentedComponents.Count == 1)
+			else if (boundComponents == 1)
 			{
 				parentedComponents[0].transform.SetParent( transform );
-				SetParent( parentedComponents[0], null );
+				ParentAllAttachedMoleculesTo( parentedComponents[0], null );
 			}
-			else
+			else if (boundComponents > 1)
 			{
 				Molecule parentedComponentClosestToRoot = GetComponentClosestToRoot( parentedComponents );
 
@@ -35,14 +86,14 @@ namespace AICS.MacroMolecules
 					if (nextToClosest != null)
 					{
 						nextToClosest.transform.SetParent( parentedComponentClosestToRoot.transform );
-						SetParent( nextToClosest, parentedComponentClosestToRoot ); 
+						ParentAllAttachedMoleculesTo( nextToClosest, parentedComponentClosestToRoot ); 
 					}
 				}
 
 				foreach (Molecule parentedComponent in parentedComponents)
 				{
 					parentedComponent.transform.SetParent( transform );
-					SetParent( parentedComponent, GetAttachedMoleculeTowardRoot( parentedComponent ) );
+					ParentAllAttachedMoleculesTo( parentedComponent, GetAttachedMoleculeTowardRoot( parentedComponent ) );
 				}
 			}
 		}
@@ -56,6 +107,7 @@ namespace AICS.MacroMolecules
 					return leash.attachedMolecule;
 				}
 			}
+			return null;
 		}
 
 		List<Molecule> GetParentedComponents ()
@@ -73,7 +125,7 @@ namespace AICS.MacroMolecules
 
 		Molecule GetComponentClosestToRoot (List<Molecule> components)
 		{
-			int n, min = (int)Mathf.Infinity;
+			int n, min = int.MaxValue - 10;
 			Molecule closestComponent = null;
 			foreach (Molecule component in components)
 			{
@@ -85,27 +137,26 @@ namespace AICS.MacroMolecules
 				{
 					foreach (Leash leash in component.leashes)
 					{
-						n = leash.GetMinBranchesToComponent( rootComponent ) + 1;
+						n = leash.GetMinBranchesToComponent( rootComponent );
+						if (n < min)
+						{
+							closestComponent = component;
+							min = n;
+						}
 					}
-				}
-
-				if (n < min)
-				{
-					closestComponent = component;
-					min = n;
 				}
 			}
 			return closestComponent;
 		}
 
-		void SetParent (Molecule parent, Molecule grandparent)
+		void ParentAllAttachedMoleculesTo (Molecule parent, Molecule excludedMolecule)
 		{
 			foreach (Leash leash in parent.leashes)
 			{
-				if (leash.attachedMolecule != grandparent)
+				if (leash.attachedMolecule != excludedMolecule)
 				{
 					leash.attachedMolecule.transform.SetParent( parent.transform );
-					SetParent( leash.attachedMolecule, parent );
+					ParentAllAttachedMoleculesTo( leash.attachedMolecule, parent );
 				}
 			}
 		}

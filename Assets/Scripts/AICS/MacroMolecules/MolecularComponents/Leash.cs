@@ -40,6 +40,10 @@ namespace AICS.MacroMolecules
 
 		public Molecule GetComponentClosestTo (Molecule componentToFind)
 		{
+			if (attachedMolecule == componentToFind)
+			{
+				return attachedMolecule;
+			}
 			foreach (Leash leash in attachedMolecule.leashes)
 			{
 				if (leash.attachedMolecule != molecule)
@@ -60,12 +64,16 @@ namespace AICS.MacroMolecules
 
 		public int GetMinBranchesToComponent (Molecule componentToFind)
 		{
-			if (attachedMolecule == componentToFind)
+			if (molecule == componentToFind)
 			{
 				return 0;
 			}
+			if (attachedMolecule == componentToFind)
+			{
+				return 1;
+			}
 
-			int n, min = (int)Mathf.Infinity;
+			int n, min = int.MaxValue - 10;
 			foreach (Leash leash in attachedMolecule.leashes)
 			{
 				if (leash.attachedMolecule != molecule)

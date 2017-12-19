@@ -138,12 +138,12 @@ namespace AICS.MacroMolecules
 			return false;
 		}
 
-		public virtual void ParentToBoundMolecule (Molecule _boundMolecule)
+		public virtual void ParentToBoundMolecule (Molecule _bindingMolecule)
 		{
-			transform.SetParent( _boundMolecule.transform );
+			transform.SetParent( _bindingMolecule.transform );
 		}
 
-		public virtual void UnParentFromBoundMolecule ()
+		public virtual void UnParentFromBoundMolecule (Molecule _releasingMolecule)
 		{
 			transform.SetParent( null );
 		}
@@ -159,7 +159,6 @@ namespace AICS.MacroMolecules
 			MoleculeBinder parentedBinder = GetParentedBinder();
 			if (parentedBinder != null)
 			{
-				Debug.Log( name + " reset binder for " + parentedBinder.typeToBind );
 				SetToBindingOrientation( parentedBinder );
 				UnityEditor.EditorApplication.isPaused = true;
 			}
