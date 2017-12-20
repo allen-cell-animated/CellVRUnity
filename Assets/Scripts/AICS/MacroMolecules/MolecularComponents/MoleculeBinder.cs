@@ -4,13 +4,16 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
+	public delegate void BindingEvent (MoleculeBinder binder);
+
 	public class MoleculeBinder : MolecularComponent
 	{
 		public FinderConditional moleculeFinder;
-		public bool _parentToBoundMolecule;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
 		public MoleculeBinder boundBinder;
+		public event BindingEvent OnBind;
+		public event BindingEvent OnRelease;
 
 		public virtual MoleculeType typeToBind
 		{
@@ -20,13 +23,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public bool parentToBoundMolecule
-		{
-			get
-			{
-				return _parentToBoundMolecule;
-			}
-		}
+		// --------------------------------------------------------------------------------------------------- Bind
 
 		public void Bind ()
 		{
@@ -34,6 +31,7 @@ namespace AICS.MacroMolecules
 			if (otherBinder != null)
 			{
 				DoBind( otherBinder );
+				otherBinder.DoBind( this );
 			}
 		}
 
@@ -45,24 +43,20 @@ namespace AICS.MacroMolecules
 		protected virtual void DoBind (MoleculeBinder otherBinder)
 		{
 			boundBinder = otherBinder;
-			boundBinder.boundBinder = this;
 
-			if (parentToBoundMolecule)
+			if (OnBind != null)
 			{
-				molecule.ParentToBoundMolecule( boundBinder.molecule );
-				molecule.SetToBindingOrientation( this );
-			}
-			else if (boundBinder.parentToBoundMolecule)
-			{
-				boundBinder.molecule.ParentToBoundMolecule( molecule );
-				boundBinder.molecule.SetToBindingOrientation( boundBinder );
+				OnBind( otherBinder );
 			}
 		}
+
+		// --------------------------------------------------------------------------------------------------- Release
 
 		public void Release ()
 		{
 			if (boundBinder != null && ReadyToRelease())
 			{
+				boundBinder.DoRelease();
 				DoRelease();
 			}
 		}
@@ -74,22 +68,13 @@ namespace AICS.MacroMolecules
 
 		protected virtual void DoRelease ()
 		{
-			Vector3 awayFromBoundMolecule = 3f * (transform.position - boundBinder.molecule.transform.position).normalized;
-
-			Molecule releasingMolecule = boundBinder.molecule;
-			boundBinder.boundBinder = null;
+			MoleculeBinder releasingBinder = boundBinder;
 			boundBinder = null;
 
-			if (parentToBoundMolecule)
+			if (OnRelease != null)
 			{
-				molecule.UnParentFromBoundMolecule( releasingMolecule );
+				OnRelease( releasingBinder );
 			}
-			else if (boundBinder.parentToBoundMolecule)
-			{
-				boundBinder.molecule.UnParentFromBoundMolecule( molecule );
-			}
-
-			molecule.MoveIfValid( awayFromBoundMolecule );
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class AssemblyParentingSchemeTests
 			int n, min = int.MaxValue;
 			foreach (Leash leash in assembly.componentMolecules[i].leashes)
 			{
-				n = leash.GetMinBranchesToComponent( assembly.rootComponent );
+				n = leash.GetMinBranchesToMolecule( assembly.rootComponent );
 				if (n < min)
 				{
 					min = n;
@@ -45,7 +45,7 @@ public class AssemblyParentingSchemeTests
 			int n, min = int.MaxValue;
 			foreach (Leash leash in assembly.componentMolecules[i].leashes)
 			{
-				n = leash.GetMinBranchesToComponent( assembly.rootComponent );
+				n = leash.GetMinBranchesToMolecule( assembly.rootComponent );
 				if (n < min)
 				{
 					min = n;

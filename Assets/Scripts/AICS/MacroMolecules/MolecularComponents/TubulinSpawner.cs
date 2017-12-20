@@ -5,20 +5,20 @@ using AICS.Splines;
 
 namespace AICS.MacroMolecules
 {
-	public class MicrotubuleComponentSpawner : ComponentSpawner
+	public class TubulinSpawner : MoleculeSpawner
 	{
 		public int tubulinsPerTurn = 13;
 
-		ComponentMolecule[] _tubulinPrefabs;
-		ComponentMolecule[] tubulinPrefabs
+		Molecule[] _tubulinPrefabs;
+		Molecule[] tubulinPrefabs
 		{
 			get
 			{
 				if (_tubulinPrefabs == null)
 				{
-					_tubulinPrefabs = new ComponentMolecule[2];
-					_tubulinPrefabs[0] = componentPrefabs.Find( m => m.type == MoleculeType.TubulinA );
-					_tubulinPrefabs[1] = componentPrefabs.Find( m => m.type == MoleculeType.TubulinB );
+					_tubulinPrefabs = new Molecule[2];
+					_tubulinPrefabs[0] = moleculePrefabs.Find( m => m.type == MoleculeType.TubulinA );
+					_tubulinPrefabs[1] = moleculePrefabs.Find( m => m.type == MoleculeType.TubulinB );
 				}
 				return _tubulinPrefabs;
 			}
@@ -52,7 +52,7 @@ namespace AICS.MacroMolecules
 			float rotationPerTubulin = direction * 360f / (float)tubulinsPerTurn;
 			float normalRotation = (direction < 0) ? 0 : rotationPerTubulin;
 			bool reachedEndOfSpline = false;
-			List<ComponentMolecule> tubulins = new List<ComponentMolecule>();
+			List<Molecule> tubulins = new List<Molecule>();
 			for (int i = 0; i < turns; i++)
 			{
 				for (int j = 0; j < tubulinsPerTurn; j++)
@@ -62,18 +62,18 @@ namespace AICS.MacroMolecules
 						if (k >= tubulins.Count)
 						{
 							int type = direction < 0 ? (k % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 0 : 1) : (k % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 1 : 0);
-							tubulins.Add( SpawnComponent( tubulinPrefabs[type] ) );
+							tubulins.Add( SpawnMolecule( tubulinPrefabs[type] ) );
 						}
 						if (tubulins[k] != null)
 						{
 							float turnT = t + 3f * j / (float)tubulinsPerTurn * inc;
 							Vector3 tangent = spline.GetTangent( turnT );
 							Vector3 normal = Quaternion.AngleAxis( normalRotation, tangent ) * spline.GetNormal( turnT );
-							Vector3 position = spline.GetPosition( turnT ) + assemblyMolecule.radius * normal;
+							Vector3 position = spline.GetPosition( turnT ) + molecule.radius * normal;
 							Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
 
 							tubulins[k].gameObject.SetActive( true );
-							PlaceComponent( tubulins[k], position, lookDirection, normal );
+							PlaceMolecule( tubulins[k], position, lookDirection, normal );
 
 							normalRotation += rotationPerTubulin;
 							if (turnT >= 1f || turnT <= 0)

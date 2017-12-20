@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class StaticMoleculeBinder : MoleculeBinder
+	public class NullMoleculeBinder : MoleculeBinder
 	{
 		public MoleculeType _typeToBind;
 

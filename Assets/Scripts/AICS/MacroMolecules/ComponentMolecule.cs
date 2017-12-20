@@ -8,23 +8,23 @@ namespace AICS.MacroMolecules
 	{
 		public AssemblyMolecule assembly;
 
-		public override void ParentToBoundMolecule (Molecule _bindingMolecule)
-		{
-			assembly.ParentToBoundMolecule( _bindingMolecule );
-			assembly.UpdateParentScheme();
-		}
-
-		public override void UnParentFromBoundMolecule (Molecule _releasingMolecule)
-		{
-			assembly.UnParentFromBoundMolecule( _releasingMolecule );
-			assembly.UpdateParentScheme();
-		}
-
-		public override void SetToBindingOrientation (MoleculeBinder binder)
-		{
-			assembly.SetToBindingOrientation( binder );
-			transform.localPosition = Vector3.zero;
-			transform.localRotation = Quaternion.identity;
-		}
+//		public void ParentToBoundMolecule (Molecule _bindingMolecule)
+//		{
+//			assembly.ParentToBoundMolecule( _bindingMolecule );
+//			assembly.UpdateParentScheme();
+//		}
+//
+//		public void UnParentFromBoundMolecule (Molecule _releasingMolecule)
+//		{
+//			assembly.UnParentFromBoundMolecule( _releasingMolecule );
+//			assembly.UpdateParentScheme();
+//		}
+//
+//		public void SetToBindingOrientation (MoleculeBinder binder)
+//		{
+//			assembly.SetToBindingOrientation( binder );
+//			transform.localPosition = Vector3.zero;
+//			transform.localRotation = Quaternion.identity;
+//		}
 	}
 }

@@ -38,9 +38,9 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public Molecule GetComponentClosestTo (Molecule componentToFind)
+		public Molecule GetMonomerClosestTo (Molecule monomerToFind)
 		{
-			if (attachedMolecule == componentToFind)
+			if (attachedMolecule == monomerToFind)
 			{
 				return attachedMolecule;
 			}
@@ -48,11 +48,11 @@ namespace AICS.MacroMolecules
 			{
 				if (leash.attachedMolecule != molecule)
 				{
-					if (leash.attachedMolecule == componentToFind)
+					if (leash.attachedMolecule == monomerToFind)
 					{
 						return leash.molecule;
 					}
-					Molecule m = leash.GetComponentClosestTo( componentToFind );
+					Molecule m = leash.GetMonomerClosestTo( monomerToFind );
 					if (m != null)
 					{
 						return m;
@@ -62,13 +62,13 @@ namespace AICS.MacroMolecules
 			return null;
 		}
 
-		public int GetMinBranchesToComponent (Molecule componentToFind)
+		public int GetMinBranchesToMolecule (Molecule moleculeToFind)
 		{
-			if (molecule == componentToFind)
+			if (molecule == moleculeToFind)
 			{
 				return 0;
 			}
-			if (attachedMolecule == componentToFind)
+			if (attachedMolecule == moleculeToFind)
 			{
 				return 1;
 			}
@@ -78,7 +78,7 @@ namespace AICS.MacroMolecules
 			{
 				if (leash.attachedMolecule != molecule)
 				{
-					n = leash.GetMinBranchesToComponent( componentToFind );
+					n = leash.GetMinBranchesToMolecule( moleculeToFind );
 					if (n < min)
 					{
 						min = n;

@@ -85,15 +85,15 @@ namespace AICS.MacroMolecules
 		{
 			get
 			{
-				return GetParentedBinder() != null;
+				return GetAnOccupiedBinder() != null;
 			}
 		}
 
-		public MoleculeBinder GetParentedBinder ()
+		public MoleculeBinder GetAnOccupiedBinder ()
 		{
 			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.boundBinder != null && binder.parentToBoundMolecule)
+				if (binder.boundBinder != null)
 				{
 					return binder;
 				}
@@ -138,29 +138,24 @@ namespace AICS.MacroMolecules
 			return false;
 		}
 
-		public virtual void ParentToBoundMolecule (Molecule _bindingMolecule)
+		List<IHandleBinds> _bindHandlers;
+		List<IHandleBinds> bindHandlers
 		{
-			transform.SetParent( _bindingMolecule.transform );
-		}
-
-		public virtual void UnParentFromBoundMolecule (Molecule _releasingMolecule)
-		{
-			transform.SetParent( null );
-		}
-
-		public virtual void SetToBindingOrientation (MoleculeBinder binder)
-		{
-			transform.position = binder.boundBinder.molecule.transform.TransformPoint( binder.bindingPosition );
-			transform.rotation = binder.boundBinder.molecule.transform.rotation * Quaternion.Euler( binder.bindingRotation );
-		}
-
-		public void ResetToBindingOrientation ()
-		{
-			MoleculeBinder parentedBinder = GetParentedBinder();
-			if (parentedBinder != null)
+			get
 			{
-				SetToBindingOrientation( parentedBinder );
-				UnityEditor.EditorApplication.isPaused = true;
+				if (_bindHandlers == null)
+				{
+					_bindHandlers = GetMolecularComponents<IHandleBinds>();
+				}
+				return _bindHandlers;
+			}
+		}
+
+		void OnEnable ()
+		{
+			foreach (IHandleBinds bindHandler in bindHandlers)
+			{
+				bindHandler.SubscribeToBindEvents( binders );
 			}
 		}
 
