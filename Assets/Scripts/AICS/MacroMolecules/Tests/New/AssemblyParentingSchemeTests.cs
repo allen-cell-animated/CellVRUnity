@@ -13,14 +13,14 @@ public class AssemblyParentingSchemeTests
 		int[] branches = new int[]{2, 1, 0, 1, 2, 3, 1, 2, 3};
 
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/BranchedAssemblyMolecule1" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BranchesToRootTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
-		for (int i = 0; i < assembly.componentMolecules.Count; i++)
+		for (int i = 0; i < polymer.monomers.Count; i++)
 		{
 			int n, min = int.MaxValue;
-			foreach (Leash leash in assembly.componentMolecules[i].leashes)
+			foreach (Leash leash in polymer.monomers[i].leashes)
 			{
-				n = leash.GetMinBranchesToMolecule( assembly.rootComponent );
+				n = leash.GetMinBranchesToMolecule( polymer.rootMonomer );
 				if (n < min)
 				{
 					min = n;
@@ -38,14 +38,14 @@ public class AssemblyParentingSchemeTests
 		int[] branches = new int[]{10, 9, 8, 7, 8, 6, 5, 6, 4, 5, 5, 3, 4, 2, 1, 2, 2, 0, 1, 2, 3, 3, 4, 4, 5};
 
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/BranchedAssemblyMolecule2" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BranchesToRootTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
-		for (int i = 0; i < assembly.componentMolecules.Count; i++)
+		for (int i = 0; i < polymer.monomers.Count; i++)
 		{
 			int n, min = int.MaxValue;
-			foreach (Leash leash in assembly.componentMolecules[i].leashes)
+			foreach (Leash leash in polymer.monomers[i].leashes)
 			{
-				n = leash.GetMinBranchesToMolecule( assembly.rootComponent );
+				n = leash.GetMinBranchesToMolecule( polymer.rootMonomer );
 				if (n < min)
 				{
 					min = n;
@@ -61,7 +61,7 @@ public class AssemblyParentingSchemeTests
 	public IEnumerator BindReleaseTest1 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/SpokeAssemblyMolecule" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -71,13 +71,13 @@ public class AssemblyParentingSchemeTests
 			binder.Bind();
 		}
 
-		Assert.IsTrue( binder.transform.parent == assembly.transform );
+		Assert.IsTrue( binder.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 0.1f );
 
 		binder.Release();
 
-		Assert.IsTrue( assembly.rootComponent.transform.parent == assembly.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == polymer.transform );
 
 		yield return null;
 	}
@@ -86,7 +86,7 @@ public class AssemblyParentingSchemeTests
 	public IEnumerator BindReleaseTest2 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/BranchedAssemblyMolecule3" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -96,13 +96,13 @@ public class AssemblyParentingSchemeTests
 			binder.Bind();
 		}
 
-		Assert.IsTrue( binder.transform.parent == assembly.transform );
+		Assert.IsTrue( binder.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 0.1f );
 
 		binder.Release();
 
-		Assert.IsTrue( assembly.rootComponent.transform.parent == assembly.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == polymer.transform );
 
 		yield return null;
 	}
@@ -111,7 +111,7 @@ public class AssemblyParentingSchemeTests
 	public IEnumerator BindReleaseTest3 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/BranchedAssemblyMolecule4" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest3" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -121,13 +121,13 @@ public class AssemblyParentingSchemeTests
 			binder.Bind();
 		}
 
-		Assert.IsTrue( binder.transform.parent == assembly.transform );
+		Assert.IsTrue( binder.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 0.1f );
 
 		binder.Release();
 
-		Assert.IsTrue( assembly.rootComponent.transform.parent == assembly.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == polymer.transform );
 
 		yield return null;
 	}
@@ -140,37 +140,37 @@ public class AssemblyParentingSchemeTests
 
 		GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject );
 		(GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindAssemblyMolecule1" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
-		GameObject molecule1 = assembly.transform.GetChild( 0 ).GetChild( 0 ).gameObject;
-		GameObject molecule2 = assembly.transform.GetChild( 0 ).GetChild( 1 ).gameObject;
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		GameObject molecule1 = polymer.transform.GetChild( 0 ).GetChild( 0 ).gameObject;
+		GameObject molecule2 = polymer.transform.GetChild( 0 ).GetChild( 1 ).gameObject;
 
 		yield return new WaitForSeconds( 1.1f );
 
 		//molecule1 is bound
-		Assert.IsTrue( molecule1.transform.parent == assembly.transform );
-		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule1.transform );
-		Assert.IsTrue( molecule2.transform.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( molecule1.transform.parent == polymer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == molecule1.transform );
+		Assert.IsTrue( molecule2.transform.parent == polymer.rootMonomer.transform );
 
 		yield return new WaitForSeconds( 1f );
 
 		//both molecules are bound
-		Assert.IsTrue( molecule1.transform.parent == assembly.transform );
-		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule1.transform );
-		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+		Assert.IsTrue( molecule1.transform.parent == polymer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == molecule1.transform );
+		Assert.IsTrue( molecule2.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 1f );
 
 		//molecule1 is released leaving only molecule2 bound
-		Assert.IsTrue( molecule1.transform.parent == assembly.rootComponent.transform );
-		Assert.IsTrue( assembly.rootComponent.transform.parent == molecule2.transform );
-		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+		Assert.IsTrue( molecule1.transform.parent == polymer.rootMonomer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == molecule2.transform );
+		Assert.IsTrue( molecule2.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 1f );
 
 		//molecule2 is released so now it's free
-		Assert.IsTrue( molecule1.transform.parent == assembly.rootComponent.transform );
-		Assert.IsTrue( assembly.rootComponent.transform.parent == assembly.transform );
-		Assert.IsTrue( molecule2.transform.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( molecule1.transform.parent == polymer.rootMonomer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == polymer.transform );
+		Assert.IsTrue( molecule2.transform.parent == polymer.rootMonomer.transform );
 
 		yield return null;
 	}
@@ -179,41 +179,42 @@ public class AssemblyParentingSchemeTests
 	public IEnumerator DoubleBindTest2 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 20f * Vector3.one;
+		MolecularEnvironment.Instance.size = 40f * Vector3.one;
 
 		GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject );
-		GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject );
-		AssemblyMolecule assembly = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindAssemblyMolecule2" ) as GameObject ) as GameObject).GetComponent<AssemblyMolecule>();
-		GameObject molecule8 = assembly.transform.GetChild( 0 ).GetChild( 2 ).GetChild( 0 ).GetChild( 0 ).gameObject;
-		GameObject molecule2 = assembly.transform.GetChild( 0 ).GetChild( 0 ).GetChild( 0 ).gameObject;
+		(GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		GameObject molecule8 = polymer.transform.GetChild( 0 ).GetChild( 2 ).GetChild( 0 ).GetChild( 0 ).gameObject;
+		GameObject molecule2 = polymer.transform.GetChild( 0 ).GetChild( 0 ).GetChild( 0 ).gameObject;
 
 		yield return new WaitForSeconds( 5.1f );
 
 		//molecule8 is bound
-//		Assert.IsTrue( molecule8.transform.parent == assembly.transform );
-//		Assert.IsTrue( assembly.rootComponent.transform.parent.parent.parent == molecule8.transform );
-//		Assert.IsTrue( molecule2.transform.parent.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( molecule8.transform.parent == polymer.transform );
+		Debug.Log(polymer.rootMonomer == null);
+		Assert.IsTrue( polymer.rootMonomer.transform.parent.parent.parent == molecule8.transform );
+		Assert.IsTrue( molecule2.transform.parent.parent == polymer.rootMonomer.transform );
 
 		yield return new WaitForSeconds( 5f );
 
 		//both molecules are bound
-//		Assert.IsTrue( molecule8.transform.parent == assembly.transform );
-//		Assert.IsTrue( assembly.rootComponent.transform.parent.parent == molecule2.transform );
-//		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+		Assert.IsTrue( molecule8.transform.parent == polymer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent.parent == molecule2.transform ); //Need to fix
+		Assert.IsTrue( molecule2.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 5f );
 
 		//molecule8 is released leaving only molecule2 bound
-//		Assert.IsTrue( molecule8.transform.parent.parent.parent == assembly.rootComponent.transform );
-//		Assert.IsTrue( assembly.rootComponent.transform.parent.parent == molecule2.transform );
-//		Assert.IsTrue( molecule2.transform.parent == assembly.transform );
+		Assert.IsTrue( molecule8.transform.parent.parent.parent == polymer.rootMonomer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent.parent == molecule2.transform );
+		Assert.IsTrue( molecule2.transform.parent == polymer.transform );
 
 		yield return new WaitForSeconds( 5f );
 
 		//molecule2 is released so now it's free
-//		Assert.IsTrue( molecule8.transform.parent.parent.parent == assembly.rootComponent.transform );
-//		Assert.IsTrue( assembly.rootComponent.transform.parent == assembly.transform );
-//		Assert.IsTrue( molecule2.transform.parent.parent == assembly.rootComponent.transform );
+		Assert.IsTrue( molecule8.transform.parent.parent.parent == polymer.rootMonomer.transform );
+		Assert.IsTrue( polymer.rootMonomer.transform.parent == polymer.transform );
+		Assert.IsTrue( molecule2.transform.parent.parent == polymer.rootMonomer.transform );
 
 		yield return new WaitForSeconds( 5f );
 

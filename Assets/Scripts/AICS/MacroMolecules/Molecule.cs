@@ -29,6 +29,7 @@ namespace AICS.MacroMolecules
 		public MoleculeType type;
 		public float radius = 1f;
 		public GameObject[] componentObjects;
+		public Polymer polymer;
 
 		void Start ()
 		{

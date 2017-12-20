@@ -67,7 +67,6 @@ namespace AICS.MacroMolecules
 
 		protected BindingSite GetRandomBindingSite ()
 		{
-			Debug.Log(validBindingSites.Count);
 			return validBindingSites[validBindingSites.GetRandomIndex()];
 		}
 	}

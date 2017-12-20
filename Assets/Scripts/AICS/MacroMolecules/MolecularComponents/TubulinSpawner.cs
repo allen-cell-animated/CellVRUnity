@@ -5,7 +5,7 @@ using AICS.Splines;
 
 namespace AICS.MacroMolecules
 {
-	public class TubulinSpawner : MoleculeSpawner
+	public class TubulinSpawner : MonomerSpawner
 	{
 		public int tubulinsPerTurn = 13;
 
@@ -17,8 +17,8 @@ namespace AICS.MacroMolecules
 				if (_tubulinPrefabs == null)
 				{
 					_tubulinPrefabs = new Molecule[2];
-					_tubulinPrefabs[0] = moleculePrefabs.Find( m => m.type == MoleculeType.TubulinA );
-					_tubulinPrefabs[1] = moleculePrefabs.Find( m => m.type == MoleculeType.TubulinB );
+					_tubulinPrefabs[0] = monomerPrefabs.Find( m => m.type == MoleculeType.TubulinA );
+					_tubulinPrefabs[1] = monomerPrefabs.Find( m => m.type == MoleculeType.TubulinB );
 				}
 				return _tubulinPrefabs;
 			}
@@ -62,7 +62,7 @@ namespace AICS.MacroMolecules
 						if (k >= tubulins.Count)
 						{
 							int type = direction < 0 ? (k % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 0 : 1) : (k % (2 * tubulinsPerTurn) < tubulinsPerTurn ? 1 : 0);
-							tubulins.Add( SpawnMolecule( tubulinPrefabs[type] ) );
+							tubulins.Add( SpawnMonomer( tubulinPrefabs[type] ) );
 						}
 						if (tubulins[k] != null)
 						{
@@ -73,7 +73,7 @@ namespace AICS.MacroMolecules
 							Vector3 lookDirection = Vector3.Normalize( Vector3.Cross( tangent, normal ) );
 
 							tubulins[k].gameObject.SetActive( true );
-							PlaceMolecule( tubulins[k], position, lookDirection, normal );
+							PlaceMonomer( tubulins[k], position, lookDirection, normal );
 
 							normalRotation += rotationPerTubulin;
 							if (turnT >= 1f || turnT <= 0)

@@ -4,11 +4,25 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class MoleculeSpawner : MolecularComponent, ISetup
+	[RequireComponent( typeof(Polymer) )]
+	public class MonomerSpawner : MolecularComponent, ISetup
 	{
-		public List<Molecule> moleculePrefabs = new List<Molecule>();
+		public List<Molecule> monomerPrefabs = new List<Molecule>();
 
 		int n = 0;
+
+		Polymer _polymer;
+		Polymer polymer
+		{
+			get
+			{
+				if (_polymer == null)
+				{
+					_polymer = GetComponent<Polymer>();
+				}
+				return _polymer;
+			}
+		}
 
 		Transform _moleculeParent;
 		protected Transform moleculeParent
@@ -33,25 +47,26 @@ namespace AICS.MacroMolecules
 
 		protected virtual void SpawnAll ()
 		{
-			foreach (Molecule _molecule in moleculePrefabs)
+			foreach (Molecule _molecule in monomerPrefabs)
 			{
-				SpawnMolecule( _molecule );
+				SpawnMonomer( _molecule );
 			}
 		}
 
-		protected Molecule SpawnMolecule (Molecule prefab)
+		protected Molecule SpawnMonomer (Molecule prefab)
 		{
 			if (prefab != null)
 			{
 				Molecule _molecule = Instantiate( prefab, moleculeParent );
 				_molecule.name = prefab.name + "_" + n;
+				_molecule.polymer = polymer;
 				n++;
 				return _molecule;
 			}
 			return null;
 		}
 
-		protected void PlaceMolecule (Molecule _molecule, Vector3 position, Vector3 lookDirection, Vector3 normal)
+		protected void PlaceMonomer (Molecule _molecule, Vector3 position, Vector3 lookDirection, Vector3 normal)
 		{
 			_molecule.transform.localPosition = position;
 			_molecule.transform.LookAt( _molecule.transform.position + lookDirection, normal );

@@ -6,8 +6,8 @@ namespace AICS.MacroMolecules
 {
 	public class Polymer : Substrate
 	{
-		public Monomer rootMonomer;
-		public List<Monomer> monomers = new List<Monomer>();
+		public Molecule rootMonomer;
+		public List<Molecule> monomers = new List<Molecule>();
 
 		List<Molecule> boundMonomerMolecules = new List<Molecule>();
 
@@ -66,8 +66,8 @@ namespace AICS.MacroMolecules
 			{
 				if (rootMonomer != null)
 				{
-					rootMonomer.molecule.transform.SetParent( transform );
-					ParentAllAttachedMoleculesTo( rootMonomer.molecule, null );
+					rootMonomer.transform.SetParent( transform );
+					ParentAllAttachedMoleculesTo( rootMonomer, null );
 				}
 			}
 			else if (boundMonomerMolecules.Count == 1)
@@ -79,11 +79,12 @@ namespace AICS.MacroMolecules
 			{
 				Molecule boundMonomerClosestToRoot = GetMoleculeClosestToRoot( boundMonomerMolecules );
 
-				foreach (Leash leash in rootMonomer.molecule.leashes)
+				foreach (Leash leash in rootMonomer.leashes)
 				{
 					Molecule nextToClosest = leash.GetMonomerClosestTo( boundMonomerClosestToRoot );
 					if (nextToClosest != null)
 					{
+						Debug.Log( "leash from root to " + leash.attachedMolecule.name + " ends at " + nextToClosest.name );
 						nextToClosest.transform.SetParent( boundMonomerClosestToRoot.transform );
 						ParentAllAttachedMoleculesTo( nextToClosest, boundMonomerClosestToRoot ); 
 					}
@@ -101,7 +102,7 @@ namespace AICS.MacroMolecules
 		{
 			foreach (Leash leash in parent.leashes)
 			{
-				if (leash.GetMonomerClosestTo( rootMonomer.molecule ) != null)
+				if (leash.GetMonomerClosestTo( rootMonomer ) != null)
 				{
 					return leash.attachedMolecule;
 				}
@@ -112,11 +113,11 @@ namespace AICS.MacroMolecules
 		List<Molecule> GetBoundMonomerMolecules ()
 		{
 			boundMonomerMolecules.Clear();
-			foreach (Monomer monomer in monomers)
+			foreach (Molecule monomer in monomers)
 			{
-				if (monomer.molecule.bound)
+				if (monomer.bound)
 				{
-					boundMonomerMolecules.Add( monomer.molecule );
+					boundMonomerMolecules.Add( monomer );
 				}
 			}
 			return boundMonomerMolecules;
@@ -128,7 +129,7 @@ namespace AICS.MacroMolecules
 			Molecule closestMonomer = null;
 			foreach (Molecule monomer in _monomers)
 			{
-				if (monomer == rootMonomer.molecule)
+				if (monomer == rootMonomer)
 				{
 					n = 0;
 				}
@@ -136,7 +137,7 @@ namespace AICS.MacroMolecules
 				{
 					foreach (Leash leash in monomer.leashes)
 					{
-						n = leash.GetMinBranchesToMolecule( rootMonomer.molecule );
+						n = leash.GetMinBranchesToMolecule( rootMonomer );
 						if (n < min)
 						{
 							closestMonomer = monomer;
