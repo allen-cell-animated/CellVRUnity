@@ -7,7 +7,7 @@ namespace AICS.MacroMolecules
 	public abstract class Substrate : MolecularComponent, IHandleBinds
 	{
 		List<MoleculeBinder> subscribedBinders;
-		MoleculeBinder currentBinder;
+		BindingSite currentBindingSite;
 
 		public void SubscribeToBindEvents (List<MoleculeBinder> binders)
 		{
@@ -28,20 +28,20 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected virtual void OnBind (MoleculeBinder binder)
+		protected virtual void OnBind (BindingSite bindingSite)
 		{
-			currentBinder = binder;
-			ParentToBoundMolecule( binder.molecule );
-			SetToBindingOrientation( binder );
+			currentBindingSite = bindingSite;
+			ParentToBoundMolecule( bindingSite.molecule );
+			SetToBindingOrientation( bindingSite );
 		}
 
-		protected virtual void OnRelease (MoleculeBinder binder)
+		protected virtual void OnRelease (BindingSite bindingSite)
 		{
-			if (binder == currentBinder)
+			if (bindingSite == currentBindingSite)
 			{
-				UnParentFromReleasedMolecule( binder.molecule );
-				MoveAwayFromReleasedMolecule( binder.molecule );
-				currentBinder = null;
+				UnParentFromReleasedMolecule( bindingSite.molecule );
+				MoveAwayFromReleasedMolecule( bindingSite.molecule );
+				currentBindingSite = null;
 			}
 		}
 
@@ -50,15 +50,15 @@ namespace AICS.MacroMolecules
 			transform.SetParent( _bindingMolecule.transform );
 		}
 
-		public virtual void SetToBindingOrientation (MoleculeBinder binder)
+		public virtual void SetToBindingOrientation (BindingSite bindingSite)
 		{
-			molecule.transform.position = binder.molecule.transform.TransformPoint( binder.boundBinder.bindingPosition );
-			molecule.transform.rotation = binder.molecule.transform.rotation * Quaternion.Euler( binder.boundBinder.bindingRotation );
+			molecule.transform.position = bindingSite.molecule.transform.TransformPoint( bindingSite.boundBinder.bindingPosition );
+			molecule.transform.rotation = bindingSite.molecule.transform.rotation * Quaternion.Euler( bindingSite.boundBinder.bindingRotation );
 		}
 
 		public void ResetToBindingOrientation ()
 		{
-			SetToBindingOrientation( currentBinder );
+			SetToBindingOrientation( currentBindingSite );
 		}
 
 		public virtual void UnParentFromReleasedMolecule (Molecule _releasingMolecule)

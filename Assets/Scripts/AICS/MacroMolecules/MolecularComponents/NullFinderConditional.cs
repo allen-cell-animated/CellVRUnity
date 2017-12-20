@@ -6,10 +6,11 @@ namespace AICS.MacroMolecules
 {
 	public class NullFinderConditional : FinderConditional 
 	{
-		public override MoleculeBinder Find ()
+		public override BindingSite Find ()
 		{
-			GameObject molecule = GameObject.Instantiate( Resources.Load( "Tests/NullMolecule" ) as GameObject ) as GameObject;
-			return molecule.AddComponent<MoleculeBinder>();
+			BindingSite site = (GameObject.Instantiate( Resources.Load( "Tests/NullMolecule" ) as GameObject ) as GameObject).AddComponent<BindingSite>();
+			site.typeToBind = typeToFind;
+			return site;
 		}
 	}
 }

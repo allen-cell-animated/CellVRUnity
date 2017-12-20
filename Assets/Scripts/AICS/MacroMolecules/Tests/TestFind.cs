@@ -12,11 +12,11 @@ namespace AICS
 
 		protected override void TestOnce ()
 		{
-			if (finder != null && binder != null && finder.Pass())
-			{
-				binder.Bind();
-			}
-			PassTest( binder != null && binder.boundBinder != null );
+//			if (finder != null && binder != null && finder.Pass())
+//			{
+//				binder.Bind();
+//			}
+//			PassTest( binder != null && binder.boundBinder != null );
 		}
 
 		protected override void TestUntilPass () {}

@@ -12,8 +12,8 @@ namespace AICS
 		public int attempts;
 
 		int n = 0;
-		int foundGoal;
-		int foundOther;
+//		int foundGoal;
+//		int foundOther;
 
 		protected override void TestOnce ()
 		{
@@ -23,22 +23,22 @@ namespace AICS
 				n++;
 			}
 
-			PassTest(foundGoal > foundOther);
+//			PassTest(foundGoal > foundOther);
 		}
 
 		void AttemptToFind ()
 		{
 			if (finder != null)
 			{
-				MoleculeBinder found = finder.Find();
-				if (found != null && found.molecule == moleculeToFindMost)
-				{
-					foundGoal++;
-				}
-				else 
-				{
-					foundOther++;
-				}
+//				MoleculeBinder found = finder.Find();
+//				if (found != null && found.molecule == moleculeToFindMost)
+//				{
+//					foundGoal++;
+//				}
+//				else 
+//				{
+//					foundOther++;
+//				}
 			}
 		}
 

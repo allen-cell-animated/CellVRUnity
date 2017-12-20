@@ -34,17 +34,17 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public override void SetToBindingOrientation (MoleculeBinder binder)
+		public override void SetToBindingOrientation (BindingSite bindingSite)
 		{
 			if (polymer != null)
 			{
-				polymer.SetToBindingOrientation( binder );
+				polymer.SetToBindingOrientation( bindingSite );
 				transform.localPosition = Vector3.zero;
 				transform.localRotation = Quaternion.identity;
 			}
 			else
 			{
-				base.SetToBindingOrientation( binder );
+				base.SetToBindingOrientation( bindingSite );
 			}
 		}
 	}

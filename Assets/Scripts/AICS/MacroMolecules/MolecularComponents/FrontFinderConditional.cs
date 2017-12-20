@@ -5,18 +5,18 @@ using UnityEngine;
 namespace AICS.MacroMolecules
 {
 	[System.Serializable]
-	public class BinderAngle : System.IComparable<BinderAngle>
+	public class BindingSiteAngle : System.IComparable<BindingSiteAngle>
 	{
-		public MoleculeBinder binder;
+		public BindingSite bindingSite;
 		public float angle;
 
-		public BinderAngle (MoleculeBinder _binder, float _angle)
+		public BindingSiteAngle (BindingSite _bindingSite, float _angle)
 		{
-			binder = _binder;
+			bindingSite = _bindingSite;
 			angle = _angle;
 		}
 
-		public int CompareTo (BinderAngle other)
+		public int CompareTo (BindingSiteAngle other)
 		{
 			if (other.angle > angle)
 			{
@@ -39,24 +39,24 @@ namespace AICS.MacroMolecules
 		public Direction upDirection = Direction.up;
 		public Molecule centerMolecule;
 
-		List<BinderAngle> graphedBinders = new List<BinderAngle>();
+		List<BindingSiteAngle> graphedBinders = new List<BindingSiteAngle>();
 
-		protected override MoleculeBinder PickFromValidBinders ()
+		protected override BindingSite PickFromValidBindingSites ()
 		{
-			return GetFrontBinder();
+			return GetFrontBindingSite();
 		}
 
-		protected MoleculeBinder GetFrontBinder ()
+		protected BindingSite GetFrontBindingSite ()
 		{
 			GraphMolecules();
-			return graphedBinders[graphedBinders.GetExponentialRandomIndex()].binder;
+			return graphedBinders[graphedBinders.GetExponentialRandomIndex()].bindingSite;
 		}
 
 		void GraphMolecules ()
 		{
-			foreach (MoleculeBinder binder in validBinders)
+			foreach (BindingSite site in validBindingSites)
 			{
-				graphedBinders.Add( new BinderAngle( binder, GetMoleculeAngleFromForward( binder.molecule ) ) );
+				graphedBinders.Add( new BindingSiteAngle( site, GetMoleculeAngleFromForward( site.molecule ) ) );
 			}
 			graphedBinders.Sort();
 		}

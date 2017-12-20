@@ -93,7 +93,7 @@ namespace AICS.MacroMolecules
 		{
 			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.boundBinder != null)
+				if (binder.bindingSite != null)
 				{
 					return binder;
 				}
@@ -114,28 +114,30 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public MoleculeBinder GetOpenBinder (MoleculeType _type)
+		List<BindingSite> _bindingSites;
+		List<BindingSite> bindingSites
 		{
-			foreach (MoleculeBinder binder in binders)
+			get
 			{
-				if (binder.typeToBind == _type && binder.boundBinder == null)
+				if (_bindingSites == null)
 				{
-					return binder;
+					_bindingSites = GetMolecularComponents<BindingSite>();
 				}
+				return _bindingSites;
 			}
-			return null;
 		}
 
-		public bool IsBoundToOther (Molecule other)
+		public List<BindingSite> GetOpenBindingSites (MoleculeType _type)
 		{
-			foreach (MoleculeBinder binder in binders)
+			List<BindingSite> sites = new List<BindingSite>();
+			foreach (BindingSite site in bindingSites)
 			{
-				if (binder.boundBinder != null && binder.boundBinder.molecule == other)
+				if (site.typeToBind == _type && site.boundBinder == null)
 				{
-					return true;
+					sites.Add( site );
 				}
 			}
-			return false;
+			return sites;
 		}
 
 		List<IHandleBinds> _bindHandlers;

@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public delegate void BindingEvent (MoleculeBinder binder);
+	public delegate void BindingEvent (BindingSite bindingSite);
 
 	public class MoleculeBinder : MolecularComponent
 	{
 		public FinderConditional moleculeFinder;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
-		public MoleculeBinder boundBinder;
+		public BindingSite bindingSite;
 		public event BindingEvent OnBind;
 		public event BindingEvent OnRelease;
 
@@ -27,26 +27,26 @@ namespace AICS.MacroMolecules
 
 		public void Bind ()
 		{
-			MoleculeBinder otherBinder = GetMoleculeToBind();
-			if (otherBinder != null)
+			BindingSite _bindingSite = GetSiteToBind();
+			if (_bindingSite != null)
 			{
-				DoBind( otherBinder );
-				otherBinder.DoBind( this );
+				DoBind( _bindingSite );
 			}
 		}
 
-		protected virtual MoleculeBinder GetMoleculeToBind ()
+		protected virtual BindingSite GetSiteToBind ()
 		{
-			return moleculeFinder.lastBinderFound;
+			return moleculeFinder.lastBindingSiteFound;
 		}
 
-		protected virtual void DoBind (MoleculeBinder otherBinder)
+		protected virtual void DoBind (BindingSite _bindingSite)
 		{
-			boundBinder = otherBinder;
+			bindingSite = _bindingSite;
+			bindingSite.boundBinder = this;
 
 			if (OnBind != null)
 			{
-				OnBind( otherBinder );
+				OnBind( bindingSite );
 			}
 		}
 
@@ -54,9 +54,8 @@ namespace AICS.MacroMolecules
 
 		public void Release ()
 		{
-			if (boundBinder != null && ReadyToRelease())
+			if (bindingSite != null && ReadyToRelease())
 			{
-				boundBinder.DoRelease();
 				DoRelease();
 			}
 		}
@@ -68,12 +67,13 @@ namespace AICS.MacroMolecules
 
 		protected virtual void DoRelease ()
 		{
-			MoleculeBinder releasingBinder = boundBinder;
-			boundBinder = null;
+			BindingSite releasingSite = bindingSite;
+			bindingSite.boundBinder = null;
+			bindingSite = null;
 
 			if (OnRelease != null)
 			{
-				OnRelease( releasingBinder );
+				OnRelease( releasingSite );
 			}
 		}
 	}

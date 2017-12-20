@@ -9,10 +9,10 @@ namespace AICS.MacroMolecules
 		public MoleculeType typeToFind;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
-		public MoleculeBinder lastBinderFound;
+		public BindingSite lastBindingSiteFound;
 
 		MoleculeDetector detector;
-		protected List<MoleculeBinder> validBinders = new List<MoleculeBinder>();
+		protected List<BindingSite> validBindingSites = new List<BindingSite>();
 
 		List<Molecule> potentialMolecules
 		{
@@ -41,45 +41,34 @@ namespace AICS.MacroMolecules
 
 		protected override bool DoCheck ()
 		{
-			lastBinderFound = Find();
-			return lastBinderFound != null;
+			lastBindingSiteFound = Find();
+			return lastBindingSiteFound != null;
 		}
 
-		public virtual MoleculeBinder Find ()
+		public virtual BindingSite Find ()
 		{
-			validBinders.Clear();
-			MoleculeBinder otherBinder = null;
+			validBindingSites.Clear();
 			foreach (Molecule m in potentialMolecules)
 			{
-				if (!molecule.IsBoundToOther( m ))
-				{
-					otherBinder = GetValidBinder( m );
-					if (otherBinder != null)
-					{
-						validBinders.Add( otherBinder );
-					}
-				}
+				validBindingSites.AddRange( m.GetOpenBindingSites( typeToFind ) );
 			}
-			if (validBinders.Count > 0)
+
+			if (validBindingSites.Count > 0)
 			{
-				return PickFromValidBinders();
+				return PickFromValidBindingSites();
 			}
 			return null;
 		}
 
-		protected virtual MoleculeBinder GetValidBinder (Molecule other)
+		protected virtual BindingSite PickFromValidBindingSites ()
 		{
-			return other.GetOpenBinder( molecule.type ) as MoleculeBinder;
+			return GetRandomBindingSite();
 		}
 
-		protected virtual MoleculeBinder PickFromValidBinders ()
+		protected BindingSite GetRandomBindingSite ()
 		{
-			return GetRandomBinder();
-		}
-
-		protected MoleculeBinder GetRandomBinder ()
-		{
-			return validBinders[validBinders.GetRandomIndex()];
+			Debug.Log(validBindingSites.Count);
+			return validBindingSites[validBindingSites.GetRandomIndex()];
 		}
 	}
 }
