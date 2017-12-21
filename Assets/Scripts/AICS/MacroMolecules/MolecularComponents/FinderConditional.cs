@@ -51,7 +51,10 @@ namespace AICS.MacroMolecules
 			validBindingSites.Clear();
 			foreach (Molecule m in potentialMolecules)
 			{
-				validBindingSites.AddRange( m.GetOpenBindingSites( bindingCriteria ) );
+				if (m != molecule && !molecule.IsBoundToMolecule( m ))
+				{
+					validBindingSites.AddRange( m.GetOpenBindingSites( bindingCriteria ) );
+				}
 			}
 
 			if (validBindingSites.Count > 0)

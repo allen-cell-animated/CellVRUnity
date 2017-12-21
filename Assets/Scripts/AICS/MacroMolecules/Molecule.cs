@@ -129,6 +129,25 @@ namespace AICS.MacroMolecules
 			}
 		}
 
+		public bool IsBoundToMolecule (Molecule other)
+		{
+			foreach (MoleculeBinder binder in binders)
+			{
+				if (binder.bindingSite != null && binder.bindingSite.molecule == other)
+				{
+					return true;
+				}
+			}
+			foreach (BindingSite site in bindingSites)
+			{
+				if (site.boundBinder != null && site.boundBinder.molecule == other)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public List<BindingSite> GetOpenBindingSites (BindingCriteria criteria)
 		{
 			List<BindingSite> sites = new List<BindingSite>();
