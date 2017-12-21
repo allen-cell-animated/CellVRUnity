@@ -18,10 +18,12 @@ namespace AICS.MacroMolecules
 		public float[] LODDistances;
 		public float nanosecondsSinceStart;
 		public int stepsSinceStart;
+		public bool needToGetMolecules = true;
 
 		float averageFrameRate;
 		int frameRateSamples;
 		float startTime = 0;
+		Molecule[] molecules;
 
 		static MolecularEnvironment _Instance;
 		public static MolecularEnvironment Instance
@@ -33,19 +35,6 @@ namespace AICS.MacroMolecules
 					_Instance = GameObject.FindObjectOfType<MolecularEnvironment>();
 				}
 				return _Instance;
-			}
-		}
-
-		Molecule[] _molecules;
-		Molecule[] molecules
-		{
-			get
-			{
-				if (_molecules == null)
-				{
-					_molecules = GameObject.FindObjectsOfType<Molecule>();
-				}
-				return _molecules;
 			}
 		}
 
@@ -73,11 +62,19 @@ namespace AICS.MacroMolecules
 
 		void Update ()
 		{
+			if (needToGetMolecules)
+			{
+				molecules = GameObject.FindObjectsOfType<Molecule>();
+				needToGetMolecules = false;
+			}
 			for (int i = 0; i < stepsPerFrame; i++)
 			{
 				foreach (Molecule molecule in molecules)
 				{
-					molecule.DoStep();
+					if (molecule != null)
+					{
+						molecule.DoStep();
+					}
 				}
 			}
 			CalculateFrameRate();
