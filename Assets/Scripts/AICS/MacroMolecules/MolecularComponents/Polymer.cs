@@ -33,7 +33,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public override void SetToBindingOrientation (BindingSite bindingSite)
+		public override void SetToBindingOrientation (MoleculeBinder binder)
 		{
 			int n = transform.childCount;
 			Transform[] children = new Transform[n];
@@ -49,7 +49,7 @@ namespace AICS.MacroMolecules
 				i++;
 			}
 
-			base.SetToBindingOrientation( bindingSite );
+			base.SetToBindingOrientation( binder );
 
 			for (int j = 0; j < n; j++)
 			{

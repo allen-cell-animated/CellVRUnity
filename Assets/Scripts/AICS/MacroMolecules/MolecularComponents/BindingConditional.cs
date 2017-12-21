@@ -17,8 +17,8 @@ namespace AICS.MacroMolecules
 
 		protected override bool DoCheck ()
 		{
-			return (requiredState == BindingState.bound && binder.bindingSite != null)
-				|| (requiredState == BindingState.empty && binder.bindingSite == null);
+			return (requiredState == BindingState.bound && binder.boundBinder != null)
+				|| (requiredState == BindingState.empty && binder.boundBinder == null);
 		}
 	}
 }

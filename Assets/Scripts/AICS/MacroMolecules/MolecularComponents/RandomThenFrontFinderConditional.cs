@@ -14,15 +14,15 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected override BindingSite PickFromValidBindingSites ()
+		protected override MoleculeBinder PickFromValidBinders ()
 		{
 			if (centerMoleculeIsBound)
 			{
-				return GetFrontBindingSite();
+				return GetFrontBinder();
 			}
 			else
 			{
-				return GetRandomBindingSite();
+				return GetRandomBinder();
 			}
 		}
 	}

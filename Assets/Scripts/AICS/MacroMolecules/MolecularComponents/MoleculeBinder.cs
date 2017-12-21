@@ -4,41 +4,47 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public delegate void BindingEvent (BindingSite bindingSite);
+	public delegate void BindingEvent (MoleculeBinder binder);
 
 	public class MoleculeBinder : MolecularComponent
 	{
 		public FinderConditional moleculeFinder;
+		public BindingCriteria bindingCriteria;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
-		public BindingSite bindingSite;
+		public MoleculeBinder boundBinder;
 		public event BindingEvent OnBind;
 		public event BindingEvent OnRelease;
+
+		public bool IsAvailableMatch (BindingCriteria _criteria)
+		{
+			return boundBinder == null && bindingCriteria.MatchesOther( _criteria );
+		}
 
 		// --------------------------------------------------------------------------------------------------- Bind
 
 		public void Bind ()
 		{
-			BindingSite _bindingSite = GetSiteToBind();
-			if (_bindingSite != null)
+			MoleculeBinder _binder = GetBinderToBind();
+			if (_binder != null)
 			{
-				DoBind( _bindingSite );
+				DoBind( _binder );
 			}
 		}
 
-		protected virtual BindingSite GetSiteToBind ()
+		protected virtual MoleculeBinder GetBinderToBind ()
 		{
-			return moleculeFinder.lastBindingSiteFound;
+			return moleculeFinder.lastBinderFound;
 		}
 
-		protected virtual void DoBind (BindingSite _bindingSite)
+		protected virtual void DoBind (MoleculeBinder otherBinder)
 		{
-			bindingSite = _bindingSite;
-			bindingSite.boundBinder = this;
+			boundBinder = otherBinder;
+			boundBinder.boundBinder = this;
 
 			if (OnBind != null)
 			{
-				OnBind( bindingSite );
+				OnBind( boundBinder );
 			}
 		}
 
@@ -46,7 +52,7 @@ namespace AICS.MacroMolecules
 
 		public void Release ()
 		{
-			if (bindingSite != null && ReadyToRelease())
+			if (boundBinder != null && ReadyToRelease())
 			{
 				DoRelease();
 			}
@@ -59,13 +65,13 @@ namespace AICS.MacroMolecules
 
 		protected virtual void DoRelease ()
 		{
-			BindingSite releasingSite = bindingSite;
-			bindingSite.boundBinder = null;
-			bindingSite = null;
+			MoleculeBinder releasingBinder = boundBinder;
+			boundBinder.boundBinder = null;
+			boundBinder = null;
 
 			if (OnRelease != null)
 			{
-				OnRelease( releasingSite );
+				OnRelease( releasingBinder );
 			}
 		}
 	}

@@ -7,7 +7,7 @@ namespace AICS.MacroMolecules
 	public class Substrate : MolecularComponent, IHandleBinds
 	{
 		List<MoleculeBinder> subscribedBinders = new List<MoleculeBinder>();
-		BindingSite currentBindingSite;
+		MoleculeBinder currentBinder;
 		bool isEnabled = true;
 
 		public void SubscribeToBindEvents (List<MoleculeBinder> binders)
@@ -29,23 +29,23 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected virtual void OnBind (BindingSite bindingSite)
+		protected virtual void OnBind (MoleculeBinder binder)
 		{
 			if (isEnabled)
 			{
-				currentBindingSite = bindingSite;
-				ParentToBoundMolecule( bindingSite.molecule );
-				SetToBindingOrientation( bindingSite );
+				currentBinder = binder;
+				ParentToBoundMolecule( binder.molecule );
+				SetToBindingOrientation( binder );
 			}
 		}
 
-		protected virtual void OnRelease (BindingSite bindingSite)
+		protected virtual void OnRelease (MoleculeBinder binder)
 		{
-			if (isEnabled && bindingSite == currentBindingSite)
+			if (isEnabled && binder == currentBinder)
 			{
-				UnParentFromReleasedMolecule( bindingSite.molecule );
-				MoveAwayFromReleasedMolecule( bindingSite.molecule );
-				currentBindingSite = null;
+				UnParentFromReleasedMolecule( binder.molecule );
+				MoveAwayFromReleasedMolecule( binder.molecule );
+				currentBinder = null;
 			}
 		}
 
@@ -62,16 +62,16 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public virtual void SetToBindingOrientation (BindingSite bindingSite)
+		public virtual void SetToBindingOrientation (MoleculeBinder binder)
 		{
 			if (molecule.polymer == null)
 			{
-				molecule.transform.position = bindingSite.molecule.transform.TransformPoint( bindingSite.boundBinder.bindingPosition );
-				molecule.transform.rotation = bindingSite.molecule.transform.rotation * Quaternion.Euler( bindingSite.boundBinder.bindingRotation );
+				molecule.transform.position = binder.molecule.transform.TransformPoint( binder.boundBinder.bindingPosition );
+				molecule.transform.rotation = binder.molecule.transform.rotation * Quaternion.Euler( binder.boundBinder.bindingRotation );
 			}
 			else
 			{
-				molecule.polymer.SetToBindingOrientation( bindingSite );
+				molecule.polymer.SetToBindingOrientation( binder );
 				transform.localPosition = Vector3.zero;
 				transform.localRotation = Quaternion.identity;
 			}
@@ -79,7 +79,7 @@ namespace AICS.MacroMolecules
 
 		public void ResetToBindingOrientation ()
 		{
-			SetToBindingOrientation( currentBindingSite );
+			SetToBindingOrientation( currentBinder );
 		}
 
 		public virtual void UnParentFromReleasedMolecule (Molecule _releasingMolecule)

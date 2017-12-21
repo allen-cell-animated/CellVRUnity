@@ -9,10 +9,10 @@ namespace AICS.MacroMolecules
 		public BindingCriteria bindingCriteria;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
-		public BindingSite lastBindingSiteFound;
+		public MoleculeBinder lastBinderFound;
 
 		MoleculeDetector detector;
-		protected List<BindingSite> validBindingSites = new List<BindingSite>();
+		protected List<MoleculeBinder> validBinders = new List<MoleculeBinder>();
 
 		List<Molecule> potentialMolecules
 		{
@@ -42,43 +42,38 @@ namespace AICS.MacroMolecules
 
 		protected override bool DoCheck ()
 		{
-			lastBindingSiteFound = Find();
-			return lastBindingSiteFound != null;
+			lastBinderFound = Find();
+			return lastBinderFound != null;
 		}
 
-		public virtual BindingSite Find ()
+		public virtual MoleculeBinder Find ()
 		{
 			if (detector.gameObject.activeSelf)
 			{
-				validBindingSites.Clear();
+				validBinders.Clear();
 				foreach (Molecule m in potentialMolecules)
 				{
 					if (m != molecule && !molecule.IsBoundToMolecule( m ))
 					{
-						validBindingSites.AddRange( m.GetOpenBindingSites( bindingCriteria ) );
+						validBinders.AddRange( m.GetOpenBinders( bindingCriteria ) );
 					}
 				}
-				if (validBindingSites.Count > 0)
+				if (validBinders.Count > 0)
 				{
-					return PickFromValidBindingSites();
+					return PickFromValidBinders();
 				}
 			}
 			return null;
 		}
 
-		protected virtual BindingSite PickFromValidBindingSites ()
+		protected virtual MoleculeBinder PickFromValidBinders ()
 		{
-			return GetRandomBindingSite();
+			return GetRandomBinder();
 		}
 
-		protected BindingSite GetRandomBindingSite ()
+		protected MoleculeBinder GetRandomBinder ()
 		{
-			return validBindingSites[validBindingSites.GetRandomIndex()];
-		}
-
-		public void EnableDetector (bool _enabled)
-		{
-			detector.gameObject.SetActive( _enabled );
+			return validBinders[validBinders.GetRandomIndex()];
 		}
 	}
 }

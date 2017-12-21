@@ -95,7 +95,7 @@ namespace AICS.MacroMolecules
 		{
 			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.bindingSite != null)
+				if (binder.boundBinder != null)
 				{
 					return binder;
 				}
@@ -104,7 +104,7 @@ namespace AICS.MacroMolecules
 		}
 
 		List<MoleculeBinder> _binders;
-		List<MoleculeBinder> binders
+		public List<MoleculeBinder> binders
 		{
 			get
 			{
@@ -116,31 +116,18 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		List<BindingSite> _bindingSites;
-		List<BindingSite> bindingSites
-		{
-			get
-			{
-				if (_bindingSites == null)
-				{
-					_bindingSites = GetMolecularComponents<BindingSite>();
-				}
-				return _bindingSites;
-			}
-		}
-
 		public bool IsBoundToMolecule (Molecule other)
 		{
 			foreach (MoleculeBinder binder in binders)
 			{
-				if (binder.bindingSite != null && binder.bindingSite.molecule == other)
+				if (binder.boundBinder != null && binder.boundBinder.molecule == other)
 				{
 					return true;
 				}
 			}
-			foreach (BindingSite site in bindingSites)
+			foreach (MoleculeBinder binder in binders)
 			{
-				if (site.boundBinder != null && site.boundBinder.molecule == other)
+				if (binder.boundBinder != null && binder.boundBinder.molecule == other)
 				{
 					return true;
 				}
@@ -148,17 +135,17 @@ namespace AICS.MacroMolecules
 			return false;
 		}
 
-		public List<BindingSite> GetOpenBindingSites (BindingCriteria criteria)
+		public List<MoleculeBinder> GetOpenBinders (BindingCriteria criteria)
 		{
-			List<BindingSite> sites = new List<BindingSite>();
-			foreach (BindingSite site in bindingSites)
+			List<MoleculeBinder> bs = new List<MoleculeBinder>();
+			foreach (MoleculeBinder b in binders)
 			{
-				if (site.IsAvailableMatch( criteria ))
+				if (b.IsAvailableMatch( criteria ))
 				{
-					sites.Add( site );
+					bs.Add( b );
 				}
 			}
-			return sites;
+			return bs;
 		}
 
 		List<IHandleBinds> _bindHandlers;
