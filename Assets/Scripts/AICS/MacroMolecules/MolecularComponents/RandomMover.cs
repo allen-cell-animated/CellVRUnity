@@ -11,11 +11,14 @@ namespace AICS.MacroMolecules
 
 		public void DoSimulationStep ()
 		{
-			for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
+			if (isEnabled)
 			{
-				if (Move())
+				for (int i = 0; i < MolecularEnvironment.Instance.maxIterationsPerStep; i++)
 				{
-					return;
+					if (Move())
+					{
+						return;
+					}
 				}
 			}
 		}

@@ -11,7 +11,10 @@ namespace AICS.MacroMolecules
 
 		public void DoSimulationStep ()
 		{
-			Rotate();
+			if (isEnabled)
+			{
+				Rotate();
+			}
 		}
 
 		public void Rotate ()

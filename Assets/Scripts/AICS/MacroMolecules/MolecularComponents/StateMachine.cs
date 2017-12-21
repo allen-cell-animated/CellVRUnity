@@ -46,6 +46,7 @@ namespace AICS.MacroMolecules
 		public int finalStateID;
 		public int attempts;
 		public int successes;
+		public bool triggered = false;
 		public bool useRate = true;
 		public float theoreticalRate;
 		public float timeToTransition;
@@ -93,10 +94,11 @@ namespace AICS.MacroMolecules
 				}
 				return Random.value <= theoreticalRate * MolecularEnvironment.Instance.nanosecondsSinceStart * 1E-9f / attempts;
 			}
-			else
+			else if (!triggered)
 			{
 				return Time.time - startTime >= timeToTransition;
 			}
+			return false;
 		}
 
 		public bool PassesConditions ()
@@ -113,7 +115,10 @@ namespace AICS.MacroMolecules
 
 		public void DoTransition ()
 		{
-			eventToDo.Invoke();
+			if (eventToDo != null)
+			{
+				eventToDo.Invoke();
+			}
 			successes++;
 		}
 
@@ -126,6 +131,19 @@ namespace AICS.MacroMolecules
 		{
 			successes = attempts = 0;
 			observedRate = 0;
+		}
+	}
+
+	[System.Serializable]
+	public class StateTransitionID
+	{
+		public int startStateID = 0;
+		public int transitionID = 0;
+
+		public StateTransitionID (int _startStateID, int _transitionID)
+		{
+			startStateID = _startStateID;
+			transitionID = _transitionID;
 		}
 	}
 
@@ -175,16 +193,13 @@ namespace AICS.MacroMolecules
 			{
 				return false;
 			}
-			if (transition.eventToDo != null)
+			transition.attempts++;
+			if (transition.ShouldHappen())
 			{
-				transition.attempts++;
-				if (transition.ShouldHappen())
-				{
-					transition.DoTransition();
-					currentState = GetStateForID( transition.finalStateID );
-					currentState.EnterState();
-					return true;
-				}
+				transition.DoTransition();
+				currentState = GetStateForID( transition.finalStateID );
+				currentState.EnterState();
+				return true;
 			}
 			return false;
 		}
@@ -200,6 +215,22 @@ namespace AICS.MacroMolecules
 			foreach (State state in states)
 			{
 				state.CalculateObservedRates( secondsSinceStart );
+			}
+		}
+
+		public void ForceTransition (StateTransitionID stateTransitionID)
+		{
+			if (currentState.id == stateTransitionID.startStateID 
+				&& stateTransitionID.transitionID >= 0 && stateTransitionID.transitionID < currentState.transitions.Length)
+			{
+				StateTransition transition = currentState.transitions[stateTransitionID.transitionID];
+				if (transition != null)
+				{
+					transition.attempts++;
+					transition.DoTransition();
+					currentState = GetStateForID( transition.finalStateID );
+					currentState.EnterState();
+				}
 			}
 		}
 

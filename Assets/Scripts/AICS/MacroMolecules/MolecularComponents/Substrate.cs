@@ -4,32 +4,11 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class Substrate : MolecularComponent, IHandleBinds
+	public class Substrate : BindHandler
 	{
-		List<MoleculeBinder> subscribedBinders = new List<MoleculeBinder>();
 		MoleculeBinder currentBinder;
-		bool isEnabled = true;
 
-		public void SubscribeToBindEvents (List<MoleculeBinder> binders)
-		{
-			foreach (MoleculeBinder binder in binders)
-			{
-				binder.OnBind += OnBind;
-				binder.OnRelease += OnRelease;
-			}
-			subscribedBinders = binders;
-		}
-
-		void OnDisable ()
-		{
-			foreach (MoleculeBinder binder in subscribedBinders)
-			{
-				binder.OnBind -= OnBind;
-				binder.OnRelease -= OnRelease;
-			}
-		}
-
-		protected virtual void OnBind (MoleculeBinder binder)
+		protected override void OnBind (MoleculeBinder binder)
 		{
 			if (isEnabled)
 			{
@@ -39,7 +18,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected virtual void OnRelease (MoleculeBinder binder)
+		protected override void OnRelease (MoleculeBinder binder)
 		{
 			if (isEnabled && binder == currentBinder)
 			{
@@ -99,11 +78,6 @@ namespace AICS.MacroMolecules
 		protected virtual void MoveAwayFromReleasedMolecule (Molecule _releasingMolecule)
 		{
 			molecule.MoveIfValid( 3f * (transform.position - _releasingMolecule.transform.position).normalized );
-		}
-
-		public void Enable (bool _enabled)
-		{
-			isEnabled = _enabled;
 		}
 	}
 }

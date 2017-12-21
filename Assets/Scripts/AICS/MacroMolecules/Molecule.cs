@@ -148,14 +148,14 @@ namespace AICS.MacroMolecules
 			return bs;
 		}
 
-		List<IHandleBinds> _bindHandlers;
-		List<IHandleBinds> bindHandlers
+		List<BindHandler> _bindHandlers;
+		List<BindHandler> bindHandlers
 		{
 			get
 			{
 				if (_bindHandlers == null)
 				{
-					_bindHandlers = GetMolecularComponents<IHandleBinds>();
+					_bindHandlers = GetMolecularComponents<BindHandler>();
 				}
 				return _bindHandlers;
 			}
@@ -163,9 +163,9 @@ namespace AICS.MacroMolecules
 
 		void OnEnable ()
 		{
-			foreach (IHandleBinds bindHandler in bindHandlers)
+			foreach (BindHandler bindHandler in bindHandlers)
 			{
-				bindHandler.SubscribeToBindEvents( binders );
+				bindHandler.SubscribeToAllBinders( binders );
 			}
 		}
 

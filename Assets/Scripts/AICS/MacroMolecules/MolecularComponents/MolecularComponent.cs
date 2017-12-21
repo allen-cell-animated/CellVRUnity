@@ -6,6 +6,8 @@ namespace AICS.MacroMolecules
 {
 	public abstract class MolecularComponent : MonoBehaviour 
 	{
+		public bool isEnabled = true;
+
 		Molecule _molecule;
 		public Molecule molecule
 		{
@@ -17,6 +19,11 @@ namespace AICS.MacroMolecules
 				}
 				return _molecule;
 			}
+		}
+
+		public void Enable (bool _enabled)
+		{
+			isEnabled = _enabled;
 		}
 	}
 }
