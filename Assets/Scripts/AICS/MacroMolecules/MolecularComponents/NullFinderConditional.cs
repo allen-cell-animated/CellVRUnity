@@ -9,7 +9,7 @@ namespace AICS.MacroMolecules
 		public override BindingSite Find ()
 		{
 			BindingSite site = (GameObject.Instantiate( Resources.Load( "Tests/NullMolecule" ) as GameObject ) as GameObject).AddComponent<BindingSite>();
-			site.typeToBind = typeToFind;
+			site.criteria = bindingCriteria;
 			return site;
 		}
 	}

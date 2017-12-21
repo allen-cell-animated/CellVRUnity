@@ -61,6 +61,11 @@ namespace AICS.MacroMolecules
 				&& point.z < transform.position.z + size.z / 2f && point.z > transform.position.z - size.z / 2f;
 		}
 
+		public Vector3 GetRandomPointInBounds ()
+		{
+			return transform.position + new Vector3( size.x * Random.value, size.y * Random.value, size.z * Random.value ) - size / 2f;
+		}
+
 		void Start ()
 		{
 			CreateResolutionNodes();

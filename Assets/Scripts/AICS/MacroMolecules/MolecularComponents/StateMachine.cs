@@ -155,6 +155,7 @@ namespace AICS.MacroMolecules
 
 		void TryTransitionsInRandomOrder ()
 		{
+			if (currentState == null) { Debug.Log( name ); }
 			if (currentState.transitions.Length > 0)
 			{
 				currentState.transitions.Shuffle();

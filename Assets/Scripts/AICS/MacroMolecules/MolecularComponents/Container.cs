@@ -8,15 +8,12 @@ namespace AICS.MacroMolecules
 	{
 		public bool MoveIsValid (Vector3 position, float radius)
 		{
-			if (molecule.GetType() == typeof( ComponentMolecule ))
+			Molecule[] children = molecule.GetComponentsInChildren<Molecule>();
+			foreach (Molecule child in children)
 			{
-				Molecule[] children = molecule.GetComponentsInChildren<Molecule>();
-				foreach (Molecule child in children)
+				if (!MolecularEnvironment.Instance.PointIsInBounds( position + molecule.transform.InverseTransformPoint( child.transform.position ) ))
 				{
-					if (!MolecularEnvironment.Instance.PointIsInBounds( position + molecule.transform.InverseTransformPoint( child.transform.position ) ))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 			return MolecularEnvironment.Instance.PointIsInBounds( position );

@@ -6,7 +6,12 @@ namespace AICS.MacroMolecules
 {
 	public class BindingSite : MolecularComponent
 	{
-		public MoleculeType typeToBind;
+		public BindingCriteria criteria;
 		public MoleculeBinder boundBinder;
+
+		public bool IsAvailableMatch (BindingCriteria _criteria)
+		{
+			return boundBinder == null && criteria.MatchesOther( _criteria );
+		}
 	}
 }

@@ -15,14 +15,6 @@ namespace AICS.MacroMolecules
 		public event BindingEvent OnBind;
 		public event BindingEvent OnRelease;
 
-		public virtual MoleculeType typeToBind
-		{
-			get
-			{
-				return moleculeFinder.typeToFind;
-			}
-		}
-
 		// --------------------------------------------------------------------------------------------------- Bind
 
 		public void Bind ()

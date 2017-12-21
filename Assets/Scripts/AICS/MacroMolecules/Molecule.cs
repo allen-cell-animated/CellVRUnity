@@ -20,7 +20,8 @@ namespace AICS.MacroMolecules
 		Kinesin,
 		ATP,
 		ADP,
-		Pi
+		Pi,
+		ActinMonomer
 	}
 
 	// A basic molecule object
@@ -128,12 +129,12 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public List<BindingSite> GetOpenBindingSites (MoleculeType _type)
+		public List<BindingSite> GetOpenBindingSites (BindingCriteria criteria)
 		{
 			List<BindingSite> sites = new List<BindingSite>();
 			foreach (BindingSite site in bindingSites)
 			{
-				if (site.typeToBind == _type && site.boundBinder == null)
+				if (site.IsAvailableMatch( criteria ))
 				{
 					sites.Add( site );
 				}

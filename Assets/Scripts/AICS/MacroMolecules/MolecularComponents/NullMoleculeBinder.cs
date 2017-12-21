@@ -8,14 +8,6 @@ namespace AICS.MacroMolecules
 	{
 		public MoleculeType _typeToBind;
 
-		public override MoleculeType typeToBind
-		{
-			get
-			{
-				return _typeToBind;
-			}
-		}
-
 		protected override BindingSite GetSiteToBind ()
 		{
 			return null;
