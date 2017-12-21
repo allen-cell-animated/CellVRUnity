@@ -21,11 +21,11 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public void Reset ()
+		public void DoReset ()
 		{
 			foreach (StateTransition transition in transitions)
 			{
-				transition.Reset();
+				transition.DoReset();
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace AICS.MacroMolecules
 			observedRate = Mathf.Round( successes / secondsSinceStart );
 		}
 
-		public void Reset ()
+		public void DoReset ()
 		{
 			successes = attempts = 0;
 			observedRate = 0;
@@ -203,11 +203,11 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public void Reset ()
+		public void DoReset ()
 		{
 			foreach (State state in states)
 			{
-				state.Reset();
+				state.DoReset();
 			}
 		}
 	}

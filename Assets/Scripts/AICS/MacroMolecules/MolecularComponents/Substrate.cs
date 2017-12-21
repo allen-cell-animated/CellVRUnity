@@ -8,6 +8,7 @@ namespace AICS.MacroMolecules
 	{
 		List<MoleculeBinder> subscribedBinders = new List<MoleculeBinder>();
 		BindingSite currentBindingSite;
+		bool isEnabled = true;
 
 		public void SubscribeToBindEvents (List<MoleculeBinder> binders)
 		{
@@ -30,14 +31,17 @@ namespace AICS.MacroMolecules
 
 		protected virtual void OnBind (BindingSite bindingSite)
 		{
-			currentBindingSite = bindingSite;
-			ParentToBoundMolecule( bindingSite.molecule );
-			SetToBindingOrientation( bindingSite );
+			if (isEnabled)
+			{
+				currentBindingSite = bindingSite;
+				ParentToBoundMolecule( bindingSite.molecule );
+				SetToBindingOrientation( bindingSite );
+			}
 		}
 
 		protected virtual void OnRelease (BindingSite bindingSite)
 		{
-			if (bindingSite == currentBindingSite)
+			if (isEnabled && bindingSite == currentBindingSite)
 			{
 				UnParentFromReleasedMolecule( bindingSite.molecule );
 				MoveAwayFromReleasedMolecule( bindingSite.molecule );
@@ -95,6 +99,11 @@ namespace AICS.MacroMolecules
 		protected virtual void MoveAwayFromReleasedMolecule (Molecule _releasingMolecule)
 		{
 			molecule.MoveIfValid( 3f * (transform.position - _releasingMolecule.transform.position).normalized );
+		}
+
+		public void Enable (bool _enabled)
+		{
+			isEnabled = _enabled;
 		}
 	}
 }

@@ -48,18 +48,20 @@ namespace AICS.MacroMolecules
 
 		public virtual BindingSite Find ()
 		{
-			validBindingSites.Clear();
-			foreach (Molecule m in potentialMolecules)
+			if (detector.gameObject.activeSelf)
 			{
-				if (m != molecule && !molecule.IsBoundToMolecule( m ))
+				validBindingSites.Clear();
+				foreach (Molecule m in potentialMolecules)
 				{
-					validBindingSites.AddRange( m.GetOpenBindingSites( bindingCriteria ) );
+					if (m != molecule && !molecule.IsBoundToMolecule( m ))
+					{
+						validBindingSites.AddRange( m.GetOpenBindingSites( bindingCriteria ) );
+					}
 				}
-			}
-
-			if (validBindingSites.Count > 0)
-			{
-				return PickFromValidBindingSites();
+				if (validBindingSites.Count > 0)
+				{
+					return PickFromValidBindingSites();
+				}
 			}
 			return null;
 		}
@@ -72,6 +74,11 @@ namespace AICS.MacroMolecules
 		protected BindingSite GetRandomBindingSite ()
 		{
 			return validBindingSites[validBindingSites.GetRandomIndex()];
+		}
+
+		public void EnableDetector (bool _enabled)
+		{
+			detector.gameObject.SetActive( _enabled );
 		}
 	}
 }

@@ -163,7 +163,7 @@ namespace AICS.MacroMolecules
 			nanosecondsPerStep = 1E9f * Time.deltaTime / (timeMultiplier * stepsPerFrame);
 		}
 
-		public void Reset ()
+		public void DoReset ()
 		{
 			nanosecondsSinceStart = 0;
 			stepsSinceStart = 0;
