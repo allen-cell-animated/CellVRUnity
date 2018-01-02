@@ -19,7 +19,7 @@ public class RandomMotionTests
 		{
 			Assert.IsTrue( MolecularEnvironment.Instance.PointIsInBounds( molecule.transform.position ) );
 
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForEndOfFrame();
 
 			n--;
 		}
@@ -40,7 +40,7 @@ public class RandomMotionTests
 		{
 			Assert.IsTrue( MolecularEnvironment.Instance.PointIsInBounds( molecule.transform.position ) );
 
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForEndOfFrame();
 
 			n--;
 		}
