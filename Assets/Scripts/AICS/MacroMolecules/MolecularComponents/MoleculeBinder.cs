@@ -9,7 +9,7 @@ namespace AICS.MacroMolecules
 	public class MoleculeBinder : MolecularComponent
 	{
 		public FinderConditional moleculeFinder;
-		public BindingCriteria bindingCriteria;
+		public BindingCriteria thisCriteria;
 		public Vector3 bindingPosition;
 		public Vector3 bindingRotation;
 		public MoleculeBinder boundBinder;
@@ -18,7 +18,7 @@ namespace AICS.MacroMolecules
 
 		public bool IsAvailableMatch (BindingCriteria _criteria)
 		{
-			return boundBinder == null && bindingCriteria.MatchesOther( _criteria );
+			return boundBinder == null && thisCriteria.MatchesOther( _criteria );
 		}
 
 		// --------------------------------------------------------------------------------------------------- Bind

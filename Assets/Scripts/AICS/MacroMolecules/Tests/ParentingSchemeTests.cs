@@ -5,15 +5,15 @@ using UnityEngine.Assertions;
 using UnityEngine.TestTools;
 using AICS.MacroMolecules;
 
-public class AssemblyParentingSchemeTests
+public class ParentingSchemeTests
 {
 	[UnityTest]
-	public IEnumerator BranchesToRootTest1 ()
+	public IEnumerator BranchesToRoot1 ()
 	{
 		int[] branches = new int[]{2, 1, 0, 1, 2, 3, 1, 2, 3};
 
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BranchesToRootTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/BranchesToRoot1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		for (int i = 0; i < polymer.monomers.Count; i++)
 		{
@@ -33,12 +33,12 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator BranchesToRootTest2 ()
+	public IEnumerator BranchesToRoot2 ()
 	{
 		int[] branches = new int[]{10, 9, 8, 7, 8, 6, 5, 6, 4, 5, 5, 3, 4, 2, 1, 2, 2, 0, 1, 2, 3, 3, 4, 4, 5};
 
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BranchesToRootTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/BranchesToRoot2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		for (int i = 0; i < polymer.monomers.Count; i++)
 		{
@@ -58,10 +58,10 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator BindReleaseTest1 ()
+	public IEnumerator BindRelease1 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/BindRelease1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -83,10 +83,10 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator BindReleaseTest2 ()
+	public IEnumerator BindRelease2 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/BindRelease2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -108,10 +108,10 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator BindReleaseTest3 ()
+	public IEnumerator BindRelease3 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/BindReleaseTest3" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/BindRelease3" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 
 		FinderConditional finder = GameObject.FindObjectOfType<FinderConditional>();
 		MoleculeBinder binder = GameObject.FindObjectOfType<MoleculeBinder>();
@@ -133,14 +133,14 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator DoubleBindTest1 ()
+	public IEnumerator DoubleBind1 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
 		MolecularEnvironment.Instance.size = 10f * Vector3.one;
 
-		GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject );
-		(GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindTest1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/StaticMolecule" ) as GameObject );
+		(GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/DoubleBind1" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 		GameObject molecule1 = polymer.transform.GetChild( 0 ).GetChild( 0 ).gameObject;
 		GameObject molecule2 = polymer.transform.GetChild( 0 ).GetChild( 1 ).gameObject;
 
@@ -176,14 +176,14 @@ public class AssemblyParentingSchemeTests
 	}
 
 	[UnityTest]
-	public IEnumerator DoubleBindTest2 ()
+	public IEnumerator DoubleBind2 ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
 		MolecularEnvironment.Instance.size = 40f * Vector3.one;
 
-		GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject );
-		(GameObject.Instantiate( Resources.Load( "Tests/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
-		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/DoubleBindTest2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
+		GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/StaticMolecule" ) as GameObject );
+		(GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/StaticMolecule" ) as GameObject ) as GameObject).transform.position = new Vector3( 0.5f, -1f, 0 );
+		Polymer polymer = (GameObject.Instantiate( Resources.Load( "Tests/ParentingScheme/DoubleBind2" ) as GameObject ) as GameObject).GetComponent<Polymer>();
 		GameObject molecule8 = polymer.transform.GetChild( 0 ).GetChild( 2 ).GetChild( 0 ).GetChild( 0 ).gameObject;
 		GameObject molecule2 = polymer.transform.GetChild( 0 ).GetChild( 0 ).GetChild( 0 ).gameObject;
 

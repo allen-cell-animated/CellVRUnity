@@ -6,7 +6,7 @@ namespace AICS.MacroMolecules
 {
 	public class FinderConditional : Conditional
 	{
-		public BindingCriteria bindingCriteria;
+		public BindingCriteria criteriaToBind;
 		public float searchRadius = 15f;
 		public bool onlyFindIfColliding = true;
 		public MoleculeBinder lastBinderFound;
@@ -37,7 +37,7 @@ namespace AICS.MacroMolecules
 		void CreateDetector ()
 		{
 			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject)
-				.GetComponent<MoleculeDetector>().Setup( bindingCriteria.typeToBind, searchRadius );
+				.GetComponent<MoleculeDetector>().Setup( criteriaToBind.type, searchRadius );
 		}
 
 		protected override bool DoCheck ()
@@ -55,7 +55,7 @@ namespace AICS.MacroMolecules
 				{
 					if (m != molecule && !molecule.IsBoundToMolecule( m ))
 					{
-						validBinders.AddRange( m.GetOpenBinders( bindingCriteria ) );
+						validBinders.AddRange( m.GetOpenBinders( criteriaToBind ) );
 					}
 				}
 				if (validBinders.Count > 0)
