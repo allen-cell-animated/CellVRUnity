@@ -21,7 +21,8 @@ namespace AICS.MacroMolecules
 		ATP,
 		ADP,
 		Pi,
-		ActinMonomer
+		ActinMonomer,
+		ActinPolymer
 	}
 
 	// A basic molecule object
@@ -146,27 +147,6 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return bs;
-		}
-
-		List<BindHandler> _bindHandlers;
-		List<BindHandler> bindHandlers
-		{
-			get
-			{
-				if (_bindHandlers == null)
-				{
-					_bindHandlers = GetMolecularComponents<BindHandler>();
-				}
-				return _bindHandlers;
-			}
-		}
-
-		void OnEnable ()
-		{
-			foreach (BindHandler bindHandler in bindHandlers)
-			{
-				bindHandler.SubscribeToAllBinders( binders );
-			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Movement

@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class Substrate : BindHandler
+	public class Substrate : MolecularComponent
 	{
 		MoleculeBinder currentBinder;
 
-		protected override void OnBind (MoleculeBinder binder)
+		protected virtual void OnBind (MoleculeBinder binder)
 		{
 			if (isEnabled)
 			{
@@ -18,7 +18,7 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		protected override void OnRelease (MoleculeBinder binder)
+		protected virtual void OnRelease (MoleculeBinder binder)
 		{
 			if (isEnabled && binder == currentBinder)
 			{

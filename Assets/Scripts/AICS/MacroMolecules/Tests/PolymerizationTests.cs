@@ -4,35 +4,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.TestTools;
 using AICS.MacroMolecules;
-using AICS.MacroMolecules.Extensions;
-
-namespace AICS.MacroMolecules.Extensions
-{
-	public static class BinderExtensions
-	{
-		public static MoleculeBinder GetOtherBinder (this MoleculeBinder binder)
-		{
-			foreach (MoleculeBinder b in binder.molecule.binders)
-			{
-				if (b != binder)
-				{
-					return b;
-				}
-			}
-			return null;
-		}
-
-		public static bool IsParent (this MoleculeBinder binder)
-		{
-			return binder.boundBinder != null && binder.molecule.transform.parent == binder.boundBinder.molecule.transform;
-		}
-
-		public static bool IsPointedEnd (this MoleculeBinder binder)
-		{
-			return binder.thisCriteria.siteId == 0;
-		}
-	}
-}
 
 public class PolarMonomer
 {
@@ -40,10 +11,11 @@ public class PolarMonomer
 	public MoleculeBinder pointedEnd;
 	public MoleculeBinder barbedEnd;
 
-	public PolarMonomer (string prefabName, Vector3 spawnPosition)
+	public PolarMonomer (string prefabName, Vector3 spawnPosition, string objectName)
 	{
 		molecule = (GameObject.Instantiate( Resources.Load( "Tests/Polymerization/" + prefabName ) as GameObject ) as GameObject).GetComponent<Molecule>();
 		molecule.transform.position = MolecularEnvironment.Instance.GetRandomPointInBounds();
+		molecule.name = objectName;
 
 		foreach (MoleculeBinder binder in molecule.binders)
 		{
@@ -79,24 +51,6 @@ public class PolarMonomer
 			return true;
 		}
 	}
-
-	public MoleculeBinder parentedBinder
-	{
-		get
-		{
-			if (molecule.transform.parent != null)
-			{
-				foreach (MoleculeBinder binder in molecule.binders)
-				{
-					if (molecule.transform.parent == binder.boundBinder.molecule.transform)
-					{
-						return binder;
-					}
-				}
-			}
-			return null;
-		}
-	}
 }
 
 public class PolymerizationTests
@@ -106,29 +60,21 @@ public class PolymerizationTests
 		PolarMonomer[] monomers = new PolarMonomer[n];
 		for (int i = 0; i < n; i++)
 		{
-			monomers[i] = new PolarMonomer( "PolarMonomerBind", MolecularEnvironment.Instance.GetRandomPointInBounds() );
+			monomers[i] = new PolarMonomer( "PolarMonomerBind", MolecularEnvironment.Instance.GetRandomPointInBounds(), "monomer_" + i );
 		}
 		return monomers;
 	}
 
-	PolarMonomer GetAMiddleMonomer (PolarMonomer[] monomers)
+	bool AllAreBound (PolarMonomer[] monomers)
 	{
 		foreach (PolarMonomer monomer in monomers)
 		{
-			if (monomer.pointedEnd.boundBinder != null && monomer.barbedEnd.boundBinder != null)
+			if (monomer.pointedEnd.boundBinder == null && monomer.barbedEnd.boundBinder == null)
 			{
-				return monomer;
+				return false;
 			}
 		}
-		return null;
-	}
-
-	bool CheckParentRecursively (MoleculeBinder binder)
-	{
-		if (binder.IsParent())
-		{
-			//TODO
-		}
+		return true;
 	}
 
 	[UnityTest]
@@ -136,43 +82,70 @@ public class PolymerizationTests
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
 		MolecularEnvironment.Instance.size = 10f * Vector3.one;
-		PolarMonomer[] monomers = CreateMonomers( 2 );
+		PolarMonomer[] monomers = new PolarMonomer[2];
+		monomers[0] = new PolarMonomer( "DimerizeBarbed", MolecularEnvironment.Instance.GetRandomPointInBounds(), "barbed" );
+		monomers[1] = new PolarMonomer( "DimerizePointed", MolecularEnvironment.Instance.GetRandomPointInBounds(), "pointed" );
 
-		while (!monomers[0].molecule.bound)
+		while (!AllAreBound( monomers ))
 		{
 			yield return new WaitForEndOfFrame();
 		}
 
+		Polymer polymer = GameObject.FindObjectOfType<Polymer>();
 		foreach (PolarMonomer monomer in monomers)
 		{
 			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
+			Assert.IsTrue( monomer.molecule.transform.parent == polymer.transform );
 		}
-		Assert.IsTrue( monomers[0].molecule.transform.parent == monomers[1].molecule.transform || monomers[1].molecule.transform.parent == monomers[0].molecule.transform );
 
 		yield return null;
 	}
 
-	[UnityTest]
-	public IEnumerator Trimerize ()
-	{
-		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 10f * Vector3.one;
-		PolarMonomer[] monomers = CreateMonomers( 3 );
-
-		PolarMonomer middle = null;
-		while (middle == null)
-		{
-			middle = GetAMiddleMonomer( monomers );
-
-			yield return new WaitForEndOfFrame();
-		}
-
-		foreach (PolarMonomer monomer in monomers)
-		{
-			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
-		}
-
-
-		yield return null;
-	}
+//	[UnityTest]
+//	public IEnumerator Trimerize ()
+//	{
+//		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
+//		MolecularEnvironment.Instance.size = 10f * Vector3.one;
+//		PolarMonomer[] monomers = CreateMonomers( 3 );
+//
+//		while (!AllAreBound( monomers ))
+//		{
+//			yield return new WaitForEndOfFrame();
+//		}
+//
+//		Polymer polymer = GameObject.FindObjectOfType<Polymer>();
+//		foreach (PolarMonomer monomer in monomers)
+//		{
+//			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
+//			Assert.IsTrue( monomer.molecule.transform.parent == polymer.transform );
+//		}
+//
+//		yield return new WaitForSeconds( 1000f );
+//
+//		yield return null;
+//	}
+//
+//	[UnityTest]
+//	public IEnumerator Polymerize ()
+//	{
+//		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
+//		MolecularEnvironment.Instance.size = 30f * Vector3.one;
+//		PolarMonomer[] monomers = CreateMonomers( 30 );
+//
+//		while (!AllAreBound( monomers ))
+//		{
+//			yield return new WaitForEndOfFrame();
+//		}
+//
+//		Polymer polymer = GameObject.FindObjectOfType<Polymer>();
+//		foreach (PolarMonomer monomer in monomers)
+//		{
+//			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
+//			Assert.IsTrue( monomer.molecule.transform.parent == polymer.transform );
+//		}
+//
+//		yield return new WaitForSeconds( 1000f );
+//
+//		yield return null;
+//	}
 }

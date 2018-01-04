@@ -12,6 +12,16 @@ namespace AICS.MacroMolecules
 		public int id;
 		public bool startState;
 		public StateTransition[] transitions;
+		[HideInInspector] public int[] transitionIDs;
+
+		public void Init ()
+		{
+			transitionIDs = new int[transitions.Length];
+			for (int i = 0; i < transitionIDs.Length; i++)
+			{
+				transitionIDs[i] = i;
+			}
+		}
 
 		public void CalculateObservedRates (float secondsSinceStart)
 		{
@@ -156,10 +166,10 @@ namespace AICS.MacroMolecules
 		{
 			foreach (State state in states)
 			{
+				state.Init();
 				if (state.startState)
 				{
 					currentState = state;
-					return;
 				}
 			}
 		}
@@ -176,10 +186,10 @@ namespace AICS.MacroMolecules
 			if (currentState == null) { Debug.Log( name ); }
 			if (currentState.transitions.Length > 0)
 			{
-				currentState.transitions.Shuffle();
-				for (int i = 0; i < currentState.transitions.Length; i++)
+				currentState.transitionIDs.Shuffle();
+				for (int i = 0; i < currentState.transitionIDs.Length; i++)
 				{
-					if (DoTransitionAtKineticRate( currentState.transitions[i] ))
+					if (DoTransitionAtKineticRate( currentState.transitions[currentState.transitionIDs[i]] ))
 					{
 						return;
 					}
@@ -196,6 +206,7 @@ namespace AICS.MacroMolecules
 			transition.attempts++;
 			if (transition.ShouldHappen())
 			{
+				Debug.Log( molecule.name + " do transition " + transition.name );
 				transition.DoTransition();
 				currentState = GetStateForID( transition.finalStateID );
 				currentState.EnterState();
@@ -226,6 +237,7 @@ namespace AICS.MacroMolecules
 				StateTransition transition = currentState.transitions[stateTransitionID.transitionID];
 				if (transition != null)
 				{
+					Debug.Log( molecule.name + " force transition " + transition.name );
 					transition.attempts++;
 					transition.DoTransition();
 					currentState = GetStateForID( transition.finalStateID );
