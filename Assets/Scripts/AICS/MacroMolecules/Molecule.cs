@@ -48,7 +48,7 @@ namespace AICS.MacroMolecules
 			DoSimulationStep();
 		}
 
-		List<T> GetMolecularComponents<T> ()
+		public List<T> GetMolecularComponents<T> ()
 		{
 			List<T> list = new List<T>();
 			foreach (GameObject componentObj in componentObjects)

@@ -144,19 +144,6 @@ namespace AICS.MacroMolecules
 		}
 	}
 
-	[System.Serializable]
-	public class StateTransitionID
-	{
-		public int startStateID = 0;
-		public int transitionID = 0;
-
-		public StateTransitionID (int _startStateID, int _transitionID)
-		{
-			startStateID = _startStateID;
-			transitionID = _transitionID;
-		}
-	}
-
 	public class StateMachine : MolecularComponent, ISimulate
 	{
 		public State currentState;
@@ -229,12 +216,18 @@ namespace AICS.MacroMolecules
 			}
 		}
 
-		public void ForceTransition (StateTransitionID stateTransitionID)
+		public void ForceTransition (string stateTransitionID)
 		{
-			if (currentState.id == stateTransitionID.startStateID 
-				&& stateTransitionID.transitionID >= 0 && stateTransitionID.transitionID < currentState.transitions.Length)
+			string[] ids = stateTransitionID.Split( ',' );
+			int stateIndex = 0;
+			int.TryParse( ids[0], out stateIndex );
+			int transitionIndex = 0;
+			int.TryParse( ids[1], out transitionIndex );
+
+			if (currentState.id == stateIndex 
+				&& transitionIndex >= 0 && transitionIndex < currentState.transitions.Length)
 			{
-				StateTransition transition = currentState.transitions[stateTransitionID.transitionID];
+				StateTransition transition = currentState.transitions[transitionIndex];
 				if (transition != null)
 				{
 					Debug.Log( molecule.name + " force transition " + transition.name );
