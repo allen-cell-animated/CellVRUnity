@@ -4,26 +4,29 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class CollisionAvoider : MolecularComponent, IValidateMoves
+	public class CollisionAvoider : MolecularComponent, IValidateMoves, IFind
 	{
 		public bool exitCollisions = true;
 
-		MoleculeDetector detector;
+		public BindingCriteria criteriaToFind 
+		{
+			get
+			{
+				return new BindingCriteria( MoleculeType.All, 0 );
+			}
+		}
+
+		public float searchRadius 
+		{ 
+			get
+			{
+				return molecule.radius;
+			}
+		}
 
 		public bool MoveIsValid (Vector3 position, float radius)
 		{
-			return !detector.WillCollide( position, radius );
-		}
-
-		void Awake ()
-		{
-			CreateDetector();
-		}
-
-		void CreateDetector ()
-		{
-			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject).GetComponent<MoleculeDetector>().Setup( MoleculeType.All, molecule.radius );
-			detector.name = "Collider";
+			return !molecule.detector.WillCollide( position, radius );
 		}
 
 		void OnTriggerStay (Collider other)

@@ -35,6 +35,7 @@ namespace AICS.MacroMolecules
 
 		void Start ()
 		{
+			CreateDetector();
 			DoSetup();
 		}
 
@@ -147,6 +148,44 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return bs;
+		}
+
+		public MoleculeDetector detector;
+
+		List<IFind> _finders;
+		public List<IFind> finders
+		{
+			get
+			{
+				if (_finders == null)
+				{
+					_finders = GetMolecularComponents<IFind>();
+				}
+				return _finders;
+			}
+		}
+
+		void CreateDetector ()
+		{
+			float maxSearchRadius = radius;
+			List<MoleculeType> types = new List<MoleculeType>();
+			foreach (IFind finder in finders)
+			{
+				if (!types.Contains( finder.criteriaToFind.type ))
+				{
+					types.Add( finder.criteriaToFind.type );
+				}
+				if (finder.searchRadius > maxSearchRadius)
+				{
+					maxSearchRadius = finder.searchRadius;
+				}
+			}
+
+			if (types.Count > 0)
+			{
+				detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject)
+					.GetComponent<MoleculeDetector>().Setup( types.ToArray(), maxSearchRadius );
+			}
 		}
 
 		// --------------------------------------------------------------------------------------------------- Movement

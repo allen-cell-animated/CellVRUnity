@@ -4,40 +4,37 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class FinderConditional : Conditional
+	public class FinderConditional : Conditional, IFind
 	{
-		public BindingCriteria criteriaToBind;
-		public float searchRadius = 15f;
+		public BindingCriteria _criteriaToFind;
+		public BindingCriteria criteriaToFind 
+		{
+			get
+			{
+				return _criteriaToFind;
+			}
+		}
+
+		public float _searchRadius = 15f;
+		public float searchRadius 
+		{ 
+			get
+			{
+				return _searchRadius;
+			}
+		}
+
 		public bool onlyFindIfColliding = true;
 		public MoleculeBinder lastBinderFound;
 
-		MoleculeDetector detector;
 		protected List<MoleculeBinder> validBinders = new List<MoleculeBinder>();
 
 		List<Molecule> potentialMolecules
 		{
 			get
 			{
-				if (onlyFindIfColliding)
-				{
-					return detector.GetCollidingMolecules( transform.position, molecule.radius );
-				}
-				else
-				{
-					return detector.nearbyMolecules;
-				}
+				return molecule.detector.GetNearbyMolecules( transform.position, onlyFindIfColliding ? molecule.radius : searchRadius );
 			}
-		}
-
-		void Start ()
-		{
-			CreateDetector();
-		}
-
-		void CreateDetector ()
-		{
-			detector = (Instantiate( Resources.Load( "Prefabs/MoleculeDetector" ), transform ) as GameObject)
-				.GetComponent<MoleculeDetector>().Setup( criteriaToBind.type, searchRadius );
 		}
 
 		protected override bool DoCheck ()
@@ -48,14 +45,14 @@ namespace AICS.MacroMolecules
 
 		public virtual MoleculeBinder Find ()
 		{
-			if (detector.gameObject.activeSelf)
+			if (molecule.detector.gameObject.activeSelf)
 			{
 				validBinders.Clear();
 				foreach (Molecule m in potentialMolecules)
 				{
-					if (m != molecule && !molecule.IsBoundToMolecule( m ))
+					if (m != molecule && !molecule.IsBoundToMolecule( m ) && MoleculeIsValid( m ))
 					{
-						validBinders.AddRange( m.GetOpenBinders( criteriaToBind ) );
+						validBinders.AddRange( m.GetOpenBinders( criteriaToFind ) );
 					}
 				}
 				if (validBinders.Count > 0)
@@ -64,6 +61,11 @@ namespace AICS.MacroMolecules
 				}
 			}
 			return null;
+		}
+
+		protected virtual bool MoleculeIsValid (Molecule _molecule)
+		{
+			return true;
 		}
 
 		protected virtual MoleculeBinder PickFromValidBinders ()

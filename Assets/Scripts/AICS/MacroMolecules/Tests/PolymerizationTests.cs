@@ -177,7 +177,7 @@ public class PolymerizationTests
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
 		MolecularEnvironment.Instance.size = 30f * Vector3.one;
-		PolarMonomer[] monomers = CreateMonomers( "Trimerize", 30 );
+		PolarMonomer[] monomers = CreateMonomers( "Trimerize", 60 );
 
 		while (!AllAreBound( monomers ))
 		{

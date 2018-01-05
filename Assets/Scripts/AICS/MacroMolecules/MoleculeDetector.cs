@@ -6,54 +6,73 @@ namespace AICS.MacroMolecules
 {
 	public class MoleculeDetector : MonoBehaviour 
 	{
-		public List<Molecule> nearbyMolecules = new List<Molecule>();
-		public MoleculeType moleculeToFind;
+		public List<Molecule> molecules = new List<Molecule>();
+		public MoleculeType[] moleculesToFind;
 
-		List<Molecule> collidingMolecules = new List<Molecule>();
+		List<Molecule> nearbyMolecules = new List<Molecule>();
 
-		public MoleculeDetector Setup (MoleculeType _moleculeToFind, float radius)
+		public MoleculeDetector Setup (MoleculeType[] _moleculesToFind, float radius)
 		{
-			moleculeToFind = _moleculeToFind;
+			moleculesToFind = _moleculesToFind;
 			transform.localPosition = Vector3.zero;
 			GetComponent<SphereCollider>().radius = radius;
-			name = _moleculeToFind.ToString() + "Detector";
+
+			string n = "";
+			foreach (MoleculeType type in moleculesToFind)
+			{
+				n += type.ToString() + "/";
+			}
+			name = n + "Detector";
+
 			return this;
 		}
 
 		void OnTriggerEnter (Collider other)
 		{
 			Molecule molecule = other.GetComponentInParent<Molecule>();
-			if (molecule != null && (moleculeToFind == MoleculeType.All || molecule.type == moleculeToFind) && !nearbyMolecules.Contains( molecule ))
+			if (molecule != null && !molecules.Contains( molecule ) && MoleculeIsATypeToFind( molecule ))
 			{
-				nearbyMolecules.Add( molecule );
+				molecules.Add( molecule );
 			}
+		}
+
+		bool MoleculeIsATypeToFind (Molecule _molecule)
+		{
+			foreach (MoleculeType typeToFind in moleculesToFind)
+			{
+				if (typeToFind == MoleculeType.All || typeToFind == _molecule.type)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		void OnTriggerExit (Collider other)
 		{
 			Molecule molecule = other.GetComponentInParent<Molecule>();
-			if (molecule != null && nearbyMolecules.Contains( molecule ))
+			if (molecule != null && molecules.Contains( molecule ))
 			{
-				nearbyMolecules.Remove( molecule );
+				molecules.Remove( molecule );
 			}
 		}
 
-		public List<Molecule> GetCollidingMolecules (Vector3 position, float radius)
+		public List<Molecule> GetNearbyMolecules (Vector3 position, float radius)
 		{
-			collidingMolecules.Clear();
-			foreach (Molecule m in nearbyMolecules)
+			nearbyMolecules.Clear();
+			foreach (Molecule m in molecules)
 			{
 				if (Vector3.Distance( m.transform.position, position ) <= m.radius + radius)
 				{
-					collidingMolecules.Add( m );
+					nearbyMolecules.Add( m );
 				}
 			}
-			return collidingMolecules;
+			return nearbyMolecules;
 		}
 
 		public bool WillCollide (Vector3 position, float radius)
 		{
-			return GetCollidingMolecules( position, radius ).Count > 0;
+			return GetNearbyMolecules( position, radius ).Count > 0;
 		}
 	}
 }
