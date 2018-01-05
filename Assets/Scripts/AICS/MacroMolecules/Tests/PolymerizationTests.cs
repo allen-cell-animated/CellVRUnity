@@ -172,27 +172,25 @@ public class PolymerizationTests
 		yield return null;
 	}
 
-//	[UnityTest]
-//	public IEnumerator Polymerize ()
-//	{
-//		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-//		MolecularEnvironment.Instance.size = 30f * Vector3.one;
-//		PolarMonomer[] monomers = CreateMonomers( 30 );
-//
-//		while (!AllAreBound( monomers ))
-//		{
-//			yield return new WaitForEndOfFrame();
-//		}
-//
-//		Polymer polymer = GameObject.FindObjectOfType<Polymer>();
-//		foreach (PolarMonomer monomer in monomers)
-//		{
-//			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
-//			Assert.IsTrue( monomer.molecule.transform.parent == polymer.transform );
-//		}
-//
-//		yield return new WaitForSeconds( 1000f );
-//
-//		yield return null;
-//	}
+	[UnityTest]
+	public IEnumerator Polymerize ()
+	{
+		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
+		MolecularEnvironment.Instance.size = 30f * Vector3.one;
+		PolarMonomer[] monomers = CreateMonomers( "Trimerize", 30 );
+
+		while (!AllAreBound( monomers ))
+		{
+			yield return new WaitForEndOfFrame();
+		}
+
+		foreach (PolarMonomer monomer in monomers)
+		{
+			Assert.IsTrue( monomer.bindDirectionsAreCorrect );
+			Assert.IsNotNull( monomer.molecule.transform.parent.GetComponent<Polymer>() );
+			Assert.IsTrue( monomer.stateIsCorrect );
+		}
+
+		yield return null;
+	}
 }
