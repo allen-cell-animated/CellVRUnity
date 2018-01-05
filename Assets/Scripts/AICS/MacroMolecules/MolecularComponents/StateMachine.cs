@@ -194,9 +194,9 @@ namespace AICS.MacroMolecules
 			if (transition.ShouldHappen())
 			{
 				Debug.Log( molecule.name + " do transition " + transition.name );
-				transition.DoTransition();
 				currentState = GetStateForID( transition.finalStateID );
 				currentState.EnterState();
+				transition.DoTransition();
 				return true;
 			}
 			return false;
@@ -232,8 +232,8 @@ namespace AICS.MacroMolecules
 				{
 					Debug.Log( molecule.name + " force transition " + transition.name );
 					transition.attempts++;
-					transition.DoTransition();
 					currentState = GetStateForID( transition.finalStateID );
+					transition.DoTransition();
 					currentState.EnterState();
 				}
 			}

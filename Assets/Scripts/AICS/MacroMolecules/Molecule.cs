@@ -227,7 +227,7 @@ namespace AICS.MacroMolecules
 		// --------------------------------------------------------------------------------------------------- Simulation
 
 		List<ISimulate> _simulators;
-		List<ISimulate> simulators
+		public List<ISimulate> simulators
 		{
 			get
 			{
