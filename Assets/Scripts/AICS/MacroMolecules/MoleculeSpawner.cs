@@ -10,6 +10,7 @@ namespace AICS.MacroMolecules
 		public int amount;
 
 		Molecule[] molecules;
+		bool resetting = false;
 
 		void Start ()
 		{
@@ -27,15 +28,27 @@ namespace AICS.MacroMolecules
 				molecules[i].name = prefab.name + "_" + i.ToString();
 			}
 			MolecularEnvironment.Instance.needToGetMolecules = true;
+			resetting = false;
 		}
 
 		public void DoReset ()
 		{
-			foreach (Molecule molecule in molecules)
+			if (!resetting)
+			{
+				resetting = true;
+				DestroyAll();
+				Invoke( "DestroyAll", 0.1f );
+				Invoke( "Spawn", 0.2f );
+			}
+		}
+
+		void DestroyAll ()
+		{
+			Molecule[] _molecules = GameObject.FindObjectsOfType<Molecule>();
+			foreach (Molecule molecule in _molecules)
 			{
 				Destroy( molecule.gameObject );
 			}
-			Spawn();
 		}
 	}
 }

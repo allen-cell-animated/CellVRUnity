@@ -26,6 +26,7 @@ namespace AICS.MacroMolecules
 
 		public bool MoveIsValid (Vector3 position, float radius)
 		{
+			if (molecule.detector == null) { Debug.Log( molecule.name ); }
 			return !molecule.detector.WillCollide( position, radius );
 		}
 
