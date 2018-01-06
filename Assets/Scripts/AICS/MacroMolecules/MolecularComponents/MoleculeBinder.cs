@@ -51,7 +51,6 @@ namespace AICS.MacroMolecules
 		{
 			if (OnBind != null)
 			{
-				Debug.Log( molecule.name + " do bind" );
 				OnBind.Invoke();
 			}
 		}

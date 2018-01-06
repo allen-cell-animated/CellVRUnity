@@ -193,7 +193,6 @@ namespace AICS.MacroMolecules
 			transition.attempts++;
 			if (transition.ShouldHappen())
 			{
-				Debug.Log( molecule.name + " do transition " + transition.name );
 				currentState = GetStateForID( transition.finalStateID );
 				currentState.EnterState();
 				transition.DoTransition();
@@ -230,7 +229,6 @@ namespace AICS.MacroMolecules
 				StateTransition transition = currentState.transitions[transitionIndex];
 				if (transition != null)
 				{
-					Debug.Log( molecule.name + " force transition " + transition.name );
 					transition.attempts++;
 					currentState = GetStateForID( transition.finalStateID );
 					transition.DoTransition();

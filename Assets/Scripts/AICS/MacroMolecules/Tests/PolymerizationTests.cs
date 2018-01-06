@@ -104,7 +104,7 @@ public class PolymerizationTests
 	public IEnumerator DimerizeSeparate ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 10f * Vector3.one;
+		MolecularEnvironment.Instance.size = 50f * Vector3.one;
 		PolarMonomer[] monomers = new PolarMonomer[2];
 		monomers[0] = new PolarMonomer( "DimerizeBarbed", MolecularEnvironment.Instance.GetRandomPointInBounds(), "barbed" );
 		monomers[1] = new PolarMonomer( "DimerizePointed", MolecularEnvironment.Instance.GetRandomPointInBounds(), "pointed" );
@@ -128,7 +128,7 @@ public class PolymerizationTests
 	public IEnumerator DimerizeSingle ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 10f * Vector3.one;
+		MolecularEnvironment.Instance.size = 50f * Vector3.one;
 		PolarMonomer[] monomers = CreateMonomers( "Dimerize", 2 );
 
 		while (!AllAreBound( monomers ))
@@ -152,7 +152,7 @@ public class PolymerizationTests
 	public IEnumerator Trimerize ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 10f * Vector3.one;
+		MolecularEnvironment.Instance.size = 50f * Vector3.one;
 		PolarMonomer[] monomers = CreateMonomers( "Trimerize", 3 );
 
 		while (!AllAreBound( monomers ))
@@ -176,7 +176,7 @@ public class PolymerizationTests
 	public IEnumerator Polymerize ()
 	{
 		new GameObject( "MolecularEnvironment", typeof(MolecularEnvironment) );
-		MolecularEnvironment.Instance.size = 30f * Vector3.one;
+		MolecularEnvironment.Instance.size = 100f * Vector3.one;
 		PolarMonomer[] monomers = CreateMonomers( "Trimerize", 60 );
 
 		while (!AllAreBound( monomers ))

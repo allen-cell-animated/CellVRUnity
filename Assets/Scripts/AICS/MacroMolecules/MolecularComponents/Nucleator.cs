@@ -11,7 +11,6 @@ namespace AICS.MacroMolecules
 
 		public void Nucleate ()
 		{
-			Debug.Log( molecule.name + " Nucleate" );
 			if (binderForOther != null && binderForOther.boundBinder != null)
 			{
 				bool otherIsNucleated = (binderForOther.boundBinder.molecule.polymer != null);
@@ -34,7 +33,6 @@ namespace AICS.MacroMolecules
 
 		protected virtual void JoinPolymer ()
 		{
-			Debug.Log( "Join" );
 			Polymer polymer = binderForOther.boundBinder.molecule.polymer;
 
 			polymer.monomers.Add( molecule );
@@ -44,7 +42,6 @@ namespace AICS.MacroMolecules
 
 		protected virtual void AddMonomer ()
 		{
-			Debug.Log( "Add" );
 			Molecule monomer = binderForOther.boundBinder.molecule;
 			Polymer polymer = molecule.polymer;
 
@@ -55,7 +52,6 @@ namespace AICS.MacroMolecules
 
 		protected virtual void CreatePolymer ()
 		{
-			Debug.Log( "Create" );
 			if (polymerPrefab != null)
 			{
 				Polymer polymer = Instantiate( polymerPrefab, transform.position, transform.rotation ) as Polymer;

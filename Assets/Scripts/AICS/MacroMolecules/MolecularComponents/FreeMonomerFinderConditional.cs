@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace AICS.MacroMolecules
 {
-	public class OutsidePolymerFinderConditional : FinderConditional
+	public class FreeMonomerFinderConditional : FinderConditional
 	{
 		protected override bool MoleculeIsValid (Molecule _molecule)
 		{
-			return _molecule.polymer == null || _molecule.polymer != molecule.polymer;
+			return _molecule.polymer == null;
 		}
 	}
 }
