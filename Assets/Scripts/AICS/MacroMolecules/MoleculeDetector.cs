@@ -11,11 +11,32 @@ namespace AICS.MacroMolecules
 
 		List<Molecule> nearbyMolecules = new List<Molecule>();
 
-		public MoleculeDetector Setup (MoleculeType[] _moleculesToFind, float radius)
+		SphereCollider _collider;
+		SphereCollider theCollider
+		{
+			get
+			{
+				if (_collider == null)
+				{
+					_collider = GetComponent<SphereCollider>();
+				}
+				return _collider;
+			}
+		}
+
+		public float radius
+		{
+			get
+			{
+				return theCollider.radius;
+			}
+		}
+
+		public MoleculeDetector Setup (MoleculeType[] _moleculesToFind, float _radius)
 		{
 			moleculesToFind = _moleculesToFind;
 			transform.localPosition = Vector3.zero;
-			GetComponent<SphereCollider>().radius = radius;
+			SetRadius( _radius );
 
 			string n = "";
 			foreach (MoleculeType type in moleculesToFind)
@@ -73,6 +94,11 @@ namespace AICS.MacroMolecules
 		public bool WillCollide (Vector3 position, float radius)
 		{
 			return GetNearbyMolecules( position, radius ).Count > 0;
+		}
+
+		public void SetRadius (float _radius)
+		{
+			theCollider.radius = _radius;
 		}
 	}
 }
