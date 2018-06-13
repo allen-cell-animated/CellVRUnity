@@ -6,7 +6,9 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class Necklinker : LinkerComponentMolecule 
 	{
-        public Transform firstParent;
+        public float positionAlongChain = 0.5f;
+        public Transform motor;
+        public Transform hips;
 
 		Transform _visualization;
 		Transform visualization
@@ -46,9 +48,9 @@ namespace AICS.MotorProteins.Kinesin
 
 		void PositionBetweenParents ()
 		{
-            if (firstParent != null && secondParent != null)
+            if (motor != null && hips != null)
 			{
-                SetPosition( (firstParent.position + secondParent.position) / 2f );
+                SetPosition( positionAlongChain * motor.position + (1f - positionAlongChain) * hips.position );
 			}
 		}
 

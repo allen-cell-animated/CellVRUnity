@@ -2933,8 +2933,10 @@ MonoBehaviour:
   dynamicLeash: 0
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
-  secondParent: {fileID: 4775499583041750}
-  firstParent: {fileID: 4911439622467802}
+  secondParent: {fileID: 4949612832188740}
+  positionAlongChain: 0.5714286
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114173843389251112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3027,7 +3029,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4824856951153810}
-  firstParent: {fileID: 4196192065921838}
+  positionAlongChain: 0.71428573
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114214554125599018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3066,7 +3070,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4034488052407086}
-  firstParent: {fileID: 4896155895415248}
+  positionAlongChain: 0.85714287
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114259058521497386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3165,7 +3171,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4292758425069570}
-  firstParent: {fileID: 4632356202132490}
+  positionAlongChain: 0.2857143
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114372186528302312
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3258,7 +3266,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4326178524760474}
-  firstParent: {fileID: 4103804565201104}
+  positionAlongChain: 0.42857143
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114390624950954414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3297,7 +3307,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4775499583041750}
-  firstParent: {fileID: 4949612832188740}
+  positionAlongChain: 0.85714287
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114396260823251326
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3336,7 +3348,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4234720872549682}
-  firstParent: {fileID: 4737232013986012}
+  positionAlongChain: 0.2857143
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114418349865124638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3395,7 +3409,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4196192065921838}
-  firstParent: {fileID: 4940728926468346}
+  positionAlongChain: 0.42857143
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114505644086908616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3510,8 +3526,10 @@ MonoBehaviour:
   dynamicLeash: 0
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
-  secondParent: {fileID: 4034488052407086}
-  firstParent: {fileID: 4911439622467802}
+  secondParent: {fileID: 4896155895415248}
+  positionAlongChain: 0.5714286
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114615359611929262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3713,7 +3731,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4940728926468346}
-  firstParent: {fileID: 4911439622467802}
+  positionAlongChain: 0.14285715
+  motor: {fileID: 4034488052407086}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114740309237897208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3765,7 +3785,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4103804565201104}
-  firstParent: {fileID: 4911439622467802}
+  positionAlongChain: 0.14285715
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!114 &114767023188636324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3888,7 +3910,9 @@ MonoBehaviour:
   minDistanceFromParent: 1
   maxDistanceFromParent: 2
   secondParent: {fileID: 4573375642208536}
-  firstParent: {fileID: 4326178524760474}
+  positionAlongChain: 0.71428573
+  motor: {fileID: 4775499583041750}
+  hips: {fileID: 4911439622467802}
 --- !u!135 &135121952900351116
 SphereCollider:
   m_ObjectHideFlags: 1
