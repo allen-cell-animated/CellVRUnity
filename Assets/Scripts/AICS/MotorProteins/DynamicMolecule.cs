@@ -53,7 +53,7 @@ namespace AICS.MotorProteins
 
 		public abstract void DoRandomWalk ();
 
-		protected void Animate (bool forceMove = false)
+        protected void Animate (bool forceMove = false) // Called every frame, forceMove is true if binding to tubulin
 		{
 			if (rotating)
 			{
@@ -128,9 +128,9 @@ namespace AICS.MotorProteins
 			}
 		}
 
-		protected void MoveTo (Vector3 goalPosition, bool forceMove = false)
+        protected void MoveTo (Vector3 goalPosition, bool forceMove = false) // called on exit collision and move to tubulin
 		{
-			StartMove( goalPosition, false, forceMove );
+			StartMove( goalPosition, false, forceMove ); 
 		}
 
 		Vector3 StartMove (Vector3 goalPosition, bool random, bool forceMove = false)
@@ -145,13 +145,11 @@ namespace AICS.MotorProteins
 			{
 				moving = true;
 				moved = AnimateMove( 1f, forceMove );
-//				if (moved) { Debug.Log( name + " " + (random ? "random " : "") + "step size = " + moveStep.magnitude ); }
 			}
 			else 
 			{
 				moving = true;
 			}
-//			Debug.Log( name + " " + (random ? "random" : "") + " step size = " + moveStep.magnitude );
 			return (!moved ? moveStep : Vector3.zero);
 		}
 
@@ -266,11 +264,16 @@ namespace AICS.MotorProteins
 		{
 			if (!exiting)
 			{
-				MoveTo( transform.position + 0.5f * (transform.position - otherPosition), true );
+                MoveTo( GetExitVector( otherPosition ), true );
 				exiting = true;
 				Invoke( "FinishExit", 1f );
 			}
 		}
+
+        protected virtual Vector3 GetExitVector (Vector3 otherPosition)
+        {
+            return transform.position + 0.5f * (transform.position - otherPosition);
+        }
 
 		void FinishExit ()
 		{

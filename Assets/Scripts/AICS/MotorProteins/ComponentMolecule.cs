@@ -14,7 +14,7 @@ namespace AICS.MotorProteins
 		public float minDistanceFromParent = 2f;
 		public float maxDistanceFromParent = 6f;
 
-		bool isParent
+		protected bool isParent
 		{
 			get
 			{

@@ -211,7 +211,41 @@ namespace AICS.MotorProteins.Kinesin
 			{
 				body.isKinematic = theCollider.isTrigger = binding = moving = rotating = false;
 			}
+            ClampToLeash();
 		}
+
+        void ClampToLeash ()
+        {
+            if (!isParent)
+            {
+                Vector3 parentToPosition = transform.position - transform.parent.position;
+                float d = Mathf.Clamp( parentToPosition.magnitude, minDistanceFromParent, maxDistanceFromParent );
+                transform.position = transform.parent.position + d * parentToPosition.normalized;
+            }
+        }
+
+        protected override Vector3 GetExitVector (Vector3 otherPosition)
+        {
+            if (!isParent)
+            {
+                Vector3 newPosition = transform.position + 0.5f * (transform.position - otherPosition);
+                Vector3 parentToNewPosition = newPosition - transform.parent.position;
+                float d = Mathf.Clamp( parentToNewPosition.magnitude, minDistanceFromParent, maxDistanceFromParent );
+                return transform.parent.position + d * parentToNewPosition.normalized;
+            }
+            return base.GetExitVector( otherPosition );
+        }
+
+        protected override Vector3 ClampedPosition (Vector3 newPosition)
+        {
+            if (!isParent)
+            {
+                Vector3 parentToNewPosition = newPosition - transform.parent.position;
+                float d = Mathf.Clamp( parentToNewPosition.magnitude, minDistanceFromParent, maxDistanceFromParent );
+                return transform.parent.position + d * parentToNewPosition.normalized;
+            }
+            return base.ClampedPosition( newPosition );
+        }
 
 		void TryToSwitchToStrong ()
 		{
@@ -544,7 +578,7 @@ namespace AICS.MotorProteins.Kinesin
 			tubulin.hasMotorBound = true;
 
 			kinesin.SetParentSchemeOnComponentBind( this as ComponentMolecule );
-			MoveTo( tubulin.transform.TransformPoint( bindingPosition ) );
+			MoveTo( tubulin.transform.TransformPoint( bindingPosition ) ); //CHECK
 			RotateTo( tubulin.transform.rotation * Quaternion.Euler( bindingRotation ) );
 		}
 

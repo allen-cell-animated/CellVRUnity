@@ -85,8 +85,13 @@ namespace AICS.MotorProteins
 
 		protected void IncrementPosition (Vector3 moveStep)
 		{
-			SetPosition( transform.position + moveStep );
+            SetPosition( ClampedPosition( transform.position + moveStep ) );
 		}
+
+        protected virtual Vector3 ClampedPosition (Vector3 newPosition)
+        {
+            return newPosition;
+        }
 
 		protected void SetPosition (Vector3 newPosition)
 		{

@@ -6,6 +6,8 @@ namespace AICS.MotorProteins.Kinesin
 {
 	public class Necklinker : LinkerComponentMolecule 
 	{
+        public Transform firstParent;
+
 		Transform _visualization;
 		Transform visualization
 		{
@@ -32,7 +34,7 @@ namespace AICS.MotorProteins.Kinesin
 		public override void DoCustomSimulation ()
 		{
 //			Jitter( 0.1f );
-//			PositionBetweenParents();
+			PositionBetweenParents();
 //			PlaceVisualization();
 		}
 
@@ -44,9 +46,9 @@ namespace AICS.MotorProteins.Kinesin
 
 		void PositionBetweenParents ()
 		{
-			if (transform.parent != null && secondParent != null)
+            if (firstParent != null && secondParent != null)
 			{
-				SetPosition( (transform.parent.position + secondParent.position) / 2f );
+                SetPosition( (firstParent.position + secondParent.position) / 2f );
 			}
 		}
 
