@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 947c58abab4084ecc96918150f4a8a20
-timeCreated: 1512183777
-licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -73,6 +71,9 @@ ModelImporter:
     2300028: MitosGaussian
     2300030: Sec61_MeshPart0
     2300032: Sec61_MeshPart1
+    2300034: LaminB
+    2300036: Microtubule_singles
+    2300038: Sec61
     3300000: 881_7_CellMembrane_1Metaball
     3300002: BetaActin
     3300004: Fibrilarin
@@ -90,6 +91,9 @@ ModelImporter:
     3300028: MitosGaussian
     3300030: Sec61_MeshPart0
     3300032: Sec61_MeshPart1
+    3300034: LaminB
+    3300036: Microtubule_singles
+    3300038: Sec61
     4300000: Microtubule_singles_MeshPart0
     4300002: Microtubule_singles_MeshPart1
     4300004: Microtubule_singles_MeshPart2
@@ -107,6 +111,9 @@ ModelImporter:
     4300028: LaminB_MeshPart1
     4300030: Fibrilarin
     4300032: 881_7_CellMembrane_1Metaball
+    4300034: Microtubule_singles
+    4300036: Sec61
+    4300038: LaminB
     9500000: //RootNode
   externalObjects:
   - first:
@@ -167,6 +174,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -191,6 +199,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88

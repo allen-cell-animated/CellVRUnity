@@ -1,3 +1,6 @@
+// Upgrade NOTE: upgraded instancing buffer 'PerDraw0' to new syntax.
+// Upgrade NOTE: upgraded instancing buffer 'name' to new syntax.
+
 // Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
 
 #ifndef UNITY_INSTANCING_INCLUDED
@@ -74,24 +77,24 @@
 
 	#if defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)
 		// GLCore and ES3 have constant buffers disabled normally, but not here.
-		#define UNITY_INSTANCING_CBUFFER_START(name)	cbuffer UnityInstancing_##name {
-		#define UNITY_INSTANCING_CBUFFER_END			}
+		#define UNITY_INSTANCING_BUFFER_START(name)	cbuffer UnityInstancing_##name {
+		#define UNITY_INSTANCING_BUFFER_END(name)			}
 	#else
-		#define UNITY_INSTANCING_CBUFFER_START(name)	CBUFFER_START(UnityInstancing_##name)
-		#define UNITY_INSTANCING_CBUFFER_END			CBUFFER_END
+		#define UNITY_INSTANCING_BUFFER_START(name)	CBUFFER_START(UnityInstancing_##name)
+		#define UNITY_INSTANCING_BUFFER_END(name)			CBUFFER_END
 	#endif
 
 	// Define a per-instance shader property. Must be used inside a UNITY_INSTANCING_CBUFFER_START / END block.
 	#define UNITY_DEFINE_INSTANCED_PROP(type, name)	type name[UNITY_INSTANCED_ARRAY_SIZE];
 
 	// Access a per-instance shader property.
-	#define UNITY_ACCESS_INSTANCED_PROP(name)		name[unity_InstanceID]
+	#define UNITY_ACCESS_INSTANCED_PROP(name_arr, name)		name[unity_InstanceID]
 
 	// Redefine some of the built-in variables / macros to make them work with instancing.
-	UNITY_INSTANCING_CBUFFER_START(PerDraw0)
+	UNITY_INSTANCING_BUFFER_START(PerDraw0)
 		float4x4 unity_ObjectToWorldArray[UNITY_INSTANCED_ARRAY_SIZE];
 		float4x4 unity_WorldToObjectArray[UNITY_INSTANCED_ARRAY_SIZE];
-	UNITY_INSTANCING_CBUFFER_END
+	UNITY_INSTANCING_BUFFER_END(PerDraw0)
 
 	#define unity_ObjectToWorld		unity_ObjectToWorldArray[unity_InstanceID]
 	#define unity_WorldToObject		unity_WorldToObjectArray[unity_InstanceID]
@@ -108,11 +111,11 @@
 		#undef UNITY_MAX_INSTANCE_COUNT
 	#endif
 
-	#define UNITY_INSTANCING_CBUFFER_START(name)	CBUFFER_START(name)
-	#define UNITY_INSTANCING_CBUFFER_END			CBUFFER_END
+	#define UNITY_INSTANCING_BUFFER_START(name)	CBUFFER_START(name)
+	#define UNITY_INSTANCING_BUFFER_END(name)			CBUFFER_END
 
 	#define UNITY_DEFINE_INSTANCED_PROP(type, name)	type name;
-	#define UNITY_ACCESS_INSTANCED_PROP(name)		name
+	#define UNITY_ACCESS_INSTANCED_PROP(name_arr, name)		name
 
 #endif // UNITY_SUPPORT_INSTANCING && defined(INSTANCING_ON)
 
