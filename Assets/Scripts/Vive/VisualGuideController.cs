@@ -31,7 +31,7 @@ public class VisualGuideController : ViveController
     float startControllerDistance;
     Vector3 startCellScale;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
-    Vector3 maxScale = new Vector3( 2.5f, 2.5f, 2.5f );
+    Vector3 maxScale = new Vector3( 10f, 10f, 10f );
 	Vector3[] linePoints = new Vector3[2];
 
     void OnTriggerEnter (Collider other)
@@ -39,8 +39,9 @@ public class VisualGuideController : ViveController
         CellStructure structure = other.GetComponentInParent<CellStructure>();
         if (structure != null)
         {
+            SetHoveredStructureOutline( false );
             hoveredStructure = structure;
-            hoveredStructure.SetOutline( true );
+            SetHoveredStructureOutline( true );
         }
     }
 
@@ -49,17 +50,28 @@ public class VisualGuideController : ViveController
         CellStructure structure = other.GetComponentInParent<CellStructure>();
         if (structure != null && hoveredStructure == structure)
         {
-            hoveredStructure.SetOutline( false );
+            SetHoveredStructureOutline( false );
             hoveredStructure = null;
+        }
+    }
+
+    void SetHoveredStructureOutline (bool enabled)
+    {
+        if (hoveredStructure != null)
+        {
+            hoveredStructure.SetOutline( enabled );
         }
     }
 
     public override void OnTriggerPull () 
 	{
-		if (state == VisualGuideControllerState.Idle && otherController.state == VisualGuideControllerState.HoldingTrigger)
+        if (state == VisualGuideControllerState.Idle)
         {
             state = VisualGuideControllerState.HoldingTrigger;
-            StartScaling();
+            if (otherController.state == VisualGuideControllerState.HoldingTrigger)
+            {
+                StartScaling();
+            }
         }
     }
 
@@ -76,7 +88,10 @@ public class VisualGuideController : ViveController
         if (state == VisualGuideControllerState.HoldingTrigger)
         {
             state = VisualGuideControllerState.Idle;
-            StopScaling();
+            if (otherController.state == VisualGuideControllerState.Idle)
+            {
+                StopScaling();
+            }
         }
     }
 
