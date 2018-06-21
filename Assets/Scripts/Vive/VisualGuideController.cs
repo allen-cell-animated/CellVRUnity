@@ -7,7 +7,8 @@ using AICS.Cell;
 public enum VisualGuideControllerState
 {
     Idle,
-    HoldingTrigger
+    FirstTriggerHold,
+    SecondTriggerHold
 }
 
 public class VisualGuideController : ViveController
@@ -67,17 +68,22 @@ public class VisualGuideController : ViveController
 	{
         if (state == VisualGuideControllerState.Idle)
         {
-            state = VisualGuideControllerState.HoldingTrigger;
-            if (otherController.state == VisualGuideControllerState.HoldingTrigger)
+            if (otherController.state != VisualGuideControllerState.Idle)
             {
+                otherController.state = VisualGuideControllerState.FirstTriggerHold;
+                state = VisualGuideControllerState.SecondTriggerHold;
                 StartScaling();
+            }
+            else
+            {
+                state = VisualGuideControllerState.FirstTriggerHold;
             }
         }
     }
 
     public override void OnTriggerHold ()
     {
-        if (state == VisualGuideControllerState.HoldingTrigger && otherController.state == VisualGuideControllerState.HoldingTrigger)
+        if (state == VisualGuideControllerState.SecondTriggerHold)
         {
             UpdateScale();
         }
@@ -85,14 +91,19 @@ public class VisualGuideController : ViveController
 
     public override void OnTriggerRelease()
     {
-        if (state == VisualGuideControllerState.HoldingTrigger)
+        if (state == VisualGuideControllerState.FirstTriggerHold)
         {
-            state = VisualGuideControllerState.Idle;
-            if (otherController.state == VisualGuideControllerState.Idle)
+            if (otherController.state == VisualGuideControllerState.SecondTriggerHold)
             {
-                StopScaling();
+                otherController.state = VisualGuideControllerState.FirstTriggerHold;
+                otherController.StopScaling();
             }
         }
+        else if (state == VisualGuideControllerState.SecondTriggerHold)
+        {
+            StopScaling();
+        }
+        state = VisualGuideControllerState.Idle;
     }
 
     void StartScaling ()
