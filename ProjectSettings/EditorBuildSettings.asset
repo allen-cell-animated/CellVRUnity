@@ -4,10 +4,4 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/cells.unity
-    guid: 138cbe49dfd9aaf4f95b4f044ff602cf
-  - enabled: 1
-    path: Assets/Scenes/kinesin.unity
-    guid: e9f1e404574654c9a990ccb77fe8dc37
+  m_Scenes: []
