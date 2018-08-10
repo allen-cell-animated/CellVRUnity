@@ -20,6 +20,20 @@ public class VisualGuideController : ViveController
 	public LineRenderer scaleLine;
 	public GameObject scaleButtonLabel;
 	public GameObject labelLine;
+    public Transform cursor;
+
+    LabelCanvas _structureLabel;
+    LabelCanvas structureLabel
+    {
+        get
+        {
+            if (_structureLabel == null)
+            {
+                _structureLabel = Resources.Load("LabelCanvas") as LabelCanvas;
+            }
+            return _structureLabel;
+        }
+    }
 
     public Cell draggedCell
     {
@@ -40,9 +54,9 @@ public class VisualGuideController : ViveController
         CellStructure structure = other.GetComponentInParent<CellStructure>();
         if (structure != null)
         {
-            SetHoveredStructureOutline( false );
+            SetHoveredStructure( false );
             hoveredStructure = structure;
-            SetHoveredStructureOutline( true );
+            SetHoveredStructure( true );
         }
     }
 
@@ -51,16 +65,20 @@ public class VisualGuideController : ViveController
         CellStructure structure = other.GetComponentInParent<CellStructure>();
         if (structure != null && hoveredStructure == structure)
         {
-            SetHoveredStructureOutline( false );
+            SetHoveredStructure( false );
             hoveredStructure = null;
         }
     }
 
-    void SetHoveredStructureOutline (bool enabled)
+    void SetHoveredStructure (bool enabled)
     {
         if (hoveredStructure != null)
         {
             hoveredStructure.SetOutline( enabled );
+            if (enabled)
+            {
+                structureLabel.SetLabel( hoveredStructure.structureName, cursor.position );
+            }
         }
     }
 

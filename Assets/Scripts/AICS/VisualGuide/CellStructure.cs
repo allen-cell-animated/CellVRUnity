@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CellStructure : MonoBehaviour 
 {
+    public string structureName;
     public GameObject outline;
 
     public void SetOutline (bool show)
