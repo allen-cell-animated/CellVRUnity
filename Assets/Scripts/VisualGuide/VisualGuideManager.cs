@@ -5,6 +5,7 @@ using UnityEngine;
 public class VisualGuideManager : MonoBehaviour 
 {
     public VisualGuideData data;
+    public bool inIsolationMode;
 
     Vector3 startScale;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
@@ -91,6 +92,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void IsolateStructure (CellStructure _structure)
     {
+        inIsolationMode = true;
         foreach (CellStructure structure in structures)
         {
             if (structure != _structure && !structure.alwaysShowInIsolationMode)
@@ -115,6 +117,7 @@ public class VisualGuideManager : MonoBehaviour
             s.gameObject.SetActive( true );
         }
         infoPanel.gameObject.SetActive( false );
+        inIsolationMode = false;
     }
 
     public void StartScaling ()

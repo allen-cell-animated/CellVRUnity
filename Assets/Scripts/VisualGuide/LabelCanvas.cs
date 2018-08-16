@@ -24,6 +24,6 @@ public class LabelCanvas : MonoBehaviour
     void SetPosition (Vector3 _cursorPosition)
     {
         transform.position = _cursorPosition;
-        transform.LookAt( Camera.main.transform );
+        transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
     }
 }

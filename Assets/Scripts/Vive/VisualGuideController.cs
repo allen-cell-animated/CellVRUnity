@@ -27,12 +27,15 @@ public class VisualGuideController : ViveController
 
     void OnTriggerEnter (Collider _other)
     {
-        CellStructure structure = _other.GetComponentInParent<CellStructure>();
-        if (structure != null)
+        if (!VisualGuideManager.Instance.inIsolationMode)
         {
-            SetHoveredStructure( false );
-            hoveredStructure = structure;
-            SetHoveredStructure( true );
+            CellStructure structure = _other.GetComponentInParent<CellStructure>();
+            if (structure != null)
+            {
+                SetHoveredStructure( false );
+                hoveredStructure = structure;
+                SetHoveredStructure( true );
+            }
         }
     }
 
