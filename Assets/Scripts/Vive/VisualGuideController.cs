@@ -89,7 +89,7 @@ public class VisualGuideController : ViveController
             UpdateScale();
         }
     }
-
+    
     public override void OnTriggerRelease()
     {
         if (state == VisualGuideControllerState.FirstTriggerHold)
@@ -99,9 +99,13 @@ public class VisualGuideController : ViveController
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
                 otherController.StopScaling();
             }
-            else
+            else 
             {
-                ToggleIsolationMode();
+                if (!VisualGuideManager.Instance.scaling)
+                {
+                    ToggleIsolationMode();
+                }
+                VisualGuideManager.Instance.scaling = false;
             }
         }
         else if (state == VisualGuideControllerState.SecondTriggerHold)
@@ -143,13 +147,17 @@ public class VisualGuideController : ViveController
     {
         if (!isolationMode)
         {
-            VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
+            if (hoveredStructure != null)
+            {
+                VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
+                isolationMode = true;
+            }
         }
         else
         {
             VisualGuideManager.Instance.ExitIsolationMode();
+            isolationMode = false;
         }
-        isolationMode = !isolationMode;
     }
 
 	protected override void DoUpdate ()

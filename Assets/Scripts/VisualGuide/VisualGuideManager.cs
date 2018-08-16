@@ -6,6 +6,7 @@ public class VisualGuideManager : MonoBehaviour
 {
     public VisualGuideData data;
     public bool inIsolationMode;
+    public bool scaling;
 
     Vector3 startScale;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
@@ -122,6 +123,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void StartScaling ()
     {
+        scaling = true;
         startScale = transform.localScale;
     }
 
