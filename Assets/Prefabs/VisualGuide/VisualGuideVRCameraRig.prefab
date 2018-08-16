@@ -1520,7 +1520,7 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 7316ec84b68c14cb29b643cfe3e284f3, type: 2}
+  - {fileID: 2100000, guid: 6bddbe45ddf104a58bc9c0c3abc7120f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1796,7 +1796,7 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 7316ec84b68c14cb29b643cfe3e284f3, type: 2}
+  - {fileID: 2100000, guid: 6bddbe45ddf104a58bc9c0c3abc7120f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2074,7 +2074,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01
+  m_Radius: 0.02
   m_Center: {x: -0.0005, y: -0.0235, z: 0.0365}
 --- !u!135 &135824728286851358
 SphereCollider:
@@ -2086,7 +2086,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01
+  m_Radius: 0.02
   m_Center: {x: -0.0005, y: -0.0235, z: 0.0365}
 --- !u!212 &212344067193602414
 SpriteRenderer:
