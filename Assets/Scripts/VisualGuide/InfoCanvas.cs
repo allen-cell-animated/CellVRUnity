@@ -20,9 +20,16 @@ public class InfoCanvas : MonoBehaviour
         SetPosition();
     }
 
+    void Start ()
+    {
+        SetPosition();
+    }
+
     void SetPosition ()
     {
-        transform.position = Camera.main.transform.position + Camera.main.transform.TransformPoint( offsetFromCamera );
-        transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
+        Vector3 position = Camera.main.transform.position + Camera.main.transform.TransformPoint( offsetFromCamera );
+        transform.position = new Vector3( position.x, Camera.main.transform.position.y, position.z );
+        transform.LookAt( transform.position + (transform.position - Camera.main.transform.position), Vector3.up );
+        transform.rotation = Quaternion.Euler( 0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z );
     }
 }

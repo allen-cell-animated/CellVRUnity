@@ -106,9 +106,8 @@ public class VisualGuideManager : MonoBehaviour
 
     void ShowInfoPanel (CellStructure _structure)
     {
-        infoPanel.gameObject.SetActive( true );
-        Debug.Log(_structure == null);
         infoPanel.SetContent( _structure.data );
+        infoPanel.gameObject.SetActive( true );
     }
 
     public void ExitIsolationMode ()
