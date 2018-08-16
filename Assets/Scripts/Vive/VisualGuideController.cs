@@ -186,9 +186,7 @@ public class VisualGuideController : ViveController
                     }
                     else
                     {
-                        SetButtonLabel( null );
-                        ShowObject( labelLine, false );
-                        return;
+                        SetButtonLabel( scaleButtonLabel );
                     }
                 }
                 else
