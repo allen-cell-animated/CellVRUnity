@@ -80,10 +80,10 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    public void LabelStructure (CellStructure _structure, Vector3 _position)
+    public void LabelStructure (CellStructure _structure, Vector3 _cursorPosition)
     {
         structureLabel.gameObject.SetActive( true );
-        structureLabel.SetLabel( _structure.structureName, _position );
+        structureLabel.SetLabel( _structure.structureName, _cursorPosition );
     }
 
     public void HideLabel ()
