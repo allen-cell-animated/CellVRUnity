@@ -15,43 +15,19 @@ public class VisualGuideController : ViveController
 {
 	public VisualGuideControllerState state;
     public VisualGuideController otherController;
-    public GameObject cell;
     public CellStructure hoveredStructure;
 	public LineRenderer scaleLine;
 	public GameObject scaleButtonLabel;
 	public GameObject labelLine;
     public Transform cursor;
 
-    LabelCanvas _structureLabel;
-    LabelCanvas structureLabel
-    {
-        get
-        {
-            if (_structureLabel == null)
-            {
-                _structureLabel = Resources.Load("LabelCanvas") as LabelCanvas;
-            }
-            return _structureLabel;
-        }
-    }
-
-    public Cell draggedCell
-    {
-        get
-        {
-            return GetComponentInChildren<Cell>();
-        }
-    }
-
+    bool isolationMode;
     float startControllerDistance;
-    Vector3 startCellScale;
-    Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
-    Vector3 maxScale = new Vector3( 10f, 10f, 10f );
 	Vector3[] linePoints = new Vector3[2];
 
-    void OnTriggerEnter (Collider other)
+    void OnTriggerEnter (Collider _other)
     {
-        CellStructure structure = other.GetComponentInParent<CellStructure>();
+        CellStructure structure = _other.GetComponentInParent<CellStructure>();
         if (structure != null)
         {
             SetHoveredStructure( false );
@@ -60,9 +36,9 @@ public class VisualGuideController : ViveController
         }
     }
 
-    void OnTriggerExit (Collider other)
+    void OnTriggerExit (Collider _other)
     {
-        CellStructure structure = other.GetComponentInParent<CellStructure>();
+        CellStructure structure = _other.GetComponentInParent<CellStructure>();
         if (structure != null && hoveredStructure == structure)
         {
             SetHoveredStructure( false );
@@ -70,14 +46,18 @@ public class VisualGuideController : ViveController
         }
     }
 
-    void SetHoveredStructure (bool enabled)
+    void SetHoveredStructure (bool _enabled)
     {
         if (hoveredStructure != null)
         {
-            hoveredStructure.SetOutline( enabled );
-            if (enabled)
+            hoveredStructure.SetOutline( _enabled );
+            if (_enabled)
             {
-                structureLabel.SetLabel( hoveredStructure.structureName, cursor.position );
+                VisualGuideManager.Instance.LabelStructure( hoveredStructure, cursor.position );
+            }
+            else
+            {
+                VisualGuideManager.Instance.HideLabel();
             }
         }
     }
@@ -116,6 +96,10 @@ public class VisualGuideController : ViveController
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
                 otherController.StopScaling();
             }
+            else
+            {
+                ToggleIsolationMode();
+            }
         }
         else if (state == VisualGuideControllerState.SecondTriggerHold)
         {
@@ -126,13 +110,18 @@ public class VisualGuideController : ViveController
 
     void StartScaling ()
     {
-        if (cell != null)
-        {
-            startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
-            startCellScale = cell.transform.localScale;
-			scaleLine.gameObject.SetActive( true );
-			SetLine();
-        }
+        VisualGuideManager.Instance.StartScaling();
+
+        startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
+        scaleLine.gameObject.SetActive( true );
+        SetLine();
+    }
+
+    public void UpdateScale ()
+    {
+        VisualGuideManager.Instance.UpdateScale( Vector3.Distance( transform.position, otherController.transform.position ) / startControllerDistance );
+
+        SetLine();
     }
 
 	void SetLine ()
@@ -142,36 +131,23 @@ public class VisualGuideController : ViveController
 		scaleLine.SetPositions( linePoints );
 	}
 
-    void UpdateScale ()
-    {
-        if (cell != null)
-        {
-            float d = Vector3.Distance( transform.position, otherController.transform.position );
-            cell.transform.localScale = ClampScale( (d / startControllerDistance) * startCellScale );
-			SetLine();
-        }
-    }
-
-    Vector3 ClampScale (Vector3 scale)
-    {
-        if (scale.magnitude > maxScale.magnitude)
-        {
-            return maxScale;
-        }
-        else if (scale.magnitude < minScale.magnitude)
-        {
-            return minScale;
-        }
-        else
-        {
-            return scale;
-        }
-    }
-
     void StopScaling ()
     {
 		scaleLine.gameObject.SetActive( false );
 	}
+
+    void ToggleIsolationMode ()
+    {
+        if (!isolationMode)
+        {
+            VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
+        }
+        else
+        {
+            VisualGuideManager.Instance.ExitIsolationMode();
+        }
+        isolationMode = !isolationMode;
+    }
 
 	protected override void DoUpdate ()
 	{

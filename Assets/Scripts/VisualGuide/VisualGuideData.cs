@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VisualGuideData : ScriptableObject 
 {
-    public StructureData[] StructureData;
+    public List<StructureData> structureData;
 }
 
 [System.Serializable]

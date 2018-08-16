@@ -696,7 +696,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 0.6132076, g: 0.6103151, b: 0.6103151, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -1037,11 +1037,11 @@ MonoBehaviour:
   useTriggerInput: 1
   state: 0
   otherController: {fileID: 114641123671834930}
-  cell: {fileID: 0}
   hoveredStructure: {fileID: 0}
   scaleLine: {fileID: 0}
   scaleButtonLabel: {fileID: 1622001765830664}
   labelLine: {fileID: 1538094291014558}
+  cursor: {fileID: 4019839280498776}
 --- !u!114 &114321945210650504
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1139,11 +1139,11 @@ MonoBehaviour:
   useTriggerInput: 1
   state: 0
   otherController: {fileID: 114210288422020234}
-  cell: {fileID: 0}
   hoveredStructure: {fileID: 0}
   scaleLine: {fileID: 0}
   scaleButtonLabel: {fileID: 1601366528161114}
   labelLine: {fileID: 1893031693627766}
+  cursor: {fileID: 4972083258918002}
 --- !u!114 &114646795998274018
 MonoBehaviour:
   m_ObjectHideFlags: 1
