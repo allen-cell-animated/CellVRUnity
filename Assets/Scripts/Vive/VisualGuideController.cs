@@ -17,13 +17,23 @@ public class VisualGuideController : ViveController
     public VisualGuideController otherController;
     public CellStructure hoveredStructure;
 	public LineRenderer scaleLine;
-	public GameObject scaleButtonLabel;
+    public GameObject scaleButtonLabel;
+    public GameObject selectButtonLabel;
+    public GameObject backButtonLabel;
 	public GameObject labelLine;
     public Transform cursor;
 
     bool isolationMode;
     float startControllerDistance;
 	Vector3[] linePoints = new Vector3[2];
+    GameObject[] buttonLabels = new GameObject[3];
+
+    void Start ()
+    {
+        buttonLabels[0] = scaleButtonLabel;
+        buttonLabels[1] = selectButtonLabel;
+        buttonLabels[2] = backButtonLabel;
+    }
 
     void OnTriggerEnter (Collider _other)
     {
@@ -169,25 +179,57 @@ public class VisualGuideController : ViveController
 	{
 		if (state == VisualGuideControllerState.Idle)
 		{
-            ShowObject( scaleButtonLabel, true );
-			ShowObject( labelLine, true );
+            if (otherController.state == VisualGuideControllerState.Idle)
+            {
+                if (!VisualGuideManager.Instance.inIsolationMode)
+                {
+                    SetButtonLabel( selectButtonLabel );
+                }
+                else
+                {
+                    SetButtonLabel( backButtonLabel );
+                }
+            }
+            else
+            {
+                SetButtonLabel( scaleButtonLabel );
+            }
+            ShowObject( labelLine, true );
 		}
 		else
 		{
-			ShowObject( scaleButtonLabel, false );
-			ShowObject( labelLine, false );
+            SetButtonLabel( null );
+            ShowObject( labelLine, false );
 		}
 	}
 
-	void ShowObject (GameObject obj, bool show)
+    void SetButtonLabel (GameObject _buttonLabel)
 	{
-        if (show && !obj.activeSelf)
-		{
-            obj.SetActive( true );
-		}
-        else if (!show && obj.activeSelf)
-		{
-            obj.SetActive( false );
-		}
+        foreach (GameObject buttonLabel in buttonLabels)
+        {
+            if (buttonLabel != _buttonLabel)
+            {
+                ShowObject( buttonLabel, false );
+            }
+            else
+            {
+                ShowObject( buttonLabel, true );
+            }
+        }
 	}
+
+    void ShowObject (GameObject obj, bool show)
+    {
+        if (obj != null)
+        {
+            if (show && !obj.activeSelf)
+            {
+                obj.SetActive( true );
+            }
+            else if (!show && obj.activeSelf)
+            {
+                obj.SetActive( false );
+            }
+        }
+    }
 }
