@@ -17,7 +17,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             if (_Instance == null)
             {
-                GameObject.FindObjectOfType<VisualGuideManager>();
+                _Instance = GameObject.FindObjectOfType<VisualGuideManager>();
             }
             return _Instance;
         }
@@ -104,6 +104,7 @@ public class VisualGuideManager : MonoBehaviour
     void ShowInfoPanel (CellStructure _structure)
     {
         infoPanel.gameObject.SetActive( true );
+        Debug.Log(_structure == null);
         infoPanel.SetContent( _structure.structureName, _structure.infoImage, _structure.description );
     }
 
