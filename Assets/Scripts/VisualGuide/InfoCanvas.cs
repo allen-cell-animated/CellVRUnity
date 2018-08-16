@@ -9,7 +9,7 @@ public class InfoCanvas : MonoBehaviour
     public Image image;
     public Text text;
 
-    Vector3 offsetFromCamera = new Vector3( -1.5f, 0, 1.5f );
+    Vector3 offsetFromCamera = new Vector3( -1f, 0, 1f );
 	
     public void SetContent (StructureData _data)
     {
@@ -22,7 +22,7 @@ public class InfoCanvas : MonoBehaviour
 
     void SetPosition ()
     {
-        transform.position = Camera.main.transform.position + offsetFromCamera;
+        transform.position = Camera.main.transform.position + Camera.main.transform.TransformPoint( offsetFromCamera );
         transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
     }
 }
