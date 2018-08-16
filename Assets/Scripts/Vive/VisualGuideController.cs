@@ -184,6 +184,12 @@ public class VisualGuideController : ViveController
                     {
                         SetButtonLabel( selectButtonLabel );
                     }
+                    else
+                    {
+                        SetButtonLabel( null );
+                        ShowObject( labelLine, false );
+                        return;
+                    }
                 }
                 else
                 {
