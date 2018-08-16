@@ -380,7 +380,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4409121408377758}
-  - component: {fileID: 114959360205235174}
   m_Layer: 0
   m_Name: nucleus
   m_TagString: Untagged
@@ -388,24 +387,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1492350523276650
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4900474781464000}
-  - component: {fileID: 33669635705809870}
-  - component: {fileID: 23015761955418912}
-  - component: {fileID: 114169500003323218}
-  m_Layer: 0
-  m_Name: outline
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &1501137028834602
 GameObject:
   m_ObjectHideFlags: 1
@@ -1007,7 +988,6 @@ Transform:
   m_LocalScale: {x: 0.076752186, y: 0.07675222, z: 0.07675222}
   m_Children:
   - {fileID: 4596791881202662}
-  - {fileID: 4900474781464000}
   m_Father: {fileID: 4631015608485938}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1420,19 +1400,6 @@ Transform:
   m_Father: {fileID: 4318093957362712}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4900474781464000
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1492350523276650}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9999975, y: 0.999997, z: 0.999997}
-  m_Children: []
-  m_Father: {fileID: 4409121408377758}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4930808767002072
 Transform:
   m_ObjectHideFlags: 1
@@ -1476,41 +1443,6 @@ Transform:
   m_Father: {fileID: 4572528537761860}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23015761955418912
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1492350523276650}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
-  m_Materials:
-  - {fileID: 2100000, guid: e181778b4821e4c68bcbcb136186e00b, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!23 &23097566721255930
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -2366,7 +2298,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
+  - {fileID: 2100000, guid: 8aa87f3c4ed844c888913f4a50d72449, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2610,13 +2542,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1186773239186274}
   m_Mesh: {fileID: 4300000, guid: 0076c32bea2e24114817d33b16ea38a7, type: 3}
---- !u!33 &33669635705809870
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1492350523276650}
-  m_Mesh: {fileID: 4300000, guid: eb0f59d212c2040a7905e969983f10ed, type: 3}
 --- !u!33 &33721188984967440
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -2973,7 +2898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Centrosomes
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1186773239186274}
@@ -2989,7 +2914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Endoplasmic Reticulum
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1874818952415812}
@@ -3005,7 +2930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Tight Junctions
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1213723173137752}
@@ -3021,7 +2946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Nuclear Envelope
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1710224120610026}
@@ -3037,7 +2962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Golgi Apparatus
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1413268251052756}
@@ -3087,21 +3012,6 @@ MonoBehaviour:
   eraseRenderer: 0
   originalLayer: 0
   originalMaterials: []
---- !u!114 &114169500003323218
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1492350523276650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
-  originalLayer: 0
-  originalMaterials: []
 --- !u!114 &114173936902564938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3113,7 +3023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Actin Filaments
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1280836491939930}
@@ -3159,7 +3069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Microtubules
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1373666688461966}
@@ -3190,7 +3100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Peroxisomes
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1946965416428744}
@@ -3206,7 +3116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Mitochondria
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1768681351646704}
@@ -3222,7 +3132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Chromatin
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1783107673256522}
@@ -3325,7 +3235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Lysosomes
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1166679917536336}
@@ -3341,7 +3251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Nucleolus
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1354568678411088}
@@ -3387,24 +3297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: 
+  structureName: Desmosomes
   infoImage: {fileID: 0}
   description: 
   outline: {fileID: 1913291321155742}
-  alwaysShowInIsolationMode: 0
---- !u!114 &114959360205235174
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1426697887525446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  structureName: 
-  infoImage: {fileID: 0}
-  description: 
-  outline: {fileID: 1492350523276650}
   alwaysShowInIsolationMode: 0

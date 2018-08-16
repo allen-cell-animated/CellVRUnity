@@ -11,7 +11,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a5e097f022242408291d9d3bc45ba4, type: 3}
   m_Name: visualGuideData
   m_EditorClassIdentifier: 
-  StructureData:
-  - structureName: 
+  structureData:
+  - structureName: Actin Filaments
     infoImage: {fileID: 0}
-    description: 
+    description: Network that maintains and morphs cell shape in order to move and
+      divide.
+  - structureName: Centrosomes
+    infoImage: {fileID: 0}
+    description: Points that organize fibers to split the cell in two during division.
+  - structureName: Chromatin
+    infoImage: {fileID: 0}
+    description: DNA mixed with the molecules that read, copy, and store it.
+  - structureName: Desmosomes
+    infoImage: {fileID: 0}
+    description: Spots where the cell is stuck tightly to its neighbors so they move
+      as a unit.
+  - structureName: Endoplasmic Reticulum
+    infoImage: {fileID: 0}
+    description: Densely folded membranes where molecules are created and transported.
+  - structureName: Golgi Apparatus
+    infoImage: {fileID: 0}
+    description: Transport hub that modifies and sorts molecules.
+  - structureName: Lysosomes
+    infoImage: {fileID: 0}
+    description: Small compartments where waste molecules are broken down.
+  - structureName: Microtubules
+    infoImage: {fileID: 0}
+    description: Fiber network that maintains cell structure and forms highways for
+      transport.
+  - structureName: Mitochondria
+    infoImage: {fileID: 21300000, guid: 639d4d82f2af24254abd705686844c14, type: 3}
+    description: Compartments that break food down into cellular energy molecules.
+  - structureName: Nuclear Envelope
+    infoImage: {fileID: 0}
+    description: Large compartment that separates DNA from the rest of the cell.
+  - structureName: Nucleolus
+    infoImage: {fileID: 0}
+    description: Subcompartment of the nucleus where machinery to make molecules is
+      made.
+  - structureName: Peroxisomes
+    infoImage: {fileID: 0}
+    description: Small compartments that digest fats and neutralize hydrogen peroxide.
+  - structureName: Tight Junctions
+    infoImage: {fileID: 0}
+    description: Bands that seal neighboring cells together to form a barrier to fluids.
