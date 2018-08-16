@@ -12,17 +12,18 @@ public class LabelCanvas : MonoBehaviour
     {
         label.text = _label;
 
-        SetPanelSize();
+        SetPanelSize( _label );
         SetPosition( _cursorPosition );
     }
 
-    void SetPanelSize ()
+    void SetPanelSize (string _label)
     {
-        //TODO
+        panel.sizeDelta = new Vector2( 6f * _label.Length + 6f, 20f );
     }
 
     void SetPosition (Vector3 _cursorPosition)
     {
-        //TODO
+        transform.position = _cursorPosition;
+        transform.LookAt( Camera.main.transform );
     }
 }
