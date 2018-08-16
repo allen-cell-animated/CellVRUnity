@@ -67,7 +67,7 @@ public class VisualGuideManager : MonoBehaviour
     void Start ()
     {
         structureLabel.gameObject.SetActive( false );
-        infoPanel.gameObject.SetActive( false );
+        //infoPanel.gameObject.SetActive( false );
 
         LoadStructureData();
     }

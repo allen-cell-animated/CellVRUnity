@@ -10,7 +10,20 @@ public class InfoCanvas : MonoBehaviour
     public Text text;
 
     Vector3 offsetFromCamera = new Vector3( -1f, 0, 1f );
-	
+
+    Transform _calculator;
+    Transform calculator
+    {
+        get
+        {
+            if (_calculator == null)
+            {
+                _calculator = new GameObject( "Calculator" ).transform;
+            }
+            return _calculator;
+        }
+    }
+
     public void SetContent (StructureData _data)
     {
         title.text = _data.structureName;
@@ -27,9 +40,13 @@ public class InfoCanvas : MonoBehaviour
 
     void SetPosition ()
     {
-        Vector3 position = Camera.main.transform.position + Camera.main.transform.TransformPoint( offsetFromCamera );
-        transform.position = new Vector3( position.x, Camera.main.transform.position.y, position.z );
-        transform.LookAt( transform.position + (transform.position - Camera.main.transform.position), Vector3.up );
+        calculator.position = Camera.main.transform.position;
+        calculator.rotation = Quaternion.Euler( 0, Camera.main.transform.rotation.eulerAngles.y, Camera.main.transform.rotation.eulerAngles.z );
+
+        Vector3 position = calculator.TransformPoint( offsetFromCamera );
+        transform.position = new Vector3( position.x, calculator.position.y, position.z );
+
+        transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
         transform.rotation = Quaternion.Euler( 0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z );
     }
 }
