@@ -23,7 +23,6 @@ public class VisualGuideController : ViveController
 	public GameObject labelLine;
     public Transform cursor;
 
-    bool isolationMode;
     float startControllerDistance;
 	Vector3[] linePoints = new Vector3[2];
     GameObject[] buttonLabels = new GameObject[3];
@@ -155,18 +154,16 @@ public class VisualGuideController : ViveController
 
     void ToggleIsolationMode ()
     {
-        if (!isolationMode)
+        if (!VisualGuideManager.Instance.inIsolationMode)
         {
             if (hoveredStructure != null)
             {
                 VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
-                isolationMode = true;
             }
         }
         else
         {
             VisualGuideManager.Instance.ExitIsolationMode();
-            isolationMode = false;
         }
     }
 
@@ -183,7 +180,10 @@ public class VisualGuideController : ViveController
             {
                 if (!VisualGuideManager.Instance.inIsolationMode)
                 {
-                    SetButtonLabel( selectButtonLabel );
+                    if (hoveredStructure != null)
+                    {
+                        SetButtonLabel( selectButtonLabel );
+                    }
                 }
                 else
                 {
