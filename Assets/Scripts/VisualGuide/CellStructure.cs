@@ -5,8 +5,7 @@ using UnityEngine;
 public class CellStructure : MonoBehaviour 
 {
     public string structureName;
-    [HideInInspector] public Sprite infoImage;
-    [HideInInspector] public string description;
+    [HideInInspector] public StructureData data;
     public GameObject outline;
     public bool alwaysShowInIsolationMode;
 
@@ -14,8 +13,7 @@ public class CellStructure : MonoBehaviour
     {
         if (_data != null)
         {
-            infoImage = _data.infoImage;
-            description = _data.description;
+            data = _data;
         }
         else
         {

@@ -13,4 +13,5 @@ public class StructureData
     public string structureName;
     public Sprite infoImage;
     public string description;
+    public float nameWidth;
 }

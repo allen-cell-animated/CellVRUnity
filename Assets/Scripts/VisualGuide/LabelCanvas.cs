@@ -8,17 +8,17 @@ public class LabelCanvas : MonoBehaviour
     public Text label;
     public RectTransform panel;
 
-    public void SetLabel (string _label, Vector3 _cursorPosition)
+    public void SetLabel (StructureData _data, Vector3 _cursorPosition)
     {
-        label.text = _label;
+        label.text = _data.structureName;
 
-        SetPanelSize( _label );
+        SetPanelSize( _data.nameWidth );
         SetPosition( _cursorPosition );
     }
 
-    void SetPanelSize (string _label)
+    void SetPanelSize (float _width)
     {
-        panel.sizeDelta = new Vector2( 6f * _label.Length + 6f, 20f );
+        panel.sizeDelta = new Vector2( _width, 20f );
     }
 
     void SetPosition (Vector3 _cursorPosition)

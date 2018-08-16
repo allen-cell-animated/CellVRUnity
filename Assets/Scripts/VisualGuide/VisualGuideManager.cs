@@ -83,7 +83,7 @@ public class VisualGuideManager : MonoBehaviour
     public void LabelStructure (CellStructure _structure, Vector3 _cursorPosition)
     {
         structureLabel.gameObject.SetActive( true );
-        structureLabel.SetLabel( _structure.structureName, _cursorPosition );
+        structureLabel.SetLabel( _structure.data, _cursorPosition );
     }
 
     public void HideLabel ()
@@ -108,7 +108,7 @@ public class VisualGuideManager : MonoBehaviour
     {
         infoPanel.gameObject.SetActive( true );
         Debug.Log(_structure == null);
-        infoPanel.SetContent( _structure.structureName, _structure.infoImage, _structure.description );
+        infoPanel.SetContent( _structure.data );
     }
 
     public void ExitIsolationMode ()

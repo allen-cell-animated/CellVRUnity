@@ -9,11 +9,11 @@ public class InfoCanvas : MonoBehaviour
     public Image image;
     public Text text;
 	
-    public void SetContent (string _title, Sprite _image, string _copy)
+    public void SetContent (StructureData _data)
     {
-        title.text = _title;
-        image.sprite = _image;
-        text.text = _copy;
+        title.text = _data.structureName;
+        image.sprite = _data.infoImage;
+        text.text = _data.description;
 
         SetPosition();
     }
