@@ -196,7 +196,7 @@ public class VisualGuideController : ViveController
                 VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
             }
         }
-        else
+        else if (canSelect)
         {
             VisualGuideManager.Instance.ExitIsolationMode();
         }
@@ -226,7 +226,14 @@ public class VisualGuideController : ViveController
                 }
                 else
                 {
-                    SetButtonLabel( backButtonLabel );
+                    if (canSelect)
+                    {
+                        SetButtonLabel( backButtonLabel );
+                    }
+                    else
+                    {
+                        SetButtonLabel( scaleButtonLabel );
+                    }
                 }
             }
             else
