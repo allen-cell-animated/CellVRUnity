@@ -39,7 +39,7 @@ public class InfoCanvas : MonoBehaviour
         calculator.rotation = Quaternion.Euler( 0, Camera.main.transform.rotation.eulerAngles.y, Camera.main.transform.rotation.eulerAngles.z );
 
         Vector3 position = calculator.TransformPoint( offsetFromCamera );
-        transform.position = new Vector3( position.x, calculator.position.y, position.z );
+        transform.position = new Vector3( position.x, 1f, position.z );
 
         transform.LookAt( transform.position + (transform.position - Camera.main.transform.position) );
         transform.rotation = Quaternion.Euler( 0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z );
