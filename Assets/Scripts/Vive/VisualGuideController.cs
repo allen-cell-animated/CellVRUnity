@@ -27,6 +27,31 @@ public class VisualGuideController : ViveController
 	Vector3[] linePoints = new Vector3[2];
     GameObject[] buttonLabels = new GameObject[3];
 
+    SteamVR_LaserPointer _laserPointer;
+    SteamVR_LaserPointer laserPointer
+    {
+        get
+        {
+            if (_laserPointer == null)
+            {
+                _laserPointer = GetComponent<SteamVR_LaserPointer>();
+            }
+            return _laserPointer;
+        }
+    }
+
+    void OnEnable ()
+    {
+        laserPointer.PointerIn += OnPointerEnter;
+        laserPointer.PointerOut += OnPointerExit;
+    }
+
+    void OnDisable ()
+    {
+        laserPointer.PointerIn -= OnPointerEnter;
+        laserPointer.PointerOut -= OnPointerExit;
+    }
+
     void Start ()
     {
         buttonLabels[0] = scaleButtonLabel;
@@ -34,11 +59,13 @@ public class VisualGuideController : ViveController
         buttonLabels[2] = backButtonLabel;
     }
 
-    void OnTriggerEnter (Collider _other)
+    void OnPointerEnter (object sender, PointerEventArgs args)
     {
-        if (!VisualGuideManager.Instance.inIsolationMode)
+        Debug.Log( "Enter " + args.target.name + "-----------------------------" );
+
+        if (!VisualGuideManager.Instance.inIsolationMode && args.target != null)
         {
-            CellStructure structure = _other.GetComponentInParent<CellStructure>();
+            CellStructure structure = args.target.GetComponentInParent<CellStructure>();
             if (structure != null)
             {
                 SetHoveredStructure( false );
@@ -48,15 +75,44 @@ public class VisualGuideController : ViveController
         }
     }
 
-    void OnTriggerExit (Collider _other)
+    void OnPointerExit (object sender, PointerEventArgs args)
     {
-        CellStructure structure = _other.GetComponentInParent<CellStructure>();
-        if (structure != null && hoveredStructure == structure)
+        Debug.Log( "Exit " + args.target.name );
+
+        if (args.target != null)
         {
-            SetHoveredStructure( false );
-            hoveredStructure = null;
+            CellStructure structure = args.target.GetComponentInParent<CellStructure>();
+            if (structure != null && hoveredStructure == structure)
+            {
+                SetHoveredStructure( false );
+                hoveredStructure = null;
+            }
         }
     }
+
+    //void OnTriggerEnter (Collider _other)
+    //{
+    //    if (!VisualGuideManager.Instance.inIsolationMode)
+    //    {
+    //        CellStructure structure = _other.GetComponentInParent<CellStructure>();
+    //        if (structure != null)
+    //        {
+    //            SetHoveredStructure( false );
+    //            hoveredStructure = structure;
+    //            SetHoveredStructure( true );
+    //        }
+    //    }
+    //}
+
+    //void OnTriggerExit (Collider _other)
+    //{
+    //    CellStructure structure = _other.GetComponentInParent<CellStructure>();
+    //    if (structure != null && hoveredStructure == structure)
+    //    {
+    //        SetHoveredStructure( false );
+    //        hoveredStructure = null;
+    //    }
+    //}
 
     void SetHoveredStructure (bool _enabled)
     {

@@ -118,10 +118,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4020738893793124}
+  - component: {fileID: 114210288422020234}
   - component: {fileID: 114793997252186552}
+  - component: {fileID: 114513935975485630}
   - component: {fileID: 54404013979559050}
   - component: {fileID: 135824728286851358}
-  - component: {fileID: 114210288422020234}
   m_Layer: 10
   m_Name: Controller (left)
   m_TagString: Untagged
@@ -433,10 +434,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4526248248529002}
+  - component: {fileID: 114641123671834930}
   - component: {fileID: 114409363062494756}
+  - component: {fileID: 114069756388067914}
   - component: {fileID: 54691295938260520}
   - component: {fileID: 135366659167607306}
-  - component: {fileID: 114641123671834930}
   m_Layer: 10
   m_Name: Controller (right)
   m_TagString: Untagged
@@ -1124,6 +1126,24 @@ MonoBehaviour:
   loadingScreenFadeInTime: 0
   loadingScreenFadeOutTime: 0
   autoTriggerOnEnable: 0
+--- !u!114 &114069756388067914
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1997463156583822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e8a839a7c5b7e4580c59e305fb5f01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  color: {r: 0, g: 0, b: 0, a: 0}
+  thickness: 0.002
+  holder: {fileID: 0}
+  pointer: {fileID: 0}
+  addRigidBody: 0
+  reference: {fileID: 0}
 --- !u!114 &114132365266180298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1245,6 +1265,24 @@ MonoBehaviour:
   verbose: 0
   createComponents: 1
   updateDynamically: 1
+--- !u!114 &114513935975485630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1317341646107130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e8a839a7c5b7e4580c59e305fb5f01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  color: {r: 0, g: 0, b: 0, a: 0}
+  thickness: 0.002
+  holder: {fileID: 0}
+  pointer: {fileID: 0}
+  addRigidBody: 0
+  reference: {fileID: 0}
 --- !u!114 &114641123671834930
 MonoBehaviour:
   m_ObjectHideFlags: 1
