@@ -138,7 +138,7 @@ public class VisualGuideManager : MonoBehaviour
 
     void ToggleLaser (bool on)
     {
-        //laserPointer.gameObject.SetActive( on );
+        laserPointer.pointer.SetActive( on );
     }
 
     public void StartScaling ()
