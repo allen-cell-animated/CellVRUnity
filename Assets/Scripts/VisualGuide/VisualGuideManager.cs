@@ -7,6 +7,8 @@ public class VisualGuideManager : MonoBehaviour
     public VisualGuideData data;
     public bool inIsolationMode;
     public bool scaling;
+    public LayerMask selectableLayersDefault;
+    public LayerMask selectableLayersIsolation;
 
     Vector3 startScale;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
@@ -118,6 +120,7 @@ public class VisualGuideManager : MonoBehaviour
             }
         }
         ShowInfoPanel( _structure );
+        laserPointer.selectableLayers = selectableLayersIsolation;
     }
 
     void ShowInfoPanel (CellStructure _structure)
@@ -133,6 +136,7 @@ public class VisualGuideManager : MonoBehaviour
             s.gameObject.SetActive( true );
         }
         infoPanel.gameObject.SetActive( false );
+        laserPointer.selectableLayers = selectableLayersDefault;
         inIsolationMode = false;
     }
 

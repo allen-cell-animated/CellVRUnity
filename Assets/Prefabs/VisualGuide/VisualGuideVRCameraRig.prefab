@@ -900,6 +900,9 @@ MonoBehaviour:
   pointer: {fileID: 0}
   addRigidBody: 0
   reference: {fileID: 0}
+  selectableLayers:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!114 &114132365266180298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -941,6 +944,7 @@ MonoBehaviour:
   backButtonLabel: {fileID: 1352005051377988}
   labelLine: {fileID: 1538094291014558}
   cursor: {fileID: 0}
+  uiOverlayMaterial: {fileID: 0}
 --- !u!114 &114321945210650504
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1046,6 +1050,7 @@ MonoBehaviour:
   backButtonLabel: {fileID: 1622001765830664}
   labelLine: {fileID: 1893031693627766}
   cursor: {fileID: 0}
+  uiOverlayMaterial: {fileID: 0}
 --- !u!114 &114646795998274018
 MonoBehaviour:
   m_ObjectHideFlags: 1

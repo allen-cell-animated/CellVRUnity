@@ -1177,8 +1177,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1313539689652808}
   m_LocalRotation: {x: -0, y: -0.46214572, z: -0, w: 0.88680404}
-  m_LocalPosition: {x: 0, y: 0, z: 0.33}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0.33}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4454433839937806}
   - {fileID: 4070718753813524}
@@ -2899,8 +2899,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Centrosomes
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1186773239186274}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114026747983169700
@@ -2915,8 +2918,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Endoplasmic Reticulum
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1874818952415812}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114051679187052530
@@ -2931,8 +2937,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Tight Junctions
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1213723173137752}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114103527075811344
@@ -2947,8 +2956,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nuclear Envelope
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1710224120610026}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114104733200487322
@@ -2963,8 +2975,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Golgi Apparatus
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1413268251052756}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114135528679007664
@@ -3024,8 +3039,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Actin Filaments
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1280836491939930}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114216377665873676
@@ -3070,8 +3088,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Microtubules
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1373666688461966}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114399318299721222
@@ -3101,8 +3122,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Peroxisomes
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1946965416428744}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114423581851370790
@@ -3117,8 +3141,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1768681351646704}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114472247861371210
@@ -3133,8 +3160,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Chromatin
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1783107673256522}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114518361332461620
@@ -3194,6 +3224,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 12e54869aca234aea914e675188848b7, type: 2}
+  inIsolationMode: 0
+  scaling: 0
+  selectableLayersDefault:
+    serializedVersion: 2
+    m_Bits: 1
+  selectableLayersIsolation:
+    serializedVersion: 2
+    m_Bits: 32
 --- !u!114 &114733923737942434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3236,8 +3274,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Lysosomes
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1166679917536336}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114791197593523244
@@ -3252,8 +3293,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nucleolus
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1354568678411088}
   alwaysShowInIsolationMode: 0
 --- !u!114 &114823976152265846
@@ -3298,7 +3342,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Desmosomes
-  infoImage: {fileID: 0}
-  description: 
+  data:
+    structureName: 
+    infoImage: {fileID: 0}
+    description: 
+    nameWidth: 0
   outline: {fileID: 1913291321155742}
   alwaysShowInIsolationMode: 0
