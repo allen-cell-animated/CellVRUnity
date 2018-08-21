@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 222680011521216608}
   - component: {fileID: 114506116260031932}
   - component: {fileID: 114134444193855384}
+  - component: {fileID: 65472570384235314}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -145,6 +146,18 @@ Transform:
   m_Father: {fileID: 224419981925066086}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65472570384235314
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1958259157645990}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 80, y: 24, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114134444193855384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -321,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 7316ec84b68c14cb29b643cfe3e284f3, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.8039216}
   m_RaycastTarget: 1
   m_OnCullStateChanged:

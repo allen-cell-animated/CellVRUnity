@@ -23,6 +23,7 @@ public class VisualGuideController : ViveController
     public GameObject backButtonLabel;
 	public GameObject labelLine;
     public Transform cursor;
+    public Material uiOverlayMaterial;
 
     float startControllerDistance;
 	Vector3[] linePoints = new Vector3[2];
@@ -68,20 +69,24 @@ public class VisualGuideController : ViveController
 
     void OnPointerEnter (object sender, PointerEventArgs args)
     {
-        if (!VisualGuideManager.Instance.inIsolationMode && args.target != null)
+        if (args.target != null)
         {
-            CellStructure structure = args.target.GetComponentInParent<CellStructure>();
-            if (structure != null)
+            if (!VisualGuideManager.Instance.inIsolationMode)
             {
-                SetHoveredStructure( false );
-                hoveredStructure = structure;
-                SetHoveredStructure( true );
+                CellStructure structure = args.target.GetComponentInParent<CellStructure>();
+                if (structure != null)
+                {
+                    SetHoveredStructure( false );
+                    hoveredStructure = structure;
+                    SetHoveredStructure( true );
+                }
             }
             else 
             {
                 Button button = args.target.GetComponent<Button>();
                 if (button != null)
                 {
+                    Debug.Log("should select button");
                     button.Select();
                 }
             }
@@ -218,9 +223,13 @@ public class VisualGuideController : ViveController
         }
     }
 
-	protected override void DoUpdate ()
-	{
-		UpdateButtonLabels();
+    protected override void DoUpdate()
+    {
+        UpdateButtonLabels();
+        if (canSelect)
+        {
+            Debug.Log(EventSystem.current.currentSelectedGameObject == null ? "null" : EventSystem.current.currentSelectedGameObject.name);
+        }
 	}
 
 	void UpdateButtonLabels ()
