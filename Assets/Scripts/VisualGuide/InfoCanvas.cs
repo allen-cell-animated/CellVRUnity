@@ -24,11 +24,6 @@ public class InfoCanvas : MonoBehaviour
         }
     }
 
-    void Start ()
-    {
-        gameObject.SetActive( false );
-    }
-
     public void SetContent (StructureData _data)
     {
         title.text = _data.structureName;

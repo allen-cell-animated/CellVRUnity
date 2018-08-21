@@ -7,11 +7,13 @@ public class LabelCanvas : MonoBehaviour
 {
     public Text label;
     public RectTransform panel;
+    public Transform cursor;
 
-    void Start ()
+    void Update ()
     {
-        gameObject.SetActive( false );
-    }
+        transform.position = cursor.transform.position;
+        transform.rotation = cursor.transform.rotation;
+    } 
 
     public void SetLabel (StructureData _data)
     {
