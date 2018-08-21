@@ -64,6 +64,19 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
+    SteamVR_LaserPointer _laserPointer;
+    SteamVR_LaserPointer laserPointer
+    {
+        get
+        {
+            if (_laserPointer == null)
+            {
+                _laserPointer = GameObject.FindObjectOfType<SteamVR_LaserPointer>();
+            }
+            return _laserPointer;
+        }
+    }
+
     void Start ()
     {
         structureLabel.gameObject.SetActive( false );
@@ -80,10 +93,13 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    public void LabelStructure (CellStructure _structure, Vector3 _cursorPosition)
+    public void LabelStructure (CellStructure _structure)
     {
-        structureLabel.gameObject.SetActive( true );
-        structureLabel.SetLabel( _structure.data, _cursorPosition );
+        if (!scaling)
+        {
+            structureLabel.gameObject.SetActive( true );
+            structureLabel.SetLabel( _structure.data );
+        }
     }
 
     public void HideLabel ()
@@ -120,15 +136,28 @@ public class VisualGuideManager : MonoBehaviour
         inIsolationMode = false;
     }
 
+    void ToggleLaser (bool on)
+    {
+        //laserPointer.gameObject.SetActive( on );
+    }
+
     public void StartScaling ()
     {
         scaling = true;
         startScale = transform.localScale;
+        HideLabel();
+        ToggleLaser( false );
     }
 
     public void UpdateScale (float _scale)
     {
         transform.localScale = ClampScale( _scale * startScale );
+    }
+
+    public void StopScaling ()
+    {
+        scaling = false;
+        ToggleLaser( true );
     }
 
     Vector3 ClampScale (Vector3 scale)

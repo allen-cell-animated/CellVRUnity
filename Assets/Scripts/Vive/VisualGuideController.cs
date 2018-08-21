@@ -13,6 +13,7 @@ public enum VisualGuideControllerState
 
 public class VisualGuideController : ViveController
 {
+    public bool canSelect;
 	public VisualGuideControllerState state;
     public VisualGuideController otherController;
     public CellStructure hoveredStructure;
@@ -42,14 +43,20 @@ public class VisualGuideController : ViveController
 
     void OnEnable ()
     {
-        laserPointer.PointerIn += OnPointerEnter;
-        laserPointer.PointerOut += OnPointerExit;
+        if (canSelect)
+        {
+            laserPointer.PointerIn += OnPointerEnter;
+            laserPointer.PointerOut += OnPointerExit;
+        }
     }
 
     void OnDisable ()
     {
-        laserPointer.PointerIn -= OnPointerEnter;
-        laserPointer.PointerOut -= OnPointerExit;
+        if (canSelect)
+        {
+            laserPointer.PointerIn -= OnPointerEnter;
+            laserPointer.PointerOut -= OnPointerExit;
+        }
     }
 
     void Start ()
@@ -61,8 +68,6 @@ public class VisualGuideController : ViveController
 
     void OnPointerEnter (object sender, PointerEventArgs args)
     {
-        Debug.Log( "Enter " + args.target.name + "-----------------------------" );
-
         if (!VisualGuideManager.Instance.inIsolationMode && args.target != null)
         {
             CellStructure structure = args.target.GetComponentInParent<CellStructure>();
@@ -77,8 +82,6 @@ public class VisualGuideController : ViveController
 
     void OnPointerExit (object sender, PointerEventArgs args)
     {
-        Debug.Log( "Exit " + args.target.name );
-
         if (args.target != null)
         {
             CellStructure structure = args.target.GetComponentInParent<CellStructure>();
@@ -90,30 +93,6 @@ public class VisualGuideController : ViveController
         }
     }
 
-    //void OnTriggerEnter (Collider _other)
-    //{
-    //    if (!VisualGuideManager.Instance.inIsolationMode)
-    //    {
-    //        CellStructure structure = _other.GetComponentInParent<CellStructure>();
-    //        if (structure != null)
-    //        {
-    //            SetHoveredStructure( false );
-    //            hoveredStructure = structure;
-    //            SetHoveredStructure( true );
-    //        }
-    //    }
-    //}
-
-    //void OnTriggerExit (Collider _other)
-    //{
-    //    CellStructure structure = _other.GetComponentInParent<CellStructure>();
-    //    if (structure != null && hoveredStructure == structure)
-    //    {
-    //        SetHoveredStructure( false );
-    //        hoveredStructure = null;
-    //    }
-    //}
-
     void SetHoveredStructure (bool _enabled)
     {
         if (hoveredStructure != null)
@@ -121,7 +100,7 @@ public class VisualGuideController : ViveController
             hoveredStructure.SetOutline( _enabled );
             if (_enabled)
             {
-                VisualGuideManager.Instance.LabelStructure( hoveredStructure, cursor.position );
+                VisualGuideManager.Instance.LabelStructure( hoveredStructure );
             }
             else
             {
@@ -170,7 +149,7 @@ public class VisualGuideController : ViveController
                 {
                     ToggleIsolationMode();
                 }
-                VisualGuideManager.Instance.scaling = false;
+                VisualGuideManager.Instance.StopScaling();
             }
         }
         else if (state == VisualGuideControllerState.SecondTriggerHold)
