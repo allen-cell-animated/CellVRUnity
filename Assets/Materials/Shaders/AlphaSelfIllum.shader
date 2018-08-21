@@ -44,7 +44,6 @@ SubShader {
 		    return texcol * _Color;
 		}
 		ENDCG
-        Ztest Always
     }
 }
 Fallback off
