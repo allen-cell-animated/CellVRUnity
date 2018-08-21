@@ -77,6 +77,14 @@ public class VisualGuideController : ViveController
                 hoveredStructure = structure;
                 SetHoveredStructure( true );
             }
+            else 
+            {
+                Button button = args.target.GetComponent<Button>();
+                if (button != null)
+                {
+                    button.Select();
+                }
+            }
         }
     }
 
@@ -89,6 +97,14 @@ public class VisualGuideController : ViveController
             {
                 SetHoveredStructure( false );
                 hoveredStructure = null;
+            }
+            else 
+            {
+                Button button = args.target.GetComponent<Button>();
+                if (button != null)
+                {
+                    EventSystem.current.SetSelectedGameObject( null );
+                }
             }
         }
     }
