@@ -24,17 +24,17 @@ public class InfoCanvas : MonoBehaviour
         }
     }
 
+    void Start ()
+    {
+        gameObject.SetActive( false );
+    }
+
     public void SetContent (StructureData _data)
     {
         title.text = _data.structureName;
         image.sprite = _data.infoImage;
         text.text = _data.description;
 
-        SetPosition();
-    }
-
-    void Start ()
-    {
         SetPosition();
     }
 

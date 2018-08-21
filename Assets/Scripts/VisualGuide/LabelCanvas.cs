@@ -8,6 +8,11 @@ public class LabelCanvas : MonoBehaviour
     public Text label;
     public RectTransform panel;
 
+    void Start ()
+    {
+        gameObject.SetActive( false );
+    }
+
     public void SetLabel (StructureData _data)
     {
         label.text = _data.structureName;
