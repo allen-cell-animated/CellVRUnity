@@ -190,11 +190,24 @@ public class VisualGuideManager : MonoBehaviour
         {
             Vector3 controllerVector = _controller2Position - _controller1Position;
             controllerVector.y = 0;
-            float direction = Mathf.Acos( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= Mathf.PI / 2f ? 1f : -1f;
-            float dAngle = direction * Mathf.Acos( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
+            float direction = GetArcCosineDegrees( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= 90f ? 1f : -1f;
+            float dAngle = direction * GetArcCosineDegrees( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
 
-            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle * 180f / Mathf.PI, Vector3.up );
+            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle, Vector3.up );
         }
+    }
+
+    float GetArcCosineDegrees (float cosine)
+    {
+        if (cosine > 1f - float.Epsilon)
+        {
+            return 0;
+        }
+        if (cosine < -1f + float.Epsilon)
+        {
+            return 180f;
+        }
+        return Mathf.Acos( cosine ) * Mathf.Rad2Deg;
     }
 
     public void StopRotating ()
