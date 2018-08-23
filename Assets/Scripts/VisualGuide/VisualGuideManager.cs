@@ -10,6 +10,7 @@ public class VisualGuideManager : MonoBehaviour
     public bool inIsolationMode;
     public bool scaling;
     public bool rotating;
+    public bool hasTranslated;
 
     Vector3 startScale;
     float startControllerDistance;

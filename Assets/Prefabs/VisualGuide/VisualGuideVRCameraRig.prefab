@@ -945,6 +945,12 @@ MonoBehaviour:
   labelLine: {fileID: 1538094291014558}
   cursor: {fileID: 0}
   uiOverlayMaterial: {fileID: 0}
+  selectableLayersDefault:
+    serializedVersion: 2
+    m_Bits: 1
+  selectableLayersIsolation:
+    serializedVersion: 2
+    m_Bits: 32
 --- !u!114 &114321945210650504
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1051,6 +1057,12 @@ MonoBehaviour:
   labelLine: {fileID: 1893031693627766}
   cursor: {fileID: 0}
   uiOverlayMaterial: {fileID: 0}
+  selectableLayersDefault:
+    serializedVersion: 2
+    m_Bits: 1
+  selectableLayersIsolation:
+    serializedVersion: 2
+    m_Bits: 32
 --- !u!114 &114646795998274018
 MonoBehaviour:
   m_ObjectHideFlags: 1

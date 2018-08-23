@@ -70,7 +70,7 @@ public class VisualGuideController : ViveController
 
     void OnPointerEnter (object sender, PointerEventArgs args)
     {
-        if (args.target != null)
+        if (args.target != null && laserPointer.pointer.activeSelf)
         {
             if (!VisualGuideManager.Instance.inIsolationMode)
             {
@@ -130,11 +130,12 @@ public class VisualGuideController : ViveController
             }
         }
     }
-
+    
     public override void OnTriggerPull () 
 	{
         if (state == VisualGuideControllerState.Idle)
         {
+            VisualGuideManager.Instance.hasTranslated = false;
             if (otherController.state != VisualGuideControllerState.Idle)
             {
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
@@ -144,6 +145,11 @@ public class VisualGuideController : ViveController
             else
             {
                 state = VisualGuideControllerState.FirstTriggerHold;
+                if (otherController.canSelect)
+                {
+                    otherController.ToggleLaser( false );
+                    VisualGuideManager.Instance.HideLabel();
+                }
             }
         }
     }
@@ -165,13 +171,13 @@ public class VisualGuideController : ViveController
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
                 otherController.StopTranslating();
             }
-            else 
+            else
             {
-                if (!VisualGuideManager.Instance.scaling && !VisualGuideManager.Instance.rotating)
+                if (!VisualGuideManager.Instance.hasTranslated)
                 {
                     ToggleIsolationMode();
                 }
-                //VisualGuideManager.Instance.StopScaling();
+                ToggleLaser( true );
             }
         }
         else if (state == VisualGuideControllerState.SecondTriggerHold)
@@ -183,6 +189,7 @@ public class VisualGuideController : ViveController
 
     void StartTranslating ()
     {
+        VisualGuideManager.Instance.hasTranslated = true;
         VisualGuideManager.Instance.HideLabel();
         VisualGuideManager.Instance.StartScaling( transform.position, otherController.transform.position );
         VisualGuideManager.Instance.StartRotating( transform.position, otherController.transform.position );
@@ -201,7 +208,6 @@ public class VisualGuideController : ViveController
     {
         VisualGuideManager.Instance.StopScaling();
         VisualGuideManager.Instance.StopRotating();
-        ToggleLaser( true );
         SetLine( false );
     }
 
@@ -255,10 +261,6 @@ public class VisualGuideController : ViveController
     protected override void DoUpdate()
     {
         UpdateButtonLabels();
-        if (canSelect)
-        {
-            Debug.Log(EventSystem.current.currentSelectedGameObject == null ? "null" : EventSystem.current.currentSelectedGameObject.name);
-        }
 	}
 
 	void UpdateButtonLabels ()
