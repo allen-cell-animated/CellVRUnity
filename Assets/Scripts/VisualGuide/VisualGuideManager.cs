@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class VisualGuideManager : MonoBehaviour 
 {
+    public bool canScale = true;
+    public bool canRotate = true;
     public VisualGuideData data;
     public bool inIsolationMode;
     public bool scaling;
-    public LayerMask selectableLayersDefault;
-    public LayerMask selectableLayersIsolation;
+    public bool rotating;
 
     Vector3 startScale;
+    float startControllerDistance;
+    Quaternion startRotation;
+    Vector3 startControllerVector;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
     Vector3 maxScale = new Vector3( 10f, 10f, 10f );
 
@@ -66,19 +70,6 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    SteamVR_LaserPointer _laserPointer;
-    SteamVR_LaserPointer laserPointer
-    {
-        get
-        {
-            if (_laserPointer == null)
-            {
-                _laserPointer = GameObject.FindObjectOfType<SteamVR_LaserPointer>();
-            }
-            return _laserPointer;
-        }
-    }
-
     void Start ()
     {
         structureLabel.gameObject.SetActive( false );
@@ -97,7 +88,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void LabelStructure (CellStructure _structure)
     {
-        if (!scaling)
+        if (!scaling && !rotating)
         {
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.data );
@@ -120,7 +111,6 @@ public class VisualGuideManager : MonoBehaviour
             }
         }
         ShowInfoPanel( _structure );
-        laserPointer.selectableLayers = selectableLayersIsolation;
     }
 
     void ShowInfoPanel (CellStructure _structure)
@@ -136,47 +126,75 @@ public class VisualGuideManager : MonoBehaviour
             s.gameObject.SetActive( true );
         }
         infoPanel.gameObject.SetActive( false );
-        laserPointer.selectableLayers = selectableLayersDefault;
         inIsolationMode = false;
     }
 
-    void ToggleLaser (bool on)
+    public void StartScaling (Vector3 _controller1Position, Vector3 _controller2Position)
     {
-        laserPointer.pointer.SetActive( on );
+        if (canScale)
+        {
+            scaling = true;
+            startScale = transform.localScale;
+            startControllerDistance = Vector3.Distance( _controller1Position, _controller2Position );
+        }
     }
 
-    public void StartScaling ()
+    public void UpdateScale (Vector3 _controller1Position, Vector3 _controller2Position)
     {
-        scaling = true;
-        startScale = transform.localScale;
-        HideLabel();
-        ToggleLaser( false );
-    }
+        if (canScale)
+        {
+            float scale = Vector3.Distance( _controller1Position, _controller2Position ) / startControllerDistance;
 
-    public void UpdateScale (float _scale)
-    {
-        transform.localScale = ClampScale( _scale * startScale );
+            transform.localScale = ClampScale( scale * startScale );
+        }
     }
 
     public void StopScaling ()
     {
         scaling = false;
-        ToggleLaser( true );
     }
 
-    Vector3 ClampScale (Vector3 scale)
+    Vector3 ClampScale (Vector3 _scale)
     {
-        if (scale.magnitude > maxScale.magnitude)
+        if (_scale.magnitude > maxScale.magnitude)
         {
             return maxScale;
         }
-        else if (scale.magnitude < minScale.magnitude)
+        else if (_scale.magnitude < minScale.magnitude)
         {
             return minScale;
         }
         else
         {
-            return scale;
+            return _scale;
         }
+    }
+
+    public void StartRotating (Vector3 _controller1Position, Vector3 _controller2Position)
+    {
+        if (canRotate)
+        {
+            rotating = true;
+            startRotation = transform.localRotation;
+            startControllerVector = _controller2Position - _controller1Position;
+            startControllerVector.y = 0;
+        }
+    }
+
+    public void UpdateRotation (Vector3 _controller1Position, Vector3 _controller2Position)
+    {
+        if (canRotate)
+        {
+            Vector3 controllerVector = _controller2Position - _controller1Position;
+            controllerVector.y = 0;
+            float dAngle = Mathf.Acos( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
+
+            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle, Vector3.up );
+        }
+    }
+
+    public void StopRotating ()
+    {
+        rotating = false;
     }
 }

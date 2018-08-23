@@ -24,8 +24,9 @@ public class VisualGuideController : ViveController
 	public GameObject labelLine;
     public Transform cursor;
     public Material uiOverlayMaterial;
+    public LayerMask selectableLayersDefault;
+    public LayerMask selectableLayersIsolation;
 
-    float startControllerDistance;
 	Vector3[] linePoints = new Vector3[2];
     GameObject[] buttonLabels = new GameObject[3];
 
@@ -138,7 +139,7 @@ public class VisualGuideController : ViveController
             {
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
                 state = VisualGuideControllerState.SecondTriggerHold;
-                StartScaling();
+                StartTranslating();
             }
             else
             {
@@ -151,7 +152,7 @@ public class VisualGuideController : ViveController
     {
         if (state == VisualGuideControllerState.SecondTriggerHold)
         {
-            UpdateScale();
+            UpdateTranslation();
         }
     }
     
@@ -162,50 +163,64 @@ public class VisualGuideController : ViveController
             if (otherController.state == VisualGuideControllerState.SecondTriggerHold)
             {
                 otherController.state = VisualGuideControllerState.FirstTriggerHold;
-                otherController.StopScaling();
+                otherController.StopTranslating();
             }
             else 
             {
-                if (!VisualGuideManager.Instance.scaling)
+                if (!VisualGuideManager.Instance.scaling && !VisualGuideManager.Instance.rotating)
                 {
                     ToggleIsolationMode();
                 }
-                VisualGuideManager.Instance.StopScaling();
+                //VisualGuideManager.Instance.StopScaling();
             }
         }
         else if (state == VisualGuideControllerState.SecondTriggerHold)
         {
-            StopScaling();
+            StopTranslating();
         }
         state = VisualGuideControllerState.Idle;
     }
 
-    void StartScaling ()
+    void StartTranslating ()
     {
-        VisualGuideManager.Instance.StartScaling();
-
-        startControllerDistance = Vector3.Distance( transform.position, otherController.transform.position );
-        scaleLine.gameObject.SetActive( true );
-        SetLine();
+        VisualGuideManager.Instance.HideLabel();
+        VisualGuideManager.Instance.StartScaling( transform.position, otherController.transform.position );
+        VisualGuideManager.Instance.StartRotating( transform.position, otherController.transform.position );
+        ToggleLaser( false );
+        SetLine( true );
     }
 
-    public void UpdateScale ()
+    public void UpdateTranslation ()
     {
-        VisualGuideManager.Instance.UpdateScale( Vector3.Distance( transform.position, otherController.transform.position ) / startControllerDistance );
-
-        SetLine();
+        VisualGuideManager.Instance.UpdateScale( transform.position, otherController.transform.position );
+        VisualGuideManager.Instance.UpdateRotation( transform.position, otherController.transform.position );
+        SetLine( true );
     }
 
-	void SetLine ()
+    void StopTranslating ()
+    {
+        VisualGuideManager.Instance.StopScaling();
+        VisualGuideManager.Instance.StopRotating();
+        ToggleLaser( true );
+        SetLine( false );
+    }
+
+	void SetLine (bool active)
 	{
-		linePoints[0] = transform.position;
-		linePoints[1] = otherController.transform.position;
-		scaleLine.SetPositions( linePoints );
-	}
-
-    void StopScaling ()
-    {
-		scaleLine.gameObject.SetActive( false );
+        if (active)
+        {
+            if (!scaleLine.gameObject.activeSelf)
+            {
+                scaleLine.gameObject.SetActive( true );
+            }
+            linePoints[0] = transform.position;
+            linePoints[1] = otherController.transform.position;
+            scaleLine.SetPositions( linePoints );
+        }
+        else
+        {
+            scaleLine.gameObject.SetActive( false );
+        }
 	}
 
     void ToggleIsolationMode ()
@@ -214,12 +229,26 @@ public class VisualGuideController : ViveController
         {
             if (hoveredStructure != null)
             {
+                laserPointer.selectableLayers = selectableLayersIsolation;
                 VisualGuideManager.Instance.IsolateStructure( hoveredStructure );
             }
         }
         else if (canSelect)
         {
+            laserPointer.selectableLayers = selectableLayersDefault;
             VisualGuideManager.Instance.ExitIsolationMode();
+        }
+    }
+
+    public void ToggleLaser (bool _on)
+    {
+        if (canSelect)
+        {
+            laserPointer.pointer.SetActive( _on );
+        }
+        else if (otherController.canSelect)
+        {
+            otherController.laserPointer.pointer.SetActive( _on );
         }
     }
 
