@@ -15,6 +15,7 @@ public class VisualGuideManager : MonoBehaviour
     float startControllerDistance;
     Quaternion startRotation;
     Vector3 startControllerVector;
+    Vector3 startPositiveVector;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
     Vector3 maxScale = new Vector3( 10f, 10f, 10f );
 
@@ -178,6 +179,7 @@ public class VisualGuideManager : MonoBehaviour
             startRotation = transform.localRotation;
             startControllerVector = _controller2Position - _controller1Position;
             startControllerVector.y = 0;
+            startPositiveVector = Vector3.Cross( startControllerVector, Vector3.up );
         }
     }
 
@@ -187,9 +189,10 @@ public class VisualGuideManager : MonoBehaviour
         {
             Vector3 controllerVector = _controller2Position - _controller1Position;
             controllerVector.y = 0;
-            float dAngle = Mathf.Acos( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
+            float direction = Mathf.Acos( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= Mathf.PI / 2f ? 1f : -1f;
+            float dAngle = direction * Mathf.Acos( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
 
-            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle, Vector3.up );
+            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle * 180f / Mathf.PI, Vector3.up );
         }
     }
 
