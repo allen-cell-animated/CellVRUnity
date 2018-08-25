@@ -87,8 +87,11 @@ public class VisualGuideController : ViveController
                 Button button = args.target.GetComponent<Button>();
                 if (button != null)
                 {
-                    Debug.Log("should select button");
                     button.Select();
+                    if (!VisualGuideManager.Instance.inIsolationMode)
+                    {
+                        ToggleIsolationMode();
+                    }
                 }
             }
         }
@@ -173,7 +176,7 @@ public class VisualGuideController : ViveController
             }
             else
             {
-                if (!VisualGuideManager.Instance.hasTranslated)
+                if (!VisualGuideManager.Instance.hasTranslated && !VisualGuideManager.Instance.inIsolationMode)
                 {
                     ToggleIsolationMode();
                 }
