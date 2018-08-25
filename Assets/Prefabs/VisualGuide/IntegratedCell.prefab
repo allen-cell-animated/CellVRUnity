@@ -3208,15 +3208,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e870ace856a4989a3c2902194287ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canScale: 1
+  canRotate: 1
   data: {fileID: 11400000, guid: 12e54869aca234aea914e675188848b7, type: 2}
   inIsolationMode: 0
   scaling: 0
-  selectableLayersDefault:
-    serializedVersion: 2
-    m_Bits: 1
-  selectableLayersIsolation:
-    serializedVersion: 2
-    m_Bits: 32
+  rotating: 0
+  hasTranslated: 0
 --- !u!114 &114733923737942434
 MonoBehaviour:
   m_ObjectHideFlags: 1

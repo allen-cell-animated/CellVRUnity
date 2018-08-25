@@ -30,7 +30,7 @@ public class InfoCanvas : MonoBehaviour
         image.sprite = _data.infoImage;
         text.text = _data.description;
 
-        SetPosition();
+        //SetPosition();
     }
 
     void SetPosition ()
