@@ -26,8 +26,9 @@ public class VisualGuideController : ViveController
     public Material uiOverlayMaterial;
     public LayerMask selectableLayersDefault;
     public LayerMask selectableLayersIsolation;
+    public Button backButton;
 
-	Vector3[] linePoints = new Vector3[2];
+    Vector3[] linePoints = new Vector3[2];
     GameObject[] buttonLabels = new GameObject[3];
 
     SteamVR_LaserPointer _laserPointer;
@@ -67,7 +68,7 @@ public class VisualGuideController : ViveController
         buttonLabels[1] = selectButtonLabel;
         buttonLabels[2] = backButtonLabel;
     }
-
+    
     void OnPointerEnter (object sender, PointerEventArgs args)
     {
         if (args.target != null && laserPointer.pointer.activeSelf)
@@ -85,13 +86,9 @@ public class VisualGuideController : ViveController
             else 
             {
                 Button button = args.target.GetComponent<Button>();
-                if (button != null)
+                if (button == backButton)
                 {
                     button.Select();
-                    if (!VisualGuideManager.Instance.inIsolationMode)
-                    {
-                        ToggleIsolationMode();
-                    }
                 }
             }
         }
@@ -167,7 +164,11 @@ public class VisualGuideController : ViveController
     
     public override void OnTriggerRelease()
     {
-        if (state == VisualGuideControllerState.FirstTriggerHold)
+        if (EventSystem.current.currentSelectedGameObject == backButton.gameObject)
+        {
+            ToggleIsolationMode();
+        }
+        else if (state == VisualGuideControllerState.FirstTriggerHold)
         {
             if (otherController.state == VisualGuideControllerState.SecondTriggerHold)
             {

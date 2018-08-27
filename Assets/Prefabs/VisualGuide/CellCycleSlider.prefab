@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 224984969515000014}
   - component: {fileID: 222158066616287610}
   - component: {fileID: 114038441226126800}
+  - component: {fileID: 65276389272928764}
   m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
@@ -263,6 +264,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &65276389272928764
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238321852437402}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 20, y: 20, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114030304914653494
 MonoBehaviour:
   m_ObjectHideFlags: 1
