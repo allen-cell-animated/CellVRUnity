@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 223760861731716410}
   - component: {fileID: 114360685192090856}
   - component: {fileID: 114282265728661182}
+  - component: {fileID: 114953459517449744}
   m_Layer: 5
   m_Name: InfoCanvas
   m_TagString: Untagged
@@ -125,7 +126,6 @@ GameObject:
   - component: {fileID: 222680011521216608}
   - component: {fileID: 114506116260031932}
   - component: {fileID: 114134444193855384}
-  - component: {fileID: 65472570384235314}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -146,18 +146,6 @@ Transform:
   m_Father: {fileID: 224419981925066086}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &65472570384235314
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1958259157645990}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 80, y: 24, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114134444193855384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -397,6 +385,19 @@ MonoBehaviour:
   title: {fileID: 114491232892701878}
   image: {fileID: 114214239417957392}
   text: {fileID: 114581857376640562}
+--- !u!114 &114953459517449744
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1726383676649292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1518a5e598c7da244bc4850d3ae63354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickOnPointerCollision: 0
+  autoActivateWithinDistance: 0
 --- !u!212 &212532535081867902
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -572,7 +573,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1726383676649292}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.943}
   m_LocalScale: {x: 0.0146827465, y: 0.014682743, z: 0.014682743}
   m_Children:
   - {fileID: 224510131567061680}
