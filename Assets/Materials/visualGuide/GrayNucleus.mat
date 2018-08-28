@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Nucleus
+  m_Name: GrayNucleus
   m_Shader: {fileID: 4800000, guid: d176263621d5543a9847510acc450942, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0

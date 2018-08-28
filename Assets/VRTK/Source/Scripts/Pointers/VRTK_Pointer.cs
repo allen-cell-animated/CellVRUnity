@@ -269,6 +269,7 @@ namespace VRTK
         {
             if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state) || (state && IsPointerActive()) || (!state && !IsPointerActive()))
             {
+                Debug.Log( !CanActivate() + " " + NoPointerRenderer() + " " + CanActivateOnToggleButton(state) + " " + (state && IsPointerActive()) + " " + (!state && !IsPointerActive()) );
                 return;
             }
 
