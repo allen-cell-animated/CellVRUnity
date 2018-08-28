@@ -9,42 +9,43 @@ public class CellStructure : MonoBehaviour
     public Color color;
     [HideInInspector] public StructureData data;
 
-    VRTK_DestinationMarker pointer
+    VRTK_InteractableObject _interactableObject;
+    VRTK_InteractableObject interactableObject
     {
         get
         {
-            if (VisualGuideManager.Instance.pointerRight != null)
+            if (_interactableObject == null)
             {
-                return VisualGuideManager.Instance.pointerRight.GetComponent<VRTK_DestinationMarker>();
+                _interactableObject = GetComponent<VRTK_InteractableObject>();
             }
-            return null;
+            return _interactableObject;
         }
     }
 
     void OnEnable ()
     {
-        if (pointer != null)
+        if (interactableObject != null)
         {
-            pointer.DestinationMarkerEnter += OnHoverEnter;
-            pointer.DestinationMarkerExit += OnHoverExit;
+            interactableObject.InteractableObjectTouched += OnHoverEnter;
+            interactableObject.InteractableObjectUntouched += OnHoverExit;
         }
     }
 
     void OnDisable ()
     {
-        if (pointer != null)
+        if (interactableObject != null)
         {
-            pointer.DestinationMarkerEnter -= OnHoverEnter;
-            pointer.DestinationMarkerExit -= OnHoverExit;
+            interactableObject.InteractableObjectTouched -= OnHoverEnter;
+            interactableObject.InteractableObjectUntouched -= OnHoverExit;
         }
     }
 
-    void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
+    void OnHoverEnter (object sender, InteractableObjectEventArgs e)
     {
         VisualGuideManager.Instance.OnHoverStructureEnter( this );
     }
 
-    void OnHoverExit (object sender, DestinationMarkerEventArgs e)
+    void OnHoverExit (object sender, InteractableObjectEventArgs e)
     {
         VisualGuideManager.Instance.OnHoverStructureExit();
     }

@@ -156,6 +156,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void OnHoverStructureEnter (CellStructure _selectedStructure)
     {
+        Debug.Log( "select " + _selectedStructure );
         selectedStructure = _selectedStructure;
         foreach (CellStructure structure in structures)
         {
@@ -170,6 +171,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void OnHoverStructureExit ()
     {
+        Debug.Log( "--------- DESELECT " + selectedStructure );
         selectedStructure = null;
         foreach (CellStructure structure in structures)
         {
