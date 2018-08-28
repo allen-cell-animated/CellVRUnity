@@ -337,7 +337,6 @@ public class VisualGuideManager : MonoBehaviour
     public GameObject selectButtonLabelRight;
     public GameObject labelLineRight;
     public GameObject scaleButtonLabelLeft;
-    public GameObject selectButtonLabelLeft;
     public GameObject labelLineLeft;
 
     void UpdateButtonLabels ()
@@ -357,7 +356,6 @@ public class VisualGuideManager : MonoBehaviour
                 ShowObject( labelLineRight, true );
             }
             ShowObject( scaleButtonLabelLeft, true );
-            ShowObject( selectButtonLabelLeft, false );
             ShowObject( labelLineLeft, true );
         }
         else if (rightTriggerDown && !leftTriggerDown)
@@ -366,7 +364,6 @@ public class VisualGuideManager : MonoBehaviour
             ShowObject( selectButtonLabelRight, false );
             ShowObject( labelLineRight, false );
             ShowObject( scaleButtonLabelLeft, true );
-            ShowObject( selectButtonLabelLeft, false );
             ShowObject( labelLineLeft, true );
         }
         else if (!rightTriggerDown && leftTriggerDown)
@@ -375,7 +372,6 @@ public class VisualGuideManager : MonoBehaviour
             ShowObject( selectButtonLabelRight, false );
             ShowObject( labelLineRight, true );
             ShowObject( scaleButtonLabelLeft, false );
-            ShowObject( selectButtonLabelLeft, false );
             ShowObject( labelLineLeft, false );
         }
         else
@@ -384,7 +380,6 @@ public class VisualGuideManager : MonoBehaviour
             ShowObject( selectButtonLabelRight, false );
             ShowObject( labelLineRight, false );
             ShowObject( scaleButtonLabelLeft, false );
-            ShowObject( selectButtonLabelLeft, false );
             ShowObject( labelLineLeft, false );
         }
     }
