@@ -166,14 +166,14 @@ public class VisualGuideManager : MonoBehaviour
 
     // HIGHLIGHT & LABEL --------------------------------------------------------------------------------------------------
 
-    VRTK_StraightPointerRenderer _laser;
-    VRTK_StraightPointerRenderer laser
+    VRTK_Pointer _laser;
+    VRTK_Pointer laser
     {
         get
         {
             if (_laser == null)
             {
-                _laser = GameObject.FindObjectOfType<VRTK_StraightPointerRenderer>();
+                _laser = GameObject.FindObjectOfType<VRTK_Pointer>();
             }
             return _laser;
         }
@@ -181,7 +181,7 @@ public class VisualGuideManager : MonoBehaviour
 
     void ToggleLaser (bool _active)
     {
-        laser.enabled = _active;
+        laser.Toggle( _active );
         if (!_active)
         {
             HideLabel();
