@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17699158, g: 0.22155921, b: 0.3038349, a: 1}
+  m_IndirectSpecularColor: {r: 0.17698582, g: 0.22155294, b: 0.30382904, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2811,36 +2811,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4da77a990bdb4e8588678d83f2863fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDPadPress: 0
-  useDPadHover: 0
-  useTriggerInput: 1
-  trackedObj: {fileID: 0}
-  dPadPosition: {x: 0, y: 0}
-  dPadHovering: 
-  canSelect: 1
-  state: 0
-  otherController: {fileID: 1146071401}
-  hoveredStructure: {fileID: 0}
-  scaleLine: {fileID: 630044442}
-  scaleButtonLabel: {fileID: 302519355}
-  selectButtonLabel: {fileID: 763482719}
-  backButtonLabel: {fileID: 2049478556}
-  labelLine: {fileID: 1682990225}
-  cursor: {fileID: 0}
-  uiOverlayMaterial: {fileID: 0}
-  selectableLayersDefault:
-    m_Bits: 1
-  selectableLayersIsolation:
-    m_Bits: 32
-  backButton: {fileID: 1443368345}
-  linePoints:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  buttonLabels:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _laserPointer: {fileID: 0}
 --- !u!4 &737221408
 Transform:
   m_ObjectHideFlags: 0
@@ -3815,7 +3785,7 @@ MonoBehaviour:
   cursorVisibility: 0
   maximumLength: 150
   scaleFactor: 0.002
-  cursorScaleMultiplier: 2
+  cursorScaleMultiplier: 5
   cursorMatchTargetRotation: 0
   cursorDistanceRescale: 0
   maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
@@ -4540,36 +4510,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4da77a990bdb4e8588678d83f2863fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDPadPress: 0
-  useDPadHover: 0
-  useTriggerInput: 1
-  trackedObj: {fileID: 0}
-  dPadPosition: {x: 0, y: 0}
-  dPadHovering: 
-  canSelect: 0
-  state: 0
-  otherController: {fileID: 737221407}
-  hoveredStructure: {fileID: 0}
-  scaleLine: {fileID: 630044442}
-  scaleButtonLabel: {fileID: 1147104561}
-  selectButtonLabel: {fileID: 748645434}
-  backButtonLabel: {fileID: 1912880788}
-  labelLine: {fileID: 688645303}
-  cursor: {fileID: 0}
-  uiOverlayMaterial: {fileID: 0}
-  selectableLayersDefault:
-    m_Bits: 1
-  selectableLayersIsolation:
-    m_Bits: 32
-  backButton: {fileID: 1443368345}
-  linePoints:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  buttonLabels:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _laserPointer: {fileID: 0}
 --- !u!114 &1146071402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10625,12 +10565,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: -1
   origin: {fileID: 0}
---- !u!114 &1443368345 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114134444193855384, guid: 1d87a336eff1d42dba1c7973072714fc,
-    type: 2}
-  m_PrefabInternal: {fileID: 1509204895}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!84 &1460209569
 RenderTexture:
   m_ObjectHideFlags: 0
