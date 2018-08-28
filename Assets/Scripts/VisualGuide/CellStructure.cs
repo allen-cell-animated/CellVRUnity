@@ -13,7 +13,11 @@ public class CellStructure : MonoBehaviour
     {
         get
         {
-            return VisualGuideManager.Instance.pointerRight.GetComponent<VRTK_DestinationMarker>();
+            if (VisualGuideManager.Instance.pointerRight != null)
+            {
+                return VisualGuideManager.Instance.pointerRight.GetComponent<VRTK_DestinationMarker>();
+            }
+            return null;
         }
     }
 

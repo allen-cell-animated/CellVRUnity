@@ -3813,9 +3813,9 @@ MonoBehaviour:
   invalidCollisionColor: {r: 0.29019606, g: 0.80076736, b: 1, a: 0.627451}
   tracerVisibility: 0
   cursorVisibility: 0
-  maximumLength: 100
+  maximumLength: 150
   scaleFactor: 0.002
-  cursorScaleMultiplier: 25
+  cursorScaleMultiplier: 2
   cursorMatchTargetRotation: 0
   cursorDistanceRescale: 0
   maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
