@@ -9,47 +9,63 @@ public class CellStructure : MonoBehaviour
     public Color color;
     [HideInInspector] public StructureData data;
 
-    VRTK_InteractableObject _interactableObject;
-    VRTK_InteractableObject interactableObject
+    VRTK_DestinationMarker pointer
     {
         get
         {
-            if (_interactableObject == null)
+            if (VisualGuideManager.Instance.pointerRight != null)
             {
-                _interactableObject = GetComponent<VRTK_InteractableObject>();
+                return VisualGuideManager.Instance.pointerRight.GetComponent<VRTK_DestinationMarker>();
             }
-            return _interactableObject;
+            return null;
+        }
+    }
+
+    Collider _collider;
+    Collider collider
+    {
+        get
+        {
+            if (_collider == null)
+            {
+                _collider = GetComponent<Collider>();
+            }
+            return _collider;
         }
     }
 
     void OnEnable ()
     {
-        if (interactableObject != null)
+        if (pointer != null)
         {
-            interactableObject.InteractableObjectTouched += OnHoverEnter;
-            interactableObject.InteractableObjectUntouched += OnHoverExit;
+            pointer.DestinationMarkerEnter += OnHoverEnter;
+            pointer.DestinationMarkerExit += OnHoverExit;
         }
     }
 
     void OnDisable ()
     {
-        if (interactableObject != null)
+        if (pointer != null)
         {
-            interactableObject.InteractableObjectTouched -= OnHoverEnter;
-            interactableObject.InteractableObjectUntouched -= OnHoverExit;
+            pointer.DestinationMarkerEnter -= OnHoverEnter;
+            pointer.DestinationMarkerExit -= OnHoverExit;
         }
     }
 
-    void OnHoverEnter (object sender, InteractableObjectEventArgs e)
+    void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
     {
-        Debug.Log( "enter " + structureName );
-        VisualGuideManager.Instance.OnHoverStructureEnter( this );
+        if (e.raycastHit.collider == collider)
+        {
+            VisualGuideManager.Instance.OnHoverStructureEnter( this );
+        }
     }
 
-    void OnHoverExit (object sender, InteractableObjectEventArgs e)
+    void OnHoverExit (object sender, DestinationMarkerEventArgs e)
     {
-        Debug.Log("--------EXIT " + structureName);
-        VisualGuideManager.Instance.OnHoverStructureExit();
+        if (e.raycastHit.collider == collider)
+        {
+            VisualGuideManager.Instance.OnHoverStructureExit();
+        }
     }
 
     void Start ()

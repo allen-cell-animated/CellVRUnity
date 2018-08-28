@@ -18,7 +18,6 @@ public class CellCycleSlider : MonoBehaviour
 
 	public void SetValue (float _sliderValue)
     {
-		Debug.Log( _sliderValue );
         DiscretizeSliderPosition(_sliderValue);
     }
 
