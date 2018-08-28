@@ -23,7 +23,7 @@ public class VisualGuideManager : MonoBehaviour
     Vector3 startControllerVector;
     Vector3 startPositiveVector;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
-    Vector3 maxScale = new Vector3( 10f, 10f, 10f );
+    Vector3 maxScale = new Vector3( 5f, 5f, 5f );
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance

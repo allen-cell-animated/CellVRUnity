@@ -12,59 +12,24 @@ MonoBehaviour:
   m_Name: visualGuideData
   m_EditorClassIdentifier: 
   structureData:
-  - structureName: Actin Filaments
+  - structureName: Cytoskeleton
     infoImage: {fileID: 0}
-    description: Network that maintains and morphs cell shape in order to move and
-      divide.
-    nameWidth: 88
-  - structureName: Centrosomes
+    description: Fiber networks that maintain and morph cell shape in order to move
+      and divide.
+    nameWidth: 79
+  - structureName: Nucleus
     infoImage: {fileID: 0}
-    description: Points that organize fibers to split the cell in two during division.
-    nameWidth: 78
-  - structureName: Chromatin
-    infoImage: {fileID: 0}
-    description: DNA mixed with the molecules that read, copy, and store it.
-    nameWidth: 62
-  - structureName: Desmosomes
-    infoImage: {fileID: 0}
-    description: Spots where the cell is stuck tightly to its neighbors so they move
-      as a unit.
-    nameWidth: 80
-  - structureName: Endoplasmic Reticulum
-    infoImage: {fileID: 0}
-    description: Densely folded membranes where molecules are created and transported.
-    nameWidth: 132
-  - structureName: Golgi Apparatus
-    infoImage: {fileID: 0}
-    description: Transport hub that modifies and sorts molecules.
-    nameWidth: 92
-  - structureName: Lysosomes
-    infoImage: {fileID: 0}
-    description: Small compartments where waste molecules are broken down.
-    nameWidth: 68
-  - structureName: Microtubules
-    infoImage: {fileID: 0}
-    description: Fiber network that maintains cell structure and forms highways for
-      transport.
-    nameWidth: 74
+    description: Large compartment that separates DNA from the rest of the cell.
+    nameWidth: 54
   - structureName: Mitochondria
     infoImage: {fileID: 21300000, guid: 639d4d82f2af24254abd705686844c14, type: 3}
     description: Compartments that break food down into cellular energy molecules.
     nameWidth: 75
-  - structureName: Nuclear Envelope
+  - structureName: Endomembrane System
     infoImage: {fileID: 0}
-    description: Large compartment that separates DNA from the rest of the cell.
-    nameWidth: 100
-  - structureName: Nucleolus
+    description: Makes, modifies, and transports molecules.
+    nameWidth: 135
+  - structureName: '''Somes'
     infoImage: {fileID: 0}
-    description: Subcompartment of the nucleus where machinery to make molecules is
-      made.
-    nameWidth: 60
-  - structureName: Peroxisomes
-    infoImage: {fileID: 0}
-    description: Small compartments that digest fats and neutralize hydrogen peroxide.
-    nameWidth: 76
-  - structureName: Tight Junctions
-    infoImage: {fileID: 0}
-    description: Bands that seal neighboring cells together to form a barrier to fluids.
-    nameWidth: 87
+    description: Small compartments that isolate and neutralize debris and toxins.
+    nameWidth: 132

@@ -21,16 +21,16 @@ public class CellStructure : MonoBehaviour
         }
     }
 
-    Collider _collider;
-    Collider collider
+    List<Collider> _colliders;
+    List<Collider> colliders
     {
         get
         {
-            if (_collider == null)
+            if (_colliders == null)
             {
-                _collider = GetComponent<Collider>();
+                _colliders = new List<Collider>( GetComponentsInChildren<Collider>() );
             }
-            return _collider;
+            return _colliders;
         }
     }
 
@@ -54,7 +54,7 @@ public class CellStructure : MonoBehaviour
 
     void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
     {
-        if (e.raycastHit.collider == collider)
+        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
         {
             VisualGuideManager.Instance.OnHoverStructureEnter( this );
         }
@@ -62,7 +62,7 @@ public class CellStructure : MonoBehaviour
 
     void OnHoverExit (object sender, DestinationMarkerEventArgs e)
     {
-        if (e.raycastHit.collider == collider)
+        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
         {
             VisualGuideManager.Instance.OnHoverStructureExit();
         }
@@ -83,28 +83,36 @@ public class CellStructure : MonoBehaviour
         }
     }
 
-    Material _material;
-    Material material
+    Material[] _materials;
+    Material[] materials
     {
         get
         {
-            if (_material == null)
+            if (_materials == null)
             {
-                _material = GetComponent<MeshRenderer>().material;
+                MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+                _materials = new Material[renderers.Length];
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    _materials[i] = renderers[i].material;
+                }
             }
-            return _material;
+            return _materials;
         }
     }
 
     public void GrayOut (bool _gray)
     {
-        if (!_gray)
+        foreach (Material material in materials)
         {
-            material.SetColor( "_Color", color );
-        }
-        else
-        {
-            material.SetColor( "_Color", Color.white );
+            if (!_gray)
+            {
+                material.SetColor( "_Color", color );
+            }
+            else
+            {
+                material.SetColor( "_Color", Color.white );
+            }
         }
     }
 }
