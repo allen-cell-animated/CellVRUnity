@@ -116,7 +116,7 @@ public class VisualGuideManager : MonoBehaviour
         rightTriggerDown = false;
         if (!translating)
         {
-            ToggleIsolationMode();
+            IsolateSelectedStructure();
         }
     }
 
@@ -192,18 +192,6 @@ public class VisualGuideManager : MonoBehaviour
     }
 
     // ISOLATE STRUCTURE --------------------------------------------------------------------------------------------------
-
-    void ToggleIsolationMode ()
-    {
-        if (!inIsolationMode)
-        {
-            IsolateSelectedStructure();
-        }
-        else
-        {
-            ExitIsolationMode();
-        }
-    }
 
     void IsolateSelectedStructure ()
     {
