@@ -635,7 +635,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4121173544031244}
-  - component: {fileID: 135662939147690994}
   m_Layer: 0
   m_Name: InterphaseCell
   m_TagString: Untagged
@@ -3166,15 +3165,3 @@ MonoBehaviour:
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
---- !u!135 &135662939147690994
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1949957552789310}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.62
-  m_Center: {x: 0, y: 0.4, z: 0}

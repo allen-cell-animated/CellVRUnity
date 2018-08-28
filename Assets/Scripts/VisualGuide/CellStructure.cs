@@ -41,11 +41,13 @@ public class CellStructure : MonoBehaviour
 
     void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
     {
+        Debug.Log( "enter " + structureName );
         VisualGuideManager.Instance.OnHoverStructureEnter( this );
     }
 
     void OnHoverExit (object sender, DestinationMarkerEventArgs e)
     {
+        Debug.Log("--------EXIT " + structureName);
         VisualGuideManager.Instance.OnHoverStructureExit();
     }
 
