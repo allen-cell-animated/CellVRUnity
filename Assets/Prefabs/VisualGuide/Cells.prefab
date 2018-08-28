@@ -2982,6 +2982,13 @@ MonoBehaviour:
   selectedStructure: {fileID: 0}
   canScale: 1
   canRotate: 1
+  scaleLine: {fileID: 0}
+  scaleButtonLabelRight: {fileID: 0}
+  selectButtonLabelRight: {fileID: 0}
+  labelLineRight: {fileID: 0}
+  scaleButtonLabelLeft: {fileID: 0}
+  selectButtonLabelLeft: {fileID: 0}
+  labelLineLeft: {fileID: 0}
 --- !u!114 &114709814821654108
 MonoBehaviour:
   m_ObjectHideFlags: 1

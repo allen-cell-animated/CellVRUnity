@@ -23,7 +23,8 @@ public class VisualGuideManager : MonoBehaviour
     Vector3 startControllerVector;
     Vector3 startPositiveVector;
     Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
-    Vector3 maxScale = new Vector3( 5f, 5f, 5f );
+    Vector3 maxScale = new Vector3( 3f, 3f, 3f );
+    Vector3[] linePoints = new Vector3[2];
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -83,6 +84,12 @@ public class VisualGuideManager : MonoBehaviour
         structureLabel.gameObject.SetActive( false );
     }
 
+    void Update ()
+    {
+        UpdateTranslating();
+        UpdateButtonLabels();
+    }
+
     // INPUT --------------------------------------------------------------------------------------------------
 
     void OnEnable ()
@@ -131,7 +138,7 @@ public class VisualGuideManager : MonoBehaviour
         leftTriggerDown = false;
     }
 
-    void Update ()
+    void UpdateTranslating ()
     {
         if (rightTriggerDown && leftTriggerDown)
         {
@@ -146,9 +153,11 @@ public class VisualGuideManager : MonoBehaviour
                 UpdateScale();
                 UpdateRotation();
             }
+            SetLine( true );
         }
-        else
+        else if (translating)
         {
+            SetLine( false );
             translating = false;
         }
     }
@@ -192,7 +201,7 @@ public class VisualGuideManager : MonoBehaviour
         structureLabel.gameObject.SetActive( false );
     }
 
-    // ISOLATE STRUCTURE --------------------------------------------------------------------------------------------------
+    // ISOLATE --------------------------------------------------------------------------------------------------
 
     void IsolateSelectedStructure ()
     {
@@ -229,7 +238,7 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    // SCALING --------------------------------------------------------------------------------------------------
+    // TRANSLATING --------------------------------------------------------------------------------------------------
 
     void StartScaling ()
     {
@@ -266,8 +275,6 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    // ROTATING --------------------------------------------------------------------------------------------------
-
     void StartRotating ()
     {
         if (canRotate)
@@ -303,5 +310,88 @@ public class VisualGuideManager : MonoBehaviour
             return 180f;
         }
         return Mathf.Acos( cosine ) * Mathf.Rad2Deg;
+    }
+
+    void SetLine (bool active)
+    {
+        if (active)
+        {
+            if (!scaleLine.gameObject.activeSelf)
+            {
+                scaleLine.gameObject.SetActive( true );
+            }
+            linePoints[0] = pointerRight.transform.position;
+            linePoints[1] = pointerLeft.transform.position;
+            scaleLine.SetPositions( linePoints );
+        }
+        else
+        {
+            scaleLine.gameObject.SetActive( false );
+        }
+    }
+
+    // BUTTON LABELS --------------------------------------------------------------------------------------------------
+
+    public LineRenderer scaleLine;
+    public GameObject scaleButtonLabelRight;
+    public GameObject selectButtonLabelRight;
+    public GameObject labelLineRight;
+    public GameObject scaleButtonLabelLeft;
+    public GameObject selectButtonLabelLeft;
+    public GameObject labelLineLeft;
+
+    void UpdateButtonLabels ()
+    {
+        if (!rightTriggerDown && !leftTriggerDown)
+        {
+            ShowObject( scaleButtonLabelRight, false );
+            ShowObject( selectButtonLabelRight, true );
+            ShowObject( labelLineRight, true );
+            ShowObject( scaleButtonLabelLeft, true );
+            ShowObject( selectButtonLabelLeft, false );
+            ShowObject( labelLineLeft, true );
+        }
+        else if (rightTriggerDown && !leftTriggerDown)
+        {
+            ShowObject( scaleButtonLabelRight, false );
+            ShowObject( selectButtonLabelRight, false );
+            ShowObject( labelLineRight, false );
+            ShowObject( scaleButtonLabelLeft, false );
+            ShowObject( selectButtonLabelLeft, false );
+            ShowObject( labelLineLeft, false );
+        }
+        else if (!rightTriggerDown && leftTriggerDown)
+        {
+            ShowObject( scaleButtonLabelRight, true );
+            ShowObject( selectButtonLabelRight, false );
+            ShowObject( labelLineRight, true );
+            ShowObject( scaleButtonLabelLeft, false );
+            ShowObject( selectButtonLabelLeft, false );
+            ShowObject( labelLineLeft, false );
+        }
+        else
+        {
+            ShowObject( scaleButtonLabelRight, false );
+            ShowObject( selectButtonLabelRight, false );
+            ShowObject( labelLineRight, false );
+            ShowObject( scaleButtonLabelLeft, false );
+            ShowObject( selectButtonLabelLeft, false );
+            ShowObject( labelLineLeft, false );
+        }
+    }
+
+    void ShowObject (GameObject obj, bool show)
+    {
+        if (obj != null)
+        {
+            if (show && !obj.activeSelf)
+            {
+                obj.SetActive( true );
+            }
+            else if (!show && obj.activeSelf)
+            {
+                obj.SetActive( false );
+            }
+        }
     }
 }
