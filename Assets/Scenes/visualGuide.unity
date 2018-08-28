@@ -3294,6 +3294,21 @@ Prefab:
       propertyPath: labelLineLeft
       value: 
       objectReference: {fileID: 688645303}
+    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
+        type: 2}
+      propertyPath: scaleButtonLabelRight
+      value: 
+      objectReference: {fileID: 302519355}
+    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
+        type: 2}
+      propertyPath: selectButtonLabelRight
+      value: 
+      objectReference: {fileID: 763482719}
+    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
+        type: 2}
+      propertyPath: labelLineRight
+      value: 
+      objectReference: {fileID: 1682990225}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66d4cea1028254a7881a08e5f7160fba, type: 2}
   m_IsPrefabParent: 0
