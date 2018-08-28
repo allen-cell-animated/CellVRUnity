@@ -145,6 +145,7 @@ public class VisualGuideManager : MonoBehaviour
             if (!translating)
             {
                 translating = true;
+                ToggleLaser( false );
                 StartScaling();
                 StartRotating();
             }
@@ -154,7 +155,6 @@ public class VisualGuideManager : MonoBehaviour
                 UpdateRotation();
             }
             ToggleLine( true );
-            ToggleLaser( false );
         }
         else if (translating)
         {
@@ -181,6 +181,7 @@ public class VisualGuideManager : MonoBehaviour
 
     void ToggleLaser (bool _active)
     {
+        Debug.Log( "toggle laser " + _active );
         laser.Toggle( _active );
         if (!_active)
         {
