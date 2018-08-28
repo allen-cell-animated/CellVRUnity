@@ -153,35 +153,60 @@ public class VisualGuideManager : MonoBehaviour
                 UpdateScale();
                 UpdateRotation();
             }
-            SetLine( true );
+            ToggleLine( true );
+            ToggleLaser( false );
         }
         else if (translating)
         {
-            SetLine( false );
+            ToggleLine( false );
+            ToggleLaser( true );
             translating = false;
         }
     }
 
     // HIGHLIGHT & LABEL --------------------------------------------------------------------------------------------------
 
+    VRTK_StraightPointerRenderer _laser;
+    VRTK_StraightPointerRenderer laser
+    {
+        get
+        {
+            if (_laser == null)
+            {
+                _laser = GameObject.FindObjectOfType<VRTK_StraightPointerRenderer>();
+            }
+            return _laser;
+        }
+    }
+
+    void ToggleLaser (bool _active)
+    {
+        laser.enabled = _active;
+        if (!_active)
+        {
+            HideLabel();
+        }
+    }
+
     public void OnHoverStructureEnter (CellStructure _selectedStructure)
     {
-        Debug.Log( "select " + _selectedStructure );
-        selectedStructure = _selectedStructure;
-        foreach (CellStructure structure in structures)
+        if (!translating)
         {
-            if (structure != selectedStructure)
+            selectedStructure = _selectedStructure;
+            foreach (CellStructure structure in structures)
             {
-                structure.GrayOut( true );
+                if (structure != selectedStructure)
+                {
+                    structure.GrayOut( true );
+                }
             }
+            selectedStructure.GrayOut( false );
+            LabelSelectedStructure();
         }
-        selectedStructure.GrayOut( false );
-        LabelSelectedStructure();
     }
 
     public void OnHoverStructureExit ()
     {
-        Debug.Log( "--------- DESELECT " + selectedStructure );
         selectedStructure = null;
         foreach (CellStructure structure in structures)
         {
@@ -312,9 +337,9 @@ public class VisualGuideManager : MonoBehaviour
         return Mathf.Acos( cosine ) * Mathf.Rad2Deg;
     }
 
-    void SetLine (bool active)
+    void ToggleLine (bool _active)
     {
-        if (active)
+        if (_active)
         {
             if (!scaleLine.gameObject.activeSelf)
             {

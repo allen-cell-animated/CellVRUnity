@@ -1547,7 +1547,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1722,7 +1722,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1792,7 +1792,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1827,7 +1827,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2142,7 +2142,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2282,7 +2282,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: c951d24bc2f0f4ccab1e5f759a735835, type: 2}
+  - {fileID: 2100000, guid: f5a0d90a717cc40f7a28e57cd24329be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2987,7 +2987,6 @@ MonoBehaviour:
   selectButtonLabelRight: {fileID: 0}
   labelLineRight: {fileID: 0}
   scaleButtonLabelLeft: {fileID: 0}
-  selectButtonLabelLeft: {fileID: 0}
   labelLineLeft: {fileID: 0}
 --- !u!114 &114709814821654108
 MonoBehaviour:

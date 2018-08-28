@@ -3281,21 +3281,6 @@ Prefab:
       objectReference: {fileID: 630044442}
     - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
         type: 2}
-      propertyPath: scaleButtonLabelLeft
-      value: 
-      objectReference: {fileID: 1147104561}
-    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
-        type: 2}
-      propertyPath: selectButtonLabelLeft
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
-        type: 2}
-      propertyPath: labelLineLeft
-      value: 
-      objectReference: {fileID: 688645303}
-    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
-        type: 2}
       propertyPath: scaleButtonLabelRight
       value: 
       objectReference: {fileID: 302519355}
@@ -3309,6 +3294,16 @@ Prefab:
       propertyPath: labelLineRight
       value: 
       objectReference: {fileID: 1682990225}
+    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
+        type: 2}
+      propertyPath: scaleButtonLabelLeft
+      value: 
+      objectReference: {fileID: 1147104561}
+    - target: {fileID: 114674164477664820, guid: 66d4cea1028254a7881a08e5f7160fba,
+        type: 2}
+      propertyPath: labelLineLeft
+      value: 
+      objectReference: {fileID: 688645303}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66d4cea1028254a7881a08e5f7160fba, type: 2}
   m_IsPrefabParent: 0
@@ -3791,7 +3786,7 @@ MonoBehaviour:
     smoothsRotation: 0
     maxAllowedPerFrameAngleDifference: 1.5
   validCollisionColor: {r: 0.29019606, g: 0.80076736, b: 1, a: 1}
-  invalidCollisionColor: {r: 0.29019606, g: 0.80076736, b: 1, a: 0.627451}
+  invalidCollisionColor: {r: 0.33361515, g: 0.5208757, b: 0.5943396, a: 0.49803922}
   tracerVisibility: 0
   cursorVisibility: 0
   maximumLength: 150
