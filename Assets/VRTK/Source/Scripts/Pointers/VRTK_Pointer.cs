@@ -267,17 +267,18 @@ namespace VRTK
         /// <param name="state">If `true` the pointer will be enabled if possible, if `false` the pointer will be disabled if possible.</param>
         public virtual void Toggle(bool state)
         {
+            Debug.Log( !CanActivate() + " " + NoPointerRenderer() + " " + CanActivateOnToggleButton(state) + " " + (state && IsPointerActive()) + " " + (!state && !IsPointerActive()) );
             if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state) || (state && IsPointerActive()) || (!state && !IsPointerActive()))
             {
-                Debug.Log( !CanActivate() + " " + NoPointerRenderer() + " " + CanActivateOnToggleButton(state) + " " + (state && IsPointerActive()) + " " + (!state && !IsPointerActive()) );
                 return;
             }
-
+            Debug.Log( "passed check" );
             ManageActivationState(willDeactivate ? true : state);
             pointerRenderer.Toggle(IsPointerActive(), state);
             willDeactivate = false;
             if (!state)
             {
+                Debug.Log( "deactivate" );
                 StopUseAction();
             }
         }
