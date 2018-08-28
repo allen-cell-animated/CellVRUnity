@@ -39,6 +39,7 @@ public class CellCycleSlider : MonoBehaviour
     {
         if (currentCell != cells[i])
         {
+            VisualGuideManager.Instance.ExitIsolationMode();
             if (currentCell != null)
             {
                 currentCell.SetActive( false );

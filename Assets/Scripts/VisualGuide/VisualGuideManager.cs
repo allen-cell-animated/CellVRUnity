@@ -79,6 +79,7 @@ public class VisualGuideManager : MonoBehaviour
 
     void Start ()
     {
+        infoPanel.gameObject.SetActive( false );
         structureLabel.gameObject.SetActive( false );
     }
 
@@ -195,7 +196,7 @@ public class VisualGuideManager : MonoBehaviour
 
     void IsolateSelectedStructure ()
     {
-        if (selectedStructure != null)
+        if (selectedStructure != null && !inIsolationMode)
         {
             inIsolationMode = true;
             foreach (CellStructure structure in structures)
@@ -215,14 +216,17 @@ public class VisualGuideManager : MonoBehaviour
         infoPanel.gameObject.SetActive( true );
     }
 
-    void ExitIsolationMode ()
+    public void ExitIsolationMode ()
     {
-        foreach (CellStructure s in structures)
+        if (inIsolationMode)
         {
-            s.gameObject.SetActive( true );
+            foreach (CellStructure s in structures)
+            {
+                s.gameObject.SetActive( true );
+            }
+            infoPanel.gameObject.SetActive( false );
+            inIsolationMode = false;
         }
-        infoPanel.gameObject.SetActive( false );
-        inIsolationMode = false;
     }
 
     // SCALING --------------------------------------------------------------------------------------------------
