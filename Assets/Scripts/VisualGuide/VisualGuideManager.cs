@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
 
 public class VisualGuideManager : MonoBehaviour 
 {
+    public VRTK_ControllerEvents pointerLeft;
+    public VRTK_ControllerEvents pointerRight;
+    public VisualGuideData data;
+    public CellStructure selectedStructure;
     public bool canScale = true;
     public bool canRotate = true;
-    public VisualGuideData data;
-    public bool inIsolationMode;
-    public bool scaling;
-    public bool rotating;
-    public bool hasTranslated;
+
+    bool rightTriggerDown;
+    bool leftTriggerDown;
+    bool translating;
+    bool inIsolationMode;
 
     Vector3 startScale;
     float startControllerDistance;
@@ -75,53 +80,152 @@ public class VisualGuideManager : MonoBehaviour
     void Start ()
     {
         structureLabel.gameObject.SetActive( false );
-        infoPanel.gameObject.SetActive( false );
-
-        LoadStructureData();
     }
 
-    void LoadStructureData ()
+    // INPUT --------------------------------------------------------------------------------------------------
+
+    void OnEnable ()
     {
+        if (pointerLeft != null && pointerRight != null)
+        {
+            pointerRight.TriggerPressed += OnRightControllerTriggerDown;
+            pointerLeft.TriggerPressed += OnLeftControllerTriggerDown;
+            pointerRight.TriggerReleased += OnRightControllerTriggerUp;
+            pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
+        }
+    }
+
+    void OnDisable ()
+    {
+        if (pointerLeft != null && pointerRight != null)
+        {
+            pointerRight.TriggerPressed -= OnRightControllerTriggerDown;
+            pointerLeft.TriggerPressed -= OnLeftControllerTriggerDown;
+            pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
+            pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
+        }
+    }
+
+    void OnRightControllerTriggerDown (object sender, ControllerInteractionEventArgs e)
+    {
+        rightTriggerDown = true;
+    }
+
+    void OnRightControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
+    {
+        rightTriggerDown = false;
+        if (!translating)
+        {
+            ToggleIsolationMode();
+        }
+    }
+
+    void OnLeftControllerTriggerDown (object sender, ControllerInteractionEventArgs e)
+    {
+        leftTriggerDown = true;
+    }
+
+    void OnLeftControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
+    {
+        leftTriggerDown = false;
+    }
+
+    void Update ()
+    {
+        if (rightTriggerDown && leftTriggerDown)
+        {
+            if (!translating)
+            {
+                translating = true;
+                StartScaling();
+                StartRotating();
+            }
+            else
+            {
+                UpdateScale();
+                UpdateRotation();
+            }
+        }
+        else
+        {
+            translating = false;
+        }
+    }
+
+    // HIGHLIGHT & LABEL --------------------------------------------------------------------------------------------------
+
+    public void OnHoverStructureEnter (CellStructure _selectedStructure)
+    {
+        selectedStructure = _selectedStructure;
         foreach (CellStructure structure in structures)
         {
-            structure.SetData( data.structureData.Find( s => s.structureName == structure.structureName ) );
+            if (structure != selectedStructure)
+            {
+                structure.GrayOut( true );
+            }
         }
+        selectedStructure.GrayOut( false );
+        LabelSelectedStructure();
     }
 
-    public void LabelStructure (CellStructure _structure)
+    public void OnHoverStructureExit ()
     {
-        if (!scaling && !rotating)
+        selectedStructure = null;
+        foreach (CellStructure structure in structures)
         {
-            structureLabel.gameObject.SetActive( true );
-            structureLabel.SetLabel( _structure.data );
+            structure.GrayOut( false );
         }
+        HideLabel();
     }
 
-    public void HideLabel ()
+    void LabelSelectedStructure ()
+    {
+        structureLabel.gameObject.SetActive( true );
+        structureLabel.SetLabel( selectedStructure.data );
+    }
+
+    void HideLabel ()
     {
         structureLabel.gameObject.SetActive( false );
     }
 
-    public void IsolateStructure (CellStructure _structure)
+    // ISOLATE STRUCTURE --------------------------------------------------------------------------------------------------
+
+    void ToggleIsolationMode ()
     {
-        inIsolationMode = true;
-        foreach (CellStructure structure in structures)
+        if (!inIsolationMode)
         {
-            if (structure != _structure && !structure.alwaysShowInIsolationMode)
-            {
-                structure.gameObject.SetActive( false );
-            }
+            IsolateSelectedStructure();
         }
-        ShowInfoPanel( _structure );
+        else
+        {
+            ExitIsolationMode();
+        }
     }
 
-    void ShowInfoPanel (CellStructure _structure)
+    void IsolateSelectedStructure ()
     {
-        infoPanel.SetContent( _structure.data );
+        if (selectedStructure != null)
+        {
+            inIsolationMode = true;
+            foreach (CellStructure structure in structures)
+            {
+                if (structure != selectedStructure)
+                {
+                    structure.gameObject.SetActive( false );
+                }
+            }
+            ShowInfoPanelForSelectedStructure();
+        }
+    }
+
+    void ShowInfoPanelForSelectedStructure ()
+    {
+        infoPanel.SetContent( selectedStructure.data );
         infoPanel.gameObject.SetActive( true );
     }
 
-    public void ExitIsolationMode ()
+    void ExitIsolationMode ()
     {
         foreach (CellStructure s in structures)
         {
@@ -131,29 +235,25 @@ public class VisualGuideManager : MonoBehaviour
         inIsolationMode = false;
     }
 
-    public void StartScaling (Vector3 _controller1Position, Vector3 _controller2Position)
+    // SCALING --------------------------------------------------------------------------------------------------
+
+    void StartScaling ()
     {
         if (canScale)
         {
-            scaling = true;
             startScale = transform.localScale;
-            startControllerDistance = Vector3.Distance( _controller1Position, _controller2Position );
+            startControllerDistance = Vector3.Distance( pointerRight.transform.position, pointerLeft.transform.position );
         }
     }
 
-    public void UpdateScale (Vector3 _controller1Position, Vector3 _controller2Position)
+    void UpdateScale ()
     {
         if (canScale)
         {
-            float scale = Vector3.Distance( _controller1Position, _controller2Position ) / startControllerDistance;
+            float scale = Vector3.Distance( pointerRight.transform.position, pointerLeft.transform.position ) / startControllerDistance;
 
             transform.localScale = ClampScale( scale * startScale );
         }
-    }
-
-    public void StopScaling ()
-    {
-        scaling = false;
     }
 
     Vector3 ClampScale (Vector3 _scale)
@@ -172,23 +272,24 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    public void StartRotating (Vector3 _controller1Position, Vector3 _controller2Position)
+    // ROTATING --------------------------------------------------------------------------------------------------
+
+    void StartRotating ()
     {
         if (canRotate)
         {
-            rotating = true;
             startRotation = transform.localRotation;
-            startControllerVector = _controller2Position - _controller1Position;
+            startControllerVector = pointerRight.transform.position - pointerLeft.transform.position;
             startControllerVector.y = 0;
             startPositiveVector = Vector3.Cross( startControllerVector, Vector3.up );
         }
     }
 
-    public void UpdateRotation (Vector3 _controller1Position, Vector3 _controller2Position)
+    void UpdateRotation ()
     {
         if (canRotate)
         {
-            Vector3 controllerVector = _controller2Position - _controller1Position;
+            Vector3 controllerVector = pointerRight.transform.position - pointerLeft.transform.position;
             controllerVector.y = 0;
             float direction = GetArcCosineDegrees( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= 90f ? 1f : -1f;
             float dAngle = direction * GetArcCosineDegrees( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
@@ -208,10 +309,5 @@ public class VisualGuideManager : MonoBehaviour
             return 180f;
         }
         return Mathf.Acos( cosine ) * Mathf.Rad2Deg;
-    }
-
-    public void StopRotating ()
-    {
-        rotating = false;
     }
 }

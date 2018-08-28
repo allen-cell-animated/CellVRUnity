@@ -5038,13 +5038,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Centrosomes
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1186773239186274}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114026747983169700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5057,13 +5056,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Endoplasmic Reticulum
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1874818952415812}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114051679187052530
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5076,13 +5074,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Tight Junctions
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1213723173137752}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114103527075811344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5095,13 +5092,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nuclear Envelope
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1710224120610026}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114104733200487322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5114,13 +5110,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Golgi Apparatus
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1413268251052756}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114135528679007664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5148,13 +5143,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1308437936125760}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114151285503918802
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5197,13 +5191,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Actin Filaments
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1280836491939930}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114216377665873676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5261,13 +5254,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Microtubules
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1373666688461966}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114399318299721222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5295,13 +5287,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Peroxisomes
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1946965416428744}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114423581851370790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5314,13 +5305,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1768681351646704}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114472247861371210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5333,13 +5323,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Chromatin
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1783107673256522}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114518361332461620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5367,13 +5356,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1241888362932374}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114582503214045448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5401,13 +5389,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1221630600799886}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114603626613525094
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5449,13 +5436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e870ace856a4989a3c2902194287ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointerLeft: {fileID: 0}
+  pointerRight: {fileID: 0}
+  data: {fileID: 11400000, guid: 12e54869aca234aea914e675188848b7, type: 2}
+  selectedStructure: {fileID: 0}
   canScale: 1
   canRotate: 1
-  data: {fileID: 11400000, guid: 12e54869aca234aea914e675188848b7, type: 2}
-  inIsolationMode: 0
-  scaling: 0
-  rotating: 0
-  hasTranslated: 0
 --- !u!114 &114677269243280446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5468,13 +5454,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1173104981774024}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114685130457721850
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5562,13 +5547,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Lysosomes
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1166679917536336}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114785148899156280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5581,13 +5565,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1170875317517982}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114791197593523244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5600,13 +5583,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nucleolus
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1354568678411088}
-  alwaysShowInIsolationMode: 0
 --- !u!114 &114823976152265846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5649,10 +5631,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Desmosomes
+  color: {r: 0, g: 0, b: 0, a: 0}
   data:
     structureName: 
     infoImage: {fileID: 0}
     description: 
     nameWidth: 0
-  outline: {fileID: 1913291321155742}
-  alwaysShowInIsolationMode: 0
