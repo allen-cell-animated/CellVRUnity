@@ -344,9 +344,18 @@ public class VisualGuideManager : MonoBehaviour
     {
         if (!rightTriggerDown && !leftTriggerDown)
         {
-            ShowObject( scaleButtonLabelRight, false );
-            ShowObject( selectButtonLabelRight, true );
-            ShowObject( labelLineRight, true );
+            if (inIsolationMode)
+            {
+                ShowObject( scaleButtonLabelRight, false );
+                ShowObject( selectButtonLabelRight, true );
+                ShowObject( labelLineRight, true );
+            }
+            else 
+            {
+                ShowObject( scaleButtonLabelRight, true );
+                ShowObject( selectButtonLabelRight, false );
+                ShowObject( labelLineRight, true );
+            }
             ShowObject( scaleButtonLabelLeft, true );
             ShowObject( selectButtonLabelLeft, false );
             ShowObject( labelLineLeft, true );
@@ -356,9 +365,9 @@ public class VisualGuideManager : MonoBehaviour
             ShowObject( scaleButtonLabelRight, false );
             ShowObject( selectButtonLabelRight, false );
             ShowObject( labelLineRight, false );
-            ShowObject( scaleButtonLabelLeft, false );
+            ShowObject( scaleButtonLabelLeft, true );
             ShowObject( selectButtonLabelLeft, false );
-            ShowObject( labelLineLeft, false );
+            ShowObject( labelLineLeft, true );
         }
         else if (!rightTriggerDown && leftTriggerDown)
         {
