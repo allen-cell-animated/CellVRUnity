@@ -345,14 +345,14 @@ public class VisualGuideManager : MonoBehaviour
         {
             if (inIsolationMode)
             {
-                ShowObject( scaleButtonLabelRight, false );
-                ShowObject( selectButtonLabelRight, true );
+                ShowObject( scaleButtonLabelRight, true );
+                ShowObject( selectButtonLabelRight, false );
                 ShowObject( labelLineRight, true );
             }
             else 
             {
-                ShowObject( scaleButtonLabelRight, true );
-                ShowObject( selectButtonLabelRight, false );
+                ShowObject( scaleButtonLabelRight, false );
+                ShowObject( selectButtonLabelRight, true );
                 ShowObject( labelLineRight, true );
             }
             ShowObject( scaleButtonLabelLeft, true );
