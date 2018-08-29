@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class SliderHandle3D : MonoBehaviour 
+public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Color highlightColor;
     public GameObject handle3D;
@@ -27,13 +28,15 @@ public class SliderHandle3D : MonoBehaviour
         defaultColor = material.GetColor( "_Color" );
     }
 
-    void OnMouseEnter ()
+    public void OnPointerEnter (PointerEventData _data)
     {
+        Debug.Log( "ENTER" );
         material.SetColor( "_Color", highlightColor );
     }
 
-    void OnMouseExit ()
+    public void OnPointerExit (PointerEventData _data)
     {
+        Debug.Log( "exit" );
         material.SetColor( "_Color", defaultColor );
     }
 }
