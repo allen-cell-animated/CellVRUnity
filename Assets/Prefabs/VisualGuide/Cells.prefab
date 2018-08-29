@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Nucleus
   color: {r: 0, g: 0.37446833, b: 1, a: 1}
-  hideNucleus: 0
+  hideNucleus: 1
   data:
     structureName: 
     infoImage: {fileID: 0}

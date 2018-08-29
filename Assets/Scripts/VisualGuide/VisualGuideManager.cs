@@ -210,11 +210,6 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    public void HideIntegratedNucleus ()
-    {
-        integratedNucleus.SetActive( false );
-    }
-
     public void OnHoverStructureExit ()
     {
         selectedStructure = null;
@@ -222,7 +217,6 @@ public class VisualGuideManager : MonoBehaviour
         {
             structure.GrayOut( false );
         }
-        integratedNucleus.SetActive( true );
         HideLabel();
     }
 
@@ -252,6 +246,10 @@ public class VisualGuideManager : MonoBehaviour
                 }
             }
             ShowInfoPanelForSelectedStructure();
+            if (selectedStructure.showNucleus)
+            {
+                SetIntegratedNucleus( true );
+            }
         }
     }
 
@@ -271,7 +269,13 @@ public class VisualGuideManager : MonoBehaviour
             }
             infoPanel.gameObject.SetActive( false );
             inIsolationMode = false;
+            SetIntegratedNucleus( false );
         }
+    }
+
+    public void SetIntegratedNucleus (bool _show)
+    {
+        integratedNucleus.SetActive( _show );
     }
 
     // TRANSLATING --------------------------------------------------------------------------------------------------
