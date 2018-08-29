@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderHandle3D : MonoBehaviour
+public class ChangeColor : MonoBehaviour
 {
     public Color highlightColor;
 
