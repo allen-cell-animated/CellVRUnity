@@ -194,7 +194,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void OnHoverStructureEnter (CellStructure _selectedStructure)
     {
-        if (!translating)
+        if (!translating && !inIsolationMode)
         {
             selectedStructure = _selectedStructure;
             foreach (CellStructure structure in structures)
