@@ -10756,7 +10756,7 @@ Prefab:
     - target: {fileID: 224846971478673308, guid: 1d87a336eff1d42dba1c7973072714fc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 1.831
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 224846971478673308, guid: 1d87a336eff1d42dba1c7973072714fc,
         type: 2}
@@ -11097,16 +11097,6 @@ Prefab:
       propertyPath: cursor
       value: 
       objectReference: {fileID: 1570326865}
-    - target: {fileID: 114610423735103278, guid: 69186480d4f601e478d59c6aed598d39,
-        type: 2}
-      propertyPath: m_Text
-      value: Endomembrane System
-      objectReference: {fileID: 0}
-    - target: {fileID: 224806071771079174, guid: 69186480d4f601e478d59c6aed598d39,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 135.3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 69186480d4f601e478d59c6aed598d39, type: 2}
   m_IsPrefabParent: 0

@@ -32,4 +32,4 @@ MonoBehaviour:
   - structureName: '''Somes'
     infoImage: {fileID: 0}
     description: Small compartments that isolate and neutralize debris and toxins.
-    nameWidth: 132
+    nameWidth: 50

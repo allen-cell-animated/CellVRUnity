@@ -2943,7 +2943,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -2962,7 +2962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Cytoskeleton
   color: {r: 1, g: 0.8741454, b: 0, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -2981,7 +2981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3000,7 +3000,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3019,7 +3019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Endomembrane System
   color: {r: 0, g: 1, b: 0.6661012, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3038,7 +3038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Nucleus
   color: {r: 0, g: 0.37446833, b: 1, a: 1}
-  hideNucleus: 1
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3100,7 +3100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3119,7 +3119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: '''Somes'
   color: {r: 1, g: 0, b: 0.2797885, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3138,7 +3138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureName: Mitochondria
   color: {r: 0.71340466, g: 0, b: 1, a: 1}
-  hideNucleus: 0
+  showNucleus: 0
   data:
     structureName: 
     infoImage: {fileID: 0}
