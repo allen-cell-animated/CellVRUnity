@@ -1,13 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class SliderHandle3D : Slider
+public class SliderHandle3D : MonoBehaviour
 {
     public Color highlightColor;
-    public GameObject handle3D;
 
     Color defaultColor;
 
@@ -18,33 +15,19 @@ public class SliderHandle3D : Slider
         {
             if (_material == null)
             {
-                _material = handle3D.GetComponent<MeshRenderer>().material;
+                _material = GetComponent<MeshRenderer>().material;
             }
             return _material;
         }
     }
 
-    protected override void Start ()
+    void Start ()
     {
-        base.Start();
-        defaultColor = material.GetColor( "_Color" );
+        defaultColor = material.GetColor("_Color");
     }
 
-    public override void OnDrag (PointerEventData _data)
+    public void SetHighlight (bool _highlight)
     {
-        base.OnDrag( _data );
-        material.SetColor( "_Color", highlightColor );
-    }
-
-    public override void OnSelect (BaseEventData _data) 
-    { 
-        base.OnSelect( _data );
-        material.SetColor( "_Color", highlightColor );
-    }
-
-    public override void OnDeselect (BaseEventData _data)
-    {
-        base.OnDeselect( _data );
-        material.SetColor( "_Color", defaultColor );
+        material.SetColor("_Color", _highlight ? highlightColor : defaultColor);
     }
 }
