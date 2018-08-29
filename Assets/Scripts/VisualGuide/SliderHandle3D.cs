@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler
+public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public Color highlightColor;
     public GameObject handle3D;
@@ -30,15 +30,18 @@ public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
     public void OnPointerEnter (PointerEventData _data)
     {
-        Debug.Log( "ENTER" );
         material.SetColor( "_Color", highlightColor );
     }
 
-    public void OnPointerDown (PointerEventData _data) { }
+    public void OnPointerDown (PointerEventData _data) 
+    { 
+        material.SetColor( "_Color", highlightColor );
+    }
+
+    public void OnPointerExit (PointerEventData _data) { }
 
     public void OnPointerUp (PointerEventData _data)
     {
-        Debug.Log( "exit" );
         material.SetColor( "_Color", defaultColor );
     }
 }
