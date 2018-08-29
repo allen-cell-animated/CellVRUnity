@@ -15,6 +15,7 @@ public class VisualGuideManager : MonoBehaviour
     bool rightTriggerDown;
     bool leftTriggerDown;
     bool translating;
+    bool wasTranslating;
     bool inIsolationMode;
 
     Vector3 startScale;
@@ -117,12 +118,13 @@ public class VisualGuideManager : MonoBehaviour
     void OnRightControllerTriggerDown (object sender, ControllerInteractionEventArgs e)
     {
         rightTriggerDown = true;
+        wasTranslating = false;
     }
 
     void OnRightControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
     {
         rightTriggerDown = false;
-        if (!translating)
+        if (!wasTranslating)
         {
             IsolateSelectedStructure();
         }
@@ -144,7 +146,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             if (!translating)
             {
-                translating = true;
+                translating = wasTranslating = true;
                 ToggleLaser( false );
                 StartScaling();
                 StartRotating();
@@ -181,12 +183,9 @@ public class VisualGuideManager : MonoBehaviour
 
     void ToggleLaser (bool _active)
     {
-        Debug.Log( "toggle laser " + _active );
         laser.enabled = false;
-        laser.pointerRenderer.enabled = false;
-        laser.Toggle( _active );
+        laser.pointerRenderer.enabled = _active;
         laser.enabled = true;
-        laser.pointerRenderer.enabled = true;
         if (!_active)
         {
             HideLabel();
