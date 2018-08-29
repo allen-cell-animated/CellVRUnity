@@ -182,7 +182,11 @@ public class VisualGuideManager : MonoBehaviour
     void ToggleLaser (bool _active)
     {
         Debug.Log( "toggle laser " + _active );
+        laser.enabled = false;
+        laser.pointerRenderer.enabled = false;
         laser.Toggle( _active );
+        laser.enabled = true;
+        laser.pointerRenderer.enabled = true;
         if (!_active)
         {
             HideLabel();
