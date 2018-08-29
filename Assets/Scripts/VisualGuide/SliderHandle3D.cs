@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class SliderHandle3D : Slider
 {
     public Color highlightColor;
     public GameObject handle3D;
@@ -23,25 +24,27 @@ public class SliderHandle3D : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
     }
 
-    void Start ()
+    protected override void Start ()
     {
+        base.Start();
         defaultColor = material.GetColor( "_Color" );
     }
 
-    public void OnPointerEnter (PointerEventData _data)
+    public override void OnDrag (PointerEventData _data)
     {
+        base.OnDrag( _data );
         material.SetColor( "_Color", highlightColor );
     }
 
-    public void OnPointerDown (PointerEventData _data) 
+    public override void OnSelect (BaseEventData _data) 
     { 
+        base.OnSelect( _data );
         material.SetColor( "_Color", highlightColor );
     }
 
-    public void OnPointerExit (PointerEventData _data) { }
-
-    public void OnPointerUp (PointerEventData _data)
+    public override void OnDeselect (BaseEventData _data)
     {
+        base.OnDeselect( _data );
         material.SetColor( "_Color", defaultColor );
     }
 }
