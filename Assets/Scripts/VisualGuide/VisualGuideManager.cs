@@ -11,6 +11,7 @@ public class VisualGuideManager : MonoBehaviour
     public CellStructure selectedStructure;
     public bool canScale = true;
     public bool canRotate = true;
+    public GameObject integratedNucleus;
 
     bool rightTriggerDown;
     bool leftTriggerDown;
@@ -209,6 +210,11 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
+    public void HideIntegratedNucleus ()
+    {
+        integratedNucleus.SetActive( false );
+    }
+
     public void OnHoverStructureExit ()
     {
         selectedStructure = null;
@@ -216,6 +222,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             structure.GrayOut( false );
         }
+        integratedNucleus.SetActive( true );
         HideLabel();
     }
 

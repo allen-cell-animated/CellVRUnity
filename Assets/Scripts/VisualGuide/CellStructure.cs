@@ -7,6 +7,7 @@ public class CellStructure : MonoBehaviour
 {
     public string structureName;
     public Color color;
+    public bool hideNucleus;
     [HideInInspector] public StructureData data;
 
     VRTK_DestinationMarker pointer
@@ -57,6 +58,10 @@ public class CellStructure : MonoBehaviour
         if (colliders.Find( c => c == e.raycastHit.collider ) != null)
         {
             VisualGuideManager.Instance.OnHoverStructureEnter( this );
+            if (hideNucleus)
+            {
+                VisualGuideManager.Instance.HideIntegratedNucleus();
+            }
         }
     }
 
