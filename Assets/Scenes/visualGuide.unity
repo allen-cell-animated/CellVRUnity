@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17601937, g: 0.22028202, b: 0.30261013, a: 1}
+  m_IndirectSpecularColor: {r: 0.17601947, g: 0.22028212, b: 0.3026106, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -205,7 +205,6 @@ GameObject:
   m_Component:
   - component: {fileID: 15438957}
   - component: {fileID: 15438956}
-  - component: {fileID: 15438955}
   - component: {fileID: 15438954}
   m_Layer: 8
   m_Name: Floor
@@ -249,20 +248,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &15438955
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 15438953}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &15438956
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1439,7 +1424,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 333294445}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.00000001, z: 0}
+  m_LocalPosition: {x: 0, y: 0.000001, z: 0}
   m_LocalScale: {x: 0.000260501, y: 0.00026050114, z: 0.00026050114}
   m_Children: []
   m_Father: {fileID: 15438957}
@@ -3870,7 +3855,7 @@ MonoBehaviour:
     smoothsRotation: 0
     maxAllowedPerFrameAngleDifference: 1.5
   validCollisionColor: {r: 0.29019606, g: 0.80076736, b: 1, a: 1}
-  invalidCollisionColor: {r: 0.33361515, g: 0.5208757, b: 0.5943396, a: 0.49803922}
+  invalidCollisionColor: {r: 0.47726062, g: 0.5746554, b: 0.6132076, a: 0.24313726}
   tracerVisibility: 0
   cursorVisibility: 0
   maximumLength: 150
