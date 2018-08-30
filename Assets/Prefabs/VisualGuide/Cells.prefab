@@ -460,7 +460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1561717105410582
 GameObject:
   m_ObjectHideFlags: 1
@@ -599,7 +599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1805655974223414
 GameObject:
   m_ObjectHideFlags: 1
@@ -2961,7 +2961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Cytoskeleton
-  color: {r: 1, g: 0.8741454, b: 0, a: 1}
+  color: {r: 1, g: 0.6784314, b: 0.19999996, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3017,8 +3017,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: Endomembrane System
-  color: {r: 0, g: 1, b: 0.6661012, a: 1}
+  structureName: Molecule Generation
+  color: {r: 0.07058824, g: 0.49411765, b: 0.8862745, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3080,7 +3080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nucleus
-  color: {r: 0, g: 0.37446833, b: 1, a: 1}
+  color: {r: 0, g: 0.85882354, b: 0.77254903, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3117,8 +3117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: '''Somes'
-  color: {r: 1, g: 0, b: 0.2797885, a: 1}
+  structureName: Waste Disposal
+  color: {r: 0.6901961, g: 0.5176471, b: 0.34509805, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3136,8 +3136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  structureName: Energy Production
+  color: {r: 0.63529414, g: 0.22352941, b: 0.2627451, a: 1}
   showNucleus: 0
   data:
     structureName: 

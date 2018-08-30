@@ -244,7 +244,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 639d4d82f2af24254abd705686844c14, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2ce8fb1feb8e4481694504ec770eed16, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -309,7 +309,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 3ba9f982f868e438fbcd5f5ca9379445, type: 3}
+    m_Font: {fileID: 12800000, guid: 81e460162d0294ab39c5d868d19b573e, type: 3}
     m_FontSize: 100
     m_FontStyle: 0
     m_BestFit: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Endoplasmic Reticulum
+  m_Text: Energy Production
 --- !u!114 &114506116260031932
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -369,7 +369,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 3324e71d41fde4a72961d1c7e2d22fb0, type: 3}
+    m_Font: {fileID: 12800000, guid: 0da009173ef0a46a4a464788ba2fd6cb, type: 3}
     m_FontSize: 100
     m_FontStyle: 0
     m_BestFit: 0
@@ -380,8 +380,9 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: Subcompartment of the nucleus where machinery to make molecules is made.
+    m_LineSpacing: 0.8
+  m_Text: Mitochondria  are descended from bacteria and break food down into cellular
+    energy molecules.
 --- !u!114 &114719636810292246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -519,8 +520,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 6, y: -51.7}
-  m_SizeDelta: {x: 1300, y: 50}
+  m_AnchoredPosition: {x: 63.3, y: -17.300007}
+  m_SizeDelta: {x: 771, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224205638197555212
 RectTransform:
@@ -530,14 +531,14 @@ RectTransform:
   m_GameObject: {fileID: 1072880044107950}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -2}
-  m_LocalScale: {x: 0.43832105, y: 0.43832102, z: 0.43832102}
+  m_LocalScale: {x: 0.63976204, y: 0.6397616, z: 0.6397616}
   m_Children: []
   m_Father: {fileID: 224846971478673308}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 6, y: -13.8}
+  m_AnchoredPosition: {x: 6, y: -17.3}
   m_SizeDelta: {x: 175.5, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224419981925066086
@@ -575,7 +576,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 176, y: 154}
+  m_SizeDelta: {x: 223.8, y: 152.3}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224846971478673308
 RectTransform:
@@ -598,7 +599,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 1.4}
-  m_SizeDelta: {x: 88.5, y: 77.1}
+  m_SizeDelta: {x: 112.2, y: 76.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224856454392850462
 RectTransform:
