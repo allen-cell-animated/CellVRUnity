@@ -13,27 +13,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData:
   - structureName: Cytoskeleton
-    infoImage: {fileID: 21300000, guid: 958ab988a9e7140b1b48d846b1d1fcf8, type: 3}
+    infoImage: {fileID: 21300000, guid: a8107907cef4b429b822809d39e94133, type: 3}
     description: The cytoskeleton is made of fiber networks that maintain cell shape
       and morph it in order to move and divide.
     nameWidth: 80
   - structureName: Nucleus
-    infoImage: {fileID: 21300000, guid: 346f6fe1522d74919ac2717466835ce6, type: 3}
+    infoImage: {fileID: 21300000, guid: 1beb90945af2540feaa2f471bc8b8f62, type: 3}
     description: The nucleus is a large central compartment that separates DNA from
       the rest of the cell.
     nameWidth: 54
   - structureName: Energy Production
-    infoImage: {fileID: 21300000, guid: 639d4d82f2af24254abd705686844c14, type: 3}
-    description: Mitochondria  are descended from bacteria and break food down into
+    infoImage: {fileID: 21300000, guid: 9c5c176ee43304d6fa5a97048324d896, type: 3}
+    description: Mitochondria  are descended from bacteria and break down food into
       cellular energy molecules.
     nameWidth: 108
   - structureName: Molecule Generation
-    infoImage: {fileID: 21300000, guid: 07e6dd93ff5ca4d1889522b287b3ac5a, type: 3}
+    infoImage: {fileID: 21300000, guid: a32bf676db62f460681806539084b870, type: 3}
     description: The Endoplasmic Reticulum (ER) and Golgi Apparatus produce and distribute
       new molecules.
     nameWidth: 118
-  - structureName: Waste Disposal
-    infoImage: {fileID: 21300000, guid: fdf986690a18a45698acaf9d9ccad1a2, type: 3}
+  - structureName: Waste Removal
+    infoImage: {fileID: 21300000, guid: 5060b1ebed672469ab9ec0e4f7b06977, type: 3}
     description: Lysosomes and Peroxisomes isolate and neutralize debris and toxins
       from outside the cell.
     nameWidth: 90
