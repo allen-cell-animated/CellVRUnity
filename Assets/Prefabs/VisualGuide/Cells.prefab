@@ -2942,7 +2942,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -2961,7 +2962,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Cytoskeleton
-  color: {r: 1, g: 0.6784314, b: 0.19999996, a: 1}
+  color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
+  illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -2980,7 +2982,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -2999,7 +3002,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3018,7 +3022,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Molecule Generation
-  color: {r: 0.07058824, g: 0.49411765, b: 0.8862745, a: 1}
+  color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
+  illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3037,7 +3042,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3080,7 +3086,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Nucleus
-  color: {r: 0, g: 0.85882354, b: 0.77254903, a: 1}
+  color: {r: 0.57254905, g: 0.72156864, b: 1, a: 1}
+  illumColor: {r: 0.5019608, g: 0.34117645, b: 0.7607843, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3099,7 +3106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Mitochondria
-  color: {r: 0.71340466, g: 0, b: 1, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3118,7 +3126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Waste Removal
-  color: {r: 0.6901961, g: 0.5176471, b: 0.34509805, a: 1}
+  color: {r: 1, g: 0.26666665, b: 0, a: 1}
+  illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
   showNucleus: 0
   data:
     structureName: 
@@ -3137,7 +3146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   structureName: Energy Production
-  color: {r: 0.63529414, g: 0.22352941, b: 0.2627451, a: 1}
+  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
   showNucleus: 0
   data:
     structureName: 

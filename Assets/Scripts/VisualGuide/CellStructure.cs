@@ -7,6 +7,7 @@ public class CellStructure : MonoBehaviour
 {
     public string structureName;
     public Color color;
+    public Color illumColor;
     public bool showNucleus;
     [HideInInspector] public StructureData data;
 
@@ -109,10 +110,12 @@ public class CellStructure : MonoBehaviour
             if (!_gray)
             {
                 material.SetColor( "_Color", color );
+                material.SetColor( "_EmissionColor", illumColor );
             }
             else
             {
                 material.SetColor( "_Color", Color.white );
+                material.SetColor( "_EmissionColor", Color.black );
             }
         }
     }
