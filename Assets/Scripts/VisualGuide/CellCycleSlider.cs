@@ -24,9 +24,9 @@ public class CellCycleSlider : MonoBehaviour
 
     void DiscretizeSliderPosition (float _sliderValue)
     {
-        for (int i = 0; i < bins.Length - 2; i++)
+        for (int i = 0; i < bins.Length - 1; i++)
         {
-            if (_sliderValue > bins[i] && _sliderValue <= bins[i+1])
+            if (_sliderValue >= bins[i] && _sliderValue <= bins[i+1])
             {
                 slider.value = (bins[i] + bins[i+1]) / 2f;
                 DisplayCell( i );
