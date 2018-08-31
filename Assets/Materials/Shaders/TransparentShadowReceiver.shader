@@ -60,7 +60,7 @@ CGPROGRAM
             return o; 
         } 
  
-        void surf (Input IN, inout SurfaceOutput o) {
+        //void surf (Input IN, inout SurfaceOutput o) {
             // Comment the next 4 following lines to get a standard bumped rendering
             // [Without Parallax usage, which can cause strange result on the back side of the plane]
             /*half h = tex2D (_ParallaxMap, IN.uv_BumpMap).w;
@@ -68,14 +68,14 @@ CGPROGRAM
             IN.uv_MainTex += offset;
             IN.uv_BumpMap += offset;*/
  
-            fixed4 tex = tex2D(_MainTex, IN.uv_MainTex);
-            o.Albedo = tex.rgb * _Color.rgb;
-            o.Gloss = tex.a;
-            o.Alpha = tex.a * _Color.a;
+            //fixed4 tex = tex2D(_MainTex, IN.uv_MainTex);
+            //o.Albedo = tex.rgb * _Color.rgb;
+            //o.Gloss = tex.a;
+            //o.Alpha = tex.a * _Color.a;
             //clip(o.Alpha - _Cutoff);
-            o.Specular = 0;//_Shininess;
+            //o.Specular = _Shininess;
             //o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
-        }
+        //}
 ENDCG
  
  
