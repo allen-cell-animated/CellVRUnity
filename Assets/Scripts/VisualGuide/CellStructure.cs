@@ -8,7 +8,7 @@ public class CellStructure : MonoBehaviour
     public string structureName;
     public Color color;
     public Color illumColor;
-    public bool showNucleus;
+    public GameObject nucleusToDisplayInIsolation;
     [HideInInspector] public StructureData data;
 
     VRTK_DestinationMarker pointer

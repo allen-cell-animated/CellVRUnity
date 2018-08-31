@@ -11,7 +11,6 @@ public class VisualGuideManager : MonoBehaviour
     public CellStructure selectedStructure;
     public bool canScale = true;
     public bool canRotate = true;
-    public GameObject integratedNucleus;
 
     bool rightTriggerDown;
     bool leftTriggerDown;
@@ -246,10 +245,7 @@ public class VisualGuideManager : MonoBehaviour
                 }
             }
             ShowInfoPanelForSelectedStructure();
-            if (selectedStructure.showNucleus)
-            {
-                SetIntegratedNucleus( true );
-            }
+            SetNucleus( true );
         }
     }
 
@@ -269,13 +265,16 @@ public class VisualGuideManager : MonoBehaviour
             }
             infoPanel.gameObject.SetActive( false );
             inIsolationMode = false;
-            SetIntegratedNucleus( false );
+            SetNucleus( false );
         }
     }
 
-    public void SetIntegratedNucleus (bool _show)
+    public void SetNucleus (bool _show)
     {
-        integratedNucleus.SetActive( _show );
+        if (selectedStructure.nucleusToDisplayInIsolation != null)
+        {
+            selectedStructure.nucleusToDisplayInIsolation.SetActive( _show );
+        }
     }
 
     // TRANSLATING --------------------------------------------------------------------------------------------------
