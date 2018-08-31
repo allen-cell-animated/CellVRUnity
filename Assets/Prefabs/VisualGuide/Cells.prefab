@@ -2964,7 +2964,7 @@ MonoBehaviour:
   structureName: Cytoskeleton
   color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
   illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
-  showNucleus: 0
+  showNucleus: 1
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3024,7 +3024,7 @@ MonoBehaviour:
   structureName: Molecule Generation
   color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
   illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
-  showNucleus: 0
+  showNucleus: 1
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3128,7 +3128,7 @@ MonoBehaviour:
   structureName: Waste Removal
   color: {r: 1, g: 0.26666665, b: 0, a: 1}
   illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
-  showNucleus: 0
+  showNucleus: 1
   data:
     structureName: 
     infoImage: {fileID: 0}
@@ -3148,7 +3148,7 @@ MonoBehaviour:
   structureName: Energy Production
   color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
   illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
-  showNucleus: 0
+  showNucleus: 1
   data:
     structureName: 
     infoImage: {fileID: 0}
