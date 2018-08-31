@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-    m_HighlightedColor: {r: 0.29019606, g: 0.80076736, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.3647059, g: 0.43137258, b: 0.854902, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -244,7 +244,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 2ce8fb1feb8e4481694504ec770eed16, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c5c176ee43304d6fa5a97048324d896, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
