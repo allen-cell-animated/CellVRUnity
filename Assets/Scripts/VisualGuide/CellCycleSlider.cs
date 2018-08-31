@@ -8,12 +8,13 @@ public class CellCycleSlider : MonoBehaviour
 	public Slider slider;
     public GameObject[] cells;
 
-    float[] bins = {0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f};
+    float[] bins = {0, 0.17f, 0.33f, 0.5f, 0.67f, 0.83f, 1f};
     GameObject currentCell;
 
     void Start ()
     {
         currentCell = cells[0];
+        slider.value = (bins[0] + bins[1]) / 2f;
     }
 
 	public void SetValue (float _sliderValue)
@@ -23,16 +24,15 @@ public class CellCycleSlider : MonoBehaviour
 
     void DiscretizeSliderPosition (float _sliderValue)
     {
-        for (int i = 0; i < bins.Length - 1; i++)
+        for (int i = 0; i < bins.Length - 2; i++)
         {
             if (_sliderValue > bins[i] && _sliderValue <= bins[i+1])
             {
                 slider.value = (bins[i] + bins[i+1]) / 2f;
-                DisplayCell( i + 1 );
+                DisplayCell( i );
                 return;
             }
         }
-        DisplayCell( 0 );
     }
 
     void DisplayCell (int i)
