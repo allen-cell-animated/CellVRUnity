@@ -69,9 +69,9 @@ CGPROGRAM
             IN.uv_BumpMap += offset;*/
  
             fixed4 tex = tex2D(_MainTex, IN.uv_MainTex);
-            o.Albedo = 0;//tex.rgb * _Color.rgb;
-            o.Gloss = 0;//tex.a;
-            o.Alpha = 0;//tex.a * _Color.a;
+            o.Albedo = tex.rgb * _Color.rgb;
+            o.Gloss = tex.a;
+            o.Alpha = tex.a * _Color.a;
             //clip(o.Alpha - _Cutoff);
             o.Specular = 0;//_Shininess;
             //o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
