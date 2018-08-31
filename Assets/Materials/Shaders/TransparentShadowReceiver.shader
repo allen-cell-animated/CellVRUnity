@@ -13,7 +13,7 @@ Properties
  
     // Bump stuffs
     //_Parallax ("Height", Range (0.005, 0.08)) = 0.02
-    //_BumpMap ("Normalmap", 2D) = "bump" {}
+    _BumpMap ("Normalmap", 2D) = "bump" {}
     //_ParallaxMap ("Heightmap (A)", 2D) = "black" {}
  
     // Shadow Stuff
@@ -30,56 +30,7 @@ SubShader
     }
  
     LOD 300
- 
- 
-// Main Surface Pass (Handles Spot/Point lights)
-CGPROGRAM
-        #pragma surface surf BlinnPhong alpha vertex:vert fullforwardshadows approxview
- 
-        half _Shininess;
- 
-        sampler2D _MainTex;
-        float4 _Color;
-        //sampler2D _BumpMap;
-        //sampler2D _ParallaxMap;
-        float _Parallax;
- 
-        struct v2f { 
-            V2F_SHADOW_CASTER; 
-            float2 uv : TEXCOORD1;
-        };
- 
-        struct Input {
-            float2 uv_MainTex;
-            float2 uv_BumpMap;
-            //float3 viewDir;
-        };
- 
-        v2f vert (inout appdata_full v) { 
-            v2f o; 
-            return o; 
-        } 
- 
-        void surf (Input IN, inout SurfaceOutput o) {
-            // Comment the next 4 following lines to get a standard bumped rendering
-            // [Without Parallax usage, which can cause strange result on the back side of the plane]
-            /*half h = tex2D (_ParallaxMap, IN.uv_BumpMap).w;
-            float2 offset = ParallaxOffset (h, _Parallax, IN.viewDir);
-            IN.uv_MainTex += offset;
-            IN.uv_BumpMap += offset;*/
- 
-            fixed4 tex = tex2D(_MainTex, IN.uv_MainTex);
-            o.Albedo = tex.rgb * _Color.rgb;
-            o.Gloss = tex.a;
-            o.Alpha = tex.a * _Color.a;
-            //clip(o.Alpha - _Cutoff);
-            o.Specular = _Shininess;
-            //o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
-        }
-ENDCG
- 
- 
- 
+
         // Shadow Pass : Adding the shadows (from Directional Light)
         // by blending the light attenuation
         Pass {
