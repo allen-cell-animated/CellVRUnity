@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Floor
-  m_Shader: {fileID: 4800000, guid: 91ba869410e5349b8ba7cf03f4822ba6, type: 3}
+  m_Shader: {fileID: 4800000, guid: d176263621d5543a9847510acc450942, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

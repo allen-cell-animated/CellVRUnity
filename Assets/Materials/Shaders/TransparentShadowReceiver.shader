@@ -60,7 +60,7 @@ CGPROGRAM
             return o; 
         } 
  
-        //void surf (Input IN, inout SurfaceOutput o) {
+        void surf (Input IN, inout SurfaceOutput o) {
             // Comment the next 4 following lines to get a standard bumped rendering
             // [Without Parallax usage, which can cause strange result on the back side of the plane]
             /*half h = tex2D (_ParallaxMap, IN.uv_BumpMap).w;
@@ -75,7 +75,7 @@ CGPROGRAM
             //clip(o.Alpha - _Cutoff);
             //o.Specular = _Shininess;
             //o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
-        //}
+        }
 ENDCG
  
  
