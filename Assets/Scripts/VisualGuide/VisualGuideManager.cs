@@ -47,7 +47,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             if (_structures == null)
             {
-                _structures = new List<CellStructure>( GetComponentsInChildren<CellStructure>() );
+                _structures = new List<CellStructure>( GetComponentsInChildren<CellStructure>( true ) );
             }
             return _structures;
         }
@@ -245,7 +245,7 @@ public class VisualGuideManager : MonoBehaviour
                 }
             }
             ShowInfoPanelForSelectedStructure();
-            SetNucleus( true );
+            SetNucleus( selectedStructure, true );
         }
     }
 
@@ -265,15 +265,24 @@ public class VisualGuideManager : MonoBehaviour
             }
             infoPanel.gameObject.SetActive( false );
             inIsolationMode = false;
-            SetNucleus( false );
+            SetNucleus( selectedStructure, false);
         }
     }
 
-    public void SetNucleus (bool _show)
+    GameObject lastNucleus;
+    public void SetNucleus (CellStructure _structure, bool _show)
     {
-        if (selectedStructure.nucleusToDisplayInIsolation != null)
+        if (_show)
         {
-            selectedStructure.nucleusToDisplayInIsolation.SetActive( _show );
+            if (_structure.nucleusToDisplayInIsolation != null)
+            {
+                lastNucleus = _structure.nucleusToDisplayInIsolation;
+                lastNucleus.SetActive(_show);
+            }
+        }
+        else
+        {
+            lastNucleus.SetActive(_show);
         }
     }
 
