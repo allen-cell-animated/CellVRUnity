@@ -13,7 +13,7 @@ Properties
  
     // Bump stuffs
     //_Parallax ("Height", Range (0.005, 0.08)) = 0.02
-    _BumpMap ("Normalmap", 2D) = "bump" {}
+    //_BumpMap ("Normalmap", 2D) = "bump" {}
     //_ParallaxMap ("Heightmap (A)", 2D) = "black" {}
  
     // Shadow Stuff
@@ -40,7 +40,7 @@ CGPROGRAM
  
         sampler2D _MainTex;
         float4 _Color;
-        sampler2D _BumpMap;
+        // _BumpMap;
         //sampler2D _ParallaxMap;
         float _Parallax;
  
@@ -51,7 +51,7 @@ CGPROGRAM
  
         struct Input {
             float2 uv_MainTex;
-            float2 uv_BumpMap;
+            //float2 uv_BumpMap;
             //float3 viewDir;
         };
  
@@ -74,7 +74,7 @@ CGPROGRAM
             o.Alpha = 0;//tex.a * _Color.a;
             //clip(o.Alpha - _Cutoff);
             o.Specular = 0;//_Shininess;
-            o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
+            //o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
         }
 ENDCG
  
