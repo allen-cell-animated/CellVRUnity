@@ -86,6 +86,7 @@ public class Throwable : MonoBehaviour
     {
         if (other.tag == "GameController")
         {
+            Debug.Log("Touched! " + name);
             touchingController = other.gameObject.GetComponentInParent<VRTK_ControllerEvents>();
             SetHighlight( true );
         }
@@ -107,6 +108,7 @@ public class Throwable : MonoBehaviour
 
     void OnTouchingControllerDown ()
     {
+        Debug.Log("GRABBED!!!!!! " + name);
         body.isKinematic = true;
         transform.SetParent( touchingController.transform );
     }
