@@ -5,7 +5,7 @@ using VRTK;
 
 public class Throwable : MonoBehaviour 
 {
-    public Quaternion rotationOffsetAtTarget;
+    public Vector3 rotationOffsetAtTarget;
 
     VRTK_ControllerEvents touchingController;
 
@@ -25,7 +25,7 @@ public class Throwable : MonoBehaviour
     Vector3 lastPosition;
     Vector3 velocity;
 
-    void FixedUpdate ()
+    void Update ()
     {
         velocity = transform.position - lastPosition;
         lastPosition = transform.position;
@@ -124,17 +124,18 @@ public class Throwable : MonoBehaviour
     {
         transform.SetParent( MitosisGameManager.Instance.transform );
         body.isKinematic = false;
-        body.AddForce( 100f * velocity );
+        body.AddForce( 5000f * velocity );
     }
 
     void OnCollisionEnter (Collision collision)
     {
         if (collision.gameObject.tag == "Target")
         {
-            if (collision.gameObject.name.Contains( name ))
+            if (collision.gameObject.name.Contains( name.Substring( 0, name.Length - 7 ) ))
             {
+                body.isKinematic = true;
                 transform.position = collision.transform.position;
-                transform.rotation = collision.transform.rotation * rotationOffsetAtTarget;
+                transform.rotation = collision.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
             }
             else
             {

@@ -301,4 +301,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a86cc32f9c2749db9d55e76754c1d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationOffsetAtTarget: {x: 0, y: 0, z: 0, w: 0}
+  rotationOffsetAtTarget: {x: -10, y: 95, z: 45}

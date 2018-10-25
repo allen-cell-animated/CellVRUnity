@@ -46,6 +46,8 @@ public class MitosisGameManager : MonoBehaviour
 
     IEnumerator SpawnThrowables ()
     {
+        yield return new WaitForSeconds( 3f );
+
         GameObject prefab;
         foreach (string t in throwableNames)
         {
@@ -74,7 +76,7 @@ public class MitosisGameManager : MonoBehaviour
         }
 
         GameObject target;
-        Vector3 targetPosition = 2f * Vector3.forward;
+        Vector3 targetPosition = 1.5f * Vector3.forward;
         for (int i = 0; i < 5; i++)
         {
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
