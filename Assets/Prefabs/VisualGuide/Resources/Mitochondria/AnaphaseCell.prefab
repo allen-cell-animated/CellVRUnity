@@ -56,7 +56,6 @@ GameObject:
   - component: {fileID: 4447168771401870}
   - component: {fileID: 114129721151546554}
   - component: {fileID: 54645958428116080}
-  - component: {fileID: 114354345430263638}
   m_Layer: 0
   m_Name: AnaphaseCell
   m_TagString: Untagged
@@ -303,18 +302,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationOffsetAtTarget: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114354345430263638
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1810416253179532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 517ff69079c604861874ef00639db3af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointerLeft: {fileID: 0}
-  pointerRight: {fileID: 0}
-  rightTriggerDown: 0
-  leftTriggerDown: 0

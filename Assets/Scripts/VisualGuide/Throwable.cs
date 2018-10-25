@@ -22,6 +22,15 @@ public class Throwable : MonoBehaviour
         }
     }
 
+    Vector3 lastPosition;
+    Vector3 velocity;
+
+    void FixedUpdate ()
+    {
+        velocity = transform.position - lastPosition;
+        lastPosition = transform.position;
+    }
+
     void OnEnable ()
     {
         if (ControllerInput.Instance.pointerLeft != null)
@@ -86,7 +95,6 @@ public class Throwable : MonoBehaviour
     {
         if (other.tag == "GameController")
         {
-            Debug.Log("Touched! " + name);
             touchingController = other.gameObject.GetComponentInParent<VRTK_ControllerEvents>();
             SetHighlight( true );
         }
@@ -108,7 +116,6 @@ public class Throwable : MonoBehaviour
 
     void OnTouchingControllerDown ()
     {
-        Debug.Log("GRABBED!!!!!! " + name);
         body.isKinematic = true;
         transform.SetParent( touchingController.transform );
     }
@@ -117,7 +124,7 @@ public class Throwable : MonoBehaviour
     {
         transform.SetParent( MitosisGameManager.Instance.transform );
         body.isKinematic = false;
-        body.AddForce( 50f * body.velocity );
+        body.AddForce( 100f * velocity );
     }
 
     void OnCollisionEnter (Collision collision)

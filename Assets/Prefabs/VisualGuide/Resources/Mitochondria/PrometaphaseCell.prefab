@@ -56,7 +56,6 @@ GameObject:
   - component: {fileID: 4024432358890790}
   - component: {fileID: 114300715313196568}
   - component: {fileID: 54640506557521342}
-  - component: {fileID: 114614200521733198}
   m_Layer: 0
   m_Name: PrometaphaseCell
   m_TagString: Untagged
@@ -303,18 +302,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationOffsetAtTarget: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114614200521733198
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1513218464410342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 517ff69079c604861874ef00639db3af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointerLeft: {fileID: 0}
-  pointerRight: {fileID: 0}
-  rightTriggerDown: 0
-  leftTriggerDown: 0
