@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4281394303562920}
   - component: {fileID: 114566352064189500}
   - component: {fileID: 54930485163512048}
+  - component: {fileID: 114374152243524216}
   m_Layer: 0
   m_Name: ProphaseCell
   m_TagString: Untagged
@@ -290,6 +291,21 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: a4d95bfd32fec49c2b875521ad877774, type: 3}
+--- !u!114 &114374152243524216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745456451640766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517ff69079c604861874ef00639db3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointerLeft: {fileID: 0}
+  pointerRight: {fileID: 0}
+  rightTriggerDown: 0
+  leftTriggerDown: 0
 --- !u!114 &114566352064189500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -301,3 +317,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a86cc32f9c2749db9d55e76754c1d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationOffsetAtTarget: {x: 0, y: 0, z: 0, w: 0}

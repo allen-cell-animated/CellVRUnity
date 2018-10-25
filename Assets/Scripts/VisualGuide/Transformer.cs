@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-[RequireComponent( typeof( ControllerInput ) )]
 public class Transformer : MonoBehaviour 
 {
     public bool canScale = true;
@@ -22,19 +21,6 @@ public class Transformer : MonoBehaviour
     Vector3 maxScale = new Vector3( 3f, 3f, 3f );
     Vector3[] linePoints = new Vector3[2];
 
-    ControllerInput _controllers;
-    ControllerInput controllers
-    {
-        get
-        {
-            if (_controllers == null)
-            {
-                _controllers = GetComponent<ControllerInput>();
-            }
-            return _controllers;
-        }
-    }
-
     void Update ()
     {
         UpdateTransforming();
@@ -44,12 +30,12 @@ public class Transformer : MonoBehaviour
 
     void UpdateTransforming ()
     {
-        if (controllers.rightTriggerDown && controllers.leftTriggerDown)
+        if (ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.leftTriggerDown)
         {
             if (!transforming)
             {
                 transforming = wasTransforming = true;
-                controllers.ToggleLaser( false );
+                ControllerInput.Instance.ToggleLaser( false );
                 StartScaling();
                 StartRotating();
             }
@@ -63,7 +49,7 @@ public class Transformer : MonoBehaviour
         else if (transforming)
         {
             ToggleLine( false );
-            controllers.ToggleLaser( true );
+            ControllerInput.Instance.ToggleLaser( true );
             transforming = false;
         }
     }
@@ -73,7 +59,7 @@ public class Transformer : MonoBehaviour
         if (canScale)
         {
             startScale = transform.localScale;
-            startControllerDistance = Vector3.Distance( controllers.pointerRight.transform.position, controllers.pointerLeft.transform.position );
+            startControllerDistance = Vector3.Distance( ControllerInput.Instance.pointerRight.transform.position, ControllerInput.Instance.pointerLeft.transform.position );
         }
     }
 
@@ -81,7 +67,7 @@ public class Transformer : MonoBehaviour
     {
         if (canScale)
         {
-            float scale = Vector3.Distance( controllers.pointerRight.transform.position, controllers.pointerLeft.transform.position ) / startControllerDistance;
+            float scale = Vector3.Distance( ControllerInput.Instance.pointerRight.transform.position, ControllerInput.Instance.pointerLeft.transform.position ) / startControllerDistance;
 
             transform.localScale = ClampScale( scale * startScale );
         }
@@ -108,7 +94,7 @@ public class Transformer : MonoBehaviour
         if (canRotate)
         {
             startRotation = transform.localRotation;
-            startControllerVector = controllers.pointerRight.transform.position - controllers.pointerLeft.transform.position;
+            startControllerVector = ControllerInput.Instance.pointerRight.transform.position - ControllerInput.Instance.pointerLeft.transform.position;
             startControllerVector.y = 0;
             startPositiveVector = Vector3.Cross( startControllerVector, Vector3.up );
         }
@@ -118,7 +104,7 @@ public class Transformer : MonoBehaviour
     {
         if (canRotate)
         {
-            Vector3 controllerVector = controllers.pointerRight.transform.position - controllers.pointerLeft.transform.position;
+            Vector3 controllerVector = ControllerInput.Instance.pointerRight.transform.position - ControllerInput.Instance.pointerLeft.transform.position;
             controllerVector.y = 0;
             float direction = GetArcCosineDegrees( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= 90f ? 1f : -1f;
             float dAngle = direction * GetArcCosineDegrees( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
@@ -148,8 +134,8 @@ public class Transformer : MonoBehaviour
             {
                 scaleLine.gameObject.SetActive( true );
             }
-            linePoints[0] = controllers.pointerRight.transform.position;
-            linePoints[1] = controllers.pointerLeft.transform.position;
+            linePoints[0] = ControllerInput.Instance.pointerRight.transform.position;
+            linePoints[1] = ControllerInput.Instance.pointerLeft.transform.position;
             scaleLine.SetPositions( linePoints );
         }
         else

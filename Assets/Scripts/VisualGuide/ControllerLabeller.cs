@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRTK;
 
-[RequireComponent( typeof( ControllerInput ) )]
 public class ControllerLabeller : MonoBehaviour 
 {
     public GameObject scaleButtonLabelRight;
@@ -12,19 +10,6 @@ public class ControllerLabeller : MonoBehaviour
     public GameObject scaleButtonLabelLeft;
     public GameObject labelLineLeft;
 
-    ControllerInput _controllers;
-    ControllerInput controllers
-    {
-        get
-        {
-            if (_controllers == null)
-            {
-                _controllers = GetComponent<ControllerInput>();
-            }
-            return _controllers;
-        }
-    }
-
     void Update ()
     {
         UpdateButtonLabels();
@@ -32,7 +17,7 @@ public class ControllerLabeller : MonoBehaviour
 
     void UpdateButtonLabels ()
     {
-        if (!controllers.rightTriggerDown && !controllers.leftTriggerDown)
+        if (!ControllerInput.Instance.rightTriggerDown && !ControllerInput.Instance.leftTriggerDown)
         {
             ShowObject( scaleButtonLabelRight, false );
             ShowObject( selectButtonLabelRight, true );
@@ -40,7 +25,7 @@ public class ControllerLabeller : MonoBehaviour
             ShowObject( scaleButtonLabelLeft, true );
             ShowObject( labelLineLeft, true );
         }
-        else if (controllers.rightTriggerDown && !controllers.leftTriggerDown)
+        else if (ControllerInput.Instance.rightTriggerDown && !ControllerInput.Instance.leftTriggerDown)
         {
             ShowObject( scaleButtonLabelRight, false );
             ShowObject( selectButtonLabelRight, false );
@@ -48,7 +33,7 @@ public class ControllerLabeller : MonoBehaviour
             ShowObject( scaleButtonLabelLeft, true );
             ShowObject( labelLineLeft, true );
         }
-        else if (!controllers.rightTriggerDown && controllers.leftTriggerDown)
+        else if (!ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.leftTriggerDown)
         {
             ShowObject( scaleButtonLabelRight, true );
             ShowObject( selectButtonLabelRight, false );

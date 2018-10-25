@@ -10,25 +10,44 @@ public class ControllerInput : MonoBehaviour
     public bool rightTriggerDown;
     public bool leftTriggerDown;
 
+    static ControllerInput _Instance;
+    public static ControllerInput Instance
+    {
+        get
+        {
+            if (_Instance == null)
+            {
+                _Instance = GameObject.FindObjectOfType<ControllerInput>();
+            }
+            return _Instance;
+        }
+    }
+
     void OnEnable ()
     {
-        if (pointerLeft != null && pointerRight != null)
+        if (pointerLeft != null)
+        {
+            pointerLeft.TriggerPressed += OnLeftControllerTriggerDown;
+            pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
+        }
+        if (pointerRight != null)
         {
             pointerRight.TriggerPressed += OnRightControllerTriggerDown;
-            pointerLeft.TriggerPressed += OnLeftControllerTriggerDown;
             pointerRight.TriggerReleased += OnRightControllerTriggerUp;
-            pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
         }
     }
 
     void OnDisable ()
     {
-        if (pointerLeft != null && pointerRight != null)
+        if (pointerLeft != null)
+        {
+            pointerLeft.TriggerPressed -= OnLeftControllerTriggerDown;
+            pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
+        }
+        if (pointerRight != null)
         {
             pointerRight.TriggerPressed -= OnRightControllerTriggerDown;
-            pointerLeft.TriggerPressed -= OnLeftControllerTriggerDown;
             pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
-            pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
         }
     }
 

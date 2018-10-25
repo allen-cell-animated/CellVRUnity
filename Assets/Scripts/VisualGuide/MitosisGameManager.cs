@@ -10,6 +10,19 @@ public class MitosisGameManager : MonoBehaviour
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
 
+    static MitosisGameManager _Instance;
+    public static MitosisGameManager Instance
+    {
+        get
+        {
+            if (_Instance == null)
+            {
+                _Instance = GameObject.FindObjectOfType<MitosisGameManager>();
+            }
+            return _Instance;
+        }
+    }
+
     void Start ()
     {
         SpawnTargets();
@@ -60,11 +73,13 @@ public class MitosisGameManager : MonoBehaviour
             return;
         }
 
+        GameObject target;
         Vector3 targetPosition = 2f * Vector3.forward;
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
-            Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform );
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
+            target = Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
+            target.name = throwableNames[i] + "Target";
         }
     }
 }
