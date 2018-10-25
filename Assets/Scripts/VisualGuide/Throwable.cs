@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Throwable : MonoBehaviour 
 {
-    
+    void OnTriggerEnter (Collider other)
+    {
+        
+    }
 }

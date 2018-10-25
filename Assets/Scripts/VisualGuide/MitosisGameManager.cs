@@ -12,6 +12,7 @@ public class MitosisGameManager : MonoBehaviour
 
     void Start ()
     {
+        SpawnTargets();
         StartCoroutine( "SpawnThrowables" );
     }
 
@@ -42,11 +43,28 @@ public class MitosisGameManager : MonoBehaviour
                 continue;
             }
 
-            Instantiate( prefab, randomPositionInThrowableSpawnArea, Random.rotation );
+            Instantiate( prefab, randomPositionInThrowableSpawnArea, Random.rotation, transform );
 
             yield return new WaitForSeconds( Random.Range( 0.05f, 0.3f ) );
         }
 
         yield return null;
+    }
+
+    void SpawnTargets ()
+    {
+        GameObject prefab = Resources.Load( "Target" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for Target" );
+            return;
+        }
+
+        Vector3 targetPosition = 2f * Vector3.forward;
+        for (int i = 0; i < 6; i++)
+        {
+            Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform );
+            targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
+        }
     }
 }
