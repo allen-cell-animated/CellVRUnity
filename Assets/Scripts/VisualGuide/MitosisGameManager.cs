@@ -25,6 +25,7 @@ public class MitosisGameManager : MonoBehaviour
 
     void Start ()
     {
+        SpawnWalls();
         SpawnTargets();
         StartCoroutine( "SpawnThrowables" );
     }
@@ -82,6 +83,23 @@ public class MitosisGameManager : MonoBehaviour
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
             target = Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
             target.name = throwableNames[i] + "Target";
+        }
+    }
+
+    void SpawnWalls ()
+    {
+        GameObject prefab = Resources.Load( "Wall" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for Wall" );
+            return;
+        }
+
+        Vector3 wallPosition = 2f * Vector3.forward;
+        for (int i = 0; i < 6; i++)
+        {
+            wallPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * wallPosition;
+            Instantiate( prefab, wallPosition + Vector3.up, Quaternion.LookRotation( -wallPosition, Vector3.up ), transform );
         }
     }
 }
