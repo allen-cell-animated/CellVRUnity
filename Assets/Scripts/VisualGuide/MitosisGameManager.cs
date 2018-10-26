@@ -6,7 +6,6 @@ public class MitosisGameManager : MonoBehaviour
 {
     public bool inPlayMode;
     public string currentStructureName;
-    public Bounds throwableSpawnArea;
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
 
@@ -30,18 +29,11 @@ public class MitosisGameManager : MonoBehaviour
         StartCoroutine( "SpawnThrowables" );
     }
 
-    void OnDrawGizmos ()
-    {
-        Gizmos.DrawWireCube( throwableSpawnArea.center, throwableSpawnArea.size );
-    }
-
     Vector3 randomPositionInThrowableSpawnArea
     {
         get
         {
-            return new Vector3( Random.Range( throwableSpawnArea.min.x, throwableSpawnArea.max.x ),
-                                Random.Range( throwableSpawnArea.min.y, throwableSpawnArea.max.y ),
-                                Random.Range( throwableSpawnArea.min.z, throwableSpawnArea.max.z ));
+            return Quaternion.Euler( 0, Random.Range( 0, 360f ), 0 ) * (Random.Range( 0.5f, 0.6f ) * Vector3.forward) + 1.5f * Vector3.up;
         }
     }
 
