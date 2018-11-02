@@ -6,8 +6,15 @@ public class MitosisGameManager : MonoBehaviour
 {
     public bool inPlayMode;
     public string currentStructureName;
+    public Vector2 waitBetweenThrowableSpawn = new Vector2( 0.05f, 0.3f );
+    public float throwableSpawnHeight = 1.5f;
+    public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
+    public float throwableBoundsRadius = 1.5f;
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
+    Throwable[] throwables;
+    float lastThrowableCheckTime;
+    float timeBetweenThrowableChecks = 3f;
 
     static MitosisGameManager _Instance;
     public static MitosisGameManager Instance
@@ -24,16 +31,20 @@ public class MitosisGameManager : MonoBehaviour
 
     void Start ()
     {
-        SpawnWalls();
         SpawnTargets();
         StartCoroutine( "SpawnThrowables" );
+    }
+
+    void Update ()
+    {
+        PlaceThrowablesIfOutOfBounds();
     }
 
     Vector3 randomPositionInThrowableSpawnArea
     {
         get
         {
-            return Quaternion.Euler( 0, Random.Range( 0, 360f ), 0 ) * (Random.Range( 0.5f, 0.6f ) * Vector3.forward) + 1.5f * Vector3.up;
+            return Quaternion.Euler( 0, Random.Range( 0, 360f ), 0 ) * (Random.Range( throwableSpawnRingExtents.x, throwableSpawnRingExtents.y ) * Vector3.forward) + throwableSpawnHeight * Vector3.up;
         }
     }
 
@@ -51,12 +62,40 @@ public class MitosisGameManager : MonoBehaviour
                 continue;
             }
 
-            Instantiate( prefab, randomPositionInThrowableSpawnArea, Random.rotation, transform );
+            PlaceThrowable( Instantiate( prefab, transform ).transform );
 
-            yield return new WaitForSeconds( Random.Range( 0.05f, 0.3f ) );
+            yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
         }
 
+        throwables = GetComponentsInChildren<Throwable>();
+
         yield return null;
+    }
+
+    void PlaceThrowable (Transform throwable)
+    {
+        throwable.position = transform.position + randomPositionInThrowableSpawnArea;
+        throwable.rotation = Random.rotation;
+    }
+
+    bool ThrowableIsOutOfBounds (Transform throwable)
+    {
+        return (throwable.position - transform.position).magnitude > throwableBoundsRadius;
+    }
+
+    void PlaceThrowablesIfOutOfBounds ()
+    {
+        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks)
+        {
+            foreach (Throwable throwable in throwables)
+            {
+                if (ThrowableIsOutOfBounds( throwable.transform ))
+                {
+                    PlaceThrowable( throwable.transform );
+                }
+            }
+            lastThrowableCheckTime = Time.time;
+        }
     }
 
     void SpawnTargets ()
@@ -75,23 +114,6 @@ public class MitosisGameManager : MonoBehaviour
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
             target = Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
             target.name = throwableNames[i] + "Target";
-        }
-    }
-
-    void SpawnWalls ()
-    {
-        GameObject prefab = Resources.Load( "Wall" ) as GameObject;
-        if (prefab == null)
-        {
-            Debug.LogWarning( "Couldn't load prefab for Wall" );
-            return;
-        }
-
-        Vector3 wallPosition = 2f * Vector3.forward;
-        for (int i = 0; i < 6; i++)
-        {
-            wallPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * wallPosition;
-            Instantiate( prefab, wallPosition + Vector3.up, Quaternion.LookRotation( -wallPosition, Vector3.up ), transform );
         }
     }
 }

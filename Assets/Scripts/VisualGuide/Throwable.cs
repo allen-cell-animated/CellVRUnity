@@ -6,6 +6,7 @@ using VRTK;
 public class Throwable : MonoBehaviour 
 {
     public bool pickedUp;
+    public float boundsRadius;
     public Vector3 rotationOffsetAtTarget;
 
     VRTK_ControllerEvents touchingController;
