@@ -63,18 +63,18 @@ public class MitosisGameManager : MonoBehaviour
                 continue;
             }
 
-            PlaceThrowable( Instantiate( prefab, transform ).transform );
+            PlaceThrowable( Instantiate( prefab, transform ).transform, 0 );
 
             yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
         }
 
         throwables = GetComponentsInChildren<Throwable>();
-
-        yield return null;
     }
 
-    void PlaceThrowable (Transform throwable)
+    IEnumerator PlaceThrowable (Transform throwable, float waitTime)
     {
+        yield return new WaitForSeconds( waitTime );
+
         throwable.position = transform.position + randomPositionInThrowableSpawnArea;
         throwable.rotation = Random.rotation;
     }
@@ -95,7 +95,7 @@ public class MitosisGameManager : MonoBehaviour
                 if (ThrowableIsOutOfBounds( throwable.transform ))
                 {
                     throwable.Release( true );
-                    PlaceThrowable( throwable.transform );
+                    PlaceThrowable( throwable.transform, 2f );
                 }
             }
             lastThrowableCheckTime = Time.time;
