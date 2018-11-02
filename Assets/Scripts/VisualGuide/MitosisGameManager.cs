@@ -94,7 +94,7 @@ public class MitosisGameManager : MonoBehaviour
             {
                 if (ThrowableIsOutOfBounds( throwable.transform ))
                 {
-                    throwable.Release();
+                    throwable.Release( true );
                     PlaceThrowable( throwable.transform );
                 }
             }
