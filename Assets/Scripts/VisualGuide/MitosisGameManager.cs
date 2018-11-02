@@ -63,7 +63,7 @@ public class MitosisGameManager : MonoBehaviour
                 continue;
             }
 
-            PlaceThrowable( Instantiate( prefab, transform ).transform, 0 );
+            StartCoroutine( PlaceThrowable( Instantiate( prefab, transform ).transform, 0 ) );
 
             yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
         }
@@ -95,7 +95,7 @@ public class MitosisGameManager : MonoBehaviour
                 if (ThrowableIsOutOfBounds( throwable.transform ))
                 {
                     throwable.Release( true );
-                    PlaceThrowable( throwable.transform, 2f );
+                    StartCoroutine( PlaceThrowable( throwable.transform, 2f ) );
                 }
             }
             lastThrowableCheckTime = Time.time;
