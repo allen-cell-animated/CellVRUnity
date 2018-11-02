@@ -10,6 +10,7 @@ public class MitosisGameManager : MonoBehaviour
     public float throwableSpawnHeight = 1.5f;
     public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
     public float throwableBoundsRadius = 2f;
+    public float targetHeight = 1.5f;
     public float targetDistanceFromCenter = 1.5f;
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
@@ -116,7 +117,7 @@ public class MitosisGameManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
-            target = Instantiate( prefab, targetPosition + Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
+            target = Instantiate( prefab, targetPosition + targetHeight * Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
             target.name = throwableNames[i] + "Target";
         }
     }

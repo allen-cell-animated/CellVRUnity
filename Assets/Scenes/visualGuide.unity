@@ -12822,8 +12822,8 @@ MonoBehaviour:
   waitBetweenThrowableSpawn: {x: 0.05, y: 0.3}
   throwableSpawnHeight: 1.5
   throwableSpawnRingExtents: {x: 0.5, y: 0.6}
-  throwableBoundsRadius: 2
-  targetDistanceFromCenter: 1.5
+  throwableBoundsRadius: 1.5
+  targetDistanceFromCenter: 4
 --- !u!4 &1839477190
 Transform:
   m_ObjectHideFlags: 0
