@@ -125,9 +125,14 @@ public class Throwable : MonoBehaviour
 
     void OnTouchingControllerUp ()
     {
+        Release();
+        body.AddForce( 5000f * velocity );
+    }
+
+    public void Release ()
+    {
         transform.SetParent( MitosisGameManager.Instance.transform );
         body.isKinematic = false;
-        body.AddForce( 5000f * velocity );
         pickedUp = false;
     }
 

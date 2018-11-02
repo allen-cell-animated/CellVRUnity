@@ -9,7 +9,8 @@ public class MitosisGameManager : MonoBehaviour
     public Vector2 waitBetweenThrowableSpawn = new Vector2( 0.05f, 0.3f );
     public float throwableSpawnHeight = 1.5f;
     public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
-    public float throwableBoundsRadius = 1.5f;
+    public float throwableBoundsRadius = 2f;
+    public float targetDistanceFromCenter = 1.5f;
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     Throwable[] throwables;
@@ -80,7 +81,9 @@ public class MitosisGameManager : MonoBehaviour
 
     bool ThrowableIsOutOfBounds (Transform throwable)
     {
-        return (throwable.position - transform.position).magnitude > throwableBoundsRadius;
+        Vector3 throwablePositionOnFloor = throwable.position - transform.position;
+        throwablePositionOnFloor.y = 0;
+        return throwablePositionOnFloor.magnitude > throwableBoundsRadius;
     }
 
     void PlaceThrowablesIfOutOfBounds ()
@@ -91,6 +94,7 @@ public class MitosisGameManager : MonoBehaviour
             {
                 if (ThrowableIsOutOfBounds( throwable.transform ))
                 {
+                    throwable.Release();
                     PlaceThrowable( throwable.transform );
                 }
             }
@@ -108,7 +112,7 @@ public class MitosisGameManager : MonoBehaviour
         }
 
         GameObject target;
-        Vector3 targetPosition = 1.5f * Vector3.forward;
+        Vector3 targetPosition = targetDistanceFromCenter * Vector3.forward;
         for (int i = 0; i < 5; i++)
         {
             targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
