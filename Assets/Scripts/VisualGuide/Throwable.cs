@@ -10,6 +10,7 @@ public class Throwable : MonoBehaviour
     public Vector3 rotationOffsetAtTarget;
 
     VRTK_ControllerEvents touchingController;
+    SpriteRenderer attachedTargetRenderer;
 
     Rigidbody _body;
     Rigidbody body
@@ -121,6 +122,11 @@ public class Throwable : MonoBehaviour
         pickedUp = true;
         body.isKinematic = true;
         transform.SetParent( touchingController.transform );
+        if (attachedTargetRenderer != null)
+        {
+            attachedTargetRenderer.enabled = true;
+            attachedTargetRenderer = null;
+        }
     }
 
     void OnTouchingControllerUp ()
@@ -149,6 +155,8 @@ public class Throwable : MonoBehaviour
                 body.isKinematic = true;
                 transform.position = collision.transform.position;
                 transform.rotation = collision.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
+                attachedTargetRenderer = collision.gameObject.GetComponentInChildren<SpriteRenderer>();
+                attachedTargetRenderer.enabled = false;
             }
             else
             {
