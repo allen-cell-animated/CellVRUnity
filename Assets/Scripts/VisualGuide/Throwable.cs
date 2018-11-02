@@ -5,6 +5,7 @@ using VRTK;
 
 public class Throwable : MonoBehaviour 
 {
+    public bool pickedUp;
     public Vector3 rotationOffsetAtTarget;
 
     VRTK_ControllerEvents touchingController;
@@ -93,7 +94,7 @@ public class Throwable : MonoBehaviour
 
     void OnTriggerEnter (Collider other)
     {
-        if (other.tag == "GameController")
+        if (other.tag == "GameController" && !pickedUp)
         {
             touchingController = other.gameObject.GetComponentInParent<VRTK_ControllerEvents>();
             SetHighlight( true );
@@ -102,7 +103,7 @@ public class Throwable : MonoBehaviour
 
     void OnTriggerExit (Collider other)
     {
-        if (other.tag == "GameController")
+        if (other.tag == "GameController" && !pickedUp)
         {
             touchingController = null;
             SetHighlight( false );
@@ -116,6 +117,7 @@ public class Throwable : MonoBehaviour
 
     void OnTouchingControllerDown ()
     {
+        pickedUp = true;
         body.isKinematic = true;
         transform.SetParent( touchingController.transform );
     }
@@ -125,6 +127,7 @@ public class Throwable : MonoBehaviour
         transform.SetParent( MitosisGameManager.Instance.transform );
         body.isKinematic = false;
         body.AddForce( 5000f * velocity );
+        pickedUp = false;
     }
 
     void OnCollisionEnter (Collision collision)
