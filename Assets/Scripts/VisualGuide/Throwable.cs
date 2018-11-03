@@ -6,6 +6,7 @@ using VRTK;
 public class Throwable : MonoBehaviour 
 {
     public bool pickedUp;
+    public bool bound;
     public float boundsRadius;
     public Vector3 rotationOffsetAtTarget;
 
@@ -22,6 +23,14 @@ public class Throwable : MonoBehaviour
                 _body = GetComponent<Rigidbody>();
             }
             return _body;
+        }
+    }
+
+    public bool isMoving
+    {
+        get
+        {
+            return !(body.isKinematic || body.velocity.magnitude < 0.1f);
         }
     }
 
@@ -119,6 +128,7 @@ public class Throwable : MonoBehaviour
 
     void OnTouchingControllerDown ()
     {
+        bound = false;
         pickedUp = true;
         body.isKinematic = true;
         transform.SetParent( touchingController.transform );
@@ -139,7 +149,7 @@ public class Throwable : MonoBehaviour
     {
         transform.SetParent( MitosisGameManager.Instance.transform );
         body.isKinematic = false;
-        pickedUp = false;
+        pickedUp = bound = false;
         if (resetVelocity)
         {
             body.velocity = Vector3.zero;
@@ -152,6 +162,7 @@ public class Throwable : MonoBehaviour
         {
             if (collision.gameObject.name.Contains( name.Substring( 0, name.Length - 7 ) ))
             {
+                bound = true;
                 body.isKinematic = true;
                 transform.position = collision.transform.position;
                 transform.rotation = collision.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );

@@ -93,10 +93,10 @@ public class MitosisGameManager : MonoBehaviour
         {
             foreach (Throwable throwable in throwables)
             {
-                if (ThrowableIsOutOfBounds( throwable.transform ))
+                if (!throwable.bound && !throwable.isMoving && ThrowableIsOutOfBounds( throwable.transform ))
                 {
                     throwable.Release( true );
-                    StartCoroutine( PlaceThrowable( throwable.transform, 2f ) );
+                    StartCoroutine( PlaceThrowable( throwable.transform, 1f ) );
                 }
             }
             lastThrowableCheckTime = Time.time;
