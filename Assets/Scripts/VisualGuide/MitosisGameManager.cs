@@ -15,7 +15,7 @@ public class MitosisGameManager : MonoBehaviour
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     Throwable[] throwables;
-    float lastThrowableCheckTime;
+    float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
 
     static MitosisGameManager _Instance;
@@ -89,7 +89,7 @@ public class MitosisGameManager : MonoBehaviour
 
     void PlaceThrowablesIfOutOfBounds ()
     {
-        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks)
+        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks && throwables != null)
         {
             foreach (Throwable throwable in throwables)
             {
