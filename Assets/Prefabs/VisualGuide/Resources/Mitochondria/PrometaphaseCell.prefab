@@ -54,9 +54,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4024432358890790}
-  - component: {fileID: 114300715313196568}
   - component: {fileID: 54640506557521342}
-  - component: {fileID: 114187500058017370}
+  - component: {fileID: 114300715313196568}
+  - component: {fileID: 114490552318522866}
+  - component: {fileID: 114294668610816362}
   - component: {fileID: 114897292644843982}
   - component: {fileID: 114856722265005390}
   m_Layer: 0
@@ -293,7 +294,7 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: b5e1f89c250074d549c7f0dade20651f, type: 3}
---- !u!114 &114187500058017370
+--- !u!114 &114294668610816362
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -301,14 +302,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1513218464410342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3abaf4521bf2344ea21ed3020b98eb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114300715313196568
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1513218464410342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a86cc32f9c2749db9d55e76754c1d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   disableWhenIdle: 1
   allowedNearTouchControllers: 0
   allowedTouchControllers: 0
   ignoredColliders: []
-  isGrabbable: 0
+  isGrabbable: 1
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
@@ -325,7 +337,10 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
---- !u!114 &114300715313196568
+  boundToTarget: 0
+  boundsRadius: 0
+  rotationOffsetAtTarget: {x: 30, y: -65, z: -50}
+--- !u!114 &114490552318522866
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -333,13 +348,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1513218464410342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a86cc32f9c2749db9d55e76754c1d00, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a1ebaa51525b734287157cb3f53f958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickedUp: 0
-  bound: 0
-  boundsRadius: 0
-  rotationOffsetAtTarget: {x: 30, y: -65, z: -50}
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  throwVelocityWithAttachDistance: 0
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
+  detachDistance: 1
+  velocityLimit: Infinity
+  angularVelocityLimit: Infinity
+  maxDistanceDelta: 10
 --- !u!114 &114856722265005390
 MonoBehaviour:
   m_ObjectHideFlags: 1

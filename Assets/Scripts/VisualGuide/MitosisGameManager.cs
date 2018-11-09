@@ -14,7 +14,7 @@ public class MitosisGameManager : MonoBehaviour
     public float targetDistanceFromCenter = 1.5f;
 
     string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
-    Throwable[] throwables;
+    ThrowableCell[] throwableCells;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
 
@@ -69,7 +69,7 @@ public class MitosisGameManager : MonoBehaviour
             yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
         }
 
-        throwables = GetComponentsInChildren<Throwable>();
+        throwableCells = GetComponentsInChildren<ThrowableCell>();
     }
 
     IEnumerator PlaceThrowable (Transform throwable, float waitTime)
@@ -89,14 +89,14 @@ public class MitosisGameManager : MonoBehaviour
 
     void PlaceThrowablesIfOutOfBounds ()
     {
-        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks && throwables != null)
+        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks && throwableCells != null)
         {
-            foreach (Throwable throwable in throwables)
+            foreach (ThrowableCell throwableCell in throwableCells)
             {
-                if (!throwable.bound && !throwable.isMoving && ThrowableIsOutOfBounds( throwable.transform ))
+                if (!throwableCell.boundToTarget && !throwableCell.isMoving && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
-                    throwable.Release( true );
-                    StartCoroutine( PlaceThrowable( throwable.transform, 1f ) );
+                    throwableCell.Release( true );
+                    StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
                 }
             }
             lastThrowableCheckTime = Time.time;
