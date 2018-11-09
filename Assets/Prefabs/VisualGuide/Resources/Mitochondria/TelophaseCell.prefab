@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 114501288635416520}
   - component: {fileID: 114239017526827802}
   - component: {fileID: 114866941129839808}
+  - component: {fileID: 114106891055596194}
   m_Layer: 0
   m_Name: TelophaseCell
   m_TagString: Untagged
@@ -294,6 +295,25 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 78c99e90e34ad493f88373ad73152424, type: 3}
+--- !u!114 &114106891055596194
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1993572341939594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393a6cb30fae3e841bd85dca765098f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  resetOnDisable: 1
+  sdkOverrides:
+  - loadedSDKSetup: {fileID: 0}
+    controllerType: 3
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
 --- !u!114 &114239017526827802
 MonoBehaviour:
   m_ObjectHideFlags: 1
