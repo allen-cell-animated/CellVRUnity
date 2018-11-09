@@ -12,6 +12,8 @@ public class ThrowableCell : VRTK_InteractableObject
     public Vector3 rotationOffsetAtTarget;
 
     SpriteRenderer attachedTargetRenderer;
+    Vector3 lastPosition;
+    Vector3 velocity;
 
     Rigidbody _body;
     Rigidbody body
@@ -34,9 +36,6 @@ public class ThrowableCell : VRTK_InteractableObject
         }
     }
 
-    Vector3 lastPosition;
-    Vector3 velocity;
-
     protected override void Update ()
     {
         base.Update();
@@ -45,52 +44,59 @@ public class ThrowableCell : VRTK_InteractableObject
         lastPosition = transform.position;
     }
 
-    public override void Grabbed (VRTK_InteractGrab currentGrabbingObject = null)
-    {
-        base.Grabbed( currentGrabbingObject );
-        boundToTarget = false;
-        if (attachedTargetRenderer != null)
-        {
-            attachedTargetRenderer.enabled = true;
-            attachedTargetRenderer = null;
-        }
-    }
-
-    public override void Ungrabbed (VRTK_InteractGrab previousGrabbingObject = null)
-    {
-        base.Ungrabbed( previousGrabbingObject );
-        Release( false );
-        body.AddForce( 5000f * velocity );
-    }
-
-    public void Release (bool resetVelocity)
-    {
-        transform.SetParent( MitosisGameManager.Instance.transform );
-        body.isKinematic = false;
-        boundToTarget = false;
-        if (resetVelocity)
-        {
-            body.velocity = Vector3.zero;
-        }
-    }
-
     void OnCollisionEnter (Collision collision)
     {
         if (collision.gameObject.tag == "Target")
         {
             if (collision.gameObject.name.Contains( name.Substring( 0, name.Length - 7 ) ))
             {
-                boundToTarget = true;
-                body.isKinematic = true;
-                transform.position = collision.transform.position;
-                transform.rotation = collision.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
-                attachedTargetRenderer = collision.gameObject.GetComponentInChildren<SpriteRenderer>();
-                attachedTargetRenderer.enabled = false;
+                BindToTarget( collision.gameObject );
             }
             else
             {
-                collision.gameObject.GetComponent<Animator>().SetTrigger( "Fail" );
+                BounceOffTarget( collision.gameObject );
             }
+        }
+    }
+
+    public override void Grabbed (VRTK_InteractGrab currentGrabbingObject = null)
+    {
+        base.Grabbed( currentGrabbingObject );
+        ReleaseFromTarget( false );
+    }
+
+    public override void Ungrabbed (VRTK_InteractGrab previousGrabbingObject = null)
+    {
+        base.Ungrabbed( previousGrabbingObject );
+        ReleaseFromTarget( false );
+    }
+
+    void BindToTarget (GameObject target)
+    {
+        boundToTarget = true;
+        body.isKinematic = true;
+        transform.position = target.transform.position;
+        transform.rotation = target.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
+        attachedTargetRenderer = target.GetComponentInChildren<SpriteRenderer>();
+        attachedTargetRenderer.enabled = false;
+    }
+
+    void BounceOffTarget (GameObject target)
+    {
+        target.GetComponent<Animator>().SetTrigger( "Fail" );
+    }
+
+    public void ReleaseFromTarget (bool resetVelocity)
+    {
+        body.isKinematic = boundToTarget = false;
+        if (attachedTargetRenderer != null)
+        {
+            attachedTargetRenderer.enabled = true;
+            attachedTargetRenderer = null;
+        }
+        if (resetVelocity)
+        {
+            body.velocity = Vector3.zero;
         }
     }
 }

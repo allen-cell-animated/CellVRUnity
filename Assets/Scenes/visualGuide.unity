@@ -4061,10 +4061,10 @@ GameObject:
   - component: {fileID: 8955290}
   - component: {fileID: 1000040355}
   - component: {fileID: 1000040359}
+  - component: {fileID: 1000040360}
   - component: {fileID: 1000040358}
   - component: {fileID: 1000040357}
   - component: {fileID: 1000040356}
-  - component: {fileID: 1000040360}
   m_Layer: 0
   m_Name: RightControllerScriptAlias
   m_TagString: Untagged
@@ -4240,7 +4240,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 0
+  createRigidBodyWhenNotTouching: 1
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -5014,7 +5014,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 0
+  createRigidBodyWhenNotTouching: 1
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -5544,7 +5544,7 @@ GameObject:
   - component: {fileID: 1150304417}
   - component: {fileID: 1150304416}
   m_Layer: 0
-  m_Name: Trigger
+  m_Name: Pusher
   m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11805,7 +11805,7 @@ GameObject:
   - component: {fileID: 1665513594}
   - component: {fileID: 1665513593}
   m_Layer: 0
-  m_Name: Trigger
+  m_Name: Pusher
   m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

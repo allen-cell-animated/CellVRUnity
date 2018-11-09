@@ -95,7 +95,7 @@ public class MitosisGameManager : MonoBehaviour
             {
                 if (!throwableCell.boundToTarget && !throwableCell.isMoving && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
-                    throwableCell.Release( true );
+                    throwableCell.ReleaseFromTarget( true );
                     StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
                 }
             }
