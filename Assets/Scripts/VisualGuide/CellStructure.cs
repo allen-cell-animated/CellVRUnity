@@ -45,14 +45,16 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    void Start ()
+    protected override void Awake ()
     {
+        base.Awake();
         SetColor( false );
     }
 
     public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
     {
         base.StartUsing( currentUsingObject );
+        Debug.Log("USING!!");
         interphaseCell.LabelStructure( this );
     }
 

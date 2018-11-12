@@ -16,7 +16,6 @@ public class InterphaseCellManager : MonoBehaviour
             if (_structureLabel == null)
             {
                 _structureLabel = GameObject.FindObjectOfType<LabelCanvas>();
-                _structureLabel.gameObject.SetActive( false );
             }
             return _structureLabel;
         }
@@ -37,7 +36,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     void Start ()
     {
-        
+        structureLabel.gameObject.SetActive(false);
     }
 
     void Update ()
