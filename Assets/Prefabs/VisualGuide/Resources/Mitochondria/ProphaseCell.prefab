@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4281394303562920}
   - component: {fileID: 54930485163512048}
   - component: {fileID: 114566352064189500}
-  - component: {fileID: 114269259946124236}
+  - component: {fileID: 114680773431741304}
   - component: {fileID: 114282838405263564}
   - component: {fileID: 114967858623575090}
   - component: {fileID: 114165620444149026}
@@ -311,23 +311,6 @@ MonoBehaviour:
   customOutlineModels: []
   customOutlineModelPaths: []
   enableSubmeshHighlight: 0
---- !u!114 &114269259946124236
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1745456451640766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  precisionGrab: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  throwVelocityWithAttachDistance: 0
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
 --- !u!114 &114282838405263564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -374,6 +357,23 @@ MonoBehaviour:
   boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: -10, y: 90, z: 45}
+--- !u!114 &114680773431741304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1745456451640766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eddb471561dc4517854d467bbd06b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  throwVelocityWithAttachDistance: 0
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
 --- !u!114 &114967858623575090
 MonoBehaviour:
   m_ObjectHideFlags: 1

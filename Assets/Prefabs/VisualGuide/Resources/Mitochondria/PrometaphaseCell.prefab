@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 4024432358890790}
   - component: {fileID: 54640506557521342}
   - component: {fileID: 114300715313196568}
-  - component: {fileID: 114822069786576646}
+  - component: {fileID: 114495433435646982}
   - component: {fileID: 114294668610816362}
   - component: {fileID: 114897292644843982}
   - component: {fileID: 114856722265005390}
@@ -340,7 +340,7 @@ MonoBehaviour:
   boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: 30, y: -65, z: -50}
---- !u!114 &114822069786576646
+--- !u!114 &114495433435646982
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1513218464410342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
+  m_Script: {fileID: 11500000, guid: 3eddb471561dc4517854d467bbd06b63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   precisionGrab: 0
