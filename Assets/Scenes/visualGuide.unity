@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
+  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4240,7 +4240,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 1
+  createRigidBodyWhenNotTouching: 0
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -5014,7 +5014,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 1
+  createRigidBodyWhenNotTouching: 0
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -5549,7 +5549,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1150304415
 Transform:
   m_ObjectHideFlags: 0
@@ -11810,7 +11810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1665513592
 Transform:
   m_ObjectHideFlags: 0
@@ -12957,7 +12957,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1839477186}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 217d6b453df21478aa3dda99dc11a115, type: 3}
   m_Name: 
@@ -12965,8 +12965,9 @@ MonoBehaviour:
   inPlayMode: 0
   currentStructureName: Mitochondria
   waitBetweenThrowableSpawn: {x: 0.05, y: 0.3}
-  throwableSpawnHeight: 1.5
+  throwableSpawnHeight: 3
   throwableSpawnRingExtents: {x: 0.5, y: 0.6}
+  throwableSpawnScale: 0.4
   throwableBoundsRadius: 1.5
   targetHeight: 1.5
   targetDistanceFromCenter: 3

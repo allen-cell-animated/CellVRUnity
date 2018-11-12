@@ -9,11 +9,12 @@ public class MitosisGameManager : MonoBehaviour
     public Vector2 waitBetweenThrowableSpawn = new Vector2( 0.05f, 0.3f );
     public float throwableSpawnHeight = 1.5f;
     public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
+    public float throwableSpawnScale = 0.4f;
     public float throwableBoundsRadius = 2f;
     public float targetHeight = 1.5f;
     public float targetDistanceFromCenter = 1.5f;
 
-    string[] throwableNames = {"ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
+    string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     ThrowableCell[] throwableCells;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
@@ -54,7 +55,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds( 3f );
 
-        GameObject prefab;
+        GameObject prefab, clone;
         foreach (string t in throwableNames)
         {
             prefab = Resources.Load( currentStructureName + "/" + t ) as GameObject;
@@ -64,7 +65,10 @@ public class MitosisGameManager : MonoBehaviour
                 continue;
             }
 
-            StartCoroutine( PlaceThrowable( Instantiate( prefab, transform ).transform, 0 ) );
+            clone = Instantiate( prefab, transform ) as GameObject;
+            clone.transform.position = transform.position + randomPositionInThrowableSpawnArea;
+            clone.transform.rotation = Random.rotation;
+            clone.transform.localScale = throwableSpawnScale * Vector3.one;
 
             yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
         }
@@ -78,6 +82,7 @@ public class MitosisGameManager : MonoBehaviour
 
         throwable.position = transform.position + randomPositionInThrowableSpawnArea;
         throwable.rotation = Random.rotation;
+        throwable.localScale = throwableSpawnScale * Vector3.one;
     }
 
     bool ThrowableIsOutOfBounds (Transform throwable)
@@ -114,9 +119,9 @@ public class MitosisGameManager : MonoBehaviour
 
         GameObject target;
         Vector3 targetPosition = targetDistanceFromCenter * Vector3.forward;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < throwableNames.Length; i++)
         {
-            targetPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * targetPosition;
+            targetPosition = Quaternion.Euler( 0, 360f / (throwableNames.Length + 1f), 0 ) * targetPosition;
             target = Instantiate( prefab, targetPosition + targetHeight * Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
             target.name = throwableNames[i] + "Target";
         }
