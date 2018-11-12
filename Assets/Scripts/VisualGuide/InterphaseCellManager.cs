@@ -16,6 +16,7 @@ public class InterphaseCellManager : MonoBehaviour
             if (_structureLabel == null)
             {
                 _structureLabel = GameObject.FindObjectOfType<LabelCanvas>();
+                _structureLabel.gameObject.SetActive( false );
             }
             return _structureLabel;
         }
@@ -31,6 +32,19 @@ public class InterphaseCellManager : MonoBehaviour
                 _structures = GetComponentsInChildren<CellStructure>();
             }
             return _structures;
+        }
+    }
+
+    void Start ()
+    {
+        
+    }
+
+    void Update ()
+    {
+        if (inIsolationMode && ControllerInput.Instance.leftTriggerDown)
+        {
+            ExitIsolationMode();
         }
     }
 
@@ -79,14 +93,6 @@ public class InterphaseCellManager : MonoBehaviour
                 s.gameObject.SetActive( true );
             }
             inIsolationMode = false;
-        }
-    }
-
-    void Update ()
-    {
-        if (inIsolationMode && ControllerInput.Instance.leftTriggerDown)
-        {
-            ExitIsolationMode();
         }
     }
 }
