@@ -15,11 +15,10 @@ public class LabelCanvas : MonoBehaviour
         transform.rotation = cursor.transform.rotation;
     } 
 
-    public void SetLabel (StructureData _data)
+    public void SetLabel (string structureName, float nameWidth)
     {
-        label.text = _data.structureName;
-
-        SetPanelSize( _data.nameWidth );
+        label.text = structureName;
+        SetPanelSize( nameWidth );
     }
 
     void SetPanelSize (float _width)

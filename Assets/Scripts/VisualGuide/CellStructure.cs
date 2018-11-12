@@ -5,85 +5,26 @@ using VRTK;
 
 public class CellStructure : VRTK_InteractableObject 
 {
+    [Header("Cell Structure Settings")]
+
     public string structureName;
+    public float nameWidth = 80f;
     public Color color;
     public Color illumColor;
     public GameObject nucleusToDisplayInIsolation;
     [HideInInspector] public StructureData data;
 
-    List<Collider> _colliders;
-    List<Collider> colliders
+    InterphaseCellManager _interphaseCell;
+    InterphaseCellManager interphaseCell
     {
         get
         {
-            if (_colliders == null)
+            if (_interphaseCell == null)
             {
-                _colliders = new List<Collider>( GetComponentsInChildren<Collider>() );
+                _interphaseCell = GetComponentInParent<InterphaseCellManager>();
             }
-            return _colliders;
+            return _interphaseCell;
         }
-    }
-
-    public VRTK_DestinationMarker laserPointer
-    {
-        get
-        {
-            return ControllerInput.Instance.laserPointer;
-        }
-    }
-
-    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
-    {
-        base.StartUsing( currentUsingObject );
-        SetColor( true );
-        Debug.Log( "using!" );
-    }
-
-    public override void StopUsing (VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
-    {
-        base.StopUsing( previousUsingObject, resetUsingObjectState );
-        SetColor( false );
-    }
-
-    //protected override void OnEnable ()
-    //{
-    //    base.OnEnable();
-    //    if (laserPointer != null)
-    //    {
-    //        laserPointer.DestinationMarkerEnter += OnHoverEnter;
-    //        laserPointer.DestinationMarkerExit += OnHoverExit;
-    //    }
-    //}
-
-    //protected override void OnDisable ()
-    //{
-    //    base.OnDisable();
-    //    if (laserPointer != null)
-    //    {
-    //        laserPointer.DestinationMarkerEnter -= OnHoverEnter;
-    //        laserPointer.DestinationMarkerExit -= OnHoverExit;
-    //    }
-    //}
-
-    //void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
-    //{
-    //    if (colliders.Find( c => c == e.raycastHit.collider ) != null)
-    //    {
-    //        MitosisGameManager.Instance.OnHoverStructureEnter( this );
-    //    }
-    //}
-
-    //void OnHoverExit (object sender, DestinationMarkerEventArgs e)
-    //{
-    //    if (colliders.Find( c => c == e.raycastHit.collider ) != null)
-    //    {
-    //        MitosisGameManager.Instance.OnHoverStructureExit();
-    //    }
-    //}
-
-    void Start ()
-    {
-        SetColor( false );
     }
 
     Material[] _materials;
@@ -101,6 +42,32 @@ public class CellStructure : VRTK_InteractableObject
                 }
             }
             return _materials;
+        }
+    }
+
+    void Start ()
+    {
+        SetColor( false );
+    }
+
+    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
+    {
+        base.StartUsing( currentUsingObject );
+        interphaseCell.LabelStructure( this );
+    }
+
+    public override void StopUsing (VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
+    {
+        base.StopUsing( previousUsingObject, resetUsingObjectState );
+        interphaseCell.HideLabel( this );
+    }
+
+    protected override void Update ()
+    {
+        base.Update();
+        if (IsUsing() && ControllerInput.Instance.rightTriggerDown)
+        {
+            interphaseCell.SelectStructure( this );
         }
     }
 
