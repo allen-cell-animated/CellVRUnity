@@ -86,9 +86,12 @@ public class ControllerInput : MonoBehaviour
 
     public void ToggleLaserRenderer (bool _active)
     {
-        _laserRenderer.enabled = false;
-        _laserRenderer.pointerRenderer.enabled = _active;
-        _laserRenderer.enabled = true;
+        if (_laserRenderer != null)
+        {
+            _laserRenderer.enabled = false;
+            _laserRenderer.pointerRenderer.enabled = _active;
+            _laserRenderer.enabled = true;
+        }
     }
 
     VRTK_DestinationMarker _laserPointer;

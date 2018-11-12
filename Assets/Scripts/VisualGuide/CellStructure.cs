@@ -36,6 +36,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         base.StartUsing( currentUsingObject );
         SetColor( true );
+        Debug.Log( "using!" );
     }
 
     public override void StopUsing (VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
