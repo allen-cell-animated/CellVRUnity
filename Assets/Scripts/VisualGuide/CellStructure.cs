@@ -32,6 +32,18 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
+    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
+    {
+        base.StartUsing( currentUsingObject );
+        SetColor( true );
+    }
+
+    public override void StopUsing (VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
+    {
+        base.StopUsing( previousUsingObject, resetUsingObjectState );
+        SetColor( false );
+    }
+
     //protected override void OnEnable ()
     //{
     //    base.OnEnable();

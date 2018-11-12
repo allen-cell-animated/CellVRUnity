@@ -100,7 +100,7 @@ public class MitosisGameManager : MonoBehaviour
         {
             foreach (ThrowableCell throwableCell in throwableCells)
             {
-                if (!throwableCell.boundToTarget && !throwableCell.isMoving && throwableCell.GetGrabbingObject() == null && ThrowableIsOutOfBounds( throwableCell.transform ))
+                if (!throwableCell.boundToTarget && !throwableCell.isMoving && throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
                     throwableCell.ReleaseFromTarget( true );
                     StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
