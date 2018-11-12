@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-public class CellStructure : MonoBehaviour 
+public class CellStructure : VRTK_InteractableObject 
 {
     public string structureName;
     public Color color;
     public Color illumColor;
     public GameObject nucleusToDisplayInIsolation;
     [HideInInspector] public StructureData data;
-
-    VRTK_DestinationMarker pointer
-    {
-        get
-        {
-            if (VisualGuideManager.Instance.pointerRight != null)
-            {
-                return VisualGuideManager.Instance.pointerRight.GetComponent<VRTK_DestinationMarker>();
-            }
-            return null;
-        }
-    }
 
     List<Collider> _colliders;
     List<Collider> colliders
@@ -36,53 +24,53 @@ public class CellStructure : MonoBehaviour
         }
     }
 
-    void OnEnable ()
+    public VRTK_DestinationMarker laserPointer
     {
-        if (pointer != null)
+        get
         {
-            pointer.DestinationMarkerEnter += OnHoverEnter;
-            pointer.DestinationMarkerExit += OnHoverExit;
+            return ControllerInput.Instance.laserPointer;
         }
     }
 
-    void OnDisable ()
-    {
-        if (pointer != null)
-        {
-            pointer.DestinationMarkerEnter -= OnHoverEnter;
-            pointer.DestinationMarkerExit -= OnHoverExit;
-        }
-    }
+    //protected override void OnEnable ()
+    //{
+    //    base.OnEnable();
+    //    if (laserPointer != null)
+    //    {
+    //        laserPointer.DestinationMarkerEnter += OnHoverEnter;
+    //        laserPointer.DestinationMarkerExit += OnHoverExit;
+    //    }
+    //}
 
-    void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
-    {
-        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
-        {
-            VisualGuideManager.Instance.OnHoverStructureEnter( this );
-        }
-    }
+    //protected override void OnDisable ()
+    //{
+    //    base.OnDisable();
+    //    if (laserPointer != null)
+    //    {
+    //        laserPointer.DestinationMarkerEnter -= OnHoverEnter;
+    //        laserPointer.DestinationMarkerExit -= OnHoverExit;
+    //    }
+    //}
 
-    void OnHoverExit (object sender, DestinationMarkerEventArgs e)
-    {
-        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
-        {
-            VisualGuideManager.Instance.OnHoverStructureExit();
-        }
-    }
+    //void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
+    //{
+    //    if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+    //    {
+    //        MitosisGameManager.Instance.OnHoverStructureEnter( this );
+    //    }
+    //}
+
+    //void OnHoverExit (object sender, DestinationMarkerEventArgs e)
+    //{
+    //    if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+    //    {
+    //        MitosisGameManager.Instance.OnHoverStructureExit();
+    //    }
+    //}
 
     void Start ()
     {
-        GrayOut( false );
-        SetData( VisualGuideManager.Instance.data );
-    }
-
-    public void SetData (VisualGuideData _data)
-    {
-        data = _data.structureData.Find( s => s.structureName == structureName );
-        if (_data == null)
-        {
-            Debug.LogWarning( "Couldn't load structure data for " + structureName );
-        }
+        SetColor( false );
     }
 
     Material[] _materials;
@@ -103,11 +91,11 @@ public class CellStructure : MonoBehaviour
         }
     }
 
-    public void GrayOut (bool _gray)
+    public void SetColor (bool _colored)
     {
         foreach (Material material in materials)
         {
-            if (!_gray)
+            if (_colored)
             {
                 material.SetColor( "_Color", color );
                 material.SetColor( "_EmissionColor", illumColor );

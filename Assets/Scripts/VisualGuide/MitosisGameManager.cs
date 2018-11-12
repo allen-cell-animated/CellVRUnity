@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
 
 public class MitosisGameManager : MonoBehaviour 
 {
@@ -144,4 +145,42 @@ public class MitosisGameManager : MonoBehaviour
             Instantiate( prefab, wallPosition + 20f * Vector3.up, Quaternion.LookRotation( -wallPosition, Vector3.up ), transform );
         }
     }
+
+    //public void OnHoverStructureEnter (CellStructure _selectedStructure)
+    //{
+    //    if (!translating && !inIsolationMode)
+    //    {
+    //        selectedStructure = _selectedStructure;
+    //        foreach (CellStructure structure in structures)
+    //        {
+    //            if (structure != selectedStructure)
+    //            {
+    //                structure.GrayOut( true );
+    //            }
+    //        }
+    //        selectedStructure.GrayOut( false );
+    //        LabelSelectedStructure();
+    //    }
+    //}
+
+    //public void OnHoverStructureExit ()
+    //{
+    //    selectedStructure = null;
+    //    foreach (CellStructure structure in structures)
+    //    {
+    //        structure.GrayOut( false );
+    //    }
+    //    HideLabel();
+    //}
+
+    //void LabelSelectedStructure ()
+    //{
+    //    structureLabel.gameObject.SetActive( true );
+    //    structureLabel.SetLabel( selectedStructure.data );
+    //}
+
+    //void HideLabel ()
+    //{
+    //    structureLabel.gameObject.SetActive( false );
+    //}
 }

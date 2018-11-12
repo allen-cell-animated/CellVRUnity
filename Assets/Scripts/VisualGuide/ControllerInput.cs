@@ -71,23 +71,36 @@ public class ControllerInput : MonoBehaviour
         leftTriggerDown = false;
     }
 
-    VRTK_Pointer _laser;
-    VRTK_Pointer laser
+    VRTK_Pointer _laserRenderer;
+    VRTK_Pointer laserRenderer
     {
         get
         {
-            if (_laser == null)
+            if (_laserRenderer == null)
             {
-                _laser = GameObject.FindObjectOfType<VRTK_Pointer>();
+                _laserRenderer = GameObject.FindObjectOfType<VRTK_Pointer>();
             }
-            return _laser;
+            return _laserRenderer;
         }
     }
 
-    public void ToggleLaser (bool _active)
+    public void ToggleLaserRenderer (bool _active)
     {
-        laser.enabled = false;
-        laser.pointerRenderer.enabled = _active;
-        laser.enabled = true;
+        _laserRenderer.enabled = false;
+        _laserRenderer.pointerRenderer.enabled = _active;
+        _laserRenderer.enabled = true;
+    }
+
+    VRTK_DestinationMarker _laserPointer;
+    public VRTK_DestinationMarker laserPointer
+    {
+        get
+        {
+            if (_laserPointer == null && pointerRight != null)
+            {
+                _laserPointer = pointerRight.GetComponent<VRTK_DestinationMarker>();
+            }
+            return _laserPointer;
+        }
     }
 }

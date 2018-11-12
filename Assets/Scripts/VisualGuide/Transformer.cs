@@ -35,7 +35,7 @@ public class Transformer : MonoBehaviour
             if (!transforming)
             {
                 transforming = wasTransforming = true;
-                ControllerInput.Instance.ToggleLaser( false );
+                ControllerInput.Instance.ToggleLaserRenderer( false );
                 StartScaling();
                 StartRotating();
             }
@@ -49,7 +49,7 @@ public class Transformer : MonoBehaviour
         else if (transforming)
         {
             ToggleLine( false );
-            ControllerInput.Instance.ToggleLaser( true );
+            ControllerInput.Instance.ToggleLaserRenderer( true );
             transforming = false;
         }
     }
