@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
+  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableWhenIdle: 1
+  disableWhenIdle: 0
   allowedNearTouchControllers: 0
   allowedTouchControllers: 0
   ignoredColliders: []
@@ -852,6 +852,7 @@ MonoBehaviour:
   nameWidth: 80
   color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
   illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
+  _colliders: []
 --- !u!64 &262723979
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2929,7 +2930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableWhenIdle: 1
+  disableWhenIdle: 0
   allowedNearTouchControllers: 0
   allowedTouchControllers: 0
   ignoredColliders: []
@@ -2955,6 +2956,7 @@ MonoBehaviour:
   nameWidth: 80
   color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
   illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
+  _colliders: []
 --- !u!64 &876174944
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4210,7 +4212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableWhenIdle: 1
+  disableWhenIdle: 0
   allowedNearTouchControllers: 0
   allowedTouchControllers: 0
   ignoredColliders: []
@@ -4236,6 +4238,7 @@ MonoBehaviour:
   nameWidth: 80
   color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
   illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
+  _colliders: []
 --- !u!64 &1034548618
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4487,7 +4490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableWhenIdle: 1
+  disableWhenIdle: 0
   allowedNearTouchControllers: 0
   allowedTouchControllers: 0
   ignoredColliders: []
@@ -4513,6 +4516,7 @@ MonoBehaviour:
   nameWidth: 80
   color: {r: 1, g: 0.26666665, b: 0, a: 1}
   illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
+  _colliders: []
 --- !u!64 &1057005249
 MeshCollider:
   m_ObjectHideFlags: 0

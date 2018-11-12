@@ -44,16 +44,16 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    List<Collider> _colliders;
-    List<Collider> colliders
+    [SerializeField] Collider _collider;
+    Collider collider
     {
         get
         {
-            if (_colliders == null)
+            if (_collider == null)
             {
-                _colliders = new List<Collider>( GetComponentsInChildren<Collider>() );
+                _collider = GetComponent<Collider>();
             }
-            return _colliders;
+            return _collider;
         }
     }
 
@@ -69,6 +69,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         base.Awake();
         SetColor( false );
+        Debug.Log(collider);
     }
 
     protected override void OnEnable ()
@@ -93,7 +94,7 @@ public class CellStructure : VRTK_InteractableObject
 
     void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
     {
-        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+        if (collider == e.raycastHit.collider)
         {
             hovering = true;
             interphaseCell.LabelStructure( this );
@@ -102,7 +103,7 @@ public class CellStructure : VRTK_InteractableObject
 
     void OnHoverExit (object sender, DestinationMarkerEventArgs e)
     {
-        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+        if (collider == e.raycastHit.collider)
         {
             interphaseCell.HideLabel( this );
             hovering = false;
