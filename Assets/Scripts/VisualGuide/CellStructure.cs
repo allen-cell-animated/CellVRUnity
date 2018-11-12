@@ -7,12 +7,11 @@ public class CellStructure : VRTK_InteractableObject
 {
     [Header("Cell Structure Settings")]
 
+    public bool hovering;
     public string structureName;
     public float nameWidth = 80f;
     public Color color;
     public Color illumColor;
-    public GameObject nucleusToDisplayInIsolation;
-    [HideInInspector] public StructureData data;
 
     InterphaseCellManager _interphaseCell;
     InterphaseCellManager interphaseCell
@@ -45,29 +44,75 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
+    List<Collider> _colliders;
+    List<Collider> colliders
+    {
+        get
+        {
+            if (_colliders == null)
+            {
+                _colliders = new List<Collider>( GetComponentsInChildren<Collider>() );
+            }
+            return _colliders;
+        }
+    }
+
+    public VRTK_DestinationMarker laserPointer
+    {
+        get
+        {
+            return ControllerInput.Instance.laserPointer;
+        }
+    }
+
     protected override void Awake ()
     {
         base.Awake();
         SetColor( false );
     }
 
-    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
+    protected override void OnEnable ()
     {
-        base.StartUsing( currentUsingObject );
-        Debug.Log("USING!!");
-        interphaseCell.LabelStructure( this );
+        base.OnEnable();
+        if (laserPointer != null)
+        {
+            laserPointer.DestinationMarkerEnter += OnHoverEnter;
+            laserPointer.DestinationMarkerExit += OnHoverExit;
+        }
     }
 
-    public override void StopUsing (VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
+    protected override void OnDisable ()
     {
-        base.StopUsing( previousUsingObject, resetUsingObjectState );
-        interphaseCell.HideLabel( this );
+        base.OnDisable();
+        if (laserPointer != null)
+        {
+            laserPointer.DestinationMarkerEnter -= OnHoverEnter;
+            laserPointer.DestinationMarkerExit -= OnHoverExit;
+        }
+    }
+
+    void OnHoverEnter (object sender, DestinationMarkerEventArgs e)
+    {
+        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+        {
+            hovering = true;
+            interphaseCell.LabelStructure( this );
+        }
+    }
+
+    void OnHoverExit (object sender, DestinationMarkerEventArgs e)
+    {
+        if (colliders.Find( c => c == e.raycastHit.collider ) != null)
+        {
+            interphaseCell.HideLabel( this );
+            hovering = false;
+        }
     }
 
     protected override void Update ()
     {
         base.Update();
-        if (IsUsing() && ControllerInput.Instance.rightTriggerDown)
+        if (hovering && ControllerInput.Instance.rightTriggerDown)
         {
             interphaseCell.SelectStructure( this );
         }

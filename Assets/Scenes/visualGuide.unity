@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
+  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -838,25 +838,20 @@ MonoBehaviour:
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 0}
   secondaryGrabActionScript: {fileID: 0}
-  isUsable: 1
-  holdButtonToUse: 0
+  isUsable: 0
+  holdButtonToUse: 1
   useOnlyIfGrabbed: 0
-  pointerActivatesUseAction: 1
+  pointerActivatesUseAction: 0
   useOverrideButton: 0
-  allowedUseControllers: 2
+  allowedUseControllers: 0
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  structureName: Cytoskeleton
+  hovering: 0
+  structureName: Microtubules
   nameWidth: 80
   color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
   illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
-  nucleusToDisplayInIsolation: {fileID: 0}
-  data:
-    structureName: 
-    infoImage: {fileID: 0}
-    description: 
-    nameWidth: 0
 --- !u!64 &262723979
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2946,25 +2941,20 @@ MonoBehaviour:
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 0}
   secondaryGrabActionScript: {fileID: 0}
-  isUsable: 1
-  holdButtonToUse: 0
+  isUsable: 0
+  holdButtonToUse: 1
   useOnlyIfGrabbed: 0
-  pointerActivatesUseAction: 1
+  pointerActivatesUseAction: 0
   useOverrideButton: 0
-  allowedUseControllers: 2
+  allowedUseControllers: 0
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  structureName: Molecule Generation
+  hovering: 0
+  structureName: Endoplasmic Reticulum
   nameWidth: 80
   color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
   illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
-  nucleusToDisplayInIsolation: {fileID: 0}
-  data:
-    structureName: 
-    infoImage: {fileID: 0}
-    description: 
-    nameWidth: 0
 --- !u!64 &876174944
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4232,25 +4222,20 @@ MonoBehaviour:
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 0}
   secondaryGrabActionScript: {fileID: 0}
-  isUsable: 1
-  holdButtonToUse: 0
+  isUsable: 0
+  holdButtonToUse: 1
   useOnlyIfGrabbed: 0
-  pointerActivatesUseAction: 1
+  pointerActivatesUseAction: 0
   useOverrideButton: 0
-  allowedUseControllers: 2
+  allowedUseControllers: 0
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  structureName: Energy Production
+  hovering: 0
+  structureName: Mitochondria
   nameWidth: 80
   color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
   illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
-  nucleusToDisplayInIsolation: {fileID: 0}
-  data:
-    structureName: 
-    infoImage: {fileID: 0}
-    description: 
-    nameWidth: 0
 --- !u!64 &1034548618
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4514,25 +4499,20 @@ MonoBehaviour:
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 0}
   secondaryGrabActionScript: {fileID: 0}
-  isUsable: 1
-  holdButtonToUse: 0
+  isUsable: 0
+  holdButtonToUse: 1
   useOnlyIfGrabbed: 0
-  pointerActivatesUseAction: 1
+  pointerActivatesUseAction: 0
   useOverrideButton: 0
-  allowedUseControllers: 2
+  allowedUseControllers: 0
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  structureName: Waste Removal
+  hovering: 0
+  structureName: Golgi Apparatus
   nameWidth: 80
   color: {r: 1, g: 0.26666665, b: 0, a: 1}
   illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
-  nucleusToDisplayInIsolation: {fileID: 0}
-  data:
-    structureName: 
-    infoImage: {fileID: 0}
-    description: 
-    nameWidth: 0
 --- !u!64 &1057005249
 MeshCollider:
   m_ObjectHideFlags: 0
