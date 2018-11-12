@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
+  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4240,7 +4240,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 0
+  createRigidBodyWhenNotTouching: 1
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -5014,7 +5014,7 @@ MonoBehaviour:
   grabButton: 3
   grabPrecognition: 0
   throwMultiplier: 1
-  createRigidBodyWhenNotTouching: 0
+  createRigidBodyWhenNotTouching: 1
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
@@ -12970,7 +12970,7 @@ MonoBehaviour:
   throwableSpawnScale: 0.4
   throwableBoundsRadius: 1.5
   targetHeight: 1.5
-  targetDistanceFromCenter: 3
+  targetDistanceFromCenter: 2.2
 --- !u!4 &1839477190
 Transform:
   m_ObjectHideFlags: 0
