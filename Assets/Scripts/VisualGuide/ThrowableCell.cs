@@ -86,13 +86,16 @@ public class ThrowableCell : VRTK_InteractableObject
 
     void BindToTarget (GameObject target)
     {
-        boundToTarget = true;
-        body.isKinematic = true;
-        transform.position = target.transform.position;
-        transform.rotation = target.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
-        attachedTargetRenderer = target.GetComponentInChildren<SpriteRenderer>();
-        attachedTargetRenderer.enabled = false;
-        gameManager.RecordCorrectHit();
+        if (gameManager != null)
+        {
+            boundToTarget = true;
+            body.isKinematic = true;
+            transform.position = target.transform.position;
+            transform.rotation = target.transform.rotation * Quaternion.Euler(rotationOffsetAtTarget);
+            attachedTargetRenderer = target.GetComponentInChildren<SpriteRenderer>();
+            attachedTargetRenderer.enabled = false;
+            gameManager.RecordCorrectHit();
+        }
     }
 
     void BounceOffTarget (GameObject target)
