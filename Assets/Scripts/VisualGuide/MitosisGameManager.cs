@@ -1,43 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRTK;
 
 public class MitosisGameManager : MonoBehaviour 
 {
-    public bool inPlayMode;
     public string currentStructureName;
     public Vector2 waitBetweenThrowableSpawn = new Vector2( 0.05f, 0.3f );
-    public float throwableSpawnHeight = 1.5f;
+    public float throwableSpawnHeight = 3f;
     public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
     public float throwableSpawnScale = 0.4f;
-    public float throwableBoundsRadius = 2f;
+    public float throwableBoundsRadius = 1.5f;
     public float targetHeight = 1.5f;
-    public float targetDistanceFromCenter = 1.5f;
+    public float targetDistanceFromCenter = 2.2f;
 
     string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     ThrowableCell[] throwableCells;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
+    int correctlyPlacedThrowables;
 
-    static MitosisGameManager _Instance;
-    public static MitosisGameManager Instance
+    public void StartGame (string _structureName, float timeBeforeCellDrop)
     {
-        get
-        {
-            if (_Instance == null)
-            {
-                _Instance = GameObject.FindObjectOfType<MitosisGameManager>();
-            }
-            return _Instance;
-        }
-    }
-
-    void Start ()
-    {
+        correctlyPlacedThrowables = 0;
+        currentStructureName = _structureName;
         SpawnWalls();
         SpawnTargets();
-        StartCoroutine( "SpawnThrowables" );
+        StartCoroutine( SpawnThrowables( timeBeforeCellDrop ) );
     }
 
     void Update ()
@@ -53,9 +41,9 @@ public class MitosisGameManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnThrowables ()
+    IEnumerator SpawnThrowables (float waitTime)
     {
-        yield return new WaitForSeconds( 3f );
+        yield return new WaitForSeconds( waitTime );
 
         GameObject prefab, clone;
         foreach (string t in throwableNames)
@@ -143,6 +131,15 @@ public class MitosisGameManager : MonoBehaviour
         {
             wallPosition = Quaternion.Euler( 0, 360f / 6f, 0 ) * wallPosition;
             Instantiate( prefab, wallPosition + 20f * Vector3.up, Quaternion.LookRotation( -wallPosition, Vector3.up ), transform );
+        }
+    }
+
+    public void RecordCorrectHit ()
+    {
+        correctlyPlacedThrowables++;
+        if (correctlyPlacedThrowables >= throwableNames.Length)
+        {
+            VisualGuideManager.Instance.CompleteGame();
         }
     }
 }

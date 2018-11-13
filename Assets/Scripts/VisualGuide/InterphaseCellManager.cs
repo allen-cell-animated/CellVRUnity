@@ -34,6 +34,32 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
+    Mover _mover;
+    public Mover mover
+    {
+        get
+        {
+            if (_mover == null)
+            {
+                _mover = gameObject.AddComponent<Mover>();
+            }
+            return _mover;
+        }
+    }
+
+    Rotator _rotator;
+    public Rotator rotator
+    {
+        get
+        {
+            if (_rotator == null)
+            {
+                _rotator = gameObject.AddComponent<Rotator>();
+            }
+            return _rotator;
+        }
+    }
+
     void Start ()
     {
         structureLabel.gameObject.SetActive(false);
@@ -66,6 +92,7 @@ public class InterphaseCellManager : MonoBehaviour
     {
         selectedStructure = _structure;
         IsolateSelectedStructure();
+        VisualGuideManager.Instance.StartGame( _structure.structureName );
     }
 
     void IsolateSelectedStructure ()
@@ -79,6 +106,10 @@ public class InterphaseCellManager : MonoBehaviour
                 {
                     structure.gameObject.SetActive( false );
                 }
+                else
+                {
+                    structure.theCollider.enabled = false;
+                }
             }
         }
     }
@@ -87,9 +118,10 @@ public class InterphaseCellManager : MonoBehaviour
     {
         if (inIsolationMode)
         {
-            foreach (CellStructure s in structures)
+            foreach (CellStructure structure in structures)
             {
-                s.gameObject.SetActive( true );
+                structure.gameObject.SetActive( true );
+                structure.theCollider.enabled = true;
             }
             inIsolationMode = false;
         }

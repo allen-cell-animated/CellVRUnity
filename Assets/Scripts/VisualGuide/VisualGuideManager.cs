@@ -1,449 +1,82 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using VRTK;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class VisualGuideManager : MonoBehaviour 
-//{
-//    public VRTK_ControllerEvents pointerLeft;
-//    public VRTK_ControllerEvents pointerRight;
-//    public VisualGuideData data;
-//    public CellStructure selectedStructure;
-//    public bool canScale = true;
-//    public bool canRotate = true;
+public enum VisualGuideGameMode
+{
+    Lobby,
+    Play
+}
 
-//    bool rightTriggerDown;
-//    bool leftTriggerDown;
-//    bool translating;
-//    bool wasTranslating;
-//    bool inIsolationMode;
+public class VisualGuideManager : MonoBehaviour 
+{
+    public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
 
-//    Vector3 startScale;
-//    float startControllerDistance;
-//    Quaternion startRotation;
-//    Vector3 startControllerVector;
-//    Vector3 startPositiveVector;
-//    Vector3 minScale = new Vector3( 0.2f, 0.2f, 0.2f );
-//    Vector3 maxScale = new Vector3( 3f, 3f, 3f );
-//    Vector3[] linePoints = new Vector3[2];
+    MitosisGameManager currentGameManager;
+    Vector3 interphaseCellLobbyPosition;
+    Quaternion interphaseCellLobbyRotation;
 
-//    static VisualGuideManager _Instance;
-//    public static VisualGuideManager Instance
-//    {
-//        get
-//        {
-//            if (_Instance == null)
-//            {
-//                _Instance = GameObject.FindObjectOfType<VisualGuideManager>();
-//            }
-//            return _Instance;
-//        }
-//    }
+    static VisualGuideManager _Instance;
+    public static VisualGuideManager Instance
+    {
+        get
+        {
+            if (_Instance == null)
+            {
+                _Instance = GameObject.FindObjectOfType<VisualGuideManager>();
+            }
+            return _Instance;
+        }
+    }
 
-//    List<CellStructure> _structures;
-//    public List<CellStructure> structures
-//    {
-//        get
-//        {
-//            if (_structures == null)
-//            {
-//                _structures = new List<CellStructure>( GetComponentsInChildren<CellStructure>( true ) );
-//            }
-//            return _structures;
-//        }
-//    }
+    InterphaseCellManager _interphaseCell;
+    InterphaseCellManager interphaseCell
+    {
+        get
+        {
+            if (_interphaseCell == null)
+            {
+                _interphaseCell = GameObject.FindObjectOfType<InterphaseCellManager>();
+            }
+            return _interphaseCell;
+        }
+    }
 
-//    LabelCanvas _structureLabel;
-//    LabelCanvas structureLabel
-//    {
-//        get
-//        {
-//            if (_structureLabel == null)
-//            {
-//                _structureLabel = GameObject.FindObjectOfType<LabelCanvas>();
-//            }
-//            return _structureLabel;
-//        }
-//    }
+    void Start ()
+    {
+        interphaseCellLobbyPosition = interphaseCell.transform.position;
+        interphaseCellLobbyRotation = interphaseCell.transform.rotation;
+    }
 
-//    InfoCanvas _infoPanel;
-//    InfoCanvas infoPanel
-//    {
-//        get
-//        {
-//            if (_infoPanel == null)
-//            {
-//                _infoPanel = GameObject.FindObjectOfType<InfoCanvas>();
-//            }
-//            return _infoPanel;
-//        }
-//    }
+    public void StartGame (string structureName)
+    {
+        if (currentMode == VisualGuideGameMode.Lobby)
+        {
+            currentMode = VisualGuideGameMode.Play;
+            GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
+            if (prefab == null)
+            {
+                Debug.LogWarning( "Couldn't load prefab for MitosisGame" );
+                return;
+            }
 
-//    void Start ()
-//    {
-//        infoPanel.gameObject.SetActive( false );
-//        structureLabel.gameObject.SetActive( false );
-//    }
+            currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
+            currentGameManager.StartGame( structureName, 3f );
 
-//    void Update ()
-//    {
-//        UpdateTranslating();
-//        UpdateButtonLabels();
-//    }
+            interphaseCell.mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
+            interphaseCell.rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
+        }
+    }
 
-//    // INPUT --------------------------------------------------------------------------------------------------
-
-//    void OnEnable ()
-//    {
-//        if (pointerLeft != null && pointerRight != null)
-//        {
-//            pointerRight.TriggerPressed += OnRightControllerTriggerDown;
-//            pointerLeft.TriggerPressed += OnLeftControllerTriggerDown;
-//            pointerRight.TriggerReleased += OnRightControllerTriggerUp;
-//            pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
-//        }
-//    }
-
-//    void OnDisable ()
-//    {
-//        if (pointerLeft != null && pointerRight != null)
-//        {
-//            pointerRight.TriggerPressed -= OnRightControllerTriggerDown;
-//            pointerLeft.TriggerPressed -= OnLeftControllerTriggerDown;
-//            pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
-//            pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
-//        }
-//    }
-
-//    void OnRightControllerTriggerDown (object sender, ControllerInteractionEventArgs e)
-//    {
-//        rightTriggerDown = true;
-//        wasTranslating = false;
-//    }
-
-//    void OnRightControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
-//    {
-//        rightTriggerDown = false;
-//        if (!wasTranslating)
-//        {
-//            IsolateSelectedStructure();
-//        }
-//    }
-
-//    void OnLeftControllerTriggerDown (object sender, ControllerInteractionEventArgs e)
-//    {
-//        leftTriggerDown = true;
-//    }
-
-//    void OnLeftControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
-//    {
-//        leftTriggerDown = false;
-//    }
-
-//    void UpdateTranslating ()
-//    {
-//        if (rightTriggerDown && leftTriggerDown)
-//        {
-//            if (!translating)
-//            {
-//                translating = wasTranslating = true;
-//                ToggleLaser( false );
-//                StartScaling();
-//                StartRotating();
-//            }
-//            else
-//            {
-//                UpdateScale();
-//                UpdateRotation();
-//            }
-//            ToggleLine( true );
-//        }
-//        else if (translating)
-//        {
-//            ToggleLine( false );
-//            ToggleLaser( true );
-//            translating = false;
-//        }
-//    }
-
-//    // HIGHLIGHT & LABEL --------------------------------------------------------------------------------------------------
-
-//    VRTK_Pointer _laser;
-//    VRTK_Pointer laser
-//    {
-//        get
-//        {
-//            if (_laser == null)
-//            {
-//                _laser = GameObject.FindObjectOfType<VRTK_Pointer>();
-//            }
-//            return _laser;
-//        }
-//    }
-
-//    void ToggleLaser (bool _active)
-//    {
-//        laser.enabled = false;
-//        laser.pointerRenderer.enabled = _active;
-//        laser.enabled = true;
-//        if (!_active)
-//        {
-//            HideLabel();
-//        }
-//    }
-
-//    public void OnHoverStructureEnter (CellStructure _selectedStructure)
-//    {
-//        if (!translating && !inIsolationMode)
-//        {
-//            selectedStructure = _selectedStructure;
-//            foreach (CellStructure structure in structures)
-//            {
-//                if (structure != selectedStructure)
-//                {
-//                    structure.GrayOut( true );
-//                }
-//            }
-//            selectedStructure.GrayOut( false );
-//            LabelSelectedStructure();
-//        }
-//    }
-
-//    public void OnHoverStructureExit ()
-//    {
-//        selectedStructure = null;
-//        foreach (CellStructure structure in structures)
-//        {
-//            structure.GrayOut( false );
-//        }
-//        HideLabel();
-//    }
-
-//    void LabelSelectedStructure ()
-//    {
-//        structureLabel.gameObject.SetActive( true );
-//        structureLabel.SetLabel( selectedStructure.data );
-//    }
-
-//    void HideLabel ()
-//    {
-//        structureLabel.gameObject.SetActive( false );
-//    }
-
-//    // ISOLATE --------------------------------------------------------------------------------------------------
-
-//    void IsolateSelectedStructure ()
-//    {
-//        if (selectedStructure != null && !inIsolationMode)
-//        {
-//            inIsolationMode = true;
-//            foreach (CellStructure structure in structures)
-//            {
-//                if (structure != selectedStructure)
-//                {
-//                    structure.gameObject.SetActive( false );
-//                }
-//            }
-//            ShowInfoPanelForSelectedStructure();
-//            SetNucleus( selectedStructure, true );
-//        }
-//    }
-
-//    void ShowInfoPanelForSelectedStructure ()
-//    {
-//        infoPanel.SetContent( selectedStructure.data );
-//        infoPanel.gameObject.SetActive( true );
-//    }
-
-//    public void ExitIsolationMode ()
-//    {
-//        if (inIsolationMode)
-//        {
-//            foreach (CellStructure s in structures)
-//            {
-//                s.gameObject.SetActive( true );
-//            }
-//            infoPanel.gameObject.SetActive( false );
-//            inIsolationMode = false;
-//            SetNucleus( selectedStructure, false);
-//        }
-//    }
-
-//    GameObject lastNucleus;
-//    public void SetNucleus (CellStructure _structure, bool _show)
-//    {
-//        if (_show)
-//        {
-//            if (_structure.nucleusToDisplayInIsolation != null)
-//            {
-//                lastNucleus = _structure.nucleusToDisplayInIsolation;
-//                lastNucleus.SetActive(_show);
-//            }
-//        }
-//        else
-//        {
-//            lastNucleus.SetActive(_show);
-//        }
-//    }
-
-//    // TRANSLATING --------------------------------------------------------------------------------------------------
-
-//    void StartScaling ()
-//    {
-//        if (canScale)
-//        {
-//            startScale = transform.localScale;
-//            startControllerDistance = Vector3.Distance( pointerRight.transform.position, pointerLeft.transform.position );
-//        }
-//    }
-
-//    void UpdateScale ()
-//    {
-//        if (canScale)
-//        {
-//            float scale = Vector3.Distance( pointerRight.transform.position, pointerLeft.transform.position ) / startControllerDistance;
-
-//            transform.localScale = ClampScale( scale * startScale );
-//        }
-//    }
-
-//    Vector3 ClampScale (Vector3 _scale)
-//    {
-//        if (_scale.magnitude > maxScale.magnitude)
-//        {
-//            return maxScale;
-//        }
-//        else if (_scale.magnitude < minScale.magnitude)
-//        {
-//            return minScale;
-//        }
-//        else
-//        {
-//            return _scale;
-//        }
-//    }
-
-//    void StartRotating ()
-//    {
-//        if (canRotate)
-//        {
-//            startRotation = transform.localRotation;
-//            startControllerVector = pointerRight.transform.position - pointerLeft.transform.position;
-//            startControllerVector.y = 0;
-//            startPositiveVector = Vector3.Cross( startControllerVector, Vector3.up );
-//        }
-//    }
-
-//    void UpdateRotation ()
-//    {
-//        if (canRotate)
-//        {
-//            Vector3 controllerVector = pointerRight.transform.position - pointerLeft.transform.position;
-//            controllerVector.y = 0;
-//            float direction = GetArcCosineDegrees( Vector3.Dot( startPositiveVector.normalized, controllerVector.normalized ) ) >= 90f ? 1f : -1f;
-//            float dAngle = direction * GetArcCosineDegrees( Vector3.Dot( startControllerVector.normalized, controllerVector.normalized ) );
-
-//            transform.localRotation = startRotation * Quaternion.AngleAxis( dAngle, Vector3.up );
-//        }
-//    }
-
-//    float GetArcCosineDegrees (float cosine)
-//    {
-//        if (cosine > 1f - float.Epsilon)
-//        {
-//            return 0;
-//        }
-//        if (cosine < -1f + float.Epsilon)
-//        {
-//            return 180f;
-//        }
-//        return Mathf.Acos( cosine ) * Mathf.Rad2Deg;
-//    }
-
-//    void ToggleLine (bool _active)
-//    {
-//        if (_active)
-//        {
-//            if (!scaleLine.gameObject.activeSelf)
-//            {
-//                scaleLine.gameObject.SetActive( true );
-//            }
-//            linePoints[0] = pointerRight.transform.position;
-//            linePoints[1] = pointerLeft.transform.position;
-//            scaleLine.SetPositions( linePoints );
-//        }
-//        else
-//        {
-//            scaleLine.gameObject.SetActive( false );
-//        }
-//    }
-
-//    // BUTTON LABELS --------------------------------------------------------------------------------------------------
-
-//    public LineRenderer scaleLine;
-//    public GameObject scaleButtonLabelRight;
-//    public GameObject selectButtonLabelRight;
-//    public GameObject labelLineRight;
-//    public GameObject scaleButtonLabelLeft;
-//    public GameObject labelLineLeft;
-
-//    void UpdateButtonLabels ()
-//    {
-//        if (!rightTriggerDown && !leftTriggerDown)
-//        {
-//            if (inIsolationMode)
-//            {
-//                ShowObject( scaleButtonLabelRight, true );
-//                ShowObject( selectButtonLabelRight, false );
-//                ShowObject( labelLineRight, true );
-//            }
-//            else 
-//            {
-//                ShowObject( scaleButtonLabelRight, false );
-//                ShowObject( selectButtonLabelRight, true );
-//                ShowObject( labelLineRight, true );
-//            }
-//            ShowObject( scaleButtonLabelLeft, true );
-//            ShowObject( labelLineLeft, true );
-//        }
-//        else if (rightTriggerDown && !leftTriggerDown)
-//        {
-//            ShowObject( scaleButtonLabelRight, false );
-//            ShowObject( selectButtonLabelRight, false );
-//            ShowObject( labelLineRight, false );
-//            ShowObject( scaleButtonLabelLeft, true );
-//            ShowObject( labelLineLeft, true );
-//        }
-//        else if (!rightTriggerDown && leftTriggerDown)
-//        {
-//            ShowObject( scaleButtonLabelRight, true );
-//            ShowObject( selectButtonLabelRight, false );
-//            ShowObject( labelLineRight, true );
-//            ShowObject( scaleButtonLabelLeft, false );
-//            ShowObject( labelLineLeft, false );
-//        }
-//        else
-//        {
-//            ShowObject( scaleButtonLabelRight, false );
-//            ShowObject( selectButtonLabelRight, false );
-//            ShowObject( labelLineRight, false );
-//            ShowObject( scaleButtonLabelLeft, false );
-//            ShowObject( labelLineLeft, false );
-//        }
-//    }
-
-//    void ShowObject (GameObject obj, bool show)
-//    {
-//        if (obj != null)
-//        {
-//            if (show && !obj.activeSelf)
-//            {
-//                obj.SetActive( true );
-//            }
-//            else if (!show && obj.activeSelf)
-//            {
-//                obj.SetActive( false );
-//            }
-//        }
-//    }
-//}
+    public void CompleteGame ()
+    {
+        if (currentMode == VisualGuideGameMode.Play)
+        {
+            currentMode = VisualGuideGameMode.Lobby;
+            Destroy( currentGameManager.gameObject );
+            interphaseCell.ExitIsolationMode();
+            interphaseCell.mover.MoveToOverDuration( interphaseCellLobbyPosition, 2f );
+            interphaseCell.rotator.RotateToOverDuration( interphaseCellLobbyRotation, 2f );
+        }
+    }
+}

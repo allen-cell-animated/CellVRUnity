@@ -15,6 +15,19 @@ public class ThrowableCell : VRTK_InteractableObject
     Vector3 lastPosition;
     Vector3 velocity;
 
+    MitosisGameManager _gameManager;
+    MitosisGameManager gameManager
+    {
+        get
+        {
+            if (_gameManager == null)
+            {
+                _gameManager = GetComponentInParent<MitosisGameManager>();
+            }
+            return _gameManager;
+        }
+    }
+
     Rigidbody _body;
     Rigidbody body
     {
@@ -79,6 +92,7 @@ public class ThrowableCell : VRTK_InteractableObject
         transform.rotation = target.transform.rotation * Quaternion.Euler( rotationOffsetAtTarget );
         attachedTargetRenderer = target.GetComponentInChildren<SpriteRenderer>();
         attachedTargetRenderer.enabled = false;
+        gameManager.RecordCorrectHit();
     }
 
     void BounceOffTarget (GameObject target)
