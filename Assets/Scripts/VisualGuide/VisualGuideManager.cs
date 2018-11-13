@@ -60,6 +60,8 @@ public class VisualGuideManager : MonoBehaviour
                 return;
             }
 
+            ControllerInput.Instance.ToggleLaserRenderer( false );
+
             currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
             currentGameManager.StartGame( structureName, 3f );
 
@@ -77,6 +79,7 @@ public class VisualGuideManager : MonoBehaviour
             interphaseCell.ExitIsolationMode();
             interphaseCell.mover.MoveToOverDuration( interphaseCellLobbyPosition, 2f );
             interphaseCell.rotator.RotateToOverDuration( interphaseCellLobbyRotation, 2f );
+            ControllerInput.Instance.ToggleLaserRenderer( true );
         }
     }
 }
