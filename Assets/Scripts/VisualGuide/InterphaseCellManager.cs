@@ -9,6 +9,7 @@ public class InterphaseCellManager : MonoBehaviour
     CellStructure selectedStructure;
     Vector3 lobbyPosition;
     Quaternion lobbyRotation;
+    float lobbyScale;
 
     LabelCanvas _structureLabel;
     LabelCanvas structureLabel
@@ -75,6 +76,19 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
+    Scaler _scaler;
+    Scaler scaler
+    {
+        get
+        {
+            if (_scaler == null)
+            {
+                _scaler = gameObject.AddComponent<Scaler>();
+            }
+            return _scaler;
+        }
+    }
+
     Animator _animator;
     Animator animator
     {
@@ -101,6 +115,7 @@ public class InterphaseCellManager : MonoBehaviour
         HideLabel();
         lobbyPosition = transform.position;
         lobbyRotation = transform.rotation;
+        lobbyScale = transform.localScale.x;
     }
 
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
@@ -108,6 +123,7 @@ public class InterphaseCellManager : MonoBehaviour
         transformer.enabled = false;
         mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
+        scaler.ScaleOverDuration( lobbyScale, 2f );
         structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
         HideLabel();
     }
@@ -115,8 +131,9 @@ public class InterphaseCellManager : MonoBehaviour
     public void TransitionToLobbyMode (string structureJustSolved)
     {
         ExitIsolationMode();
-        mover.MoveToOverDuration( lobbyPosition, 2f );
-        rotator.RotateToOverDuration( lobbyRotation, 2f );
+        transform.position = lobbyPosition;
+        transform.rotation = lobbyRotation;
+        transform.localScale = lobbyScale * Vector3.one;
         structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
         transformer.enabled = true;
         animator.SetTrigger( "Success" );

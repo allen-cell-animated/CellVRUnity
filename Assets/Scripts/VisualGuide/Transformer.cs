@@ -10,7 +10,6 @@ public class Transformer : MonoBehaviour
     public bool canRotate = true;
     public LineRenderer scaleLine;
 
-    bool wasTransforming;
     Vector3 startScale;
     float startControllerDistance;
     Quaternion startRotation;
@@ -33,7 +32,7 @@ public class Transformer : MonoBehaviour
         {
             if (!transforming)
             {
-                transforming = wasTransforming = true;
+                transforming = true;
                 ControllerInput.Instance.ToggleLaserRenderer( false );
                 StartScaling();
                 StartRotating();

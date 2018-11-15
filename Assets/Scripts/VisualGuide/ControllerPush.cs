@@ -5,8 +5,6 @@ using VRTK;
 
 public class ControllerPush : MonoBehaviour 
 {
-    bool pushEnabled = true;
-
     GameObject _pusher;
     GameObject pusher
     {

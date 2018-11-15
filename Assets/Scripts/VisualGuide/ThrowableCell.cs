@@ -12,8 +12,6 @@ public class ThrowableCell : VRTK_InteractableObject
     public Vector3 rotationOffsetAtTarget;
 
     SpriteRenderer attachedTargetRenderer;
-    Vector3 lastPosition;
-    Vector3 velocity;
 
     MitosisGameManager _gameManager;
     MitosisGameManager gameManager
@@ -47,14 +45,6 @@ public class ThrowableCell : VRTK_InteractableObject
         {
             return !(body.isKinematic || body.velocity.magnitude < 0.1f);
         }
-    }
-
-    protected override void Update ()
-    {
-        base.Update();
-
-        velocity = transform.position - lastPosition;
-        lastPosition = transform.position;
     }
 
     void OnCollisionEnter (Collision collision)
