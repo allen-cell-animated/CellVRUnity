@@ -13,8 +13,6 @@ public class VisualGuideManager : MonoBehaviour
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
 
     MitosisGameManager currentGameManager;
-    Vector3 interphaseCellLobbyPosition;
-    Quaternion interphaseCellLobbyRotation;
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -42,32 +40,27 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    void Start ()
-    {
-        interphaseCellLobbyPosition = interphaseCell.transform.position;
-        interphaseCellLobbyRotation = interphaseCell.transform.rotation;
-    }
-
     public void StartGame (string structureName)
     {
         if (currentMode == VisualGuideGameMode.Lobby)
         {
             currentMode = VisualGuideGameMode.Play;
-            GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
-            if (prefab == null)
-            {
-                Debug.LogWarning( "Couldn't load prefab for MitosisGame" );
-                return;
-            }
-
+            CreateMitosisGameManager( structureName );
+            interphaseCell.TransitionToPlayMode( currentGameManager );
             ControllerInput.Instance.ToggleLaserRenderer( false );
-
-            currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
-            currentGameManager.StartGame( structureName, 3f );
-
-            interphaseCell.mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
-            interphaseCell.rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
         }
+    }
+
+    void CreateMitosisGameManager (string structureName)
+    {
+        GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for MitosisGame" );
+            return;
+        }
+        currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
+        currentGameManager.StartGame( structureName, 3f );
     }
 
     public void CompleteGame ()
@@ -76,9 +69,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             currentMode = VisualGuideGameMode.Lobby;
             Destroy( currentGameManager.gameObject );
-            interphaseCell.ExitIsolationMode();
-            interphaseCell.mover.MoveToOverDuration( interphaseCellLobbyPosition, 2f );
-            interphaseCell.rotator.RotateToOverDuration( interphaseCellLobbyRotation, 2f );
+            interphaseCell.TransitionToLobbyMode();
             ControllerInput.Instance.ToggleLaserRenderer( true );
         }
     }

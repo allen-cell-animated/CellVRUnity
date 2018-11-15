@@ -84,11 +84,11 @@ public class MitosisGameManager : MonoBehaviour
 
     void PlaceThrowablesIfOutOfBounds ()
     {
-        if (Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks && throwableCells != null)
+        if (throwableCells != null && Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks)
         {
             foreach (ThrowableCell throwableCell in throwableCells)
             {
-                if (!throwableCell.boundToTarget && !throwableCell.isMoving && throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
+                if (!throwableCell.boundToTarget && !throwableCell.isMoving && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
                     throwableCell.ReleaseFromTarget( true );
                     StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );

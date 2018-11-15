@@ -7,6 +7,8 @@ public class InterphaseCellManager : MonoBehaviour
     bool inIsolationMode;
     CellStructure highlightedStructure;
     CellStructure selectedStructure;
+    Vector3 lobbyPosition;
+    Quaternion lobbyRotation;
 
     LabelCanvas _structureLabel;
     LabelCanvas structureLabel
@@ -31,6 +33,19 @@ public class InterphaseCellManager : MonoBehaviour
                 _structures = GetComponentsInChildren<CellStructure>();
             }
             return _structures;
+        }
+    }
+
+    Transformer _transformer;
+    public Transformer transformer
+    {
+        get
+        {
+            if (_transformer == null)
+            {
+                _transformer = GetComponent<Transformer>();
+            }
+            return _transformer;
         }
     }
 
@@ -62,7 +77,9 @@ public class InterphaseCellManager : MonoBehaviour
 
     void Start ()
     {
-        structureLabel.gameObject.SetActive(false);
+        HideLabel();
+        lobbyPosition = transform.position;
+        lobbyRotation = transform.rotation;
     }
 
     void Update ()
@@ -73,16 +90,32 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
+    public void TransitionToPlayMode (MitosisGameManager currentGameManager)
+    {
+        HideLabel();
+        mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
+        rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
+    }
+
+    public void TransitionToLobbyMode ()
+    {
+        ExitIsolationMode();
+        mover.MoveToOverDuration( lobbyPosition, 2f );
+        rotator.RotateToOverDuration( lobbyRotation, 2f );
+        transformer.enabled = false;
+    }
+
     public void LabelStructure (CellStructure _structure)
     {
         highlightedStructure = _structure;
         structureLabel.gameObject.SetActive( true );
         structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
+        transformer.enabled = true;
     }
 
-    public void HideLabel (CellStructure _structure)
+    public void HideLabel (CellStructure _structure = null)
     {
-        if (_structure == highlightedStructure)
+        if (_structure == null || _structure == highlightedStructure)
         {
             structureLabel.gameObject.SetActive( false );
         }
