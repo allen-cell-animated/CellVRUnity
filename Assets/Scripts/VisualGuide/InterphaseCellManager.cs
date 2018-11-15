@@ -82,7 +82,7 @@ public class InterphaseCellManager : MonoBehaviour
         {
             if (_animator == null)
             {
-                _animator = GetComponent<Animator>();
+                _animator = GetComponentInChildren<Animator>();
             }
             return _animator;
         }
@@ -134,7 +134,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void HideLabel (CellStructure _structure = null)
     {
-        if (_structure == null || _structure == highlightedStructure)
+        if (structureLabel != null && (_structure == null || _structure == highlightedStructure))
         {
             structureLabel.gameObject.SetActive( false );
         }
