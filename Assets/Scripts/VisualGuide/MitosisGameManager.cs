@@ -139,31 +139,8 @@ public class MitosisGameManager : MonoBehaviour
         correctlyPlacedThrowables++;
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
-            StartAnimateSuccess();
+            VisualGuideManager.Instance.CompleteGame();
         }
-    }
-
-    void StartAnimateSuccess ()
-    {
-        //turn off throwable cells and targets
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive( false );
-        }
-
-        //create mitosis animation
-        GameObject prefab = Resources.Load( currentStructureName + "/MitoticCells" ) as GameObject;
-        if (prefab == null)
-        {
-            Debug.LogWarning( "Couldn't load prefab for MitoticCells!" );
-        }
-        Animator mitoticCellsAnimation = (Instantiate( prefab, transform.position, transform.rotation, transform ) as GameObject).GetComponent<Animator>();
-        mitoticCellsAnimation.SetTrigger( "Play" );
-    }
-
-    public void FinishAnimateSuccess ()
-    {
-        VisualGuideManager.Instance.CompleteGame( currentStructureName );
     }
 
     public void RemoveCorrectHit ()

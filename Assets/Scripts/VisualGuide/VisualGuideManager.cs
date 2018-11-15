@@ -80,13 +80,33 @@ public class VisualGuideManager : MonoBehaviour
         currentGameManager.StartGame( structureName, 3f );
     }
 
-    public void CompleteGame (string structureName)
+    public void CompleteGame ()
+    {
+        interphaseCell.gameObject.SetActive( false );
+        currentGameManager.gameObject.SetActive( false );
+
+        //create mitosis animation
+        GameObject prefab = Resources.Load( currentGameManager.currentStructureName + "/MitoticCells" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for " + currentGameManager.currentStructureName + " MitoticCells!" );
+        }
+        Animator mitoticCellsAnimation = (Instantiate( prefab, transform.position, transform.rotation, transform ) as GameObject).GetComponent<Animator>();
+        mitoticCellsAnimation.SetTrigger( "Play" );
+    }
+
+    public void CleanupGame ()
     {
         if (currentMode == VisualGuideGameMode.Play)
         {
             currentMode = VisualGuideGameMode.Lobby;
+
+            string structureName = currentGameManager.currentStructureName;
             Destroy( currentGameManager.gameObject );
+
+            interphaseCell.gameObject.SetActive( true );
             interphaseCell.TransitionToLobbyMode( structureName );
+
             structuresSolved[structureName] = true;
             ControllerInput.Instance.ToggleLaserRenderer( true );
         }
