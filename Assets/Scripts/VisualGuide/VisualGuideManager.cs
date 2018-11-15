@@ -11,8 +11,8 @@ public enum VisualGuideGameMode
 public class VisualGuideManager : MonoBehaviour 
 {
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
+    public MitosisGameManager currentGameManager;
 
-    MitosisGameManager currentGameManager;
     Dictionary<string,bool> structuresSolved;
 
     static VisualGuideManager _Instance;

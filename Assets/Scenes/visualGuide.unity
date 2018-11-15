@@ -3987,7 +3987,7 @@ Animator:
   m_GameObject: {fileID: 1014340771}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c62c43b1837744d43bb5eafe6282744e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4007,6 +4007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ed055bcd454fc892dd1e97b8cbbc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transforming: 0
   canScale: 1
   canRotate: 1
   scaleLine: {fileID: 630044442}
@@ -12469,6 +12470,8 @@ MonoBehaviour:
   pointerRight: {fileID: 1000040355}
   rightTriggerDown: 0
   leftTriggerDown: 0
+  rightGripDown: 0
+  leftGripDown: 0
 --- !u!114 &1839477189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12481,6 +12484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMode: 0
+  currentGameManager: {fileID: 0}
 --- !u!4 &1839477190
 Transform:
   m_ObjectHideFlags: 0

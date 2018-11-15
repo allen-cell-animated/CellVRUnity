@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Mitochondria
+  m_Name: Mitochondria_Telophase_anim
   m_Shader: {fileID: 4800000, guid: d176263621d5543a9847510acc450942, type: 3}
   m_ShaderKeywords: _EMISSION _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 0
@@ -47,7 +47,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 209a5b9b8719e4dd884020c78a266013, type: 3}
+        m_Texture: {fileID: 2800000, guid: d7069684ca8984a969c6d812d37e44c1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -72,5 +72,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.40784314, g: 0.92156863, b: 0.76862746, a: 1}
-    - _EmissionColor: {r: 0, g: 0.40392157, b: 0.4117647, a: 1}
+    - _Color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+    - _EmissionColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}

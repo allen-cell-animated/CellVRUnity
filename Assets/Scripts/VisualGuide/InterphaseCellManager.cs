@@ -75,6 +75,19 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
+    Animator _animator;
+    Animator animator
+    {
+        get
+        {
+            if (_animator == null)
+            {
+                _animator = GetComponent<Animator>();
+            }
+            return _animator;
+        }
+    }
+
     bool canInteract 
     {
         get
@@ -106,6 +119,7 @@ public class InterphaseCellManager : MonoBehaviour
         rotator.RotateToOverDuration( lobbyRotation, 2f );
         structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
         transformer.enabled = true;
+        animator.SetTrigger( "Success" );
     }
 
     public void LabelStructure (CellStructure _structure)
