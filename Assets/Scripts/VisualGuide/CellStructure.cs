@@ -61,7 +61,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         get
         {
-            return ControllerInput.Instance.laserPointer;
+            return ControllerInput.Instance == null ? null : ControllerInput.Instance.laserPointer;
         }
     }
 

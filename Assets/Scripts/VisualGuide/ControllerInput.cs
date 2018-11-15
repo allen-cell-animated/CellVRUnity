@@ -9,6 +9,8 @@ public class ControllerInput : MonoBehaviour
     public VRTK_ControllerEvents pointerRight;
     public bool rightTriggerDown;
     public bool leftTriggerDown;
+    public bool rightGripDown;
+    public bool leftGripDown;
 
     static ControllerInput _Instance;
     public static ControllerInput Instance
@@ -29,11 +31,15 @@ public class ControllerInput : MonoBehaviour
         {
             pointerLeft.TriggerPressed += OnLeftControllerTriggerDown;
             pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
+            pointerLeft.GripPressed += OnLeftControllerGripDown;
+            pointerLeft.GripReleased += OnLeftControllerGripUp;
         }
         if (pointerRight != null)
         {
             pointerRight.TriggerPressed += OnRightControllerTriggerDown;
             pointerRight.TriggerReleased += OnRightControllerTriggerUp;
+            pointerRight.GripPressed += OnRightControllerGripDown;
+            pointerRight.GripReleased += OnRightControllerGripUp;
         }
     }
 
@@ -43,11 +49,15 @@ public class ControllerInput : MonoBehaviour
         {
             pointerLeft.TriggerPressed -= OnLeftControllerTriggerDown;
             pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
+            pointerLeft.GripPressed -= OnLeftControllerGripDown;
+            pointerLeft.GripReleased -= OnLeftControllerGripUp;
         }
         if (pointerRight != null)
         {
             pointerRight.TriggerPressed -= OnRightControllerTriggerDown;
             pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
+            pointerRight.GripPressed -= OnRightControllerGripDown;
+            pointerRight.GripReleased -= OnRightControllerGripUp;
         }
     }
 
@@ -69,6 +79,26 @@ public class ControllerInput : MonoBehaviour
     void OnLeftControllerTriggerUp (object sender, ControllerInteractionEventArgs e)
     {
         leftTriggerDown = false;
+    }
+
+    void OnRightControllerGripDown (object sender, ControllerInteractionEventArgs e)
+    {
+        rightGripDown = true;
+    }
+
+    void OnRightControllerGripUp (object sender, ControllerInteractionEventArgs e)
+    {
+        rightGripDown = false;
+    }
+
+    void OnLeftControllerGripDown (object sender, ControllerInteractionEventArgs e)
+    {
+        leftGripDown = true;
+    }
+
+    void OnLeftControllerGripUp (object sender, ControllerInteractionEventArgs e)
+    {
+        leftGripDown = false;
     }
 
     VRTK_Pointer _laserRenderer;

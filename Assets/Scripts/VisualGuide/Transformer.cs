@@ -29,7 +29,7 @@ public class Transformer : MonoBehaviour
 
     void UpdateTransforming ()
     {
-        if (ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.leftTriggerDown)
+        if (ControllerInput.Instance.rightGripDown && ControllerInput.Instance.leftGripDown)
         {
             if (!transforming)
             {
