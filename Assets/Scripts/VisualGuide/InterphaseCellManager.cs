@@ -121,9 +121,9 @@ public class InterphaseCellManager : MonoBehaviour
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
     {
         transformer.enabled = false;
-        mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
-        rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
-        scaler.ScaleOverDuration( lobbyScale, 2f );
+        mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 1f );
+        rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 1f );
+        scaler.ScaleOverDuration( lobbyScale, 1f );
         structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
         HideLabel();
     }
