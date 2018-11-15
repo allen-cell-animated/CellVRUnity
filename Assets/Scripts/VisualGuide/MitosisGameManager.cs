@@ -139,7 +139,7 @@ public class MitosisGameManager : MonoBehaviour
         correctlyPlacedThrowables++;
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
-            VisualGuideManager.Instance.CompleteGame();
+            VisualGuideManager.Instance.CompleteGame( currentStructureName );
         }
     }
 

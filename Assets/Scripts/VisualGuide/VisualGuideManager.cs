@@ -13,6 +13,7 @@ public class VisualGuideManager : MonoBehaviour
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
 
     MitosisGameManager currentGameManager;
+    Dictionary<string,bool> structuresSolved;
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -40,6 +41,21 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
+    void Start ()
+    {
+        SetupPuzzles();
+    }
+
+    void SetupPuzzles ()
+    {
+        structuresSolved = new Dictionary<string, bool>();
+        CellStructure[] structures = GetComponentsInChildren<CellStructure>();
+        foreach (CellStructure structure in structures)
+        {
+            structuresSolved.Add( structure.structureName, false );
+        }
+    }
+
     public void StartGame (string structureName)
     {
         if (currentMode == VisualGuideGameMode.Lobby)
@@ -47,6 +63,7 @@ public class VisualGuideManager : MonoBehaviour
             currentMode = VisualGuideGameMode.Play;
             CreateMitosisGameManager( structureName );
             interphaseCell.TransitionToPlayMode( currentGameManager );
+            structuresSolved[structureName] = false;
             ControllerInput.Instance.ToggleLaserRenderer( false );
         }
     }
@@ -63,13 +80,14 @@ public class VisualGuideManager : MonoBehaviour
         currentGameManager.StartGame( structureName, 3f );
     }
 
-    public void CompleteGame ()
+    public void CompleteGame (string structureName)
     {
         if (currentMode == VisualGuideGameMode.Play)
         {
             currentMode = VisualGuideGameMode.Lobby;
             Destroy( currentGameManager.gameObject );
-            interphaseCell.TransitionToLobbyMode();
+            interphaseCell.TransitionToLobbyMode( structureName );
+            structuresSolved[structureName] = true;
             ControllerInput.Instance.ToggleLaserRenderer( true );
         }
     }

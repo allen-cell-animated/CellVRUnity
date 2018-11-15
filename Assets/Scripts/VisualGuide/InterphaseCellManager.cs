@@ -23,14 +23,14 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
-    CellStructure[] _structures;
-    CellStructure[] structures
+    List<CellStructure> _structures;
+    List<CellStructure> structures
     {
         get
         {
             if (_structures == null)
             {
-                _structures = GetComponentsInChildren<CellStructure>();
+                _structures = new List<CellStructure>( GetComponentsInChildren<CellStructure>() );
             }
             return _structures;
         }
@@ -95,14 +95,16 @@ public class InterphaseCellManager : MonoBehaviour
         transformer.enabled = false;
         mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
+        structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
         HideLabel();
     }
 
-    public void TransitionToLobbyMode ()
+    public void TransitionToLobbyMode (string structureJustSolved)
     {
         ExitIsolationMode();
         mover.MoveToOverDuration( lobbyPosition, 2f );
         rotator.RotateToOverDuration( lobbyRotation, 2f );
+        structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
         transformer.enabled = true;
     }
 
