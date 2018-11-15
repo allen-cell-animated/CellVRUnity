@@ -5,13 +5,12 @@ using VRTK;
 
 public class Transformer : MonoBehaviour 
 {
+    public bool transforming;
     public bool canScale = true;
     public bool canRotate = true;
     public LineRenderer scaleLine;
 
-    bool transforming;
     bool wasTransforming;
-
     Vector3 startScale;
     float startControllerDistance;
     Quaternion startRotation;

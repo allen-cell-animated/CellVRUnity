@@ -142,4 +142,12 @@ public class MitosisGameManager : MonoBehaviour
             VisualGuideManager.Instance.CompleteGame();
         }
     }
+
+    public void RemoveCorrectHit ()
+    {
+        if (correctlyPlacedThrowables > 0)
+        {
+            correctlyPlacedThrowables--;
+        }
+    }
 }

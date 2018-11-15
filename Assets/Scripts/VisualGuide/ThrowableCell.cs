@@ -75,13 +75,13 @@ public class ThrowableCell : VRTK_InteractableObject
     public override void Grabbed (VRTK_InteractGrab currentGrabbingObject = null)
     {
         base.Grabbed( currentGrabbingObject );
-        ReleaseFromTarget( false );
+        ReleaseFromTarget();
     }
 
     public override void Ungrabbed (VRTK_InteractGrab previousGrabbingObject = null)
     {
         base.Ungrabbed( previousGrabbingObject );
-        ReleaseFromTarget( false );
+        ReleaseFromTarget();
     }
 
     void BindToTarget (GameObject target)
@@ -103,9 +103,15 @@ public class ThrowableCell : VRTK_InteractableObject
         target.GetComponent<Animator>().SetTrigger( "Fail" );
     }
 
-    public void ReleaseFromTarget (bool resetVelocity)
+    public void ReleaseFromTarget (bool resetVelocity = false)
     {
+        if (boundToTarget)
+        {
+            gameManager.RemoveCorrectHit();
+        }
+
         body.isKinematic = boundToTarget = false;
+
         if (attachedTargetRenderer != null)
         {
             attachedTargetRenderer.enabled = true;

@@ -37,7 +37,7 @@ public class InterphaseCellManager : MonoBehaviour
     }
 
     Transformer _transformer;
-    public Transformer transformer
+    Transformer transformer
     {
         get
         {
@@ -50,7 +50,7 @@ public class InterphaseCellManager : MonoBehaviour
     }
 
     Mover _mover;
-    public Mover mover
+    Mover mover
     {
         get
         {
@@ -63,7 +63,7 @@ public class InterphaseCellManager : MonoBehaviour
     }
 
     Rotator _rotator;
-    public Rotator rotator
+    Rotator rotator
     {
         get
         {
@@ -75,6 +75,14 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
+    bool canInteract 
+    {
+        get
+        {
+            return !transformer.transforming && VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby;
+        }
+    }
+
     void Start ()
     {
         HideLabel();
@@ -82,19 +90,12 @@ public class InterphaseCellManager : MonoBehaviour
         lobbyRotation = transform.rotation;
     }
 
-    void Update ()
-    {
-        if (inIsolationMode && ControllerInput.Instance.leftTriggerDown)
-        {
-            ExitIsolationMode();
-        }
-    }
-
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
     {
-        HideLabel();
+        transformer.enabled = false;
         mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 2f );
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 2f );
+        HideLabel();
     }
 
     public void TransitionToLobbyMode ()
@@ -102,15 +103,17 @@ public class InterphaseCellManager : MonoBehaviour
         ExitIsolationMode();
         mover.MoveToOverDuration( lobbyPosition, 2f );
         rotator.RotateToOverDuration( lobbyRotation, 2f );
-        transformer.enabled = false;
+        transformer.enabled = true;
     }
 
     public void LabelStructure (CellStructure _structure)
     {
-        highlightedStructure = _structure;
-        structureLabel.gameObject.SetActive( true );
-        structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
-        transformer.enabled = true;
+        if (canInteract)
+        {
+            highlightedStructure = _structure;
+            structureLabel.gameObject.SetActive( true );
+            structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
+        }
     }
 
     public void HideLabel (CellStructure _structure = null)
@@ -123,9 +126,12 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void SelectStructure (CellStructure _structure)
     {
-        selectedStructure = _structure;
-        IsolateSelectedStructure();
-        VisualGuideManager.Instance.StartGame( _structure.structureName );
+        if (canInteract)
+        {
+            selectedStructure = _structure;
+            IsolateSelectedStructure();
+            VisualGuideManager.Instance.StartGame( _structure.structureName );
+        }
     }
 
     void IsolateSelectedStructure ()
