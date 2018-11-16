@@ -183,7 +183,16 @@ public class MitosisGameManager : MonoBehaviour
         }
         else
         {
-            VisualGuideManager.Instance.FinishSuccessAnimation();
+            throwableCells[animationPhase-2].gameObject.SetActive( false );
+            StartCoroutine( WaitToTriggerLastPhase() );
         }
+    }
+
+    IEnumerator WaitToTriggerLastPhase ()
+    {
+        yield return new WaitForSeconds( 1f );
+
+        throwableCells[throwableCells.Length-1].gameObject.SetActive( false );
+        VisualGuideManager.Instance.FinishSuccessAnimation();
     }
 }
