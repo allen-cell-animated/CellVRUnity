@@ -176,7 +176,7 @@ public class MitosisGameManager : MonoBehaviour
             }
             else if (animationPhase > 1)
             {
-                throwableCells[animationPhase-1].gameObject.SetActive( false );
+                throwableCells[animationPhase-2].gameObject.SetActive( false );
             }
             throwableCells[animationPhase].AnimateSuccess();
             animationPhase++;

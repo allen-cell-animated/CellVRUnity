@@ -125,7 +125,7 @@ public class InterphaseCellManager : MonoBehaviour
         mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, duration );
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
-        currentGameManager.TurnOffInterphaseCellTarget( duration );
+        StartCoroutine( currentGameManager.TurnOffInterphaseCellTarget( duration ) );
         structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
         HideLabel();
     }
