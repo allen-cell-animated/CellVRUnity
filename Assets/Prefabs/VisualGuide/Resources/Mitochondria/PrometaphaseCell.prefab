@@ -339,7 +339,7 @@ MonoBehaviour:
   usingState: 0
   boundToTarget: 0
   boundsRadius: 0
-  rotationOffsetAtTarget: {x: 30, y: 0.66, z: -50}
+  rotationOffsetAtTarget: {x: 30, y: -65, z: -50}
   alignedMitosisPosition: {x: -0.01609913, y: 0.688, z: 0.09721734}
   alignedMitosisRotation: {x: 0, y: -50.546, z: 0}
   alignedMitosisScale: 0.5
