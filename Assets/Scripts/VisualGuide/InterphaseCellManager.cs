@@ -120,10 +120,12 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
     {
+        float duration = 1f;
         transformer.enabled = false;
-        mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, 1f );
-        rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), 1f );
-        scaler.ScaleOverDuration( lobbyScale, 1f );
+        mover.MoveToOverDuration( currentGameManager.targetDistanceFromCenter * Vector3.forward + currentGameManager.targetHeight * Vector3.up, duration );
+        rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
+        scaler.ScaleOverDuration( lobbyScale, duration );
+        currentGameManager.TurnOffInterphaseCellTarget( duration );
         structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
         HideLabel();
     }

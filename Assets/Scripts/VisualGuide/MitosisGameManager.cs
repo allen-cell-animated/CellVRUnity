@@ -15,6 +15,7 @@ public class MitosisGameManager : MonoBehaviour
 
     string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     ThrowableCell[] throwableCells;
+    GameObject[] targets;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
     int correctlyPlacedThrowables;
@@ -107,14 +108,28 @@ public class MitosisGameManager : MonoBehaviour
             return;
         }
 
-        GameObject target;
+        targets = new GameObject[throwableNames.Length + 1];
         Vector3 targetPosition = targetDistanceFromCenter * Vector3.forward;
-        for (int i = 0; i < throwableNames.Length; i++)
+        for (int i = 0; i < throwableNames.Length + 1; i++)
         {
             targetPosition = Quaternion.Euler( 0, 360f / (throwableNames.Length + 1f), 0 ) * targetPosition;
-            target = Instantiate( prefab, targetPosition + targetHeight * Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
-            target.name = throwableNames[i] + "Target";
+            targets[i] = Instantiate( prefab, targetPosition + targetHeight * Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
+            if (i < throwableNames.Length)
+            {
+                targets[i].name = throwableNames[i] + "Target";
+            }
+            else //interphase cell target
+            {
+                targets[i].GetComponent<SphereCollider>().enabled = false;
+            }
         }
+    }
+
+    public IEnumerator TurnOffInterphaseCellTarget (float waitTime)
+    {
+        yield return new WaitForSeconds( waitTime );
+
+        targets[throwableNames.Length].SetActive( false );
     }
 
     void SpawnWalls ()
