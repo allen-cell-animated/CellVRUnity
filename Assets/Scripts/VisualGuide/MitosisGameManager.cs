@@ -5,7 +5,7 @@ using UnityEngine;
 public class MitosisGameManager : MonoBehaviour 
 {
     public string currentStructureName;
-    public Vector2 waitBetweenThrowableSpawn = new Vector2( 0.05f, 0.3f );
+    public float waitBetweenThrowableSpawn = 0.2f;
     public float throwableSpawnHeight = 3f;
     public Vector2 throwableSpawnRingExtents = new Vector2( 0.5f, 0.6f );
     public float throwableSpawnScale = 0.4f;
@@ -19,6 +19,7 @@ public class MitosisGameManager : MonoBehaviour
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
     int correctlyPlacedThrowables;
+    int animationPhase;
 
     public void StartGame (string _structureName, float timeBeforeCellDrop)
     {
@@ -46,25 +47,24 @@ public class MitosisGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds( waitTime );
 
-        GameObject prefab, clone;
-        foreach (string t in throwableNames)
+        GameObject prefab;
+        throwableCells = new ThrowableCell[throwableNames.Length];
+        for (int i = 0; i < throwableNames.Length; i++)
         {
-            prefab = Resources.Load( currentStructureName + "/" + t ) as GameObject;
+            prefab = Resources.Load( currentStructureName + "/" + throwableNames[i] ) as GameObject;
             if (prefab == null)
             {
-                Debug.LogWarning( "Couldn't load prefab for " + currentStructureName + " " + t );
+                Debug.LogWarning( "Couldn't load prefab for " + currentStructureName + " " + throwableNames[i] );
                 continue;
             }
 
-            clone = Instantiate( prefab, transform ) as GameObject;
-            clone.transform.position = transform.position + randomPositionInThrowableSpawnArea;
-            clone.transform.rotation = Random.rotation;
-            clone.transform.localScale = throwableSpawnScale * Vector3.one;
+            throwableCells[i] = (Instantiate( prefab, transform ) as GameObject).GetComponent<ThrowableCell>();
+            throwableCells[i].transform.position = transform.position + randomPositionInThrowableSpawnArea;
+            throwableCells[i].transform.rotation = Random.rotation;
+            throwableCells[i].transform.localScale = throwableSpawnScale * Vector3.one;
 
-            yield return new WaitForSeconds( Random.Range( waitBetweenThrowableSpawn.x, waitBetweenThrowableSpawn.y ) );
+            yield return new WaitForSeconds( waitBetweenThrowableSpawn );
         }
-
-        throwableCells = GetComponentsInChildren<ThrowableCell>();
     }
 
     IEnumerator PlaceThrowable (Transform throwable, float waitTime)
@@ -163,6 +163,27 @@ public class MitosisGameManager : MonoBehaviour
         if (correctlyPlacedThrowables > 0)
         {
             correctlyPlacedThrowables--;
+        }
+    }
+
+    public void AnimateNextPhase ()
+    {
+        if (animationPhase < throwableNames.Length)
+        {
+            if (animationPhase == 1)
+            {
+                VisualGuideManager.Instance.interphaseCell.gameObject.SetActive( false );
+            }
+            else if (animationPhase > 1)
+            {
+                throwableCells[animationPhase-1].gameObject.SetActive( false );
+            }
+            throwableCells[animationPhase].AnimateSuccess();
+            animationPhase++;
+        }
+        else
+        {
+            VisualGuideManager.Instance.FinishSuccessAnimation();
         }
     }
 }

@@ -14,6 +14,7 @@ public class VisualGuideManager : MonoBehaviour
     public MitosisGameManager currentGameManager;
 
     Dictionary<string,bool> structuresSolved;
+    Animator mitoticCellsAnimation;
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -29,7 +30,7 @@ public class VisualGuideManager : MonoBehaviour
     }
 
     InterphaseCellManager _interphaseCell;
-    InterphaseCellManager interphaseCell
+    public InterphaseCellManager interphaseCell
     {
         get
         {
@@ -82,16 +83,17 @@ public class VisualGuideManager : MonoBehaviour
 
     public void CompleteGame ()
     {
-        interphaseCell.gameObject.SetActive( false );
-        currentGameManager.gameObject.SetActive( false );
+        interphaseCell.MoveToCenter( 1f );
+    }
 
-        //create mitosis animation
+    public void FinishSuccessAnimation ()
+    {
         GameObject prefab = Resources.Load( currentGameManager.currentStructureName + "/MitoticCells" ) as GameObject;
         if (prefab == null)
         {
             Debug.LogWarning( "Couldn't load prefab for " + currentGameManager.currentStructureName + " MitoticCells!" );
         }
-        Animator mitoticCellsAnimation = (Instantiate( prefab, transform.position, transform.rotation, transform ) as GameObject).GetComponent<Animator>();
+        mitoticCellsAnimation = (Instantiate( prefab, transform.position, transform.rotation, transform ) as GameObject).GetComponent<Animator>();
         mitoticCellsAnimation.SetTrigger( "Play" );
     }
 
@@ -103,6 +105,7 @@ public class VisualGuideManager : MonoBehaviour
 
             string structureName = currentGameManager.currentStructureName;
             Destroy( currentGameManager.gameObject );
+            Destroy( mitoticCellsAnimation.gameObject );
 
             interphaseCell.gameObject.SetActive( true );
             interphaseCell.TransitionToLobbyMode( structureName );

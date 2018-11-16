@@ -130,6 +130,18 @@ public class InterphaseCellManager : MonoBehaviour
         HideLabel();
     }
 
+    public void MoveToCenter (float duration)
+    {
+        mover.MoveToOverDuration( lobbyPosition, duration, ArrivedAtCenter );
+        rotator.RotateToOverDuration( lobbyRotation, duration );
+        scaler.ScaleOverDuration( lobbyScale, duration );
+    }
+
+    public void ArrivedAtCenter ()
+    {
+        VisualGuideManager.Instance.currentGameManager.AnimateNextPhase();
+    }
+
     public void TransitionToLobbyMode (string structureJustSolved)
     {
         ExitIsolationMode();

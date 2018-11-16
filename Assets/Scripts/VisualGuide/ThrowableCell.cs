@@ -10,6 +10,9 @@ public class ThrowableCell : VRTK_InteractableObject
     public bool boundToTarget;
     public float boundsRadius;
     public Vector3 rotationOffsetAtTarget;
+    public Vector3 alignedMitosisPosition;
+    public Vector3 alignedMitosisRotation;
+    public float alignedMitosisScale;
 
     SpriteRenderer attachedTargetRenderer;
 
@@ -36,6 +39,45 @@ public class ThrowableCell : VRTK_InteractableObject
                 _body = GetComponent<Rigidbody>();
             }
             return _body;
+        }
+    }
+
+    Mover _mover;
+    Mover mover
+    {
+        get
+        {
+            if (_mover == null)
+            {
+                _mover = gameObject.AddComponent<Mover>();
+            }
+            return _mover;
+        }
+    }
+
+    Rotator _rotator;
+    Rotator rotator
+    {
+        get
+        {
+            if (_rotator == null)
+            {
+                _rotator = gameObject.AddComponent<Rotator>();
+            }
+            return _rotator;
+        }
+    }
+
+    Scaler _scaler;
+    Scaler scaler
+    {
+        get
+        {
+            if (_scaler == null)
+            {
+                _scaler = gameObject.AddComponent<Scaler>();
+            }
+            return _scaler;
         }
     }
 
@@ -111,5 +153,12 @@ public class ThrowableCell : VRTK_InteractableObject
         {
             body.velocity = Vector3.zero;
         }
+    }
+
+    public void AnimateSuccess ()
+    {
+        mover.MoveToOverDuration( alignedMitosisPosition, 1f, gameManager.AnimateNextPhase );
+        rotator.RotateToOverDuration( Quaternion.Euler( alignedMitosisRotation ), 1f );
+        scaler.ScaleOverDuration( alignedMitosisScale, 1f );
     }
 }
