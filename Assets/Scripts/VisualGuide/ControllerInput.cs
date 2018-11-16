@@ -118,7 +118,6 @@ public class ControllerInput : MonoBehaviour
     {
         if (laserRenderer != null)
         {
-            Debug.Log("toggle laser");
             laserRenderer.enabled = false;
             laserRenderer.pointerRenderer.enabled = _active;
             laserRenderer.enabled = true;
