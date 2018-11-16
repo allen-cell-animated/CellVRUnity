@@ -144,7 +144,6 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void TransitionToLobbyMode (string structureJustSolved)
     {
-        ExitIsolationMode();
         transform.position = lobbyPosition;
         transform.rotation = lobbyRotation;
         transform.localScale = lobbyScale * Vector3.one;

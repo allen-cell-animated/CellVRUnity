@@ -78,7 +78,7 @@ public class VisualGuideManager : MonoBehaviour
             return;
         }
         currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
-        currentGameManager.StartGame( structureName, 3f );
+        currentGameManager.StartGame( structureName, 1.5f );
     }
 
     public void CompleteGame ()

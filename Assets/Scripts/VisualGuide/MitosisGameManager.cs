@@ -155,6 +155,10 @@ public class MitosisGameManager : MonoBehaviour
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
             VisualGuideManager.Instance.CompleteGame();
+            foreach (ThrowableCell throwable in throwableCells)
+            {
+                throwable.isGrabbable = false;
+            }
         }
     }
 
