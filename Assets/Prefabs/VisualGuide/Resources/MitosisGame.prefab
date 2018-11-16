@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStructureName: Mitochondria
-  waitBetweenThrowableSpawn: {x: 0.05, y: 0.3}
+  waitBetweenThrowableSpawn: 0.2
   throwableSpawnHeight: 3
   throwableSpawnRingExtents: {x: 0.5, y: 0.6}
   throwableSpawnScale: 0.4
