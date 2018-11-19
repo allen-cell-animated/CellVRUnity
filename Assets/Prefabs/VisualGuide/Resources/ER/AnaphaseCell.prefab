@@ -90,16 +90,16 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1802359805454150}
-  m_LocalRotation: {x: -0, y: -0.5548436, z: -0, w: 0.83195466}
-  m_LocalPosition: {x: 0.11867997, y: 0.66, z: 0.03539866}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.39999995, y: 0.4, z: 0.39999995}
   m_Children:
   - {fileID: 4632666935376944}
   - {fileID: 4388396347963356}
   - {fileID: 4280954570014638}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -12.349001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4280954570014638
 Transform:
   m_ObjectHideFlags: 1
@@ -392,7 +392,7 @@ MonoBehaviour:
   usingState: 0
   boundToTarget: 0
   boundsRadius: 0
-  rotationOffsetAtTarget: {x: -15, y: 90, z: 50}
-  alignedMitosisPosition: {x: 0.004943974, y: 0.688, z: 0.09031893}
-  alignedMitosisRotation: {x: 0, y: -67.4, z: 0}
+  rotationOffsetAtTarget: {x: -15, y: 105, z: 55}
+  alignedMitosisPosition: {x: -0.019, y: 0.688, z: 0.006}
+  alignedMitosisRotation: {x: 0, y: 122.26, z: 0}
   alignedMitosisScale: 0.5

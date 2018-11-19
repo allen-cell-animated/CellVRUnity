@@ -87,7 +87,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1470605901579018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.644, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 4084160492999992}
@@ -274,9 +274,9 @@ MonoBehaviour:
   usingState: 0
   boundToTarget: 0
   boundsRadius: 0
-  rotationOffsetAtTarget: {x: 5, y: -90, z: -55}
-  alignedMitosisPosition: {x: -0.03462542, y: 0.6752, z: 0.1126049}
-  alignedMitosisRotation: {x: 0, y: -243.111, z: 0}
+  rotationOffsetAtTarget: {x: 35, y: -80, z: -70}
+  alignedMitosisPosition: {x: -0.024, y: 0.634, z: 0.029}
+  alignedMitosisRotation: {x: 0, y: 130.915, z: 0}
   alignedMitosisScale: 0.5
 --- !u!114 &114346808210335812
 MonoBehaviour:
