@@ -850,7 +850,7 @@ GameObject:
   - component: {fileID: 262723983}
   - component: {fileID: 262723982}
   m_Layer: 0
-  m_Name: microtubules
+  m_Name: MTs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2954,7 +2954,7 @@ GameObject:
   - component: {fileID: 876174948}
   - component: {fileID: 876174947}
   m_Layer: 0
-  m_Name: endoplasmic-reticulum
+  m_Name: ER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4211,7 +4211,7 @@ GameObject:
   - component: {fileID: 1034548622}
   - component: {fileID: 1034548621}
   m_Layer: 0
-  m_Name: mitochondria
+  m_Name: mitos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4458,7 +4458,7 @@ GameObject:
   - component: {fileID: 1057005253}
   - component: {fileID: 1057005252}
   m_Layer: 0
-  m_Name: golgi-apparatus
+  m_Name: golgi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
