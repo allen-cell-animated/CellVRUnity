@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InterphaseCellExitIsolation : StateMachineBehaviour 
+public class FinishInterphaseCellAnimation : StateMachineBehaviour 
 {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {

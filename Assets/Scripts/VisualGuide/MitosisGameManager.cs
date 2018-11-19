@@ -20,6 +20,7 @@ public class MitosisGameManager : MonoBehaviour
     float timeBetweenThrowableChecks = 3f;
     int correctlyPlacedThrowables;
     int animationPhase;
+    bool rePlaceWhenOutOfBounds = true;
 
     public void StartGame (string _structureName, float timeBeforeCellDrop)
     {
@@ -27,7 +28,7 @@ public class MitosisGameManager : MonoBehaviour
         currentStructureName = _structureName;
         SpawnWalls();
         SpawnTargets();
-        StartCoroutine( SpawnThrowables( timeBeforeCellDrop ) );
+        StartCoroutine( SpawnThrowables( currentStructureName, timeBeforeCellDrop ) );
     }
 
     void Update ()
@@ -43,7 +44,16 @@ public class MitosisGameManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnThrowables (float waitTime)
+    public void SpawnAllThrowables ()
+    {
+        rePlaceWhenOutOfBounds = false;
+        for (int i = 0; i < throwableNames.Length; i++)
+        {
+            StartCoroutine( SpawnThrowables( throwableNames[i], i * throwableNames.Length * waitBetweenThrowableSpawn ) );
+        }
+    }
+
+    IEnumerator SpawnThrowables (string structureName, float waitTime)
     {
         yield return new WaitForSeconds( waitTime );
 
@@ -51,10 +61,10 @@ public class MitosisGameManager : MonoBehaviour
         throwableCells = new ThrowableCell[throwableNames.Length];
         for (int i = 0; i < throwableNames.Length; i++)
         {
-            prefab = Resources.Load( currentStructureName + "/" + throwableNames[i] ) as GameObject;
+            prefab = Resources.Load( structureName + "/" + throwableNames[i] ) as GameObject;
             if (prefab == null)
             {
-                Debug.LogWarning( "Couldn't load prefab for " + currentStructureName + " " + throwableNames[i] );
+                Debug.LogWarning( "Couldn't load prefab for " + structureName + " " + throwableNames[i] );
                 continue;
             }
 

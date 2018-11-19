@@ -172,7 +172,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void SelectStructure (CellStructure _structure)
     {
-        if (canInteract)
+        if (canInteract && highlightedStructure == _structure)
         {
             selectedStructure = _structure;
             IsolateSelectedStructure();

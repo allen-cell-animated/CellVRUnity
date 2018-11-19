@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FinishSuccessAnimation : StateMachineBehaviour 
+public class FinishMitosisSuccessAnimation : StateMachineBehaviour 
 {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {

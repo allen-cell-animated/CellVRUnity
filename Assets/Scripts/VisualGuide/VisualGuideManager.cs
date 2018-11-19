@@ -42,6 +42,21 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
+    bool allStructuresSolved
+    {
+        get
+        {
+            foreach (bool solved in structuresSolved.Values)
+            {
+                if (!solved)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     void Start ()
     {
         SetupPuzzles();
@@ -62,14 +77,15 @@ public class VisualGuideManager : MonoBehaviour
         if (currentMode == VisualGuideGameMode.Lobby)
         {
             currentMode = VisualGuideGameMode.Play;
-            CreateMitosisGameManager( structureName );
+            CreateMitosisGameManager();
+            currentGameManager.StartGame( structureName, 1.5f );
             interphaseCell.TransitionToPlayMode( currentGameManager );
             structuresSolved[structureName] = false;
             ControllerInput.Instance.ToggleLaserRenderer( false );
         }
     }
 
-    void CreateMitosisGameManager (string structureName)
+    void CreateMitosisGameManager ()
     {
         GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
         if (prefab == null)
@@ -78,7 +94,6 @@ public class VisualGuideManager : MonoBehaviour
             return;
         }
         currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
-        currentGameManager.StartGame( structureName, 1.5f );
     }
 
     public void CompleteGame ()
@@ -107,11 +122,18 @@ public class VisualGuideManager : MonoBehaviour
             Destroy( currentGameManager.gameObject );
             Destroy( mitoticCellsAnimation.gameObject );
 
-            interphaseCell.gameObject.SetActive( true );
-            interphaseCell.TransitionToLobbyMode( structureName );
-
             structuresSolved[structureName] = true;
-            ControllerInput.Instance.ToggleLaserRenderer( true );
+            if (true)//allStructuresSolved)
+            {
+                CreateMitosisGameManager();
+                currentGameManager.SpawnAllThrowables();
+            }
+            else
+            {
+                interphaseCell.gameObject.SetActive( true );
+                interphaseCell.TransitionToLobbyMode( structureName );
+                ControllerInput.Instance.ToggleLaserRenderer( true );
+            }
         }
     }
 }
