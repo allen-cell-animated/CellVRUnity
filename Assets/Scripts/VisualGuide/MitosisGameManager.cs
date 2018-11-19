@@ -44,12 +44,12 @@ public class MitosisGameManager : MonoBehaviour
         }
     }
 
-    public void SpawnAllThrowables ()
+    public void SpawnAllThrowables (string[] structureNames)
     {
         rePlaceWhenOutOfBounds = false;
-        for (int i = 0; i < throwableNames.Length; i++)
+        for (int i = 0; i < structureNames.Length; i++)
         {
-            StartCoroutine( SpawnThrowables( throwableNames[i], i * throwableNames.Length * waitBetweenThrowableSpawn ) );
+            StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn ) );
         }
     }
 

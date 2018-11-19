@@ -13,6 +13,7 @@ public class VisualGuideManager : MonoBehaviour
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
     public MitosisGameManager currentGameManager;
 
+    string[] structureNames = { "Endoplasmic Reticulum", "Golgi Apparatus", "Microtubules", "Mitochondria"};
     Dictionary<string,bool> structuresSolved;
     Animator mitoticCellsAnimation;
 
@@ -126,7 +127,7 @@ public class VisualGuideManager : MonoBehaviour
             if (true)//allStructuresSolved)
             {
                 CreateMitosisGameManager();
-                currentGameManager.SpawnAllThrowables();
+                currentGameManager.SpawnAllThrowables( structureNames );
             }
             else
             {
