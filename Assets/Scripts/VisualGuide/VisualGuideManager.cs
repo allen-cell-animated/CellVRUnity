@@ -124,10 +124,10 @@ public class VisualGuideManager : MonoBehaviour
             Destroy( mitoticCellsAnimation.gameObject );
 
             structuresSolved[structureName] = true;
-            if (true)//allStructuresSolved)
+            if (allStructuresSolved)
             {
                 CreateMitosisGameManager();
-                currentGameManager.SpawnAllThrowables( structureNames );
+                StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
             }
             else
             {

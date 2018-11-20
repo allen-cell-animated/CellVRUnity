@@ -33,7 +33,10 @@ public class MitosisGameManager : MonoBehaviour
 
     void Update ()
     {
-        PlaceThrowablesIfOutOfBounds();
+        if (rePlaceWhenOutOfBounds)
+        {
+            PlaceThrowablesIfOutOfBounds();
+        }
     }
 
     Vector3 randomPositionInThrowableSpawnArea
@@ -44,13 +47,18 @@ public class MitosisGameManager : MonoBehaviour
         }
     }
 
-    public void SpawnAllThrowables (string[] structureNames)
+    public IEnumerator SpawnAllThrowables (string[] structureNames)
     {
         rePlaceWhenOutOfBounds = false;
         for (int i = 0; i < structureNames.Length; i++)
         {
             StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn ) );
         }
+
+        yield return new WaitForSeconds( structureNames.Length * structureNames.Length * waitBetweenThrowableSpawn );
+
+        throwableCells = GetComponentsInChildren<ThrowableCell>();
+        rePlaceWhenOutOfBounds = true;
     }
 
     IEnumerator SpawnThrowables (string structureName, float waitTime)
