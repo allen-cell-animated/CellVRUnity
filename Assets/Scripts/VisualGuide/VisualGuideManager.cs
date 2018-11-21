@@ -83,6 +83,7 @@ public class VisualGuideManager : MonoBehaviour
             interphaseCell.TransitionToPlayMode( currentGameManager );
             structuresSolved[structureName] = false;
             ControllerInput.Instance.ToggleLaserRenderer( false );
+            UIManager.Instance.ToggleBackButton( true );
         }
     }
 
@@ -134,6 +135,7 @@ public class VisualGuideManager : MonoBehaviour
                 interphaseCell.gameObject.SetActive( true );
                 interphaseCell.TransitionToLobbyMode( structureName );
                 ControllerInput.Instance.ToggleLaserRenderer( true );
+                UIManager.Instance.ToggleBackButton( false );
             }
         }
     }
