@@ -27,7 +27,7 @@ public class MitosisGameManager : MonoBehaviour
         correctlyPlacedThrowables = 0;
         currentStructureName = _structureName;
         SpawnWalls();
-        SpawnTargets();
+        SpawnTargetsAndArrows();
         StartCoroutine( SpawnThrowables( currentStructureName, timeBeforeCellDrop ) );
     }
 
@@ -117,21 +117,28 @@ public class MitosisGameManager : MonoBehaviour
         }
     }
 
-    void SpawnTargets ()
+    void SpawnTargetsAndArrows ()
     {
-        GameObject prefab = Resources.Load( "Target" ) as GameObject;
-        if (prefab == null)
+        GameObject targetPrefab = Resources.Load( "Target" ) as GameObject;
+        if (targetPrefab == null)
         {
             Debug.LogWarning( "Couldn't load prefab for Target" );
             return;
         }
+        GameObject arrowPrefab = Resources.Load( "Arrow" ) as GameObject;
+        if (targetPrefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for Arrow" );
+            return;
+        }
 
         targets = new GameObject[throwableNames.Length + 1];
-        Vector3 targetPosition = targetDistanceFromCenter * Vector3.forward;
+        Vector3 position = targetDistanceFromCenter * Vector3.forward;
+        Quaternion dRotation = Quaternion.Euler( 0, 180f / (throwableNames.Length + 1f), 0 );
         for (int i = 0; i < throwableNames.Length + 1; i++)
         {
-            targetPosition = Quaternion.Euler( 0, 360f / (throwableNames.Length + 1f), 0 ) * targetPosition;
-            targets[i] = Instantiate( prefab, targetPosition + targetHeight * Vector3.up, Quaternion.LookRotation( -targetPosition, Vector3.up ), transform ) as GameObject;
+            position = dRotation * position;
+            targets[i] = Instantiate( targetPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform ) as GameObject;
             if (i < throwableNames.Length)
             {
                 targets[i].name = throwableNames[i] + "Target";
@@ -140,6 +147,9 @@ public class MitosisGameManager : MonoBehaviour
             {
                 targets[i].GetComponent<SphereCollider>().enabled = false;
             }
+
+            position = dRotation * position;
+            Instantiate( arrowPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform );
         }
     }
 
