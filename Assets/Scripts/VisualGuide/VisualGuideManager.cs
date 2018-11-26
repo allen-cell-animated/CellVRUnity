@@ -47,9 +47,9 @@ public class VisualGuideManager : MonoBehaviour
     {
         get
         {
-            foreach (bool solved in structuresSolved.Values)
+            foreach (KeyValuePair<string,bool> kvp in structuresSolved)
             {
-                if (!solved)
+                if (!kvp.Value)
                 {
                     return false;
                 }

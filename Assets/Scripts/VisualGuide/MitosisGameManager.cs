@@ -16,6 +16,7 @@ public class MitosisGameManager : MonoBehaviour
     string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     ThrowableCell[] throwableCells;
     GameObject[] targets;
+    GameObject[] arrows;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
     int correctlyPlacedThrowables;
@@ -133,6 +134,7 @@ public class MitosisGameManager : MonoBehaviour
         }
 
         targets = new GameObject[throwableNames.Length + 1];
+        arrows = new GameObject[throwableNames.Length + 1];
         Vector3 position = targetDistanceFromCenter * Vector3.forward;
         Quaternion dRotation = Quaternion.Euler( 0, 180f / (throwableNames.Length + 1f), 0 );
         position = dRotation * position;
@@ -150,7 +152,7 @@ public class MitosisGameManager : MonoBehaviour
             }
 
             position = dRotation * position;
-            Instantiate( arrowPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform );
+            arrows[i] = Instantiate( arrowPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform );
         }
     }
 
@@ -183,6 +185,7 @@ public class MitosisGameManager : MonoBehaviour
         correctlyPlacedThrowables++;
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
+            HideArrows();
             VisualGuideManager.Instance.StartSuccessAnimation();
             foreach (ThrowableCell throwable in throwableCells)
             {
@@ -196,6 +199,14 @@ public class MitosisGameManager : MonoBehaviour
         if (correctlyPlacedThrowables > 0)
         {
             correctlyPlacedThrowables--;
+        }
+    }
+
+    void HideArrows ()
+    {
+        foreach (GameObject arrow in arrows)
+        {
+            arrow.SetActive( false );
         }
     }
 
