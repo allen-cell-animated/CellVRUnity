@@ -142,14 +142,18 @@ public class InterphaseCellManager : MonoBehaviour
         VisualGuideManager.Instance.currentGameManager.AnimateNextPhase();
     }
 
-    public void TransitionToLobbyMode (string structureJustSolved)
+    public void TransitionToLobbyMode (string structureJustSolved = null)
     {
         transform.position = lobbyPosition;
         transform.rotation = lobbyRotation;
         transform.localScale = lobbyScale * Vector3.one;
-        structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
         transformer.enabled = true;
-        animator.SetTrigger( "Success" );
+
+        if (!string.IsNullOrEmpty( structureJustSolved ))
+        {
+            structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
+            animator.SetTrigger( "Success" );
+        }
     }
 
     public void LabelStructure (CellStructure _structure)

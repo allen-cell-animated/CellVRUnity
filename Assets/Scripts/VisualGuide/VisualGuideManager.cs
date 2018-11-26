@@ -98,12 +98,12 @@ public class VisualGuideManager : MonoBehaviour
         currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
     }
 
-    public void CompleteGame ()
+    public void StartSuccessAnimation ()
     {
         interphaseCell.MoveToCenter( 1f );
     }
 
-    public void FinishSuccessAnimation ()
+    public void TriggerMitoticCellsAnimation ()
     {
         GameObject prefab = Resources.Load( currentGameManager.currentStructureName + "/MitoticCells" ) as GameObject;
         if (prefab == null)
@@ -114,29 +114,41 @@ public class VisualGuideManager : MonoBehaviour
         mitoticCellsAnimation.SetTrigger( "Play" );
     }
 
-    public void CleanupGame ()
+    public void CompleteGame ()
+    {
+        if (currentMode == VisualGuideGameMode.Play)
+        {
+            string structureName = currentGameManager.currentStructureName;
+            structuresSolved[structureName] = true;
+
+            if (!allStructuresSolved)
+            {
+                CleanupGame( structureName );
+            }
+            else
+            {
+                CreateMitosisGameManager();
+                StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
+            }
+        }
+    }
+
+    public void CleanupGame (string structureJustSolved = null)
     {
         if (currentMode == VisualGuideGameMode.Play)
         {
             currentMode = VisualGuideGameMode.Lobby;
 
-            string structureName = currentGameManager.currentStructureName;
             Destroy( currentGameManager.gameObject );
-            Destroy( mitoticCellsAnimation.gameObject );
+            if (mitoticCellsAnimation != null)
+            {
+                Destroy( mitoticCellsAnimation.gameObject );
+            }
 
-            structuresSolved[structureName] = true;
-            if (allStructuresSolved)
-            {
-                CreateMitosisGameManager();
-                StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
-            }
-            else
-            {
-                interphaseCell.gameObject.SetActive( true );
-                interphaseCell.TransitionToLobbyMode( structureName );
-                ControllerInput.Instance.ToggleLaserRenderer( true );
-                UIManager.Instance.ToggleBackButton( false );
-            }
+            interphaseCell.gameObject.SetActive( true );
+            interphaseCell.TransitionToLobbyMode( structureJustSolved );
+            ControllerInput.Instance.ToggleLaserRenderer( true );
+            UIManager.Instance.ToggleBackButton( false );
         }
     }
 }

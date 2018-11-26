@@ -23,4 +23,9 @@ public class UIManager : MonoBehaviour
     {
         backButton.SetActive( on );
     }
+
+    public void ExitPlayMode ()
+    {
+        VisualGuideManager.Instance.CleanupGame();
+    }
 }

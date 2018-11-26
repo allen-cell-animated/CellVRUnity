@@ -182,7 +182,7 @@ public class MitosisGameManager : MonoBehaviour
         correctlyPlacedThrowables++;
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
-            VisualGuideManager.Instance.CompleteGame();
+            VisualGuideManager.Instance.StartSuccessAnimation();
             foreach (ThrowableCell throwable in throwableCells)
             {
                 throwable.isGrabbable = false;
@@ -216,15 +216,15 @@ public class MitosisGameManager : MonoBehaviour
         else
         {
             throwableCells[animationPhase-2].gameObject.SetActive( false );
-            StartCoroutine( WaitToTriggerLastPhase() );
+            StartCoroutine( WaitToTriggerMitoticCells() );
         }
     }
 
-    IEnumerator WaitToTriggerLastPhase ()
+    IEnumerator WaitToTriggerMitoticCells ()
     {
         yield return new WaitForSeconds( 1f );
 
         throwableCells[throwableCells.Length-1].gameObject.SetActive( false );
-        VisualGuideManager.Instance.FinishSuccessAnimation();
+        VisualGuideManager.Instance.TriggerMitoticCellsAnimation();
     }
 }
