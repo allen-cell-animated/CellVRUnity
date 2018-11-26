@@ -5,7 +5,8 @@ using UnityEngine;
 public enum VisualGuideGameMode
 {
     Lobby,
-    Play
+    Play,
+    Reward
 }
 
 public class VisualGuideManager : MonoBehaviour 
@@ -113,41 +114,52 @@ public class VisualGuideManager : MonoBehaviour
         mitoticCellsAnimation.SetTrigger( "Play" );
     }
 
-    public void CompleteGame ()
+    public void FinishSuccessAnimation ()
     {
         if (currentMode == VisualGuideGameMode.Play)
         {
             string structureName = currentGameManager.currentStructureName;
             structuresSolved[structureName] = true;
 
+            CleanupGame();
+
             if (!allStructuresSolved)
             {
-                CleanupGame( structureName );
+                ReturnToLobby( structureName );
             }
             else
             {
-                CreateMitosisGameManager();
-                StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
+                SetupReward();
             }
         }
     }
 
-    public void CleanupGame (string structureJustSolved = null)
+    public void CleanupGame ()
     {
         if (currentMode == VisualGuideGameMode.Play)
         {
-            currentMode = VisualGuideGameMode.Lobby;
-
             Destroy( currentGameManager.gameObject );
             if (mitoticCellsAnimation != null)
             {
                 Destroy( mitoticCellsAnimation.gameObject );
             }
-
-            interphaseCell.gameObject.SetActive( true );
-            interphaseCell.TransitionToLobbyMode( structureJustSolved );
-            ControllerInput.Instance.ToggleLaserRenderer( true );
-            UIManager.Instance.ToggleBackButton( false );
         }
+    }
+
+    public void ReturnToLobby (string structureJustSolved = null)
+    {
+        currentMode = VisualGuideGameMode.Lobby;
+
+        interphaseCell.gameObject.SetActive( true );
+        interphaseCell.TransitionToLobbyMode( structureJustSolved );
+        ControllerInput.Instance.ToggleLaserRenderer( true );
+        UIManager.Instance.ToggleBackButton( false );
+    }
+
+    void SetupReward ()
+    {
+        currentMode = VisualGuideGameMode.Reward;
+        CreateMitosisGameManager();
+        StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
     }
 }

@@ -7,6 +7,6 @@ public class FinishMitosisSuccessAnimation : StateMachineBehaviour
 {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        VisualGuideManager.Instance.CompleteGame();
+        VisualGuideManager.Instance.FinishSuccessAnimation();
 	}
 }
