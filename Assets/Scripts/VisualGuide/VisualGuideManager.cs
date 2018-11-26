@@ -75,16 +75,15 @@ public class VisualGuideManager : MonoBehaviour
 
     public void StartGame (string structureName)
     {
-        if (currentMode == VisualGuideGameMode.Lobby)
-        {
-            currentMode = VisualGuideGameMode.Play;
-            CreateMitosisGameManager();
-            currentGameManager.StartGame( structureName, 1.5f );
-            interphaseCell.TransitionToPlayMode( currentGameManager );
-            structuresSolved[structureName] = false;
-            //ControllerInput.Instance.ToggleLaserRenderer( false );
-            UIManager.Instance.ToggleBackButton( true );
-        }
+        currentMode = VisualGuideGameMode.Play;
+
+        Cleanup();
+        CreateMitosisGameManager();
+        currentGameManager.StartGame( structureName, 1.5f );
+        interphaseCell.TransitionToPlayMode( currentGameManager );
+        structuresSolved[structureName] = false;
+        //ControllerInput.Instance.ToggleLaserRenderer( false );
+        UIManager.Instance.ToggleBackButton( true );
     }
 
     void CreateMitosisGameManager ()
@@ -116,33 +115,21 @@ public class VisualGuideManager : MonoBehaviour
 
     public void FinishSuccessAnimation ()
     {
-        if (currentMode == VisualGuideGameMode.Play)
-        {
-            string structureName = currentGameManager.currentStructureName;
-            structuresSolved[structureName] = true;
+        string structureName = currentGameManager.currentStructureName;
+        structuresSolved[structureName] = true;
 
-            CleanupGame();
-
-            if (!allStructuresSolved)
-            {
-                ReturnToLobby( structureName );
-            }
-            else
-            {
-                SetupReward();
-            }
-        }
+        ReturnToLobby( structureName );
     }
 
-    public void CleanupGame ()
+    void Cleanup ()
     {
-        if (currentMode == VisualGuideGameMode.Play)
+        if (currentGameManager != null)
         {
             Destroy( currentGameManager.gameObject );
-            if (mitoticCellsAnimation != null)
-            {
-                Destroy( mitoticCellsAnimation.gameObject );
-            }
+        }
+        if (mitoticCellsAnimation != null)
+        {
+            Destroy( mitoticCellsAnimation.gameObject );
         }
     }
 
@@ -150,16 +137,35 @@ public class VisualGuideManager : MonoBehaviour
     {
         currentMode = VisualGuideGameMode.Lobby;
 
+        Cleanup();
+
         interphaseCell.gameObject.SetActive( true );
         interphaseCell.TransitionToLobbyMode( structureJustSolved );
         ControllerInput.Instance.ToggleLaserRenderer( true );
         UIManager.Instance.ToggleBackButton( false );
     }
 
-    void SetupReward ()
+    public void CheckSetupReward ()
     {
-        currentMode = VisualGuideGameMode.Reward;
-        CreateMitosisGameManager();
-        StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
+        if (allStructuresSolved)
+        {
+            currentMode = VisualGuideGameMode.Reward;
+
+            interphaseCell.gameObject.SetActive( false );
+            CreateMitosisGameManager();
+            StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
+            StartCoroutine( EndReward() );
+        }
+    }
+
+    IEnumerator EndReward ()
+    {
+        yield return new WaitForSeconds( 10f );
+
+        if (currentMode == VisualGuideGameMode.Reward)
+        {
+            Cleanup();
+            interphaseCell.gameObject.SetActive( true );
+        }
     }
 }

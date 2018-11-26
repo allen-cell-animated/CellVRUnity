@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
 
     public void ExitPlayMode ()
     {
-        VisualGuideManager.Instance.CleanupGame();
         VisualGuideManager.Instance.ReturnToLobby();
     }
 }
