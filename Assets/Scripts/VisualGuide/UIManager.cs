@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour 
 {
+    public GameObject resetButton;
     public GameObject backButton;
 
     static UIManager _Instance;
@@ -27,5 +28,15 @@ public class UIManager : MonoBehaviour
     public void ExitPlayMode ()
     {
         VisualGuideManager.Instance.ReturnToLobby();
+    }
+
+    public void ToggleResetButton (bool on)
+    {
+        resetButton.SetActive( on );
+    }
+
+    public void ResetSolvedStructures ()
+    {
+        VisualGuideManager.Instance.ResetSolvedStructures();
     }
 }

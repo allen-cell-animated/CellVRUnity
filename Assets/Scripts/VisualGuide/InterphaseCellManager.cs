@@ -118,6 +118,14 @@ public class InterphaseCellManager : MonoBehaviour
         lobbyScale = transform.localScale.x;
     }
 
+    public void GrayOutStructures ()
+    {
+        foreach (CellStructure structure in structures)
+        {
+            structure.SetColor( false );
+        }
+    }
+
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
     {
         float duration = 1f;

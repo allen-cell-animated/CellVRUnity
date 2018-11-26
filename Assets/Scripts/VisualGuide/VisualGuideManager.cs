@@ -61,16 +61,17 @@ public class VisualGuideManager : MonoBehaviour
 
     void Start ()
     {
-        SetupPuzzles();
+        ResetSolvedStructures();
     }
 
-    void SetupPuzzles ()
+    public void ResetSolvedStructures ()
     {
         structuresSolved = new Dictionary<string, bool>();
         foreach (string structure in structureNames)
         {
             structuresSolved.Add( structure, false );
         }
+        interphaseCell.GrayOutStructures();
     }
 
     public void StartGame (string structureName)
@@ -83,6 +84,7 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.TransitionToPlayMode( currentGameManager );
         structuresSolved[structureName] = false;
         //ControllerInput.Instance.ToggleLaserRenderer( false );
+        UIManager.Instance.ToggleResetButton( false );
         UIManager.Instance.ToggleBackButton( true );
     }
 
@@ -121,18 +123,6 @@ public class VisualGuideManager : MonoBehaviour
         ReturnToLobby( structureName );
     }
 
-    void Cleanup ()
-    {
-        if (currentGameManager != null)
-        {
-            Destroy( currentGameManager.gameObject );
-        }
-        if (mitoticCellsAnimation != null)
-        {
-            Destroy( mitoticCellsAnimation.gameObject );
-        }
-    }
-
     public void ReturnToLobby (string structureJustSolved = null)
     {
         currentMode = VisualGuideGameMode.Lobby;
@@ -143,6 +133,7 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.TransitionToLobbyMode( structureJustSolved );
         ControllerInput.Instance.ToggleLaserRenderer( true );
         UIManager.Instance.ToggleBackButton( false );
+        UIManager.Instance.ToggleResetButton( true );
     }
 
     public void CheckSetupReward ()
@@ -164,8 +155,22 @@ public class VisualGuideManager : MonoBehaviour
 
         if (currentMode == VisualGuideGameMode.Reward)
         {
+            currentMode = VisualGuideGameMode.Lobby;
+
             Cleanup();
             interphaseCell.gameObject.SetActive( true );
+        }
+    }
+
+    void Cleanup ()
+    {
+        if (currentGameManager != null)
+        {
+            Destroy( currentGameManager.gameObject );
+        }
+        if (mitoticCellsAnimation != null)
+        {
+            Destroy( mitoticCellsAnimation.gameObject );
         }
     }
 }
