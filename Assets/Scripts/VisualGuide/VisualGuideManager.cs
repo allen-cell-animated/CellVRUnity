@@ -49,7 +49,7 @@ public class VisualGuideManager : MonoBehaviour
         {
             foreach (KeyValuePair<string,bool> kvp in structuresSolved)
             {
-                if (!kvp.Value)
+                if (kvp.Value == false)
                 {
                     return false;
                 }
@@ -66,10 +66,9 @@ public class VisualGuideManager : MonoBehaviour
     void SetupPuzzles ()
     {
         structuresSolved = new Dictionary<string, bool>();
-        CellStructure[] structures = GetComponentsInChildren<CellStructure>();
-        foreach (CellStructure structure in structures)
+        foreach (string structure in structureNames)
         {
-            structuresSolved.Add( structure.structureName, false );
+            structuresSolved.Add( structure, false );
         }
     }
 
