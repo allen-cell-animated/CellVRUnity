@@ -154,6 +154,10 @@ public class InterphaseCellManager : MonoBehaviour
             structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
             animator.SetTrigger( "Success" );
         }
+        else
+        {
+            ExitIsolationMode();
+        }
     }
 
     public void LabelStructure (CellStructure _structure)

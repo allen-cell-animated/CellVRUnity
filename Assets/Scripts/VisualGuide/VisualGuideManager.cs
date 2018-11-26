@@ -82,7 +82,7 @@ public class VisualGuideManager : MonoBehaviour
             currentGameManager.StartGame( structureName, 1.5f );
             interphaseCell.TransitionToPlayMode( currentGameManager );
             structuresSolved[structureName] = false;
-            ControllerInput.Instance.ToggleLaserRenderer( false );
+            //ControllerInput.Instance.ToggleLaserRenderer( false );
             UIManager.Instance.ToggleBackButton( true );
         }
     }

@@ -137,7 +137,6 @@ public class MitosisGameManager : MonoBehaviour
         Quaternion dRotation = Quaternion.Euler( 0, 180f / (throwableNames.Length + 1f), 0 );
         for (int i = 0; i < throwableNames.Length + 1; i++)
         {
-            position = dRotation * position;
             targets[i] = Instantiate( targetPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform ) as GameObject;
             if (i < throwableNames.Length)
             {
@@ -150,6 +149,7 @@ public class MitosisGameManager : MonoBehaviour
 
             position = dRotation * position;
             Instantiate( arrowPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform );
+            position = dRotation * position;
         }
     }
 
