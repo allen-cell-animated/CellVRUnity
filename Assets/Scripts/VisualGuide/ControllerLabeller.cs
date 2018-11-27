@@ -1,16 +1,77 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
 
 public class ControllerLabeller : MonoBehaviour 
 {
     public GameObject scaleButtonLabelRight;
     public GameObject grabButtonLabelRight;
     public GameObject selectButtonLabelRight;
+    public GameObject gripRight;
 
     public GameObject scaleButtonLabelLeft;
     public GameObject grabButtonLabelLeft;
     public GameObject backButtonLabelLeft;
+    public GameObject backButtonLabelLeftHover;
+    public GameObject gripLeft;
+
+    public float gripScaleMultiplier;
+
+    float gripStartScale;
+
+    void Awake ()
+    {
+        gripStartScale = gripLeft.transform.localScale.x;
+    }
+
+    void OnEnable ()
+    {
+        if (ControllerInput.Instance.pointerLeft != null)
+        {
+            ControllerInput.Instance.pointerLeft.GripPressed += OnLeftControllerGripDown;
+            ControllerInput.Instance.pointerLeft.GripReleased += OnLeftControllerGripUp;
+        }
+        if (ControllerInput.Instance.pointerRight != null)
+        {
+            ControllerInput.Instance.pointerRight.GripPressed += OnRightControllerGripDown;
+            ControllerInput.Instance.pointerRight.GripReleased += OnRightControllerGripUp;
+        }
+    }
+
+    void OnDisable ()
+    {
+        if (ControllerInput.Instance.pointerLeft != null)
+        {
+            ControllerInput.Instance.pointerLeft.GripPressed -= OnLeftControllerGripDown;
+            ControllerInput.Instance.pointerLeft.GripReleased -= OnLeftControllerGripUp;
+        }
+        if (ControllerInput.Instance.pointerRight != null)
+        {
+            ControllerInput.Instance.pointerRight.GripPressed -= OnRightControllerGripDown;
+            ControllerInput.Instance.pointerRight.GripReleased -= OnRightControllerGripUp;
+        }
+    }
+
+    void OnRightControllerGripDown (object sender, ControllerInteractionEventArgs e)
+    {
+        gripRight.transform.localScale = gripScaleMultiplier * gripStartScale * Vector3.one;
+    }
+
+    void OnRightControllerGripUp (object sender, ControllerInteractionEventArgs e)
+    {
+        gripRight.transform.localScale = gripStartScale * Vector3.one;
+    }
+
+    void OnLeftControllerGripDown (object sender, ControllerInteractionEventArgs e)
+    {
+        gripLeft.transform.localScale = gripScaleMultiplier * gripStartScale * Vector3.one;
+    }
+
+    void OnLeftControllerGripUp (object sender, ControllerInteractionEventArgs e)
+    {
+        gripLeft.transform.localScale = gripStartScale * Vector3.one;
+    }
 
     void Update ()
     {
@@ -36,6 +97,7 @@ public class ControllerLabeller : MonoBehaviour
             ShowObject( grabButtonLabelLeft, !ControllerInput.Instance.leftTriggerDown );
 
             ShowObject( backButtonLabelLeft, true );
+            ShowObject( backButtonLabelLeftHover, ControllerInput.Instance.leftTouchpadHover );
 
             ShowObject( scaleButtonLabelRight, false );
             ShowObject( scaleButtonLabelLeft, false );

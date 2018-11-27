@@ -11,6 +11,7 @@ public class ControllerInput : MonoBehaviour
     public bool leftTriggerDown;
     public bool rightGripDown;
     public bool leftGripDown;
+    public bool leftTouchpadHover;
 
     static ControllerInput _Instance;
     public static ControllerInput Instance
@@ -33,6 +34,8 @@ public class ControllerInput : MonoBehaviour
             pointerLeft.TriggerReleased += OnLeftControllerTriggerUp;
             pointerLeft.GripPressed += OnLeftControllerGripDown;
             pointerLeft.GripReleased += OnLeftControllerGripUp;
+            pointerLeft.TouchpadTouchStart += OnLeftControllerTouchpadHoverEnter;
+            pointerLeft.TouchpadTouchEnd += OnLeftControllerTouchpadHoverExit;
         }
         if (pointerRight != null)
         {
@@ -51,6 +54,8 @@ public class ControllerInput : MonoBehaviour
             pointerLeft.TriggerReleased -= OnLeftControllerTriggerUp;
             pointerLeft.GripPressed -= OnLeftControllerGripDown;
             pointerLeft.GripReleased -= OnLeftControllerGripUp;
+            pointerLeft.TouchpadTouchStart -= OnLeftControllerTouchpadHoverEnter;
+            pointerLeft.TouchpadTouchEnd -= OnLeftControllerTouchpadHoverExit;
         }
         if (pointerRight != null)
         {
@@ -99,6 +104,16 @@ public class ControllerInput : MonoBehaviour
     void OnLeftControllerGripUp (object sender, ControllerInteractionEventArgs e)
     {
         leftGripDown = false;
+    }
+
+    void OnLeftControllerTouchpadHoverEnter (object sender, ControllerInteractionEventArgs e)
+    {
+        leftTouchpadHover = true;
+    }
+
+    void OnLeftControllerTouchpadHoverExit (object sender, ControllerInteractionEventArgs e)
+    {
+        leftTouchpadHover = false;
     }
 
     VRTK_Pointer _laserRenderer;
