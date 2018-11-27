@@ -47,7 +47,7 @@ public class MitosisGameManager : MonoBehaviour
 
     public IEnumerator SpawnAllThrowables (string[] structureNames)
     {
-        yield return new WaitForSeconds( 6f );
+        yield return new WaitForSeconds( 4f );
             
         destroyWhenOutOfBounds = true;
         for (int i = 0; i < structureNames.Length; i++)
@@ -232,7 +232,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         for (int i = 0; i < throwableCells.Length; i++)
         {
-            yield return new WaitForSeconds( i + 1f );
+            yield return new WaitForSeconds( 0.5f * (i + 1) );
 
             VisualGuideManager.Instance.AnimateSuccess( throwableCells[i].gameObject );
         }

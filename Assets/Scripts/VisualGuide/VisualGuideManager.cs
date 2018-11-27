@@ -123,7 +123,6 @@ public class VisualGuideManager : MonoBehaviour
 
         cellAnimator.oldParent = obj.transform.parent;
         cellAnimator.transform.position = obj.transform.position;
-        cellAnimator.transform.rotation = obj.transform.rotation;
 
         Animator animator = cellAnimator.GetComponentInChildren<Animator>();
         obj.transform.SetParent( animator.transform );
