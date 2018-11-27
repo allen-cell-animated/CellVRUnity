@@ -6,6 +6,7 @@ public class FinishCellAnimation : StateMachineBehaviour
 {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        VisualGuideManager.Instance.CheckSucess();
+        animator.transform.GetChild( 0 ).parent = animator.GetComponentInParent<CellAnimator>().oldParent;
+        Destroy( animator.transform.parent.gameObject );
 	}
 }

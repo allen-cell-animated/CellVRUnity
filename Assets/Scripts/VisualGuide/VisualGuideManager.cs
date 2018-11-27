@@ -107,23 +107,29 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.ColorActiveStructure();
 
         AnimateSuccess( interphaseCell.gameObject );
+        CheckSucess();
     }
 
     void AnimateSuccess (GameObject obj)
     {
-        GameObject prefab = Resources.Load( "Animator" ) as GameObject;
+        GameObject prefab = Resources.Load( "CellAnimator" ) as GameObject;
         if (prefab == null)
         {
-            Debug.LogWarning( "Couldn't load prefab for Animator" );
+            Debug.LogWarning( "Couldn't load prefab for CellAnimator" );
             return;
         }
-        Animator animator = (Instantiate( prefab ) as GameObject).GetComponent<Animator>();
+        CellAnimator cellAnimator = (Instantiate( prefab ) as GameObject).GetComponent<CellAnimator>();
 
+        cellAnimator.oldParent = obj.transform.parent;
+        cellAnimator.transform.position = obj.transform.position;
+        cellAnimator.transform.rotation = obj.transform.rotation;
+
+        Animator animator = cellAnimator.GetComponentInChildren<Animator>();
         obj.transform.SetParent( animator.transform );
         animator.SetTrigger( "Success" );
     }
 
-    public void CheckSucess ()
+    void CheckSucess ()
     {
         if (allStructuresSolved)
         {
