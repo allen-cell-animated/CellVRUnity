@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4500739602376180}
   - component: {fileID: 33134467903290578}
   - component: {fileID: 23736154304423316}
+  - component: {fileID: 114037940109520352}
   m_Layer: 0
   m_Name: ER
   m_TagString: Untagged
@@ -258,3 +259,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197889054457796}
   m_Mesh: {fileID: 4300000, guid: 689a897cc72a248af876e0824f6e53a3, type: 3}
+--- !u!114 &114037940109520352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123833924027640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
+    illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}

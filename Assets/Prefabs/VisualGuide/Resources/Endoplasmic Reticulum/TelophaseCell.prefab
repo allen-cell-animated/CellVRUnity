@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 4318774522379618}
   - component: {fileID: 33634745883060512}
   - component: {fileID: 23397712401925606}
+  - component: {fileID: 114004831521754342}
   m_Layer: 0
   m_Name: ER
   m_TagString: Untagged
@@ -294,6 +295,22 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: d9648c09dccfd4810a94848b7af07080, type: 3}
+--- !u!114 &114004831521754342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1661818396514898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
+    illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
 --- !u!114 &114260292216340176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -345,12 +362,12 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: -60, y: 170, z: 10}
   alignedMitosisPosition: {x: 0.03, y: 0.688, z: -0.032}
   alignedMitosisRotation: {x: 0, y: 2.705, z: 0}
   alignedMitosisScale: 0.5
+  attachedTarget: {fileID: 0}
 --- !u!114 &114590480479800552
 MonoBehaviour:
   m_ObjectHideFlags: 1

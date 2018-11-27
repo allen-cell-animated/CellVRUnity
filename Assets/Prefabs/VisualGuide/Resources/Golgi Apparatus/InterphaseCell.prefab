@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 4271762288836646}
   - component: {fileID: 33767022996029222}
   - component: {fileID: 23545357120825638}
+  - component: {fileID: 114613436017721498}
   m_Layer: 0
   m_Name: golgi
   m_TagString: Untagged
@@ -273,3 +274,19 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: b47d6c3cde3de4ca3ab6ed1e1b024e7c, type: 3}
+--- !u!114 &114613436017721498
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1818065669259316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 1, g: 0.26666665, b: 0, a: 1}
+    illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}

@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4841813998724084}
   - component: {fileID: 33020063110720956}
   - component: {fileID: 23137050426221186}
+  - component: {fileID: 114843803747465034}
   m_Layer: 0
   m_Name: MTs
   m_TagString: Untagged
@@ -358,6 +359,22 @@ MonoBehaviour:
   throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &114843803747465034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1413820930616424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
+    illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
 --- !u!114 &114860943696940430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -390,9 +407,9 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: -40, y: 105, z: 65}
   alignedMitosisPosition: {x: 0.083, y: 0.66, z: 0.093}
   alignedMitosisRotation: {x: 0, y: -35.445, z: 0}
   alignedMitosisScale: 0.5
+  attachedTarget: {fileID: 0}

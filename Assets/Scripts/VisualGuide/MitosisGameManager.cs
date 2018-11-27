@@ -59,6 +59,10 @@ public class MitosisGameManager : MonoBehaviour
         yield return new WaitForSeconds( structureNames.Length * structureNames.Length * waitBetweenThrowableSpawn );
 
         throwableCells = GetComponentsInChildren<ThrowableCell>();
+        foreach (ThrowableCell cell in throwableCells)
+        {
+            cell.colorer.SetColor( 1 );
+        }
         rePlaceWhenOutOfBounds = true;
     }
 
@@ -108,7 +112,9 @@ public class MitosisGameManager : MonoBehaviour
         {
             foreach (ThrowableCell throwableCell in throwableCells)
             {
-                if (throwableCell != null && throwableCell.attachedTarget == null && !throwableCell.isMoving && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
+                if (throwableCell != null && throwableCell.attachedTarget == null 
+                    && (!throwableCell.isMoving || throwableCell.transform.position.y < 5f) 
+                    && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
                     throwableCell.ReleaseFromTarget( true );
                     StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );

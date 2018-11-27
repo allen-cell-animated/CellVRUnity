@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
+  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -953,6 +953,7 @@ GameObject:
   - component: {fileID: 262723978}
   - component: {fileID: 262723983}
   - component: {fileID: 262723982}
+  - component: {fileID: 262723984}
   m_Layer: 0
   m_Name: MTs
   m_TagString: Untagged
@@ -1106,6 +1107,22 @@ MonoBehaviour:
   objectToHighlight: {fileID: 0}
   objectHighlighter: {fileID: 0}
   objectToAffect: {fileID: 0}
+--- !u!114 &262723984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 262723976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
+    illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
 --- !u!1 &302519355
 GameObject:
   m_ObjectHideFlags: 0
@@ -3279,6 +3296,7 @@ GameObject:
   - component: {fileID: 876174943}
   - component: {fileID: 876174948}
   - component: {fileID: 876174947}
+  - component: {fileID: 876174949}
   m_Layer: 0
   m_Name: ER
   m_TagString: Untagged
@@ -3432,6 +3450,22 @@ MonoBehaviour:
   objectToHighlight: {fileID: 0}
   objectHighlighter: {fileID: 0}
   objectToAffect: {fileID: 0}
+--- !u!114 &876174949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 876174941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
+    illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
 --- !u!1 &878630274
 GameObject:
   m_ObjectHideFlags: 0
@@ -4535,6 +4569,7 @@ GameObject:
   - component: {fileID: 1034548617}
   - component: {fileID: 1034548622}
   - component: {fileID: 1034548621}
+  - component: {fileID: 1034548623}
   m_Layer: 0
   m_Name: mitos
   m_TagString: Untagged
@@ -4688,6 +4723,22 @@ MonoBehaviour:
   objectToHighlight: {fileID: 0}
   objectHighlighter: {fileID: 0}
   objectToAffect: {fileID: 0}
+--- !u!114 &1034548623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1034548615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+    illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
 --- !u!1 &1036563832
 GameObject:
   m_ObjectHideFlags: 0
@@ -4781,6 +4832,7 @@ GameObject:
   - component: {fileID: 1057005248}
   - component: {fileID: 1057005253}
   - component: {fileID: 1057005252}
+  - component: {fileID: 1057005254}
   m_Layer: 0
   m_Name: golgi
   m_TagString: Untagged
@@ -4934,6 +4986,22 @@ MonoBehaviour:
   objectToHighlight: {fileID: 0}
   objectHighlighter: {fileID: 0}
   objectToAffect: {fileID: 0}
+--- !u!114 &1057005254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1057005246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 1, g: 0.26666665, b: 0, a: 1}
+    illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
 --- !u!1 &1065822084
 GameObject:
   m_ObjectHideFlags: 0

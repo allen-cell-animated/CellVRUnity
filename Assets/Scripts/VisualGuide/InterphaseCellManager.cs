@@ -122,7 +122,7 @@ public class InterphaseCellManager : MonoBehaviour
     {
         foreach (CellStructure structure in structures)
         {
-            structure.SetColor( false );
+            structure.colorer.SetColor( 0 );
         }
     }
 
@@ -134,7 +134,7 @@ public class InterphaseCellManager : MonoBehaviour
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
         StartCoroutine( currentGameManager.TurnOffInterphaseCellTarget( duration ) );
-        structures.Find( s => s.structureName == currentGameManager.currentStructureName ).SetColor( false );
+        structures.Find( s => s.structureName == currentGameManager.currentStructureName ).colorer.SetColor( 0 );
         HideLabel();
     }
 
@@ -159,7 +159,7 @@ public class InterphaseCellManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty( structureJustSolved ))
         {
-            structures.Find( s => s.structureName == structureJustSolved ).SetColor( true );
+            structures.Find( s => s.structureName == structureJustSolved ).colorer.SetColor( 1 );
             animator.SetTrigger( "Success" );
         }
         else

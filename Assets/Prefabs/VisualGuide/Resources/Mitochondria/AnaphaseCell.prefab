@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 4710738632345026}
   - component: {fileID: 33527362965345762}
   - component: {fileID: 23899611674222152}
+  - component: {fileID: 114446650236690658}
   m_Layer: 0
   m_Name: mitochondria
   m_TagString: Untagged
@@ -343,12 +344,12 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: -15, y: 90, z: 50}
   alignedMitosisPosition: {x: 0.004943974, y: 0.688, z: 0.09031893}
   alignedMitosisRotation: {x: 0, y: -67.4, z: 0}
   alignedMitosisScale: 0.5
+  attachedTarget: {fileID: 0}
 --- !u!114 &114235545993744128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -379,6 +380,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114446650236690658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1756103295714278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
+    illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
 --- !u!114 &114535802844275720
 MonoBehaviour:
   m_ObjectHideFlags: 1

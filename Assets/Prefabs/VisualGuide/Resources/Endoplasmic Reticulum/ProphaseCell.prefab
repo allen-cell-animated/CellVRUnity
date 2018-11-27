@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4529160699064598}
   - component: {fileID: 33162558242757802}
   - component: {fileID: 23807221342720014}
+  - component: {fileID: 114579886561157944}
   m_Layer: 0
   m_Name: ER
   m_TagString: Untagged
@@ -326,12 +327,12 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  boundToTarget: 0
   boundsRadius: 0
   rotationOffsetAtTarget: {x: 20, y: 80, z: 60}
   alignedMitosisPosition: {x: 0.116, y: 0.698, z: 0}
   alignedMitosisRotation: {x: 0, y: -121.628, z: 0}
   alignedMitosisScale: 0.5
+  attachedTarget: {fileID: 0}
 --- !u!114 &114407053451667436
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,6 +367,22 @@ MonoBehaviour:
   customOutlineModels: []
   customOutlineModelPaths: []
   enableSubmeshHighlight: 0
+--- !u!114 &114579886561157944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1304357580628280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    illumColor: {r: 0, g: 0, b: 0, a: 1}
+  - color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
+    illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
 --- !u!114 &114721470272988210
 MonoBehaviour:
   m_ObjectHideFlags: 1

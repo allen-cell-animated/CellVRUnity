@@ -26,24 +26,6 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    Material[] _materials;
-    Material[] materials
-    {
-        get
-        {
-            if (_materials == null)
-            {
-                MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-                _materials = new Material[renderers.Length];
-                for (int i = 0; i < renderers.Length; i++)
-                {
-                    _materials[i] = renderers[i].material;
-                }
-            }
-            return _materials;
-        }
-    }
-
     Collider _collider;
     public Collider theCollider
     {
@@ -54,6 +36,19 @@ public class CellStructure : VRTK_InteractableObject
                 _collider = GetComponent<Collider>();
             }
             return _collider;
+        }
+    }
+
+    Colorer _colorer;
+    public Colorer colorer
+    {
+        get
+        {
+            if (_colorer == null)
+            {
+                _colorer = GetComponent<Colorer>();
+            }
+            return _colorer;
         }
     }
 
@@ -68,7 +63,7 @@ public class CellStructure : VRTK_InteractableObject
     protected override void Awake ()
     {
         base.Awake();
-        SetColor( false );
+        colorer.SetColor( 0 );
     }
 
     protected override void OnEnable ()
@@ -115,23 +110,6 @@ public class CellStructure : VRTK_InteractableObject
         if (hovering && ControllerInput.Instance.rightTriggerDown)
         {
             interphaseCell.SelectStructure( this );
-        }
-    }
-
-    public void SetColor (bool _colored)
-    {
-        foreach (Material material in materials)
-        {
-            if (_colored)
-            {
-                material.SetColor( "_Color", color );
-                material.SetColor( "_EmissionColor", illumColor );
-            }
-            else
-            {
-                material.SetColor( "_Color", Color.white );
-                material.SetColor( "_EmissionColor", Color.black );
-            }
         }
     }
 }
