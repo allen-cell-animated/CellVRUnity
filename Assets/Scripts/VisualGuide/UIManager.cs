@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
 
 public class UIManager : MonoBehaviour 
 {
-    public GameObject resetButton;
-    public GameObject backButton;
-
     static UIManager _Instance;
     public static UIManager Instance
     {
@@ -20,23 +18,45 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ToggleBackButton (bool on)
+    void OnEnable ()
     {
-        backButton.SetActive( on );
+        if (ControllerInput.Instance.pointerLeft != null)
+        {
+            ControllerInput.Instance.pointerLeft.TouchpadReleased += OnLeftControllerTouchpadUp;
+        }
     }
 
-    public void ExitPlayMode ()
+    void OnDisable ()
     {
-        VisualGuideManager.Instance.ReturnToLobby();
+        if (ControllerInput.Instance.pointerLeft != null)
+        {
+            ControllerInput.Instance.pointerLeft.TouchpadReleased -= OnLeftControllerTouchpadUp;
+        }
     }
 
-    public void ToggleResetButton (bool on)
+    void OnLeftControllerTouchpadUp (object sender, ControllerInteractionEventArgs e)
     {
-        resetButton.SetActive( on );
+        if (VisualGuideManager.Instance.currentMode != VisualGuideGameMode.Lobby)
+        {
+            VisualGuideManager.Instance.ReturnToLobby();
+        }
     }
 
-    public void ResetSolvedStructures ()
+    void Update ()
     {
-        VisualGuideManager.Instance.ResetSolvedStructures();
+        if (Input.GetKeyUp( KeyCode.X ))
+        {
+            VisualGuideManager.Instance.ResetSolvedStructures();
+        }
+
+        if (Input.GetKeyUp( KeyCode.C ))
+        {
+            //toggle color in integrated cell in lobby
+        }
+
+        if (Input.GetKeyUp( KeyCode.Q ))
+        {
+            //toggle cell placement in game
+        }
     }
 }

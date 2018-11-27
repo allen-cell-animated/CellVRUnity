@@ -83,9 +83,7 @@ public class VisualGuideManager : MonoBehaviour
         currentGameManager.StartGame( structureName, 1.5f );
         interphaseCell.TransitionToPlayMode( currentGameManager );
         structuresSolved[structureName] = false;
-        //ControllerInput.Instance.ToggleLaserRenderer( false );
-        UIManager.Instance.ToggleResetButton( false );
-        UIManager.Instance.ToggleBackButton( true );
+        ControllerInput.Instance.ToggleLaserRenderer( false );
     }
 
     void CreateMitosisGameManager ()
@@ -132,7 +130,6 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.gameObject.SetActive( true );
         interphaseCell.TransitionToLobbyMode( structureJustSolved );
         ControllerInput.Instance.ToggleLaserRenderer( true );
-        UIManager.Instance.ToggleBackButton( false );
     }
 
     public void CheckSetupReward ()
@@ -146,10 +143,6 @@ public class VisualGuideManager : MonoBehaviour
             StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
             StartCoroutine( EndReward() );
         }
-        else
-        {
-            UIManager.Instance.ToggleResetButton( true );
-        }
     }
 
     IEnumerator EndReward ()
@@ -162,7 +155,6 @@ public class VisualGuideManager : MonoBehaviour
 
             Cleanup();
             interphaseCell.gameObject.SetActive( true );
-            UIManager.Instance.ToggleResetButton( true );
         }
     }
 

@@ -5,10 +5,12 @@ using UnityEngine;
 public class ControllerLabeller : MonoBehaviour 
 {
     public GameObject scaleButtonLabelRight;
+    public GameObject grabButtonLabelRight;
     public GameObject selectButtonLabelRight;
-    public GameObject labelLineRight;
+
     public GameObject scaleButtonLabelLeft;
-    public GameObject labelLineLeft;
+    public GameObject grabButtonLabelLeft;
+    public GameObject backButtonLabelLeft;
 
     void Update ()
     {
@@ -17,37 +19,27 @@ public class ControllerLabeller : MonoBehaviour
 
     void UpdateButtonLabels ()
     {
-        if (!ControllerInput.Instance.rightTriggerDown && !ControllerInput.Instance.leftTriggerDown)
+        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby)
         {
-            ShowObject( scaleButtonLabelRight, false );
-            ShowObject( selectButtonLabelRight, true );
-            ShowObject( labelLineRight, true );
-            ShowObject( scaleButtonLabelLeft, true );
-            ShowObject( labelLineLeft, true );
-        }
-        else if (ControllerInput.Instance.rightTriggerDown && !ControllerInput.Instance.leftTriggerDown)
-        {
-            ShowObject( scaleButtonLabelRight, false );
-            ShowObject( selectButtonLabelRight, false );
-            ShowObject( labelLineRight, false );
-            ShowObject( scaleButtonLabelLeft, true );
-            ShowObject( labelLineLeft, true );
-        }
-        else if (!ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.leftTriggerDown)
-        {
-            ShowObject( scaleButtonLabelRight, true );
-            ShowObject( selectButtonLabelRight, false );
-            ShowObject( labelLineRight, true );
-            ShowObject( scaleButtonLabelLeft, false );
-            ShowObject( labelLineLeft, false );
+            ShowObject( scaleButtonLabelRight, !ControllerInput.Instance.rightGripDown );
+            ShowObject( scaleButtonLabelLeft, !ControllerInput.Instance.leftGripDown );
+
+            ShowObject( selectButtonLabelRight, !ControllerInput.Instance.rightTriggerDown );
+
+            ShowObject( grabButtonLabelRight, false );
+            ShowObject( grabButtonLabelLeft, false );
+            ShowObject( backButtonLabelLeft, false );
         }
         else
         {
+            ShowObject( grabButtonLabelRight, !ControllerInput.Instance.rightTriggerDown );
+            ShowObject( grabButtonLabelLeft, !ControllerInput.Instance.leftTriggerDown );
+
+            ShowObject( backButtonLabelLeft, true );
+
             ShowObject( scaleButtonLabelRight, false );
-            ShowObject( selectButtonLabelRight, false );
-            ShowObject( labelLineRight, false );
             ShowObject( scaleButtonLabelLeft, false );
-            ShowObject( labelLineLeft, false );
+            ShowObject( selectButtonLabelRight, false );
         }
     }
 
