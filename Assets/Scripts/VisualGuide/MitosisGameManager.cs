@@ -53,20 +53,16 @@ public class MitosisGameManager : MonoBehaviour
         rePlaceWhenOutOfBounds = false;
         for (int i = 0; i < structureNames.Length; i++)
         {
-            StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn ) );
+            StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn, 1 ) );
         }
 
         yield return new WaitForSeconds( structureNames.Length * structureNames.Length * waitBetweenThrowableSpawn );
 
         throwableCells = GetComponentsInChildren<ThrowableCell>();
-        foreach (ThrowableCell cell in throwableCells)
-        {
-            cell.colorer.SetColor( 1 );
-        }
         rePlaceWhenOutOfBounds = true;
     }
 
-    IEnumerator SpawnThrowables (string structureName, float waitTime)
+    IEnumerator SpawnThrowables (string structureName, float waitTime, int colorSet = -1)
     {
         yield return new WaitForSeconds( waitTime );
 
@@ -85,6 +81,11 @@ public class MitosisGameManager : MonoBehaviour
             throwableCells[i].transform.position = transform.position + randomPositionInThrowableSpawnArea;
             throwableCells[i].transform.rotation = Random.rotation;
             throwableCells[i].transform.localScale = throwableSpawnScale * Vector3.one;
+
+            if (colorSet >= 0)
+            {
+                throwableCells[i].colorer.SetColor( colorSet );
+            }
 
             yield return new WaitForSeconds( waitBetweenThrowableSpawn );
         }
