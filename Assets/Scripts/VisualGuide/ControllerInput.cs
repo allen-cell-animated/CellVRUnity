@@ -12,6 +12,9 @@ public class ControllerInput : MonoBehaviour
     public bool rightGripDown;
     public bool leftGripDown;
     public bool leftTouchpadHover;
+    public bool pointerHover;
+    public bool touchingRight;
+    public bool touchingLeft;
 
     static ControllerInput _Instance;
     public static ControllerInput Instance
@@ -23,6 +26,58 @@ public class ControllerInput : MonoBehaviour
                 _Instance = GameObject.FindObjectOfType<ControllerInput>();
             }
             return _Instance;
+        }
+    }
+
+    VRTK_DestinationMarker _laserPointer;
+    public VRTK_DestinationMarker laserPointer
+    {
+        get
+        {
+            if (_laserPointer == null && pointerRight != null)
+            {
+                _laserPointer = pointerRight.GetComponent<VRTK_DestinationMarker>();
+            }
+            return _laserPointer;
+        }
+    }
+
+    VRTK_Pointer _laserRenderer;
+    VRTK_Pointer laserRenderer
+    {
+        get
+        {
+            if (_laserRenderer == null)
+            {
+                _laserRenderer = GameObject.FindObjectOfType<VRTK_Pointer>();
+            }
+            return _laserRenderer;
+        }
+    }
+
+    VRTK_InteractTouch _toucherLeft;
+    VRTK_InteractTouch toucherLeft
+    {
+        get
+        {
+            if (_toucherLeft == null && pointerLeft != null)
+            {
+                _toucherLeft = pointerLeft.GetComponent<VRTK_InteractTouch>();
+            }
+            return _toucherLeft;
+        }
+    }
+
+    VRTK_InteractTouch _toucherRight;
+    VRTK_InteractTouch toucherRight
+    {
+        get
+        {
+            if (_toucherRight == null && pointerRight != null)
+            {
+                _toucherRight = pointerRight.GetComponent<VRTK_InteractTouch>();
+            }
+            return _toucherRight;
         }
     }
 
@@ -44,6 +99,21 @@ public class ControllerInput : MonoBehaviour
             pointerRight.GripPressed += OnRightControllerGripDown;
             pointerRight.GripReleased += OnRightControllerGripUp;
         }
+        if (laserPointer != null)
+        {
+            laserPointer.DestinationMarkerEnter += OnPointerHoverEnter;
+            laserPointer.DestinationMarkerExit += OnPointerHoverExit;
+        }
+        if (toucherLeft != null)
+        {
+            toucherLeft.ControllerTouchInteractableObject += OnLeftControllerTouch;
+            toucherLeft.ControllerUntouchInteractableObject += OnLeftControllerUntouch;
+        }
+        if (toucherRight != null)
+        {
+            toucherRight.ControllerTouchInteractableObject += OnRightControllerTouch;
+            toucherRight.ControllerUntouchInteractableObject += OnRightControllerUntouch;
+        }
     }
 
     void OnDisable ()
@@ -63,6 +133,21 @@ public class ControllerInput : MonoBehaviour
             pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
             pointerRight.GripPressed -= OnRightControllerGripDown;
             pointerRight.GripReleased -= OnRightControllerGripUp;
+        }
+        if (laserPointer != null)
+        {
+            laserPointer.DestinationMarkerEnter -= OnPointerHoverEnter;
+            laserPointer.DestinationMarkerExit -= OnPointerHoverExit;
+        }
+        if (toucherLeft != null)
+        {
+            toucherLeft.ControllerTouchInteractableObject -= OnLeftControllerTouch;
+            toucherLeft.ControllerUntouchInteractableObject -= OnLeftControllerUntouch;
+        }
+        if (toucherRight != null)
+        {
+            toucherRight.ControllerTouchInteractableObject -= OnRightControllerTouch;
+            toucherRight.ControllerUntouchInteractableObject -= OnRightControllerUntouch;
         }
     }
 
@@ -116,17 +201,34 @@ public class ControllerInput : MonoBehaviour
         leftTouchpadHover = false;
     }
 
-    VRTK_Pointer _laserRenderer;
-    VRTK_Pointer laserRenderer
+    void OnPointerHoverEnter (object sender, DestinationMarkerEventArgs e)
     {
-        get
-        {
-            if (_laserRenderer == null)
-            {
-                _laserRenderer = GameObject.FindObjectOfType<VRTK_Pointer>();
-            }
-            return _laserRenderer;
-        }
+        pointerHover = true;
+    }
+
+    void OnPointerHoverExit (object sender, DestinationMarkerEventArgs e)
+    {
+        pointerHover = false;
+    }
+
+    void OnRightControllerTouch (object sender, ObjectInteractEventArgs e)
+    {
+        touchingRight = true;
+    }
+
+    void OnRightControllerUntouch (object sender, ObjectInteractEventArgs e)
+    {
+        touchingRight = false;
+    }
+
+    void OnLeftControllerTouch (object sender, ObjectInteractEventArgs e)
+    {
+        touchingLeft = true;
+    }
+
+    void OnLeftControllerUntouch (object sender, ObjectInteractEventArgs e)
+    {
+        touchingLeft = false;
     }
 
     public void ToggleLaserRenderer (bool _active)
@@ -136,19 +238,6 @@ public class ControllerInput : MonoBehaviour
             laserRenderer.enabled = false;
             laserRenderer.pointerRenderer.enabled = _active;
             laserRenderer.enabled = true;
-        }
-    }
-
-    VRTK_DestinationMarker _laserPointer;
-    public VRTK_DestinationMarker laserPointer
-    {
-        get
-        {
-            if (_laserPointer == null && pointerRight != null)
-            {
-                _laserPointer = pointerRight.GetComponent<VRTK_DestinationMarker>();
-            }
-            return _laserPointer;
         }
     }
 }

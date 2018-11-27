@@ -85,7 +85,10 @@ public class ControllerLabeller : MonoBehaviour
             ShowObject( scaleButtonLabelRight, !ControllerInput.Instance.rightGripDown );
             ShowObject( scaleButtonLabelLeft, !ControllerInput.Instance.leftGripDown );
 
-            ShowObject( selectButtonLabelRight, !ControllerInput.Instance.rightTriggerDown );
+            ShowObject( selectButtonLabelRight, !ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.pointerHover );
+
+            ShowObject( gripRight, true );
+            ShowObject( gripLeft, true );
 
             ShowObject( grabButtonLabelRight, false );
             ShowObject( grabButtonLabelLeft, false );
@@ -93,12 +96,14 @@ public class ControllerLabeller : MonoBehaviour
         }
         else
         {
-            ShowObject( grabButtonLabelRight, !ControllerInput.Instance.rightTriggerDown );
-            ShowObject( grabButtonLabelLeft, !ControllerInput.Instance.leftTriggerDown );
+            ShowObject( grabButtonLabelRight, !ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.touchingRight );
+            ShowObject( grabButtonLabelLeft, !ControllerInput.Instance.leftTriggerDown && ControllerInput.Instance.touchingLeft );
 
             ShowObject( backButtonLabelLeft, true );
             ShowObject( backButtonLabelLeftHover, ControllerInput.Instance.leftTouchpadHover );
 
+            ShowObject( gripRight, false );
+            ShowObject( gripLeft, false );
             ShowObject( scaleButtonLabelRight, false );
             ShowObject( scaleButtonLabelLeft, false );
             ShowObject( selectButtonLabelRight, false );
