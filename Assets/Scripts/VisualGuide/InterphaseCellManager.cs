@@ -138,10 +138,9 @@ public class InterphaseCellManager : MonoBehaviour
         HideLabel();
     }
 
-    public void Celebrate ()
+    public void ColorActiveStructure ()
     {
         structures.Find( s => s.gameObject.activeSelf ).colorer.SetColor( 1 );
-        animator.SetTrigger( "Success" );
     }
 
     public void TransitionToLobbyMode ()

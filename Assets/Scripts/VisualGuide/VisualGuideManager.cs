@@ -104,7 +104,23 @@ public class VisualGuideManager : MonoBehaviour
         currentMode = VisualGuideGameMode.Success;
 
         structuresSolved[currentGameManager.currentStructureName] = true;
-        interphaseCell.Celebrate();
+        interphaseCell.ColorActiveStructure();
+
+        AnimateSuccess( interphaseCell.gameObject );
+    }
+
+    void AnimateSuccess (GameObject obj)
+    {
+        GameObject prefab = Resources.Load( "Animator" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for Animator" );
+            return;
+        }
+        Animator animator = (Instantiate( prefab ) as GameObject).GetComponent<Animator>();
+
+        obj.transform.SetParent( animator.transform );
+        animator.SetTrigger( "Success" );
     }
 
     public void CheckSucess ()
