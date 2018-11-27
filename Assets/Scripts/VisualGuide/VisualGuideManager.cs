@@ -107,10 +107,11 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.ColorActiveStructure();
 
         AnimateSuccess( interphaseCell.gameObject );
+        StartCoroutine( currentGameManager.AnimateCellsForSuccess() );
         CheckSucess();
     }
 
-    void AnimateSuccess (GameObject obj)
+    public void AnimateSuccess (GameObject obj)
     {
         GameObject prefab = Resources.Load( "CellAnimator" ) as GameObject;
         if (prefab == null)
