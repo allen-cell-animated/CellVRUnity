@@ -21,7 +21,7 @@ public class MitosisGameManager : MonoBehaviour
     float timeBetweenThrowableChecks = 3f;
     int correctlyPlacedThrowables;
     int animationPhase;
-    bool rePlaceWhenOutOfBounds = true;
+    bool destroyWhenOutOfBounds;
 
     public void StartGame (string _structureName, float timeBeforeCellDrop)
     {
@@ -34,10 +34,7 @@ public class MitosisGameManager : MonoBehaviour
 
     void Update ()
     {
-        if (rePlaceWhenOutOfBounds)
-        {
-            PlaceThrowablesIfOutOfBounds();
-        }
+        CheckIfThrowablesOutOfBounds();
     }
 
     Vector3 randomPositionInThrowableSpawnArea
@@ -50,7 +47,7 @@ public class MitosisGameManager : MonoBehaviour
 
     public IEnumerator SpawnAllThrowables (string[] structureNames)
     {
-        rePlaceWhenOutOfBounds = false;
+        destroyWhenOutOfBounds = true;
         for (int i = 0; i < structureNames.Length; i++)
         {
             StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn, 1 ) );
@@ -59,7 +56,6 @@ public class MitosisGameManager : MonoBehaviour
         yield return new WaitForSeconds( structureNames.Length * structureNames.Length * waitBetweenThrowableSpawn );
 
         throwableCells = GetComponentsInChildren<ThrowableCell>();
-        rePlaceWhenOutOfBounds = true;
     }
 
     IEnumerator SpawnThrowables (string structureName, float waitTime, int colorSet = -1)
@@ -107,7 +103,7 @@ public class MitosisGameManager : MonoBehaviour
         return throwablePositionOnFloor.magnitude > throwableBoundsRadius;
     }
 
-    void PlaceThrowablesIfOutOfBounds ()
+    void CheckIfThrowablesOutOfBounds ()
     {
         if (throwableCells != null && Time.time - lastThrowableCheckTime > timeBetweenThrowableChecks)
         {
@@ -117,8 +113,15 @@ public class MitosisGameManager : MonoBehaviour
                     && (!throwableCell.isMoving || throwableCell.transform.position.y < 5f) 
                     && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
-                    throwableCell.ReleaseFromTarget( true );
-                    StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
+                    if (destroyWhenOutOfBounds)
+                    {
+                        Destroy( throwableCell.gameObject );
+                    }
+                    else
+                    {
+                        throwableCell.ReleaseFromTarget( true );
+                        StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
+                    }
                 }
             }
             lastThrowableCheckTime = Time.time;

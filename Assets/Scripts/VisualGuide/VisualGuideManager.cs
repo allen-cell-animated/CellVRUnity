@@ -14,6 +14,7 @@ public class VisualGuideManager : MonoBehaviour
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
     public MitosisGameManager currentGameManager;
 
+    MitosisGameManager successGameManager;
     string[] structureNames = { "Endoplasmic Reticulum", "Golgi Apparatus", "Microtubules", "Mitochondria"};
     Dictionary<string,bool> structuresSolved;
 
@@ -79,23 +80,23 @@ public class VisualGuideManager : MonoBehaviour
 
         structuresSolved[structureName] = false;
 
-        CreateMitosisGameManager();
+        Cleanup();
+        currentGameManager = CreateMitosisGameManager();
         currentGameManager.StartGame( structureName, 1.5f );
 
         interphaseCell.TransitionToPlayMode( currentGameManager );
         ControllerInput.Instance.ToggleLaserRenderer( false );
     }
 
-    void CreateMitosisGameManager ()
+    MitosisGameManager CreateMitosisGameManager ()
     {
-        CleanupGame();
         GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
         if (prefab == null)
         {
             Debug.LogWarning( "Couldn't load prefab for MitosisGame" );
-            return;
+            return null;
         }
-        currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
+        return (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
     }
 
     public void EnterSuccessMode ()
@@ -110,8 +111,8 @@ public class VisualGuideManager : MonoBehaviour
     {
         if (allStructuresSolved)
         {
-            CreateMitosisGameManager();
-            StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
+            successGameManager = CreateMitosisGameManager();
+            StartCoroutine( successGameManager.SpawnAllThrowables( structureNames ) );
         }
     }
 
@@ -119,17 +120,21 @@ public class VisualGuideManager : MonoBehaviour
     {
         currentMode = VisualGuideGameMode.Lobby;
 
-        CleanupGame();
+        Cleanup();
 
         interphaseCell.TransitionToLobbyMode();
         ControllerInput.Instance.ToggleLaserRenderer( true );
     }
 
-    void CleanupGame ()
+    void Cleanup ()
     {
         if (currentGameManager != null)
         {
             Destroy( currentGameManager.gameObject );
+        }
+        if (successGameManager != null)
+        {
+            Destroy( successGameManager.gameObject );
         }
     }
 }
