@@ -13,7 +13,7 @@ public class MitosisGameManager : MonoBehaviour
     public float targetHeight = 1.5f;
     public float targetDistanceFromCenter = 2.2f;
 
-    string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
+    string[] throwableNames = { "Prophase", "Prometaphase", "Metaphase", "Anaphase", "Telophase"};
     ThrowableCell[] throwableCells;
     Target[] targets;
     GameObject[] arrows;
@@ -70,7 +70,7 @@ public class MitosisGameManager : MonoBehaviour
         throwableCells = new ThrowableCell[throwableNames.Length];
         for (int i = 0; i < throwableNames.Length; i++)
         {
-            prefab = Resources.Load( structureName + "/" + throwableNames[i] ) as GameObject;
+            prefab = Resources.Load( structureName + "/" + throwableNames[i] + "Cell" ) as GameObject;
             if (prefab == null)
             {
                 Debug.LogWarning( "Couldn't load prefab for " + structureName + " " + throwableNames[i] );
@@ -160,7 +160,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds( waitTime );
 
-        targets[throwableNames.Length].gameObject.SetActive( false );
+        targets[throwableNames.Length].Bind();
     }
 
     void SpawnWalls ()

@@ -92,7 +92,7 @@ public class ThrowableCell : VRTK_InteractableObject
         Target target = collision.gameObject.GetComponent<Target>();
         if (target != null)
         {
-            if (target.goalName.Contains( name.Substring( 0, name.Length - 7 ) ))
+            if (target.goalName.Contains( name.Substring( 0, name.Length - 11 ) ))
             {
                 BindToTarget( target );
             }

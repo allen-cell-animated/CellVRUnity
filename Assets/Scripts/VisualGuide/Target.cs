@@ -44,13 +44,13 @@ public class Target : MonoBehaviour
     public void Bind ()
     {
         visualization.gameObject.SetActive( false );
-        label.gameObject.SetActive( true );
+        label.transform.parent.gameObject.SetActive( true );
     }
 
     public void Release ()
     {
         visualization.gameObject.SetActive( true );
-        label.gameObject.SetActive( false );
+        label.transform.parent.gameObject.SetActive( false );
     }
 
     public void Bounce ()
