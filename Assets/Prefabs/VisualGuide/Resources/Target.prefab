@@ -54,6 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4346930153285702}
+  - component: {fileID: 114417123878971728}
   - component: {fileID: 135967105460304394}
   - component: {fileID: 95081957103217620}
   m_Layer: 0
@@ -173,6 +174,20 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Interphase
+--- !u!114 &114417123878971728
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816255196654972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c4f03e20b1849e599316d086869d82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goalName: 
+  visualization: {fileID: 212798010734496848}
+  label: {fileID: 114077332340101806}
 --- !u!114 &114485463085455890
 MonoBehaviour:
   m_ObjectHideFlags: 1
