@@ -118,11 +118,11 @@ public class InterphaseCellManager : MonoBehaviour
         lobbyScale = transform.localScale.x;
     }
 
-    public void GrayOutStructures ()
+    public void SetColorsetForStructures (int colorSet)
     {
         foreach (CellStructure structure in structures)
         {
-            structure.colorer.SetColor( 0 );
+            structure.colorer.SetColor( colorSet );
         }
     }
 
@@ -138,34 +138,24 @@ public class InterphaseCellManager : MonoBehaviour
         HideLabel();
     }
 
+    public void Celebrate ()
+    {
+        structures.Find( s => s.gameObject.activeSelf ).colorer.SetColor( 1 );
+        animator.SetTrigger( "Success" );
+    }
+
+    public void TransitionToLobbyMode ()
+    {
+        ExitIsolationMode();
+        transformer.enabled = true;
+        MoveToCenter( 1f );
+    }
+
     public void MoveToCenter (float duration)
     {
-        mover.MoveToOverDuration( lobbyPosition, duration, ArrivedAtCenter );
+        mover.MoveToOverDuration( lobbyPosition, duration );
         rotator.RotateToOverDuration( lobbyRotation, duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
-    }
-
-    public void ArrivedAtCenter ()
-    {
-        VisualGuideManager.Instance.currentGameManager.AnimateNextPhase();
-    }
-
-    public void TransitionToLobbyMode (string structureJustSolved = null)
-    {
-        transform.position = lobbyPosition;
-        transform.rotation = lobbyRotation;
-        transform.localScale = lobbyScale * Vector3.one;
-        transformer.enabled = true;
-
-        if (!string.IsNullOrEmpty( structureJustSolved ))
-        {
-            structures.Find( s => s.structureName == structureJustSolved ).colorer.SetColor( 1 );
-            animator.SetTrigger( "Success" );
-        }
-        else
-        {
-            ExitIsolationMode();
-        }
     }
 
     public void LabelStructure (CellStructure _structure)

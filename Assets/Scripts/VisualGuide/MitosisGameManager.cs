@@ -190,14 +190,28 @@ public class MitosisGameManager : MonoBehaviour
     public void RecordCorrectHit ()
     {
         correctlyPlacedThrowables++;
+
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
-            HideArrows();
-            VisualGuideManager.Instance.StartSuccessAnimation();
-            foreach (ThrowableCell throwable in throwableCells)
-            {
-                throwable.isGrabbable = false;
-            }
+            VisualGuideManager.Instance.EnterSuccessMode();
+            SetColorsetForThrowables( 1 );
+            SetThrowablesGrabbable( false );
+        }
+    }
+
+    void SetThrowablesGrabbable (bool grabbable)
+    {
+        foreach (ThrowableCell cell in throwableCells)
+        {
+            cell.isGrabbable = grabbable;
+        }
+    }
+
+    void SetColorsetForThrowables (int colorSet)
+    {
+        foreach (ThrowableCell cell in throwableCells)
+        {
+            cell.colorer.SetColor( colorSet );
         }
     }
 
@@ -207,43 +221,5 @@ public class MitosisGameManager : MonoBehaviour
         {
             correctlyPlacedThrowables--;
         }
-    }
-
-    void HideArrows ()
-    {
-        foreach (GameObject arrow in arrows)
-        {
-            arrow.SetActive( false );
-        }
-    }
-
-    public void AnimateNextPhase ()
-    {
-        if (animationPhase < throwableNames.Length)
-        {
-            if (animationPhase == 1)
-            {
-                VisualGuideManager.Instance.interphaseCell.gameObject.SetActive( false );
-            }
-            else if (animationPhase > 1)
-            {
-                throwableCells[animationPhase-2].gameObject.SetActive( false );
-            }
-            throwableCells[animationPhase].AnimateSuccess();
-            animationPhase++;
-        }
-        else
-        {
-            throwableCells[animationPhase-2].gameObject.SetActive( false );
-            StartCoroutine( WaitToTriggerMitoticCells() );
-        }
-    }
-
-    IEnumerator WaitToTriggerMitoticCells ()
-    {
-        yield return new WaitForSeconds( 1f );
-
-        throwableCells[throwableCells.Length-1].gameObject.SetActive( false );
-        VisualGuideManager.Instance.TriggerMitoticCellsAnimation();
     }
 }

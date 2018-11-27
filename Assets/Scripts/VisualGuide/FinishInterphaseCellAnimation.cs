@@ -6,7 +6,6 @@ public class FinishInterphaseCellAnimation : StateMachineBehaviour
 {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        VisualGuideManager.Instance.interphaseCell.ExitIsolationMode();
-        VisualGuideManager.Instance.CheckSetupReward();
+        VisualGuideManager.Instance.CheckSucess();
 	}
 }

@@ -158,11 +158,4 @@ public class ThrowableCell : VRTK_InteractableObject
             body.velocity = Vector3.zero;
         }
     }
-
-    public void AnimateSuccess ()
-    {
-        mover.MoveToOverDuration( alignedMitosisPosition, 1f, gameManager.AnimateNextPhase );
-        rotator.RotateToOverDuration( Quaternion.Euler( alignedMitosisRotation ), 1f );
-        scaler.ScaleOverDuration( alignedMitosisScale, 1f );
-    }
 }

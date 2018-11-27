@@ -6,7 +6,7 @@ public enum VisualGuideGameMode
 {
     Lobby,
     Play,
-    Reward
+    Success
 }
 
 public class VisualGuideManager : MonoBehaviour 
@@ -16,7 +16,6 @@ public class VisualGuideManager : MonoBehaviour
 
     string[] structureNames = { "Endoplasmic Reticulum", "Golgi Apparatus", "Microtubules", "Mitochondria"};
     Dictionary<string,bool> structuresSolved;
-    Animator mitoticCellsAnimation;
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -71,23 +70,25 @@ public class VisualGuideManager : MonoBehaviour
         {
             structuresSolved.Add( structure, false );
         }
-        interphaseCell.GrayOutStructures();
+        interphaseCell.SetColorsetForStructures( 0 );
     }
 
     public void StartGame (string structureName)
     {
         currentMode = VisualGuideGameMode.Play;
 
-        Cleanup();
+        structuresSolved[structureName] = false;
+
         CreateMitosisGameManager();
         currentGameManager.StartGame( structureName, 1.5f );
+
         interphaseCell.TransitionToPlayMode( currentGameManager );
-        structuresSolved[structureName] = false;
         ControllerInput.Instance.ToggleLaserRenderer( false );
     }
 
     void CreateMitosisGameManager ()
     {
+        CleanupGame();
         GameObject prefab = Resources.Load( "MitosisGame" ) as GameObject;
         if (prefab == null)
         {
@@ -97,76 +98,38 @@ public class VisualGuideManager : MonoBehaviour
         currentGameManager = (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
     }
 
-    public void StartSuccessAnimation ()
+    public void EnterSuccessMode ()
     {
-        interphaseCell.MoveToCenter( 1f );
+        currentMode = VisualGuideGameMode.Success;
+
+        structuresSolved[currentGameManager.currentStructureName] = true;
+        interphaseCell.Celebrate();
     }
 
-    public void TriggerMitoticCellsAnimation ()
-    {
-        GameObject prefab = Resources.Load( currentGameManager.currentStructureName + "/MitoticCells" ) as GameObject;
-        if (prefab == null)
-        {
-            Debug.LogWarning( "Couldn't load prefab for " + currentGameManager.currentStructureName + " MitoticCells!" );
-        }
-        mitoticCellsAnimation = (Instantiate( prefab, transform.position, transform.rotation, transform ) as GameObject).GetComponent<Animator>();
-        mitoticCellsAnimation.SetTrigger( "Play" );
-    }
-
-    public void FinishSuccessAnimation ()
-    {
-        string structureName = currentGameManager.currentStructureName;
-        structuresSolved[structureName] = true;
-
-        ReturnToLobby( structureName );
-    }
-
-    public void ReturnToLobby (string structureJustSolved = null)
-    {
-        currentMode = VisualGuideGameMode.Lobby;
-
-        Cleanup();
-
-        interphaseCell.gameObject.SetActive( true );
-        interphaseCell.TransitionToLobbyMode( structureJustSolved );
-        ControllerInput.Instance.ToggleLaserRenderer( true );
-    }
-
-    public void CheckSetupReward ()
+    public void CheckSucess ()
     {
         if (allStructuresSolved)
         {
-            currentMode = VisualGuideGameMode.Reward;
-
-            interphaseCell.gameObject.SetActive( false );
             CreateMitosisGameManager();
             StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
-            StartCoroutine( EndReward() );
         }
     }
 
-    IEnumerator EndReward ()
+    public void ReturnToLobby ()
     {
-        yield return new WaitForSeconds( 10f );
+        currentMode = VisualGuideGameMode.Lobby;
 
-        if (currentMode == VisualGuideGameMode.Reward)
-        {
-            currentMode = VisualGuideGameMode.Lobby;
+        CleanupGame();
 
-            Cleanup();
-            interphaseCell.gameObject.SetActive( true );
-        }
+        interphaseCell.TransitionToLobbyMode();
+        ControllerInput.Instance.ToggleLaserRenderer( true );
     }
 
-    void Cleanup ()
+    void CleanupGame ()
     {
         if (currentGameManager != null)
         {
             Destroy( currentGameManager.gameObject );
-        }
-        if (mitoticCellsAnimation != null)
-        {
-            Destroy( mitoticCellsAnimation.gameObject );
         }
     }
 }
