@@ -15,7 +15,7 @@ public class MitosisGameManager : MonoBehaviour
 
     string[] throwableNames = { "ProphaseCell", "PrometaphaseCell", "MetaphaseCell", "AnaphaseCell", "TelophaseCell"};
     ThrowableCell[] throwableCells;
-    GameObject[] targets;
+    Target[] targets;
     GameObject[] arrows;
     float lastThrowableCheckTime = 5f;
     float timeBetweenThrowableChecks = 3f;
@@ -108,7 +108,7 @@ public class MitosisGameManager : MonoBehaviour
         {
             foreach (ThrowableCell throwableCell in throwableCells)
             {
-                if (throwableCell != null && !throwableCell.boundToTarget && !throwableCell.isMoving && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
+                if (throwableCell != null && throwableCell.attachedTarget == null && !throwableCell.isMoving && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
                     throwableCell.ReleaseFromTarget( true );
                     StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
@@ -133,7 +133,7 @@ public class MitosisGameManager : MonoBehaviour
             return;
         }
 
-        targets = new GameObject[throwableNames.Length + 1];
+        targets = new Target[throwableNames.Length + 1];
         arrows = new GameObject[throwableNames.Length + 1];
         Vector3 position = targetDistanceFromCenter * Vector3.forward;
         Quaternion dRotation = Quaternion.Euler( 0, 180f / (throwableNames.Length + 1f), 0 );
@@ -141,14 +141,14 @@ public class MitosisGameManager : MonoBehaviour
         for (int i = 0; i < throwableNames.Length + 1; i++)
         {
             position = dRotation * position;
-            targets[i] = Instantiate( targetPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform ) as GameObject;
+            targets[i] = (Instantiate( targetPrefab, position + targetHeight * Vector3.up, Quaternion.LookRotation( -position, Vector3.up ), transform ) as GameObject).GetComponent<Target>();
             if (i < throwableNames.Length)
             {
-                targets[i].name = throwableNames[i] + "Target";
+                targets[i].SetGoalName( throwableNames[i] );
             }
             else //interphase cell target
             {
-                targets[i].GetComponent<SphereCollider>().enabled = false;
+                targets[i].theCollider.enabled = false;
             }
 
             position = dRotation * position;
@@ -160,7 +160,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds( waitTime );
 
-        targets[throwableNames.Length].SetActive( false );
+        targets[throwableNames.Length].gameObject.SetActive( false );
     }
 
     void SpawnWalls ()

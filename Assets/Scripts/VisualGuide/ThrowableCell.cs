@@ -7,14 +7,12 @@ public class ThrowableCell : VRTK_InteractableObject
 {
     [Header("Throwable Cell Settings")]
 
-    public bool boundToTarget;
     public float boundsRadius;
     public Vector3 rotationOffsetAtTarget;
     public Vector3 alignedMitosisPosition;
     public Vector3 alignedMitosisRotation;
     public float alignedMitosisScale;
-
-    SpriteRenderer attachedTargetRenderer;
+    public Target attachedTarget;
 
     MitosisGameManager _gameManager;
     MitosisGameManager gameManager
@@ -91,15 +89,16 @@ public class ThrowableCell : VRTK_InteractableObject
 
     void OnCollisionEnter (Collision collision)
     {
-        if (collision.gameObject.tag == "Target")
+        Target target = collision.gameObject.GetComponent<Target>();
+        if (target != null)
         {
-            if (collision.gameObject.name.Contains( name.Substring( 0, name.Length - 7 ) ))
+            if (target.goalName.Contains( name.Substring( 0, name.Length - 7 ) ))
             {
-                BindToTarget( collision.gameObject );
+                BindToTarget( target );
             }
             else
             {
-                BounceOffTarget( collision.gameObject );
+                target.Bounce();
             }
         }
     }
@@ -116,39 +115,31 @@ public class ThrowableCell : VRTK_InteractableObject
         ReleaseFromTarget();
     }
 
-    void BindToTarget (GameObject target)
+    void BindToTarget (Target target)
     {
         if (gameManager != null)
         {
-            boundToTarget = true;
+            attachedTarget = target;
+            attachedTarget.Bind();
+
             body.isKinematic = true;
             transform.position = target.transform.position;
             transform.rotation = target.transform.rotation * Quaternion.Euler(rotationOffsetAtTarget);
-            attachedTargetRenderer = target.GetComponentInChildren<SpriteRenderer>();
-            attachedTargetRenderer.enabled = false;
+
             gameManager.RecordCorrectHit();
         }
     }
 
-    void BounceOffTarget (GameObject target)
-    {
-        target.GetComponent<Animator>().SetTrigger( "Fail" );
-    }
-
     public void ReleaseFromTarget (bool resetVelocity = false)
     {
-        if (boundToTarget)
+        if (attachedTarget != null)
         {
             gameManager.RemoveCorrectHit();
+            attachedTarget.Release();
+            attachedTarget = null;
         }
 
-        body.isKinematic = boundToTarget = false;
-
-        if (attachedTargetRenderer != null)
-        {
-            attachedTargetRenderer.enabled = true;
-            attachedTargetRenderer = null;
-        }
+        body.isKinematic = false;
         if (resetVelocity)
         {
             body.velocity = Vector3.zero;

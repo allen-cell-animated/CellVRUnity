@@ -44,7 +44,7 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    [SerializeField] Collider _collider;
+    Collider _collider;
     public Collider theCollider
     {
         get

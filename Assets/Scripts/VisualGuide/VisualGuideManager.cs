@@ -133,7 +133,6 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.TransitionToLobbyMode( structureJustSolved );
         ControllerInput.Instance.ToggleLaserRenderer( true );
         UIManager.Instance.ToggleBackButton( false );
-        UIManager.Instance.ToggleResetButton( true );
     }
 
     public void CheckSetupReward ()
@@ -147,6 +146,10 @@ public class VisualGuideManager : MonoBehaviour
             StartCoroutine( currentGameManager.SpawnAllThrowables( structureNames ) );
             StartCoroutine( EndReward() );
         }
+        else
+        {
+            UIManager.Instance.ToggleResetButton( true );
+        }
     }
 
     IEnumerator EndReward ()
@@ -159,6 +162,7 @@ public class VisualGuideManager : MonoBehaviour
 
             Cleanup();
             interphaseCell.gameObject.SetActive( true );
+            UIManager.Instance.ToggleResetButton( true );
         }
     }
 
