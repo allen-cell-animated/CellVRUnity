@@ -213,7 +213,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224852243313921782}
-  - component: {fileID: 114327598025575430}
+  - component: {fileID: 114772024165671962}
   - component: {fileID: 223541564279792628}
   - component: {fileID: 114270245623106132}
   - component: {fileID: 114568917923114010}
@@ -878,20 +878,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0.8
   m_Text: MICROTUBULES
---- !u!114 &114327598025575430
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1306044006312270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86796021806864a96ac7794eacaf6817, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  title: {fileID: 114850914443781936}
-  image: {fileID: 114265335136794952}
-  text: {fileID: 0}
 --- !u!114 &114329048585636224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1122,6 +1108,22 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114772024165671962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306044006312270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e33aabe1043e4de0b2fbd74f871e029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: {fileID: 114850914443781936}
+  completeER: {fileID: 1233429247976428}
+  completeGolgi: {fileID: 1585626408038662}
+  completeMTs: {fileID: 1589267168717556}
+  completeMitos: {fileID: 1528311121428872}
 --- !u!114 &114801216332730626
 MonoBehaviour:
   m_ObjectHideFlags: 1

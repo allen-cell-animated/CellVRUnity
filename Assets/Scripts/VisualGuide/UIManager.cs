@@ -18,6 +18,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    ProgressCanvas _progressCanvas;
+    public ProgressCanvas progressCanvas
+    {
+        get
+        {
+            if (_progressCanvas == null)
+            {
+                _progressCanvas = GameObject.FindObjectOfType<ProgressCanvas>();
+            }
+            return _progressCanvas;
+        }
+    }
+
     void OnEnable ()
     {
         if (ControllerInput.Instance.pointerLeft != null)
