@@ -232,7 +232,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         for (int i = 0; i < throwableCells.Length; i++)
         {
-            yield return new WaitForSeconds( 0.5f * (i + 1) );
+            yield return new WaitForSeconds( 0.1f * (i + 1) );
 
             VisualGuideManager.Instance.AnimateSuccess( throwableCells[i].gameObject );
         }
