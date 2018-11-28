@@ -22,6 +22,7 @@ public class MitosisGameManager : MonoBehaviour
     int correctlyPlacedThrowables;
     int animationPhase;
     bool destroyWhenOutOfBounds;
+    float startTime;
 
     public void StartGame (string _structureName, float timeBeforeCellDrop)
     {
@@ -30,11 +31,17 @@ public class MitosisGameManager : MonoBehaviour
         SpawnWalls();
         SpawnTargetsAndArrows();
         StartCoroutine( SpawnThrowables( currentStructureName, timeBeforeCellDrop ) );
+        startTime = Time.time;
     }
 
     void Update ()
     {
         CheckIfThrowablesOutOfBounds();
+
+        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Play)
+        {
+            UIManager.Instance.progressCanvas.UpdateTime( startTime );
+        }
     }
 
     Vector3 randomPositionInThrowableSpawnArea
