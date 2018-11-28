@@ -10,6 +10,12 @@ public class ProgressCanvas : MonoBehaviour
     public GameObject completeGolgi;
     public GameObject completeMTs;
     public GameObject completeMitos;
+    public Text structureLabel;
+
+    public void SetStructureLabel (string structureName = "")
+    {
+        structureLabel.text = structureName;
+    }
 
     public void SetComplete (string structureName, bool complete)
     {

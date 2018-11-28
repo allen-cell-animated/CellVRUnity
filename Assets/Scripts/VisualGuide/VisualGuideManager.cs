@@ -79,6 +79,7 @@ public class VisualGuideManager : MonoBehaviour
         currentMode = VisualGuideGameMode.Play;
 
         structuresSolved[structureName] = false;
+        UIManager.Instance.progressCanvas.SetStructureLabel( structureName );
         UIManager.Instance.progressCanvas.SetComplete( structureName, false );
 
         Cleanup();
@@ -148,6 +149,7 @@ public class VisualGuideManager : MonoBehaviour
 
         interphaseCell.TransitionToLobbyMode();
         ControllerInput.Instance.ToggleLaserRenderer( true );
+        UIManager.Instance.progressCanvas.SetStructureLabel();
     }
 
     void Cleanup ()
