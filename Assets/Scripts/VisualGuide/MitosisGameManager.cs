@@ -47,7 +47,7 @@ public class MitosisGameManager : MonoBehaviour
 
     public IEnumerator SpawnAllThrowables (string[] structureNames)
     {
-        yield return new WaitForSeconds( 4f );
+        yield return new WaitForSeconds( 2f );
             
         destroyWhenOutOfBounds = true;
         for (int i = 0; i < structureNames.Length; i++)
