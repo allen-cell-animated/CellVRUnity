@@ -101,13 +101,14 @@ public class VisualGuideManager : MonoBehaviour
         return (Instantiate( prefab ) as GameObject).GetComponent<MitosisGameManager>();
     }
 
-    public void EnterSuccessMode ()
+    public void EnterSuccessMode (float elapsedTime)
     {
         currentMode = VisualGuideGameMode.Success;
 
         structuresSolved[currentGameManager.currentStructureName] = true;
         UIManager.Instance.progressCanvas.SetComplete( currentGameManager.currentStructureName, true );
         interphaseCell.ColorActiveStructure();
+        UIManager.Instance.DisplayScore( elapsedTime );
 
         AnimateSuccess( interphaseCell.gameObject );
         StartCoroutine( currentGameManager.AnimateCellsForSuccess() );
@@ -150,6 +151,7 @@ public class VisualGuideManager : MonoBehaviour
         interphaseCell.TransitionToLobbyMode();
         ControllerInput.Instance.ToggleLaserRenderer( true );
         UIManager.Instance.progressCanvas.SetStructureLabel();
+        UIManager.Instance.leaderboard.gameObject.SetActive( false );
     }
 
     void Cleanup ()

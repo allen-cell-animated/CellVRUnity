@@ -5,6 +5,9 @@ using VRTK;
 
 public class UIManager : MonoBehaviour 
 {
+    public ProgressCanvas progressCanvas;
+    public Leaderboard leaderboard;
+
     static UIManager _Instance;
     public static UIManager Instance
     {
@@ -15,19 +18,6 @@ public class UIManager : MonoBehaviour
                 _Instance = GameObject.FindObjectOfType<UIManager>();
             }
             return _Instance;
-        }
-    }
-
-    ProgressCanvas _progressCanvas;
-    public ProgressCanvas progressCanvas
-    {
-        get
-        {
-            if (_progressCanvas == null)
-            {
-                _progressCanvas = GameObject.FindObjectOfType<ProgressCanvas>();
-            }
-            return _progressCanvas;
         }
     }
 
@@ -71,5 +61,41 @@ public class UIManager : MonoBehaviour
         {
             //toggle cell placement in game
         }
+
+        if (Input.GetKey( KeyCode.A ) && Input.GetKey( KeyCode.I ) && Input.GetKey( KeyCode.C ) && Input.GetKey( KeyCode.S ))
+        {
+            leaderboard.ClearAllRankings();
+        }
+    }
+
+    public void UpdateTime (float startTime)
+    {
+        progressCanvas.time.text = FormatTime( Time.time - startTime );
+    }
+
+    public string FormatTime (float timeSeconds)
+    {
+        float timeMinutes = Mathf.Floor( timeSeconds / 60f );
+        timeSeconds = Mathf.Round( timeSeconds - 60f * timeMinutes);
+
+        string timeSecondsStr = timeSeconds.ToString();
+        while (timeSecondsStr.Length < 2)
+        {
+            timeSecondsStr = "0" + timeSecondsStr;
+        }
+
+        string timeMinutesStr = timeMinutes.ToString();
+        while (timeMinutesStr.Length < 2)
+        {
+            timeMinutesStr = "0" + timeMinutesStr;
+        }
+
+        return timeMinutesStr + ":" + timeSecondsStr;
+    }
+
+    public void DisplayScore (float elapsedTime)
+    {
+        leaderboard.RecordNewScore( elapsedTime );
+        leaderboard.gameObject.SetActive( true );
     }
 }

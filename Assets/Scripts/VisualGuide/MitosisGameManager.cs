@@ -40,7 +40,7 @@ public class MitosisGameManager : MonoBehaviour
 
         if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Play)
         {
-            UIManager.Instance.progressCanvas.UpdateTime( startTime );
+            UIManager.Instance.UpdateTime( startTime );
         }
     }
 
@@ -205,7 +205,7 @@ public class MitosisGameManager : MonoBehaviour
 
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
-            VisualGuideManager.Instance.EnterSuccessMode();
+            VisualGuideManager.Instance.EnterSuccessMode( Time.time - startTime );
             SetColorsetForThrowables( 1 );
             SetThrowablesGrabbable( false );
         }

@@ -38,25 +38,4 @@ public class ProgressCanvas : MonoBehaviour
                 return;
         }
     }
-
-    public void UpdateTime (float startTime)
-    {
-        float timeSeconds = Time.time - startTime;
-        float timeMinutes = Mathf.Floor( timeSeconds / 60f );
-        timeSeconds = Mathf.Round( timeSeconds - 60f * timeMinutes);
-
-        string timeSecondsStr = timeSeconds.ToString();
-        while (timeSecondsStr.Length < 2)
-        {
-            timeSecondsStr = "0" + timeSecondsStr;
-        }
-
-        string timeMinutesStr = timeMinutes.ToString();
-        while (timeMinutesStr.Length < 2)
-        {
-            timeMinutesStr = "0" + timeMinutesStr;
-        }
-
-        UIManager.Instance.progressCanvas.time.text = timeMinutesStr + ":" + timeSecondsStr;
-    }
 }
