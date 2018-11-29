@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void Awake ()
+    void Start ()
     {
         leaderboard.gameObject.SetActive( false );
         keyboard.gameObject.SetActive( false );

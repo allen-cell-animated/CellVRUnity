@@ -6,7 +6,7 @@ public class Keyboard : MonoBehaviour
 {
     string currentText;
 
-    void Awake ()
+    void Start ()
     {
         transform.SetParent( Camera.main.transform );
         transform.localPosition = new Vector3( 0, -0.5f, 1f );
