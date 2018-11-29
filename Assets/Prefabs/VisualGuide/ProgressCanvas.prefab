@@ -1174,7 +1174,7 @@ MonoBehaviour:
   completeGolgi: {fileID: 1585626408038662}
   completeMTs: {fileID: 1589267168717556}
   completeMitos: {fileID: 1528311121428872}
-  structureLabel: {fileID: 0}
+  structureLabel: {fileID: 114850914443781936}
 --- !u!114 &114801216332730626
 MonoBehaviour:
   m_ObjectHideFlags: 1
