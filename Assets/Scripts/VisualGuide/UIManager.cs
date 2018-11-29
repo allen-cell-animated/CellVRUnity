@@ -22,12 +22,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void Start ()
-    {
-        leaderboard.gameObject.SetActive( false );
-        keyboard.gameObject.SetActive( false );
-    }
-
     void OnEnable ()
     {
         if (ControllerInput.Instance.pointerLeft != null)

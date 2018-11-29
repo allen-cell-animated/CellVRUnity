@@ -9,9 +9,14 @@ public class Leaderboard : MonoBehaviour
     HighScore currentScore;
     LeaderboardEntry currentEntry;
 
-    void Awake ()
+    void OnEnable ()
     {
         LoadSavedRankings();
+    }
+
+    void OnDisable ()
+    {
+        SaveRankings();
     }
 
     void LoadSavedRankings ()
@@ -40,6 +45,23 @@ public class Leaderboard : MonoBehaviour
 
             highScores.Add( new HighScore( data[0], timeSeconds ) );
         }
+    }
+
+    public void ClearAllRankings ()
+    {
+        PlayerPrefs.DeleteAll();
+        Debug.Log( "Cleared all highscores!" );
+    }
+
+    void SaveRankings ()
+    {
+        string scores = "";
+        foreach (HighScore score in highScores)
+        {
+            scores += score.playerName + ":" + score.timeSeconds + ",";
+        }
+
+        PlayerPrefs.SetString( "highscores", scores );
     }
 
     public void RecordNewScore (float timeSeconds)
@@ -99,28 +121,6 @@ public class Leaderboard : MonoBehaviour
     {
         currentScore.playerName = _newPlayerName;
         currentEntry.UpdatePlayerName( _newPlayerName );
-    }
-
-    public void ClearAllRankings ()
-    {
-        PlayerPrefs.DeleteAll();
-        Debug.Log( "Cleared all highscores!" );
-    }
-
-    void OnDestroy ()
-    {
-        SaveRankings();
-    }
-
-    void SaveRankings ()
-    {
-        string scores = "";
-        foreach (HighScore score in highScores)
-        {
-            scores += score.playerName + ":" + score.timeSeconds + ",";
-        }
-
-        PlayerPrefs.SetString( "highscores", scores );
     }
 
     public void ReturnToLobby ()

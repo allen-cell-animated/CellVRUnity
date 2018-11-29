@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Keyboard : MonoBehaviour 
 {
+    public Transform head;
     string currentText;
 
     void Start ()
     {
-        transform.SetParent( Camera.main.transform );
-        transform.localPosition = new Vector3( 0, -0.5f, 1f );
-        transform.localRotation = Quaternion.Euler( new Vector3( 30f, 0, 0 ) );
+        transform.position = head.TransformPoint( new Vector3( 0, -0.5f, 1f ) );
+        transform.rotation = head.rotation * Quaternion.Euler( new Vector3( 30f, 0, 0 ) );
     }
 
     public void ClickKey (string character)
