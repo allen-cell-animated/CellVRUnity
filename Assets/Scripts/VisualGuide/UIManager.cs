@@ -46,6 +46,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    void Start ()
+    {
+        leaderboard.gameObject.SetActive( false );
+    }
+
     void Update ()
     {
         if (Input.GetKeyUp( KeyCode.X ))
