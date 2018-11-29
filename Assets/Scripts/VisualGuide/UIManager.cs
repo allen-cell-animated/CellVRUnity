@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     public ProgressCanvas progressCanvas;
     public Leaderboard leaderboard;
+    public Keyboard keyboard;
 
     static UIManager _Instance;
     public static UIManager Instance
@@ -97,5 +98,6 @@ public class UIManager : MonoBehaviour
     {
         leaderboard.RecordNewScore( elapsedTime );
         leaderboard.gameObject.SetActive( true );
+        keyboard.gameObject.SetActive( true );
     }
 }

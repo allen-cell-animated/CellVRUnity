@@ -152,6 +152,7 @@ public class VisualGuideManager : MonoBehaviour
         ControllerInput.Instance.ToggleLaserRenderer( true );
         UIManager.Instance.progressCanvas.SetStructureLabel();
         UIManager.Instance.leaderboard.gameObject.SetActive( false );
+        UIManager.Instance.keyboard.Dismiss();
     }
 
     void Cleanup ()

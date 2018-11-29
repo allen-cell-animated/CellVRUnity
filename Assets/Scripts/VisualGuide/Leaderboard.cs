@@ -8,7 +8,6 @@ public class Leaderboard : MonoBehaviour
     List<HighScore> highScores;
     HighScore currentScore;
     LeaderboardEntry currentEntry;
-    bool editingPlayerName;
 
     void Awake ()
     {
@@ -48,7 +47,6 @@ public class Leaderboard : MonoBehaviour
         currentScore = new HighScore( "[your name here!]", timeSeconds );
         highScores.Add( currentScore );
         highScores.Sort();
-        editingPlayerName = true;
 
         ClearDisplay();
         DisplayHighscores();
@@ -94,14 +92,6 @@ public class Leaderboard : MonoBehaviour
         foreach (LeaderboardEntry entry in entries)
         {
             Destroy( entry.gameObject );
-        }
-    }
-
-    void Update ()
-    {
-        if (editingPlayerName)
-        {
-            UpdateCurrentPlayerName( "" );
         }
     }
 
