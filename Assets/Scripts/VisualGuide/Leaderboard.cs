@@ -23,6 +23,7 @@ public class Leaderboard : MonoBehaviour
     {
         highScores = new List<HighScore>();
         float timeSeconds;
+        Debug.Log(PlayerPrefs.GetString( "highscores", "" ));
         string[] data, scores = PlayerPrefs.GetString( "highscores", "" ).Split( ',' );
         foreach (string score in scores)
         {
@@ -50,6 +51,7 @@ public class Leaderboard : MonoBehaviour
     public void ClearAllRankings ()
     {
         PlayerPrefs.DeleteAll();
+        highScores.Clear();
         Debug.Log( "Cleared all highscores!" );
     }
 
@@ -66,6 +68,7 @@ public class Leaderboard : MonoBehaviour
 
     public void RecordNewScore (float timeSeconds)
     {
+        Debug.Log("record " + timeSeconds);
         currentScore = new HighScore( "[your name here!]", timeSeconds );
         highScores.Add( currentScore );
         highScores.Sort();
@@ -77,11 +80,32 @@ public class Leaderboard : MonoBehaviour
     void DisplayHighscores ()
     {
         int currentIndex = highScores.FindIndex( s => s == currentScore );
-        int firstRankToDisplay = Mathf.Max( 0, currentIndex - 3 );
-        List<HighScore> scores = highScores.GetRange( firstRankToDisplay, Mathf.Min( 7, highScores.Count ) );
+        int firstRankToDisplay = Mathf.RoundToInt( Mathf.Max( Mathf.Min( highScores.Count - 7, currentIndex - 3 ), 0 ) );
+        int rank = firstRankToDisplay;
+        int duplicates = 0;
+        while (rank > 0 && highScores.Count > 1 && Mathf.RoundToInt( highScores[rank-1].timeSeconds ) == Mathf.RoundToInt( highScores[rank].timeSeconds ))
+        {
+            rank--;
+            duplicates++;
+        }
+        rank++;
+
+        List<HighScore> scores = highScores.GetRange( firstRankToDisplay, Mathf.Min( 7, highScores.Count - firstRankToDisplay ) );
         for (int i = 0; i < scores.Count; i++)
         {
-            CreateLeaderboardEntry( firstRankToDisplay + i, i, scores[i] );
+            if (i > 0)
+            {
+                if (Mathf.RoundToInt( scores[i-1].timeSeconds ) != Mathf.RoundToInt( scores[i].timeSeconds ))
+                {
+                    rank += 1 + duplicates;
+                    duplicates = 0;
+                }
+                else
+                {
+                    duplicates++;
+                }
+            }
+            CreateLeaderboardEntry( rank, i, scores[i] );
         }
     }
 
@@ -93,11 +117,9 @@ public class Leaderboard : MonoBehaviour
             Debug.LogWarning( "Couldn't load prefab for " + (score == currentScore ? "LeaderboardEntryCurrent" : "LeaderboardEntry") );
             return null;
         }
-        GameObject entry = Instantiate( prefab ) as GameObject;
+        GameObject entry = Instantiate( prefab, transform ) as GameObject;
 
-        entry.transform.SetParent( transform );
-        entry.transform.localPosition = new Vector3( 4f, -20f - 10f * listIndex, -1.5f );
-
+        entry.GetComponent<RectTransform>().anchoredPosition = new Vector2( 4f, -20f - 10f * listIndex );
         entry.GetComponent<LeaderboardEntry>().Populate( rank, score.playerName, score.timeSeconds );
 
         if (score == currentScore)
