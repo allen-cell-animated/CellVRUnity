@@ -101,8 +101,8 @@ public class UIManager : MonoBehaviour
 
     public void DisplayScore (float elapsedTime)
     {
-        leaderboard.RecordNewScore( elapsedTime );
         leaderboard.gameObject.SetActive( true );
+        leaderboard.RecordNewScore( elapsedTime );
         keyboard.gameObject.SetActive( true );
     }
 }
