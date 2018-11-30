@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Leaderboard : MonoBehaviour 
 {
+    [SerializeField]
     List<HighScore> highScores;
     HighScore currentScore;
     LeaderboardEntry currentEntry;
@@ -151,6 +152,7 @@ public class Leaderboard : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class HighScore : IComparable
 {
     public string playerName;
