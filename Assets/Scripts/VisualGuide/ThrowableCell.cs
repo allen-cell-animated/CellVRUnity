@@ -86,7 +86,7 @@ public class ThrowableCell : VRTK_InteractableObject
         {
             if (_colorer == null)
             {
-                _colorer = GetComponentInChildren<Colorer>();
+                _colorer = GetComponentInChildren<Colorer>( true );
             }
             return _colorer;
         }
