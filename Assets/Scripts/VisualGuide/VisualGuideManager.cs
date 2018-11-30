@@ -109,6 +109,7 @@ public class VisualGuideManager : MonoBehaviour
         UIManager.Instance.progressCanvas.SetComplete( currentGameManager.currentStructureName, true );
         interphaseCell.ColorActiveStructure();
         UIManager.Instance.DisplayScore( elapsedTime );
+        ControllerInput.Instance.ToggleLaserRenderer( true );
 
         AnimateSuccess( interphaseCell.gameObject );
         StartCoroutine( currentGameManager.AnimateCellsForSuccess() );
