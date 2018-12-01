@@ -12,7 +12,7 @@ public class ProgressCanvas : MonoBehaviour
     public GameObject completeMitos;
     public Text structureLabel;
 
-    public void SetStructureLabel (string structureName = "")
+    public void SetStructureLabel (string structureName = "Choose a structure:")
     {
         structureLabel.text = structureName;
     }
