@@ -140,7 +140,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void ColorActiveStructure ()
     {
-        structures.Find( s => s.gameObject.activeSelf ).colorer.SetColor( 1 );
+        structures.Find( s => s.gameObject.activeSelf && s.canSelect ).colorer.SetColor( 1 );
     }
 
     public void TransitionToLobbyMode ()
