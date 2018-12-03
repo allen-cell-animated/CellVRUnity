@@ -106,4 +106,24 @@ public class UIManager : MonoBehaviour
         leaderboard.RecordNewScore( elapsedTime );
         keyboard.gameObject.SetActive( true );
     }
+
+    public void EnterPlayMode (StructureData structureData)
+    {
+        progressCanvas.SetTitle( structureData.structureName );
+        progressCanvas.SetSelected( structureData.structureName, false );
+        structureInfoCanvas.SetContent( structureData );
+    }
+
+    public void EnterSuccessMode (string structureName, float timeSeconds)
+    {
+        progressCanvas.SetSelected( structureName, true );
+        DisplayScore( timeSeconds );
+    }
+
+    public void EnterLobbyMode ()
+    {
+        progressCanvas.SetTitle();
+        leaderboard.gameObject.SetActive( false );
+        keyboard.Dismiss();
+    }
 }
