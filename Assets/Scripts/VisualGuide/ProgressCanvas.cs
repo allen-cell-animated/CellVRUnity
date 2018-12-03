@@ -55,4 +55,9 @@ public class ProgressCanvas : MonoBehaviour
                 return;
         }
     }
+
+    public void SelectStructureInUI (string structureName)
+    {
+        VisualGuideManager.Instance.interphaseCell.SelectStructure( structureName );
+    }
 }
