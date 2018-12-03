@@ -190,6 +190,7 @@ public class InterphaseCellManager : MonoBehaviour
         CellStructure _structure = structures.Find( s => s.structureName == _structureName );
         if (_structure != null)
         {
+            highlightedStructure = _structure;
             SelectStructure( _structure );
         }
     }
