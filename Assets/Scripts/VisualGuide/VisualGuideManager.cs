@@ -77,6 +77,7 @@ public class VisualGuideManager : MonoBehaviour
 
     public void StartGame (string structureName)
     {
+        Debug.Log( "-------start game with " + structureName );
         currentMode = VisualGuideGameMode.Play;
 
         structuresSolved[structureName] = false;

@@ -178,7 +178,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void SelectStructure (CellStructure _structure)
     {
-        if (canInteract && highlightedStructure == _structure)
+        if (canInteract && VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby && highlightedStructure == _structure)
         {
             selectedStructure = _structure;
             IsolateSelectedStructure();
