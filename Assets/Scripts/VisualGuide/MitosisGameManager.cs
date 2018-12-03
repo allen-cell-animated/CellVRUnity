@@ -87,7 +87,7 @@ public class MitosisGameManager : MonoBehaviour
             throwableCells[i].transform.rotation = Random.rotation;
             throwableCells[i].transform.localScale = throwableSpawnScale * Vector3.one;
 
-            if (colorSet >= 0)
+            if (colorSet >= 0 && throwableCells[i].colorer != null)
             {
                 throwableCells[i].colorer.SetColor( colorSet );
             }
@@ -223,7 +223,10 @@ public class MitosisGameManager : MonoBehaviour
     {
         foreach (ThrowableCell cell in throwableCells)
         {
-            cell.colorer.SetColor( colorSet );
+            if (cell.colorer != null)
+            {
+                cell.colorer.SetColor( colorSet );
+            }
         }
     }
 

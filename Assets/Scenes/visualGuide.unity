@@ -1101,8 +1101,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  canSelect: 1
-  hovering: 0
   structureName: Microtubules
   nameWidth: 80
 --- !u!64 &262723979
@@ -3665,8 +3663,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  canSelect: 1
-  hovering: 0
   structureName: Endoplasmic Reticulum (ER)
   nameWidth: 155
 --- !u!64 &876174944
@@ -5238,8 +5234,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  canSelect: 1
-  hovering: 0
   structureName: Mitochondria
   nameWidth: 80
 --- !u!64 &1034548618
@@ -5500,8 +5494,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  canSelect: 1
-  hovering: 0
   structureName: Golgi Apparatus
   nameWidth: 95
 --- !u!64 &1057005249
@@ -14079,8 +14071,6 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
-  canSelect: 0
-  hovering: 0
   structureName: Nucleus
   nameWidth: 53
 --- !u!114 &1906161049

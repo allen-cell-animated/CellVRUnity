@@ -38,7 +38,7 @@ public class ProgressCanvas : MonoBehaviour
     {
         switch (structureName)
         {
-            case "Endoplasmic Reticulum":
+            case "Endoplasmic Reticulum (ER)":
                 selectedER.SetActive( selected );
                 return;
 
