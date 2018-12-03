@@ -140,7 +140,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void ColorActiveStructure ()
     {
-        structures.Find( s => s.gameObject.activeSelf && s.canSelect ).colorer.SetColor( 1 );
+        structures.Find( s => s.gameObject.activeSelf && s.isUsable ).colorer.SetColor( 1 );
     }
 
     public void TransitionToLobbyMode ()
@@ -178,7 +178,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void SelectStructure (CellStructure _structure)
     {
-        if (canInteract && VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby && highlightedStructure == _structure)
+        if (canInteract && highlightedStructure == _structure)
         {
             selectedStructure = _structure;
             IsolateSelectedStructure();
@@ -204,7 +204,7 @@ public class InterphaseCellManager : MonoBehaviour
             inIsolationMode = true;
             foreach (CellStructure structure in structures)
             {
-                if (structure != selectedStructure && structure.canSelect)
+                if (structure != selectedStructure && structure.isUsable)
                 {
                     structure.gameObject.SetActive( false );
                 }

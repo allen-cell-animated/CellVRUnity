@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using VRTK;
 
 public class CellStructure : VRTK_InteractableObject 
 {
     [Header("Cell Structure Settings")]
 
-    public bool canSelect = true;
-    public bool hovering;
     public string structureName;
     public float nameWidth = 80f;
 
@@ -90,8 +87,6 @@ public class CellStructure : VRTK_InteractableObject
     {
         if (theCollider == e.raycastHit.collider)
         {
-            EventSystem.current.SetSelectedGameObject( null );
-            hovering = true;
             interphaseCell.LabelStructure( this );
         }
     }
@@ -101,15 +96,14 @@ public class CellStructure : VRTK_InteractableObject
         if (theCollider == e.raycastHit.collider)
         {
             interphaseCell.HideLabel( this );
-            hovering = false;
         }
     }
 
-    protected override void Update ()
+    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
     {
-        base.Update();
-        Debug.Log( "UI selected? " + (EventSystem.current.currentSelectedGameObject == null) );
-        if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown && EventSystem.current.currentSelectedGameObject == null)
+        base.StartUsing( currentUsingObject );
+
+        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby)
         {
             Debug.Log( "select from geometry " + structureName );
             interphaseCell.SelectStructure( this );
