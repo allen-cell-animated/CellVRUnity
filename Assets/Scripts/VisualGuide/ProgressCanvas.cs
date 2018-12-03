@@ -12,9 +12,26 @@ public class ProgressCanvas : MonoBehaviour
     public GameObject selectedMitos;
     public Text titleLabel;
 
+    Animator _titleAnimator;
+    public Animator titleAnimator
+    {
+        get
+        {
+            if (_titleAnimator == null)
+            {
+                _titleAnimator = titleLabel.gameObject.GetComponent<Animator>();
+            }
+            return _titleAnimator;
+        }
+    }
+
     public void SetTitle (string structureName = "Choose a structure:")
     {
         titleLabel.text = structureName;
+        if (structureName != "Choose a structure:")
+        {
+            titleAnimator.SetTrigger( "animate" );
+        }
     }
 
     public void SetSelected (string structureName, bool selected)

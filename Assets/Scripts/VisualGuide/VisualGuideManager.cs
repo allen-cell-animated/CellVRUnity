@@ -114,7 +114,7 @@ public class VisualGuideManager : MonoBehaviour
         ControllerInput.Instance.ToggleLaserRenderer( true );
 
         AnimateSuccess( interphaseCell.gameObject );
-        StartCoroutine( currentGameManager.AnimateCellsForSuccess() );
+        currentGameManager.AnimateCellsForSuccess();
         CheckSucess();
     }
 
