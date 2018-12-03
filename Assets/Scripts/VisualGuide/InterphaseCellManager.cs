@@ -192,7 +192,7 @@ public class InterphaseCellManager : MonoBehaviour
             inIsolationMode = true;
             foreach (CellStructure structure in structures)
             {
-                if (structure != selectedStructure)
+                if (structure != selectedStructure && structure.canSelect)
                 {
                     structure.gameObject.SetActive( false );
                 }
