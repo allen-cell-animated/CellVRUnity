@@ -5,6 +5,7 @@ using VRTK;
 
 public class UIManager : MonoBehaviour 
 {
+    public InfoCanvas structureInfoCanvas;
     public ProgressCanvas progressCanvas;
     public Leaderboard leaderboard;
     public Keyboard keyboard;

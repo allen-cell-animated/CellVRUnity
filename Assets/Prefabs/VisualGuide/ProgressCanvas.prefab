@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224679462214826746}
   m_Layer: 5
-  m_Name: incomplete
+  m_Name: unselected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224323406501034334}
   m_Layer: 5
-  m_Name: incomplete
+  m_Name: unselected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224331345341589284}
   m_Layer: 5
-  m_Name: incomplete
+  m_Name: unselected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224609818746843990}
   m_Layer: 5
-  m_Name: incomplete
+  m_Name: unselected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224573695924434798}
   m_Layer: 5
-  m_Name: complete
+  m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,7 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224519864515219266}
   m_Layer: 5
-  m_Name: complete
+  m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -402,7 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224359211805321872}
   m_Layer: 5
-  m_Name: complete
+  m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,7 +417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224893288733511148}
   m_Layer: 5
-  m_Name: complete
+  m_Name: selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,7 +553,7 @@ GameObject:
   - component: {fileID: 222685223213085176}
   - component: {fileID: 114850914443781936}
   m_Layer: 5
-  m_Name: Structure
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1170,11 +1170,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: {fileID: 114256383639476198}
-  completeER: {fileID: 1233429247976428}
-  completeGolgi: {fileID: 1585626408038662}
-  completeMTs: {fileID: 1589267168717556}
-  completeMitos: {fileID: 1528311121428872}
-  structureLabel: {fileID: 114850914443781936}
+  selectedER: {fileID: 1233429247976428}
+  selectedGolgi: {fileID: 1585626408038662}
+  selectedMTs: {fileID: 1589267168717556}
+  selectedMitos: {fileID: 1528311121428872}
+  titleLabel: {fileID: 114850914443781936}
 --- !u!114 &114801216332730626
 MonoBehaviour:
   m_ObjectHideFlags: 1

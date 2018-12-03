@@ -472,6 +472,48 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 23733947}
+--- !u!1001 &70966364
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 1.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751607269187302, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &103369110
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,6 +582,12 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 103369110}
+--- !u!114 &143476485 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114687975176865524, guid: 7b694b54eb8534602adb06d504b10d4a,
+    type: 2}
+  m_PrefabInternal: {fileID: 458452799}
+  m_Script: {fileID: 11500000, guid: 86796021806864a96ac7794eacaf6817, type: 3}
 --- !u!1 &153094840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,11 +1101,10 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
+  canSelect: 1
   hovering: 0
   structureName: Microtubules
   nameWidth: 80
-  color: {r: 0.45882344, g: 0.41960782, b: 0.47450978, a: 1}
-  illumColor: {r: 0.33725488, g: 0.16078427, b: 0.45098037, a: 1}
 --- !u!64 &262723979
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2057,6 +2104,48 @@ Transform:
   m_Father: {fileID: 1662267351}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &458452799
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 1.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458778064412622, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 7b694b54eb8534602adb06d504b10d4a, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &470940742
 GameObject:
   m_ObjectHideFlags: 0
@@ -2499,48 +2588,6 @@ MonoBehaviour:
     fallbackTypeName: VRTK.SDK_FallbackController
     typeName: VRTK.SDK_SimController
     descriptionIndex: 0
---- !u!1001 &607099096
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0.958
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4347027961625750, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: b6f9d03adfaf949d88bc4d0ec0e4d6cd, type: 2}
-  m_IsPrefabParent: 0
 --- !u!120 &630044442
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -3435,7 +3482,7 @@ Prefab:
     - target: {fileID: 224062414528757252, guid: 9e93c0ced4fd5491a8f6829ae0b45496,
         type: 2}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 224062414528757252, guid: 9e93c0ced4fd5491a8f6829ae0b45496,
         type: 2}
@@ -3608,11 +3655,10 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
+  canSelect: 1
   hovering: 0
-  structureName: Endoplasmic Reticulum
-  nameWidth: 132
-  color: {r: 0.6666667, g: 0.87058824, b: 0.105882324, a: 1}
-  illumColor: {r: 0.39215684, g: 0.5647059, b: 0.24313721, a: 1}
+  structureName: Endoplasmic Reticulum (ER)
+  nameWidth: 155
 --- !u!64 &876174944
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3905,7 +3951,7 @@ GameObject:
   - component: {fileID: 950329718}
   - component: {fileID: 950329719}
   m_Layer: 0
-  m_Name: Point Light
+  m_Name: PointLight1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4228,7 +4274,7 @@ Prefab:
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 1.7188953
       objectReference: {fileID: 0}
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
@@ -4253,17 +4299,17 @@ Prefab:
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 1.318032
       objectReference: {fileID: 0}
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.7
+      value: 1.766494
       objectReference: {fileID: 0}
     - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
         type: 2}
@@ -4314,6 +4360,21 @@ Prefab:
       propertyPath: head
       value: 
       objectReference: {fileID: 309629309}
+    - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
+        type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.0031292897
+      objectReference: {fileID: 0}
+    - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
+        type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.00312929
+      objectReference: {fileID: 0}
+    - target: {fileID: 224195269769340336, guid: e9c00dedc384447038283c2a7f18f653,
+        type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.00312929
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e9c00dedc384447038283c2a7f18f653, type: 2}
   m_IsPrefabParent: 0
@@ -5167,11 +5228,10 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
+  canSelect: 1
   hovering: 0
   structureName: Mitochondria
   nameWidth: 80
-  color: {r: 0.4078431, g: 0.92156863, b: 0.76862746, a: 1}
-  illumColor: {r: 0, g: 0.40392154, b: 0.41176468, a: 1}
 --- !u!64 &1034548618
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5430,11 +5490,10 @@ MonoBehaviour:
   objectHighlighter: {fileID: 0}
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   usingState: 0
+  canSelect: 1
   hovering: 0
   structureName: Golgi Apparatus
   nameWidth: 95
-  color: {r: 1, g: 0.26666665, b: 0, a: 1}
-  illumColor: {r: 0.68627447, g: 0.31372547, b: 0.14901957, a: 1}
 --- !u!64 &1057005249
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6399,7 +6458,7 @@ GameObject:
   - component: {fileID: 1246961782}
   - component: {fileID: 1246961783}
   m_Layer: 0
-  m_Name: Point Light (1)
+  m_Name: PointLight2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6929,7 +6988,7 @@ Prefab:
     - target: {fileID: 224852243313921782, guid: f7688a69392c649bea2291536a9b965e,
         type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 224852243313921782, guid: f7688a69392c649bea2291536a9b965e,
         type: 2}
@@ -12380,7 +12439,7 @@ Prefab:
     - target: {fileID: 224280438088285632, guid: 69186480d4f601e478d59c6aed598d39,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 21.36
+      value: 24.9
       objectReference: {fileID: 0}
     - target: {fileID: 224280438088285632, guid: 69186480d4f601e478d59c6aed598d39,
         type: 2}
@@ -12429,12 +12488,12 @@ Prefab:
     - target: {fileID: 114610423735103278, guid: 69186480d4f601e478d59c6aed598d39,
         type: 2}
       propertyPath: m_Text
-      value: Endoplasmic Reticulum
+      value: Endoplasmic Reticulum (ER)
       objectReference: {fileID: 0}
     - target: {fileID: 224806071771079174, guid: 69186480d4f601e478d59c6aed598d39,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 132
+      value: 155
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 69186480d4f601e478d59c6aed598d39, type: 2}
@@ -13778,6 +13837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e870ace856a4989a3c2902194287ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 12e54869aca234aea914e675188848b7, type: 2}
   currentMode: 0
   currentGameManager: {fileID: 0}
 --- !u!4 &1839477190
@@ -13804,6 +13864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe6487e3181946f38889c3f47ca9a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureInfoCanvas: {fileID: 143476485}
   progressCanvas: {fileID: 290569485}
   leaderboard: {fileID: 811428108}
   keyboard: {fileID: 961414992}
@@ -13950,6 +14011,8 @@ GameObject:
   - component: {fileID: 1906161047}
   - component: {fileID: 1906161051}
   - component: {fileID: 1906161050}
+  - component: {fileID: 1906161048}
+  - component: {fileID: 1906161049}
   m_Layer: 0
   m_Name: nucleus
   m_TagString: Untagged
@@ -13971,6 +14034,58 @@ Transform:
   m_Father: {fileID: 1014340775}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1906161048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1906161046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8ca483bb2c5b4bdcb06bfc5606a844d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableWhenIdle: 1
+  allowedNearTouchControllers: 0
+  allowedTouchControllers: 0
+  ignoredColliders: []
+  isGrabbable: 0
+  holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 0
+  allowedGrabControllers: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
+  isUsable: 0
+  holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
+  pointerActivatesUseAction: 0
+  useOverrideButton: 0
+  allowedUseControllers: 0
+  objectHighlighter: {fileID: 0}
+  touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+  usingState: 0
+  canSelect: 0
+  hovering: 0
+  structureName: Nucleus
+  nameWidth: 53
+--- !u!114 &1906161049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1906161046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ad99056c66a49f7af2b3b3c13209ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - color: {r: 0.57254905, g: 0.72156864, b: 1, a: 1}
+    illumColor: {r: 0.5019608, g: 0.34117645, b: 0.7607843, a: 1}
+  - color: {r: 0.57254905, g: 0.72156864, b: 1, a: 1}
+    illumColor: {r: 0.5019608, g: 0.34117645, b: 0.7607843, a: 1}
 --- !u!23 &1906161050
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -6,35 +6,35 @@ using UnityEngine.UI;
 public class ProgressCanvas : MonoBehaviour 
 {
     public Text time;
-    public GameObject completeER;
-    public GameObject completeGolgi;
-    public GameObject completeMTs;
-    public GameObject completeMitos;
-    public Text structureLabel;
+    public GameObject selectedER;
+    public GameObject selectedGolgi;
+    public GameObject selectedMTs;
+    public GameObject selectedMitos;
+    public Text titleLabel;
 
-    public void SetStructureLabel (string structureName = "Choose a structure:")
+    public void SetTitle (string structureName = "Choose a structure:")
     {
-        structureLabel.text = structureName;
+        titleLabel.text = structureName;
     }
 
-    public void SetComplete (string structureName, bool complete)
+    public void SetSelected (string structureName, bool selected)
     {
         switch (structureName)
         {
             case "Endoplasmic Reticulum":
-                completeER.SetActive( complete );
+                selectedER.SetActive( selected );
                 return;
 
             case "Golgi Apparatus":
-                completeGolgi.SetActive( complete );
+                selectedGolgi.SetActive( selected );
                 return;
 
             case "Microtubules":
-                completeMTs.SetActive( complete );
+                selectedMTs.SetActive( selected );
                 return;
 
             case "Mitochondria":
-                completeMitos.SetActive( complete );
+                selectedMitos.SetActive( selected );
                 return;
         }
     }

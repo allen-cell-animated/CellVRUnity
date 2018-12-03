@@ -11,11 +11,12 @@ public enum VisualGuideGameMode
 
 public class VisualGuideManager : MonoBehaviour 
 {
+    public VisualGuideData data;
     public VisualGuideGameMode currentMode = VisualGuideGameMode.Lobby;
     public MitosisGameManager currentGameManager;
 
     MitosisGameManager successGameManager;
-    string[] structureNames = { "Endoplasmic Reticulum", "Golgi Apparatus", "Microtubules", "Mitochondria"};
+    string[] structureNames = { "Endoplasmic Reticulum (ER)", "Golgi Apparatus", "Microtubules", "Mitochondria"};
     Dictionary<string,bool> structuresSolved;
 
     static VisualGuideManager _Instance;
@@ -79,8 +80,9 @@ public class VisualGuideManager : MonoBehaviour
         currentMode = VisualGuideGameMode.Play;
 
         structuresSolved[structureName] = false;
-        UIManager.Instance.progressCanvas.SetStructureLabel( structureName );
-        UIManager.Instance.progressCanvas.SetComplete( structureName, false );
+        UIManager.Instance.progressCanvas.SetTitle( structureName );
+        UIManager.Instance.progressCanvas.SetSelected( structureName, false );
+        UIManager.Instance.structureInfoCanvas.SetContent( data.structureData.Find( s => s.structureName == structureName ) );
 
         Cleanup();
         currentGameManager = CreateMitosisGameManager();
@@ -106,7 +108,7 @@ public class VisualGuideManager : MonoBehaviour
         currentMode = VisualGuideGameMode.Success;
 
         structuresSolved[currentGameManager.currentStructureName] = true;
-        UIManager.Instance.progressCanvas.SetComplete( currentGameManager.currentStructureName, true );
+        UIManager.Instance.progressCanvas.SetSelected( currentGameManager.currentStructureName, true );
         interphaseCell.ColorActiveStructure();
         UIManager.Instance.DisplayScore( elapsedTime );
         ControllerInput.Instance.ToggleLaserRenderer( true );
@@ -151,7 +153,7 @@ public class VisualGuideManager : MonoBehaviour
 
         interphaseCell.TransitionToLobbyMode();
         ControllerInput.Instance.ToggleLaserRenderer( true );
-        UIManager.Instance.progressCanvas.SetStructureLabel();
+        UIManager.Instance.progressCanvas.SetTitle();
         UIManager.Instance.leaderboard.gameObject.SetActive( false );
         UIManager.Instance.keyboard.Dismiss();
     }

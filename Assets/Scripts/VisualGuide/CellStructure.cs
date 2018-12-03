@@ -7,11 +7,10 @@ public class CellStructure : VRTK_InteractableObject
 {
     [Header("Cell Structure Settings")]
 
+    public bool canSelect = true;
     public bool hovering;
     public string structureName;
     public float nameWidth = 80f;
-    public Color color;
-    public Color illumColor;
 
     InterphaseCellManager _interphaseCell;
     InterphaseCellManager interphaseCell
@@ -107,7 +106,7 @@ public class CellStructure : VRTK_InteractableObject
     protected override void Update ()
     {
         base.Update();
-        if (hovering && ControllerInput.Instance.rightTriggerDown)
+        if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown)
         {
             interphaseCell.SelectStructure( this );
         }
