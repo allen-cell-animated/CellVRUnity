@@ -52,6 +52,7 @@ public class UIManager : MonoBehaviour
     {
         leaderboard.gameObject.SetActive( false );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
+        progressCanvas.time.gameObject.SetActive( false );
     }
 
     void Update ()
