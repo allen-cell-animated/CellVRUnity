@@ -39,6 +39,10 @@ public class Colorer : MonoBehaviour
             {
                 material.SetColor( "_Color", colors[colorIndex].color );
                 material.SetColor( "_EmissionColor", colors[colorIndex].illumColor );
+
+                //hack around unity issue #698693
+                material.EnableKeyword( "_EMISSION" );
+                //DynamicGI.SetEmissive( );
             }
         }
     }

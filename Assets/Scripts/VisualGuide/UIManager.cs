@@ -5,6 +5,7 @@ using VRTK;
 
 public class UIManager : MonoBehaviour 
 {
+    public InfoCanvas dataInfoCanvas;
     public InfoCanvas structureInfoCanvas;
     public ProgressCanvas progressCanvas;
     public Leaderboard leaderboard;
@@ -50,6 +51,7 @@ public class UIManager : MonoBehaviour
     void Start ()
     {
         leaderboard.gameObject.SetActive( false );
+        structureInfoCanvas.transform.parent.gameObject.SetActive( false );
     }
 
     void Update ()
@@ -111,7 +113,10 @@ public class UIManager : MonoBehaviour
     {
         progressCanvas.SetTitle( structureData.structureName );
         progressCanvas.SetSelected( structureData.structureName, false );
+        progressCanvas.time.gameObject.SetActive( true );
         structureInfoCanvas.SetContent( structureData );
+        dataInfoCanvas.transform.parent.gameObject.SetActive( false );
+        structureInfoCanvas.transform.parent.gameObject.SetActive( true );
     }
 
     public void EnterSuccessMode (string structureName, float timeSeconds)
@@ -123,7 +128,10 @@ public class UIManager : MonoBehaviour
     public void EnterLobbyMode ()
     {
         progressCanvas.SetTitle();
+        progressCanvas.time.gameObject.SetActive( false );
         leaderboard.gameObject.SetActive( false );
         keyboard.Dismiss();
+        dataInfoCanvas.transform.parent.gameObject.SetActive( true );
+        structureInfoCanvas.transform.parent.gameObject.SetActive( false );
     }
 }
