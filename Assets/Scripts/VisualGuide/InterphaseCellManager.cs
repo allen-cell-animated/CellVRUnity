@@ -161,6 +161,7 @@ public class InterphaseCellManager : MonoBehaviour
     {
         if (canInteract)
         {
+            Debug.Log( "highlight " + _structure.structureName );
             highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
@@ -190,6 +191,7 @@ public class InterphaseCellManager : MonoBehaviour
         CellStructure _structure = structures.Find( s => s.structureName == _structureName );
         if (_structure != null)
         {
+            Debug.Log( "highlight + select from UI " + _structureName );
             highlightedStructure = _structure;
             SelectStructure( _structure );
         }

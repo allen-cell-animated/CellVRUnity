@@ -108,6 +108,7 @@ public class CellStructure : VRTK_InteractableObject
         base.Update();
         if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown)
         {
+            Debug.Log( "select from geometry " + structureName );
             interphaseCell.SelectStructure( this );
         }
     }
