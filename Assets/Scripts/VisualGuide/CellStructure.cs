@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using VRTK;
 
 public class CellStructure : VRTK_InteractableObject 
@@ -106,6 +107,7 @@ public class CellStructure : VRTK_InteractableObject
     protected override void Update ()
     {
         base.Update();
+        Debug.Log( "current selection = " + EventSystem.current.currentSelectedGameObject.name );
         if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown)
         {
             Debug.Log( "select from geometry " + structureName );
