@@ -90,6 +90,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         if (theCollider == e.raycastHit.collider)
         {
+            EventSystem.current.SetSelectedGameObject( null );
             hovering = true;
             interphaseCell.LabelStructure( this );
         }
@@ -107,8 +108,8 @@ public class CellStructure : VRTK_InteractableObject
     protected override void Update ()
     {
         base.Update();
-        Debug.Log( "current selection = " + EventSystem.current.currentSelectedGameObject.name );
-        if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown)
+        Debug.Log( "UI selected? " + (EventSystem.current.currentSelectedGameObject == null) );
+        if (canSelect && hovering && ControllerInput.Instance.rightTriggerDown && EventSystem.current.currentSelectedGameObject == null)
         {
             Debug.Log( "select from geometry " + structureName );
             interphaseCell.SelectStructure( this );

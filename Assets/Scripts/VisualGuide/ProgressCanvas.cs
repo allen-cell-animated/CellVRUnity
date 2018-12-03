@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ProgressCanvas : MonoBehaviour 
@@ -58,6 +59,7 @@ public class ProgressCanvas : MonoBehaviour
 
     public void SelectStructureInUI (string structureName)
     {
+        EventSystem.current.SetSelectedGameObject( gameObject );
         VisualGuideManager.Instance.interphaseCell.SelectStructure( structureName );
     }
 }
