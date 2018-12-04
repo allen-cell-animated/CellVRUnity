@@ -10,6 +10,9 @@ public class Billboard : MonoBehaviour
 
 	public void LookAtCamera ()
 	{
-		transform.LookAt(Camera.main.transform.position);
+        if (Camera.main != null)
+        {
+		    transform.LookAt( Camera.main.transform.position );
+        }
 	}
 }
