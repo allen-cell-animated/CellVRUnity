@@ -132,6 +132,14 @@ public class VisualGuideManager : MonoBehaviour
         Animator animator = cellAnimator.GetComponentInChildren<Animator>();
         obj.transform.SetParent( animator.transform );
         animator.SetTrigger( "Success" );
+
+        prefab = Resources.Load( "CelebrateParticles" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for CelebrateParticles" );
+            return;
+        }
+        Instantiate( prefab, obj.transform.position, Quaternion.identity );
     }
 
     void CheckSucess ()
