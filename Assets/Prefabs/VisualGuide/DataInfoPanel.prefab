@@ -139,7 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4751607269187302}
   - component: {fileID: 114807118070154402}
-  - component: {fileID: 135644691518200558}
+  - component: {fileID: 65690182720438008}
   m_Layer: 0
   m_Name: DataInfoPanel
   m_TagString: Untagged
@@ -296,6 +296,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+--- !u!65 &65690182720438008
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1456254051303456}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.39, y: 1.87, z: 1.23}
+  m_Center: {x: 0, y: -0.3, z: -0.24}
 --- !u!95 &95914083576739624
 Animator:
   serializedVersion: 3
@@ -738,18 +750,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!135 &135644691518200558
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1456254051303456}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.85
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &212001477464530822
 SpriteRenderer:
   m_ObjectHideFlags: 1
