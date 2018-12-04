@@ -116,7 +116,7 @@ public class VisualGuideManager : MonoBehaviour
         CheckSucess();
     }
 
-    public void AnimateSuccess (GameObject obj)
+    public void AnimateSuccess (GameObject cell)
     {
         GameObject prefab = Resources.Load( "CellAnimator" ) as GameObject;
         if (prefab == null)
@@ -126,20 +126,20 @@ public class VisualGuideManager : MonoBehaviour
         }
         CellAnimator cellAnimator = (Instantiate( prefab ) as GameObject).GetComponent<CellAnimator>();
 
-        cellAnimator.oldParent = obj.transform.parent;
-        cellAnimator.transform.position = obj.transform.position;
+        cellAnimator.oldParent = cell.transform.parent;
+        cellAnimator.transform.position = cell.transform.position;
 
         Animator animator = cellAnimator.GetComponentInChildren<Animator>();
-        obj.transform.SetParent( animator.transform );
+        cell.transform.SetParent( animator.transform );
         animator.SetTrigger( "Success" );
 
-        prefab = Resources.Load( "CelebrateParticles" ) as GameObject;
+        prefab = Resources.Load( "Confetti2" ) as GameObject;
         if (prefab == null)
         {
-            Debug.LogWarning( "Couldn't load prefab for CelebrateParticles" );
+            Debug.LogWarning( "Couldn't load prefab for Confetti2" );
             return;
         }
-        Instantiate( prefab, obj.transform.position, Quaternion.identity );
+        Instantiate( prefab, cell.transform.position, Quaternion.identity );
     }
 
     void CheckSucess ()

@@ -140,7 +140,19 @@ public class ThrowableCell : VRTK_InteractableObject
             transform.rotation = target.transform.rotation * Quaternion.Euler(rotationOffsetAtTarget);
 
             gameManager.RecordCorrectHit();
+            CreateConfetti();
         }
+    }
+
+    void CreateConfetti ()
+    {
+        GameObject prefab = Resources.Load( "Confetti1" ) as GameObject;
+        if (prefab == null)
+        {
+            Debug.LogWarning( "Couldn't load prefab for Confetti1" );
+            return;
+        }
+        Instantiate( prefab, transform.position, Quaternion.identity );
     }
 
     public void ReleaseFromTarget (bool resetVelocity = false)
