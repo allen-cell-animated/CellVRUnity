@@ -139,8 +139,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4751607269187302}
   - component: {fileID: 114807118070154402}
-  - component: {fileID: 65690182720438008}
-  m_Layer: 0
+  - component: {fileID: 135510837610100556}
+  m_Layer: 5
   m_Name: DataInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 4467276927681712}
   - component: {fileID: 212001477464530822}
   - component: {fileID: 114454207928778856}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Hotspot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1456254051303456}
   m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -1, y: 1, z: 1}
+  m_LocalPosition: {x: -1.321, y: 1, z: 1.321}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4467276927681712}
@@ -296,18 +296,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
---- !u!65 &65690182720438008
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1456254051303456}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.39, y: 1.87, z: 1.23}
-  m_Center: {x: 0, y: -0.3, z: -0.24}
 --- !u!95 &95914083576739624
 Animator:
   serializedVersion: 3
@@ -750,6 +738,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!135 &135510837610100556
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1456254051303456}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.68
+  m_Center: {x: 0, y: 0, z: -0.49}
 --- !u!212 &212001477464530822
 SpriteRenderer:
   m_ObjectHideFlags: 1
