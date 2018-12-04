@@ -42,7 +42,6 @@ public class Colorer : MonoBehaviour
 
                 //hack around unity issue #698693
                 material.EnableKeyword( "_EMISSION" );
-                //DynamicGI.SetEmissive( );
             }
         }
     }
