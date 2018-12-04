@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4797674416401620}
   - component: {fileID: 114709948328509938}
   m_Layer: 0
-  m_Name: CelebrateParticles
+  m_Name: Confetti2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

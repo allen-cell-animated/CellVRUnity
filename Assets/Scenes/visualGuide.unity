@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.77822065, g: 0.780596, b: 0.78200155, a: 1}
+  m_IndirectSpecularColor: {r: 0.77820927, g: 0.78058934, b: 0.78199303, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,7 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7151961}
   - component: {fileID: 7151962}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LabelLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +286,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9067137}
   - component: {fileID: 9067138}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: CrosshairPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 23733948}
   - component: {fileID: 23733950}
   - component: {fileID: 23733949}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 103369111}
   - component: {fileID: 103369113}
   - component: {fileID: 103369112}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -597,7 +597,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 153094841}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,7 +629,7 @@ GameObject:
   m_Component:
   - component: {fileID: 161223981}
   - component: {fileID: 161223982}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GrabButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -711,7 +711,7 @@ GameObject:
   - component: {fileID: 179094874}
   - component: {fileID: 179094873}
   - component: {fileID: 179094872}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: CancelButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -870,7 +870,7 @@ GameObject:
   - component: {fileID: 229461415}
   - component: {fileID: 229461414}
   - component: {fileID: 229461413}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -968,7 +968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 246186391}
   - component: {fileID: 246186392}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: hand_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1231,7 +1231,7 @@ GameObject:
   - component: {fileID: 307155794}
   - component: {fileID: 307155796}
   - component: {fileID: 307155795}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 309629312}
   - component: {fileID: 309629311}
   - component: {fileID: 309629310}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera (head)
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1400,7 +1400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 315973148}
   - component: {fileID: 315973149}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttachPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1447,7 +1447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 325462045}
   - component: {fileID: 325462046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1635,7 +1635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 352144788}
   - component: {fileID: 352144789}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[VRSimulator_CameraRig]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1720,7 +1720,7 @@ GameObject:
   - component: {fileID: 361481336}
   - component: {fileID: 361481338}
   - component: {fileID: 361481337}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1796,7 +1796,7 @@ GameObject:
   - component: {fileID: 393655621}
   - component: {fileID: 393655623}
   - component: {fileID: 393655622}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightHandAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1862,7 +1862,7 @@ GameObject:
   - component: {fileID: 407911507}
   - component: {fileID: 407911509}
   - component: {fileID: 407911508}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Controller (Left)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1925,7 +1925,7 @@ GameObject:
   - component: {fileID: 408562180}
   - component: {fileID: 408562179}
   - component: {fileID: 408562178}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: ChooseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2081,7 +2081,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 418160023}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightControllerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2154,7 +2154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 470940743}
   - component: {fileID: 470940744}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GrabButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2231,7 +2231,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 477582876}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2264,7 +2264,7 @@ GameObject:
   - component: {fileID: 560717226}
   - component: {fileID: 560717228}
   - component: {fileID: 560717227}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: CurrentText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2344,7 +2344,7 @@ GameObject:
   - component: {fileID: 561328240}
   - component: {fileID: 561328239}
   - component: {fileID: 561328238}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LocalAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2525,7 +2525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 600714642}
   - component: {fileID: 600714643}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VRSimulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2688,7 +2688,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 642775745}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[VRTK_SDKSetups]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2727,7 +2727,7 @@ GameObject:
   - component: {fileID: 646245171}
   - component: {fileID: 646245170}
   - component: {fileID: 646245169}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2824,7 +2824,7 @@ GameObject:
   m_Component:
   - component: {fileID: 688645304}
   - component: {fileID: 688645305}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LabelLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2948,7 +2948,7 @@ GameObject:
   m_Component:
   - component: {fileID: 703661579}
   - component: {fileID: 703661580}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LabelLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3073,7 +3073,7 @@ GameObject:
   - component: {fileID: 720617212}
   - component: {fileID: 720617214}
   - component: {fileID: 720617213}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3141,7 +3141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 757772931}
   - component: {fileID: 757772932}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: UnityXR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3212,7 +3212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 763482720}
   - component: {fileID: 763482721}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SelectButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3290,7 +3290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 778486057}
   - component: {fileID: 778486058}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3367,7 +3367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 811155423}
   - component: {fileID: 811155424}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ScaleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3551,7 +3551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 872620177}
   - component: {fileID: 872620178}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3777,7 +3777,7 @@ GameObject:
   - component: {fileID: 878630275}
   - component: {fileID: 878630277}
   - component: {fileID: 878630276}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3852,7 +3852,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 884427221}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[VRTK_Scripts]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3885,7 +3885,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 906132271}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VRTK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3916,7 +3916,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 943910299}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4015,7 +4015,7 @@ GameObject:
   - component: {fileID: 951877413}
   - component: {fileID: 951877415}
   - component: {fileID: 951877414}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CenterEyeAnchor
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -4093,7 +4093,7 @@ GameObject:
   - component: {fileID: 954369262}
   - component: {fileID: 954369261}
   - component: {fileID: 954369260}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera (eye)
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -4185,7 +4185,7 @@ GameObject:
   - component: {fileID: 958653113}
   - component: {fileID: 958653115}
   - component: {fileID: 958653114}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VerticalPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4385,7 +4385,7 @@ GameObject:
   m_Component:
   - component: {fileID: 962005143}
   - component: {fileID: 962005144}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[SteamVR]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4434,7 +4434,7 @@ GameObject:
   - component: {fileID: 985834028}
   - component: {fileID: 985834030}
   - component: {fileID: 985834029}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4502,7 +4502,7 @@ GameObject:
   - component: {fileID: 1000040358}
   - component: {fileID: 1000040357}
   - component: {fileID: 1000040356}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightControllerScriptAlias
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4718,7 +4718,7 @@ GameObject:
   - component: {fileID: 1000910382}
   - component: {fileID: 1000910381}
   - component: {fileID: 1000910380}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4805,7 +4805,7 @@ GameObject:
   - component: {fileID: 1005907046}
   - component: {fileID: 1005907045}
   - component: {fileID: 1005907044}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: SelectionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4960,7 +4960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1026298383}
   - component: {fileID: 1026298384}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ScaleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5037,7 +5037,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1026751783}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Guides
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5072,7 +5072,7 @@ GameObject:
   - component: {fileID: 1029747230}
   - component: {fileID: 1029747229}
   - component: {fileID: 1029747228}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: StatusPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5343,7 +5343,7 @@ GameObject:
   - component: {fileID: 1036563833}
   - component: {fileID: 1036563835}
   - component: {fileID: 1036563834}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5605,7 +5605,7 @@ GameObject:
   - component: {fileID: 1065822086}
   - component: {fileID: 1065822087}
   - component: {fileID: 1065822088}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftControllerScriptAlias
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5712,7 +5712,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1083975474}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TrackerAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5744,7 +5744,7 @@ GameObject:
   - component: {fileID: 1094836119}
   - component: {fileID: 1094836121}
   - component: {fileID: 1094836120}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5823,7 +5823,7 @@ GameObject:
   - component: {fileID: 1100531505}
   - component: {fileID: 1100531504}
   - component: {fileID: 1100531503}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5915,7 +5915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1105751040}
   - component: {fileID: 1105751041}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[VRTK_SDKManager]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5975,7 +5975,7 @@ GameObject:
   - component: {fileID: 1121547305}
   - component: {fileID: 1121547304}
   - component: {fileID: 1121547303}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6105,7 +6105,7 @@ GameObject:
   - component: {fileID: 1150304418}
   - component: {fileID: 1150304417}
   - component: {fileID: 1150304416}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pusher
   m_TagString: GameController
   m_Icon: {fileID: 0}
@@ -6204,7 +6204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1152918358}
   - component: {fileID: 1152918359}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AttachPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6250,7 +6250,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1162239013}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TrackingSpace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6288,7 +6288,7 @@ GameObject:
   - component: {fileID: 1197573656}
   - component: {fileID: 1197573658}
   - component: {fileID: 1197573657}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6413,7 +6413,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1222809618}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftHandAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6512,7 +6512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1249983968}
   - component: {fileID: 1249983969}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WindowsMR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6584,7 +6584,7 @@ GameObject:
   - component: {fileID: 1267743964}
   - component: {fileID: 1267743966}
   - component: {fileID: 1267743965}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6656,7 +6656,7 @@ GameObject:
   - component: {fileID: 1270851048}
   - component: {fileID: 1270851047}
   - component: {fileID: 1270851046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: OVRCameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6712,7 +6712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1300243005}
   - component: {fileID: 1300243006}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: controller_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6755,7 +6755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1312720231}
   - component: {fileID: 1312720232}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: controller_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6798,7 +6798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1320934483}
   - component: {fileID: 1320934484}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Controller (right)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6844,7 +6844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1331872286}
   - component: {fileID: 1331872287}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: hand_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6888,7 +6888,7 @@ GameObject:
   - component: {fileID: 1337083461}
   - component: {fileID: 1337083463}
   - component: {fileID: 1337083462}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera (ears)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7041,7 +7041,7 @@ GameObject:
   - component: {fileID: 1373679560}
   - component: {fileID: 1373679562}
   - component: {fileID: 1373679561}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VerticalPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7115,7 +7115,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1403664725}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[WindowsMR_CameraRig]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7151,7 +7151,7 @@ GameObject:
   - component: {fileID: 1413815157}
   - component: {fileID: 1413815156}
   - component: {fileID: 1413815155}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: SDKSetupSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11888,7 +11888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1419462397}
   - component: {fileID: 1419462398}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Controller (left)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11934,7 +11934,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1451824959}
   - component: {fileID: 1451824958}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12019,7 +12019,7 @@ GameObject:
   - component: {fileID: 1514462799}
   - component: {fileID: 1514462801}
   - component: {fileID: 1514462800}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftHandAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12084,7 +12084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1583626128}
   - component: {fileID: 1583626129}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LabelLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12291,7 +12291,7 @@ GameObject:
   - component: {fileID: 1615798481}
   - component: {fileID: 1615798480}
   - component: {fileID: 1615798479}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12501,7 +12501,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1648955045}
   - component: {fileID: 1648955046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Oculus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12573,7 +12573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1649595580}
   - component: {fileID: 1649595581}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12623,7 +12623,7 @@ GameObject:
   - component: {fileID: 1662267351}
   - component: {fileID: 1662267353}
   - component: {fileID: 1662267352}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Controller (Right)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12684,7 +12684,7 @@ GameObject:
   - component: {fileID: 1665513595}
   - component: {fileID: 1665513594}
   - component: {fileID: 1665513593}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pusher
   m_TagString: GameController
   m_Icon: {fileID: 0}
@@ -12784,7 +12784,7 @@ GameObject:
   - component: {fileID: 1680610020}
   - component: {fileID: 1680610022}
   - component: {fileID: 1680610021}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ControllerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12840,7 +12840,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1681009975}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftControllerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12871,7 +12871,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1682070067}
   - component: {fileID: 1682070068}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LeftEyeAnchor
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -12939,7 +12939,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1682990226}
   - component: {fileID: 1682990227}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: LabelLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13062,7 +13062,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1712655267}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightHandAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13093,7 +13093,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1716955495}
   - component: {fileID: 1716955496}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SteamVR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13166,7 +13166,7 @@ GameObject:
   - component: {fileID: 1764987546}
   - component: {fileID: 1764987548}
   - component: {fileID: 1764987547}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Hints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13244,7 +13244,7 @@ GameObject:
   - component: {fileID: 1785338319}
   - component: {fileID: 1785338321}
   - component: {fileID: 1785338320}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13325,7 +13325,7 @@ GameObject:
   - component: {fileID: 1829804052}
   - component: {fileID: 1829804051}
   - component: {fileID: 1829804050}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -13431,7 +13431,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1833813503}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Guides
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13466,7 +13466,7 @@ GameObject:
   - component: {fileID: 1835992311}
   - component: {fileID: 1835992310}
   - component: {fileID: 1835992309}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13562,7 +13562,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1836529473}
   - component: {fileID: 1836529474}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SceneSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13611,7 +13611,7 @@ GameObject:
   - component: {fileID: 1837159865}
   - component: {fileID: 1837159864}
   - component: {fileID: 1837159863}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: SwitchButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13872,7 +13872,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1839754792}
   - component: {fileID: 1839754793}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14248,7 +14248,7 @@ GameObject:
   - component: {fileID: 1916260879}
   - component: {fileID: 1916260881}
   - component: {fileID: 1916260880}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14326,7 +14326,7 @@ GameObject:
   - component: {fileID: 1916809624}
   - component: {fileID: 1916809626}
   - component: {fileID: 1916809625}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HorizontalPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14404,7 +14404,7 @@ GameObject:
   - component: {fileID: 1981788863}
   - component: {fileID: 1981788862}
   - component: {fileID: 1981788861}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[CameraRig]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14525,7 +14525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1991914059}
   - component: {fileID: 1991914060}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RightEyeAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14597,7 +14597,7 @@ GameObject:
   - component: {fileID: 2025495771}
   - component: {fileID: 2025495770}
   - component: {fileID: 2025495769}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14709,7 +14709,7 @@ GameObject:
   - component: {fileID: 2030022528}
   - component: {fileID: 2030022530}
   - component: {fileID: 2030022529}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Control Hints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14777,7 +14777,7 @@ GameObject:
   - component: {fileID: 2043693680}
   - component: {fileID: 2043693682}
   - component: {fileID: 2043693681}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14841,7 +14841,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 2082834528}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14874,7 +14874,7 @@ GameObject:
   - component: {fileID: 2098257161}
   - component: {fileID: 2098257163}
   - component: {fileID: 2098257162}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HorizontalPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14949,7 +14949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2107488799}
   - component: {fileID: 2107488800}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: '[UnityBase_CameraRig]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
