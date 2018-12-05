@@ -54,7 +54,7 @@ MonoBehaviour:
   currentStructureName: Mitochondria
   waitBetweenThrowableSpawn: 0.2
   throwableSpawnHeight: 3
-  throwableSpawnRingExtents: {x: 0.5, y: 0.6}
+  throwableSpawnRingExtents: {x: 0.7, y: 0.9}
   throwableSpawnScale: 0.4
   throwableBoundsRadius: 1.5
   targetHeight: 1.5
