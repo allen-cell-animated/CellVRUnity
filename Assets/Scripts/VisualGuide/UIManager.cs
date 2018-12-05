@@ -131,7 +131,6 @@ public class UIManager : MonoBehaviour
         progressCanvas.SetTitle();
         progressCanvas.time.gameObject.SetActive( false );
         leaderboard.gameObject.SetActive( false );
-        keyboard.Dismiss();
         dataInfoCanvas.transform.parent.gameObject.SetActive( true );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
     }
