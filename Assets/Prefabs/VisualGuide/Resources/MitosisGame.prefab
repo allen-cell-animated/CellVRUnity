@@ -56,6 +56,6 @@ MonoBehaviour:
   throwableSpawnHeight: 3
   throwableSpawnRingExtents: {x: 0.7, y: 0.9}
   throwableSpawnScale: 0.4
-  throwableBoundsRadius: 1.5
+  throwableBoundsRadius: 2
   targetHeight: 1.5
   targetDistanceFromCenter: 2.2

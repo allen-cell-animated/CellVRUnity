@@ -18,7 +18,7 @@ public class MitosisGameManager : MonoBehaviour
     Target[] targets;
     GameObject[] arrows;
     float lastThrowableCheckTime = 5f;
-    float timeBetweenThrowableChecks = 3f;
+    float timeBetweenThrowableChecks = 0.1f;
     int correctlyPlacedThrowables;
     int animationPhase;
     bool destroyWhenOutOfBounds;
