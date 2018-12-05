@@ -7,6 +7,7 @@ public class CellStructure : VRTK_InteractableObject
 {
     [Header("Cell Structure Settings")]
 
+    public bool isNucleus;
     public string structureName;
     public float nameWidth = 80f;
 
