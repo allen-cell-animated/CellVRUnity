@@ -18,6 +18,7 @@ public class VisualGuideManager : MonoBehaviour
     MitosisGameManager successGameManager;
     string[] structureNames = { "Endoplasmic Reticulum (ER)", "Golgi Apparatus", "Microtubules", "Mitochondria"};
     Dictionary<string,bool> structuresSolved;
+    int currentStuctureIndex;
 
     static VisualGuideManager _Instance;
     public static VisualGuideManager Instance
@@ -42,6 +43,14 @@ public class VisualGuideManager : MonoBehaviour
                 _interphaseCell = GameObject.FindObjectOfType<InterphaseCellManager>();
             }
             return _interphaseCell;
+        }
+    }
+
+    string nextStructureName 
+    {
+        get
+        {
+            return structureNames[currentStuctureIndex];
         }
     }
 
@@ -73,6 +82,11 @@ public class VisualGuideManager : MonoBehaviour
             structuresSolved.Add( structure, false );
         }
         interphaseCell.SetColorsetForStructures( 0 );
+    }
+
+    public void SelectNextStructureAndPlay ()
+    {
+        interphaseCell.SelectStructure( structureNames[currentStuctureIndex] );
     }
 
     public void StartGame (string structureName)
@@ -114,6 +128,12 @@ public class VisualGuideManager : MonoBehaviour
         AnimateSuccess( interphaseCell.gameObject );
         currentGameManager.AnimateCellsForSuccess();
         CheckSucess();
+
+        currentStuctureIndex++;
+        if (currentStuctureIndex >= structureNames.Length)
+        {
+            currentStuctureIndex = 0;
+        }
     }
 
     public void AnimateSuccess (GameObject cell)

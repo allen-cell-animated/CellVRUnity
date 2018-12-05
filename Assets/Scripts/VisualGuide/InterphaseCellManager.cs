@@ -191,7 +191,6 @@ public class InterphaseCellManager : MonoBehaviour
         CellStructure _structure = structures.Find( s => s.structureName == _structureName );
         if (_structure != null)
         {
-            Debug.Log( "highlight + select from UI " + _structureName );
             highlightedStructure = _structure;
             SelectStructure( _structure );
         }

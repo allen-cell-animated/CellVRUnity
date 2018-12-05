@@ -916,7 +916,7 @@ GameObject:
   - component: {fileID: 114414503481796070}
   - component: {fileID: 114081726278576300}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: NextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4208,7 +4208,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 975bd966db0cd4fed99a6de7309ec163, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 038bc720c2af84a59b8efd75a26a5a8e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

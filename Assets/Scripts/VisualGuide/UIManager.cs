@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public ProgressCanvas progressCanvas;
     public Leaderboard leaderboard;
     public Keyboard keyboard;
+    public GameObject playbutton;
 
     static UIManager _Instance;
     public static UIManager Instance
@@ -113,25 +114,32 @@ public class UIManager : MonoBehaviour
     public void EnterPlayMode (StructureData structureData)
     {
         progressCanvas.SetTitle( structureData.structureName );
-        progressCanvas.SetSelected( structureData.structureName, false );
+        progressCanvas.SetSelected( structureData.structureName, true );
         progressCanvas.time.gameObject.SetActive( true );
+        progressCanvas.gameObject.SetActive( true );
         structureInfoCanvas.SetContent( structureData );
         dataInfoCanvas.transform.parent.gameObject.SetActive( false );
         structureInfoCanvas.transform.parent.gameObject.SetActive( true );
+        playbutton.SetActive( false );
     }
 
     public void EnterSuccessMode (string structureName, float timeSeconds)
     {
-        progressCanvas.SetSelected( structureName, true );
         DisplayScore( timeSeconds );
     }
 
     public void EnterLobbyMode ()
     {
         progressCanvas.SetTitle();
-        progressCanvas.time.gameObject.SetActive( false );
+        progressCanvas.gameObject.SetActive( false );
         leaderboard.gameObject.SetActive( false );
         dataInfoCanvas.transform.parent.gameObject.SetActive( true );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
+        playbutton.SetActive( true );
+    }
+
+    public void Play ()
+    {
+        VisualGuideManager.Instance.SelectNextStructureAndPlay();
     }
 }

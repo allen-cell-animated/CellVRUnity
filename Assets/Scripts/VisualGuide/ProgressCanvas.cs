@@ -39,19 +39,31 @@ public class ProgressCanvas : MonoBehaviour
         switch (structureName)
         {
             case "Endoplasmic Reticulum (ER)":
-                selectedER.SetActive( selected );
+                selectedER.SetActive( true );
+                selectedGolgi.SetActive( false );
+                selectedMTs.SetActive( false );
+                selectedMitos.SetActive( false );
                 return;
 
             case "Golgi Apparatus":
-                selectedGolgi.SetActive( selected );
+                selectedER.SetActive( false );
+                selectedGolgi.SetActive( true );
+                selectedMTs.SetActive( false );
+                selectedMitos.SetActive( false );
                 return;
 
             case "Microtubules":
-                selectedMTs.SetActive( selected );
+                selectedER.SetActive( false );
+                selectedGolgi.SetActive( false );
+                selectedMTs.SetActive( true );
+                selectedMitos.SetActive( false );
                 return;
 
             case "Mitochondria":
-                selectedMitos.SetActive( selected );
+                selectedER.SetActive( false );
+                selectedGolgi.SetActive( false );
+                selectedMTs.SetActive( false );
+                selectedMitos.SetActive( true );
                 return;
         }
     }
