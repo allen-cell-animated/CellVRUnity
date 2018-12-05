@@ -16,7 +16,7 @@ public class VisualGuideManager : MonoBehaviour
     public MitosisGameManager currentGameManager;
 
     MitosisGameManager successGameManager;
-    string[] structureNames = { "Endoplasmic Reticulum (ER)", "Golgi Apparatus", "Microtubules", "Mitochondria"};
+    string[] structureNames = { "Microtubules", "Mitochondria", "Endoplasmic Reticulum (ER)", "Golgi Apparatus" };
     Dictionary<string,bool> structuresSolved;
     int currentStuctureIndex;
 
