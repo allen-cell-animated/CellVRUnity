@@ -86,6 +86,7 @@ public class MitosisGameManager : MonoBehaviour
             throwableCells[i].transform.position = transform.position + randomPositionInThrowableSpawnArea;
             throwableCells[i].transform.rotation = Random.rotation;
             throwableCells[i].transform.localScale = throwableSpawnScale * Vector3.one;
+            throwableCells[i].lastSpawnTime = Time.time;
 
             if (colorSet >= 0 && throwableCells[i].colorer != null)
             {
@@ -119,7 +120,7 @@ public class MitosisGameManager : MonoBehaviour
             foreach (ThrowableCell throwableCell in throwableCells)
             {
                 if (throwableCell != null && throwableCell.attachedTarget == null 
-                    && (!throwableCell.isMoving || throwableCell.transform.position.y < 5f) 
+                    && Time.time - throwableCell.lastSpawnTime > 2f && (!throwableCell.isMoving || throwableCell.transform.position.y < -1f)
                     && !throwableCell.IsGrabbed() && ThrowableIsOutOfBounds( throwableCell.transform ))
                 {
                     if (destroyWhenOutOfBounds)
@@ -129,6 +130,7 @@ public class MitosisGameManager : MonoBehaviour
                     else
                     {
                         throwableCell.ReleaseFromTarget( true );
+                        throwableCell.lastSpawnTime = Time.time;
                         StartCoroutine( PlaceThrowable( throwableCell.transform, 1f ) );
                     }
                 }

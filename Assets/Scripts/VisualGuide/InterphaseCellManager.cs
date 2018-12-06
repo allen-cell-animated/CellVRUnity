@@ -161,7 +161,6 @@ public class InterphaseCellManager : MonoBehaviour
     {
         if (canInteract)
         {
-            Debug.Log( "highlight " + _structure.structureName );
             highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );

@@ -13,6 +13,7 @@ public class ThrowableCell : VRTK_InteractableObject
     public Vector3 alignedMitosisRotation;
     public float alignedMitosisScale;
     public Target attachedTarget;
+    public float lastSpawnTime;
 
     MitosisGameManager _gameManager;
     MitosisGameManager gameManager
