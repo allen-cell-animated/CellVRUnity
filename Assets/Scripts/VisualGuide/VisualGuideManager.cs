@@ -103,6 +103,7 @@ public class VisualGuideManager : MonoBehaviour
 
         interphaseCell.TransitionToPlayMode( currentGameManager );
         ControllerInput.Instance.ToggleLaserRenderer( false );
+        ControllerInput.Instance.laserDisabledUnlessPointingAtUI = true;
     }
 
     MitosisGameManager CreateMitosisGameManager ()
@@ -123,7 +124,6 @@ public class VisualGuideManager : MonoBehaviour
         structuresSolved[currentGameManager.currentStructureName] = true;
         interphaseCell.ColorActiveStructure();
         UIManager.Instance.EnterSuccessMode( currentGameManager.currentStructureName, elapsedTime );
-        ControllerInput.Instance.ToggleLaserRenderer( true );
 
         AnimateSuccess( interphaseCell.gameObject );
         currentGameManager.AnimateCellsForSuccess();
@@ -179,7 +179,8 @@ public class VisualGuideManager : MonoBehaviour
 
         interphaseCell.TransitionToLobbyMode();
         ControllerInput.Instance.ToggleLaserRenderer( true );
-        UIManager.Instance.EnterLobbyMode();
+        ControllerInput.Instance.laserDisabledUnlessPointingAtUI = false;
+        UIManager.Instance.EnterLobbyMode( structureNames[currentStuctureIndex] );
     }
 
     void Cleanup ()

@@ -25,13 +25,9 @@ public class ProgressCanvas : MonoBehaviour
         }
     }
 
-    public void SetTitle (string structureName = "Choose a structure:")
+    public void AnimateTitle ()
     {
-        titleLabel.text = structureName;
-        if (structureName != "Choose a structure:")
-        {
-            titleAnimator.SetTrigger( "animate" );
-        }
+        titleAnimator.SetTrigger( "animate" );
     }
 
     public void SetSelected (string structureName, bool selected)
@@ -71,5 +67,10 @@ public class ProgressCanvas : MonoBehaviour
     public void SelectStructureInUI (string structureName)
     {
         VisualGuideManager.Instance.interphaseCell.SelectStructure( structureName );
+    }
+
+    public void GoBack ()
+    {
+        VisualGuideManager.Instance.ReturnToLobby();
     }
 }

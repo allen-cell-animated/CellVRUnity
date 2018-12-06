@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using VRTK;
 
 public class UIManager : MonoBehaviour 
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     public Leaderboard leaderboard;
     public Keyboard keyboard;
     public GameObject playbutton;
+    public Text nextStructureLabel;
 
     static UIManager _Instance;
     public static UIManager Instance
@@ -113,7 +115,7 @@ public class UIManager : MonoBehaviour
 
     public void EnterPlayMode (StructureData structureData)
     {
-        progressCanvas.SetTitle( structureData.structureName );
+        progressCanvas.AnimateTitle();
         progressCanvas.SetSelected( structureData.structureName, true );
         progressCanvas.time.gameObject.SetActive( true );
         progressCanvas.gameObject.SetActive( true );
@@ -128,14 +130,13 @@ public class UIManager : MonoBehaviour
         DisplayScore( timeSeconds );
     }
 
-    public void EnterLobbyMode ()
+    public void EnterLobbyMode (string currentStructureName)
     {
-        progressCanvas.SetTitle();
         progressCanvas.gameObject.SetActive( false );
-        leaderboard.gameObject.SetActive( false );
         dataInfoCanvas.transform.parent.gameObject.SetActive( true );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
         playbutton.SetActive( true );
+        nextStructureLabel.text = "Next: " + currentStructureName;
     }
 
     public void Play ()

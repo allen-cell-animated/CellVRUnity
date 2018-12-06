@@ -146,9 +146,9 @@ public class Leaderboard : MonoBehaviour
         currentEntry.UpdatePlayerName( _newPlayerName );
     }
 
-    public void ReturnToLobby ()
+    public void Close ()
     {
-        VisualGuideManager.Instance.ReturnToLobby();
+        gameObject.SetActive( false );
     }
 }
 

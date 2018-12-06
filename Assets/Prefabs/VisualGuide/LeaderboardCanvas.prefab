@@ -916,7 +916,7 @@ GameObject:
   - component: {fileID: 114414503481796070}
   - component: {fileID: 114081726278576300}
   m_Layer: 5
-  m_Name: NextButton
+  m_Name: OKButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1997,7 +1997,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114400948318901734}
-        m_MethodName: ReturnToLobby
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4208,7 +4208,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 038bc720c2af84a59b8efd75a26a5a8e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bad25cf4ec7e34a8999a229479911691, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

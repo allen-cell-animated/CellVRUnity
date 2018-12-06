@@ -15,6 +15,7 @@ public class ControllerInput : MonoBehaviour
     public bool pointerHover;
     public bool touchingRight;
     public bool touchingLeft;
+    public bool laserDisabledUnlessPointingAtUI;
 
     static ControllerInput _Instance;
     public static ControllerInput Instance
@@ -52,6 +53,19 @@ public class ControllerInput : MonoBehaviour
                 _laserRenderer = GameObject.FindObjectOfType<VRTK_Pointer>();
             }
             return _laserRenderer;
+        }
+    }
+
+    VRTK_UIPointer _uiPointer;
+    VRTK_UIPointer uiPointer
+    {
+        get
+        {
+            if (_uiPointer == null)
+            {
+                _uiPointer = GameObject.FindObjectOfType<VRTK_UIPointer>();
+            }
+            return _uiPointer;
         }
     }
 
@@ -98,6 +112,8 @@ public class ControllerInput : MonoBehaviour
             pointerRight.TriggerReleased += OnRightControllerTriggerUp;
             pointerRight.GripPressed += OnRightControllerGripDown;
             pointerRight.GripReleased += OnRightControllerGripUp;
+            uiPointer.UIPointerElementEnter += OnUIPointerEnter;
+            uiPointer.UIPointerElementExit += OnUIPointerExit;
         }
         if (laserPointer != null)
         {
@@ -133,6 +149,8 @@ public class ControllerInput : MonoBehaviour
             pointerRight.TriggerReleased -= OnRightControllerTriggerUp;
             pointerRight.GripPressed -= OnRightControllerGripDown;
             pointerRight.GripReleased -= OnRightControllerGripUp;
+            uiPointer.UIPointerElementEnter -= OnUIPointerEnter;
+            uiPointer.UIPointerElementExit -= OnUIPointerExit;
         }
         if (laserPointer != null)
         {
@@ -229,6 +247,22 @@ public class ControllerInput : MonoBehaviour
     void OnLeftControllerUntouch (object sender, ObjectInteractEventArgs e)
     {
         touchingLeft = false;
+    }
+
+    void OnUIPointerEnter (object sender, UIPointerEventArgs e)
+    {
+        if (laserDisabledUnlessPointingAtUI)
+        {
+            ToggleLaserRenderer( true );
+        }
+    }
+
+    void OnUIPointerExit (object sender, UIPointerEventArgs e)
+    {
+        if (laserDisabledUnlessPointingAtUI)
+        {
+            ToggleLaserRenderer( false );
+        }
     }
 
     public void ToggleLaserRenderer (bool _active)
