@@ -80,19 +80,6 @@ public class ThrowableCell : VRTK_InteractableObject
         }
     }
 
-    Colorer _colorer;
-    public Colorer colorer
-    {
-        get
-        {
-            if (_colorer == null)
-            {
-                _colorer = GetComponentInChildren<Colorer>( true );
-            }
-            return _colorer;
-        }
-    }
-
     public bool isMoving
     {
         get

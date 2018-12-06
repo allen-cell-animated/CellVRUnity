@@ -344,6 +344,7 @@ MonoBehaviour:
   alignedMitosisRotation: {x: 0, y: -50.546, z: 0}
   alignedMitosisScale: 0.5
   attachedTarget: {fileID: 0}
+  lastSpawnTime: 0
 --- !u!114 &114495433435646982
 MonoBehaviour:
   m_ObjectHideFlags: 1

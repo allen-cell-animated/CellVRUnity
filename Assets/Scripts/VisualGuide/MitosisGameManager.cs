@@ -59,7 +59,7 @@ public class MitosisGameManager : MonoBehaviour
         destroyWhenOutOfBounds = true;
         for (int i = 0; i < structureNames.Length; i++)
         {
-            StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn, 1 ) );
+            StartCoroutine( SpawnThrowables( structureNames[i], i * structureNames.Length * waitBetweenThrowableSpawn ) );
         }
 
         yield return new WaitForSeconds( structureNames.Length * structureNames.Length * waitBetweenThrowableSpawn );
@@ -67,7 +67,7 @@ public class MitosisGameManager : MonoBehaviour
         throwableCells = GetComponentsInChildren<ThrowableCell>();
     }
 
-    IEnumerator SpawnThrowables (string structureName, float waitTime, int colorSet = -1)
+    IEnumerator SpawnThrowables (string structureName, float waitTime)
     {
         yield return new WaitForSeconds( waitTime );
 
@@ -87,11 +87,6 @@ public class MitosisGameManager : MonoBehaviour
             throwableCells[i].transform.rotation = Random.rotation;
             throwableCells[i].transform.localScale = throwableSpawnScale * Vector3.one;
             throwableCells[i].lastSpawnTime = Time.time;
-
-            if (colorSet >= 0 && throwableCells[i].colorer != null)
-            {
-                throwableCells[i].colorer.SetColor( colorSet );
-            }
 
             yield return new WaitForSeconds( waitBetweenThrowableSpawn );
         }
@@ -208,7 +203,6 @@ public class MitosisGameManager : MonoBehaviour
         if (correctlyPlacedThrowables >= throwableNames.Length)
         {
             VisualGuideManager.Instance.EnterSuccessMode( Time.time - startTime );
-            SetColorsetForThrowables( 1 );
             SetThrowablesGrabbable( false );
         }
     }
@@ -218,17 +212,6 @@ public class MitosisGameManager : MonoBehaviour
         foreach (ThrowableCell cell in throwableCells)
         {
             cell.isGrabbable = grabbable;
-        }
-    }
-
-    void SetColorsetForThrowables (int colorSet)
-    {
-        foreach (ThrowableCell cell in throwableCells)
-        {
-            if (cell.colorer != null)
-            {
-                cell.colorer.SetColor( colorSet );
-            }
         }
     }
 
