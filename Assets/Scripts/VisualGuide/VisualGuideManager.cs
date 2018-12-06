@@ -54,36 +54,6 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    bool allStructuresSolved
-    {
-        get
-        {
-            foreach (KeyValuePair<string,bool> kvp in structuresSolved)
-            {
-                if (kvp.Value == false)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    void Start ()
-    {
-        ResetSolvedStructures();
-    }
-
-    public void ResetSolvedStructures ()
-    {
-        structuresSolved = new Dictionary<string, bool>();
-        foreach (string structure in structureNames)
-        {
-            structuresSolved.Add( structure, false );
-        }
-        interphaseCell.SetColorsetForStructures( 0 );
-    }
-
     public void SelectNextStructureAndPlay ()
     {
         interphaseCell.SelectStructure( structureNames[currentStuctureIndex] );
@@ -122,12 +92,12 @@ public class VisualGuideManager : MonoBehaviour
         currentMode = VisualGuideGameMode.Success;
 
         structuresSolved[currentGameManager.currentStructureName] = true;
-        interphaseCell.ColorActiveStructure();
         UIManager.Instance.EnterSuccessMode( currentGameManager.currentStructureName, elapsedTime );
 
-        AnimateSuccess( interphaseCell.gameObject );
+        AnimateCellSuccess( interphaseCell.gameObject );
         currentGameManager.AnimateCellsForSuccess();
-        CheckSucess();
+        successGameManager = CreateMitosisGameManager();
+        StartCoroutine( successGameManager.SpawnAllThrowables( structureNames ) );
 
         currentStuctureIndex++;
         if (currentStuctureIndex >= structureNames.Length)
@@ -136,7 +106,7 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    public void AnimateSuccess (GameObject cell)
+    public void AnimateCellSuccess (GameObject cell)
     {
         GameObject prefab = Resources.Load( "CellAnimator" ) as GameObject;
         if (prefab == null)
@@ -160,15 +130,6 @@ public class VisualGuideManager : MonoBehaviour
             return;
         }
         Instantiate( prefab, cell.transform.position, Quaternion.identity );
-    }
-
-    void CheckSucess ()
-    {
-        if (allStructuresSolved)
-        {
-            successGameManager = CreateMitosisGameManager();
-            StartCoroutine( successGameManager.SpawnAllThrowables( structureNames ) );
-        }
     }
 
     public void ReturnToLobby ()

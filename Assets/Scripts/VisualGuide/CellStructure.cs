@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-public class CellStructure : VRTK_InteractableObject 
+public class CellStructure : MonoBehaviour 
 {
-    [Header("Cell Structure Settings")]
-
     public bool isNucleus;
     public string structureName;
     public float nameWidth = 80f;
@@ -50,37 +48,21 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    public VRTK_DestinationMarker laserPointer
+    void OnEnable ()
     {
-        get
+        if (ControllerInput.Instance.laserPointer != null)
         {
-            return ControllerInput.Instance == null ? null : ControllerInput.Instance.laserPointer;
+            ControllerInput.Instance.laserPointer.DestinationMarkerEnter += OnHoverEnter;
+            ControllerInput.Instance.laserPointer.DestinationMarkerExit += OnHoverExit;
         }
     }
 
-    protected override void Awake ()
+    void OnDisable ()
     {
-        base.Awake();
-        colorer.SetColor( 0 );
-    }
-
-    protected override void OnEnable ()
-    {
-        base.OnEnable();
-        if (laserPointer != null)
+        if (ControllerInput.Instance.laserPointer != null)
         {
-            laserPointer.DestinationMarkerEnter += OnHoverEnter;
-            laserPointer.DestinationMarkerExit += OnHoverExit;
-        }
-    }
-
-    protected override void OnDisable ()
-    {
-        base.OnDisable();
-        if (laserPointer != null)
-        {
-            laserPointer.DestinationMarkerEnter -= OnHoverEnter;
-            laserPointer.DestinationMarkerExit -= OnHoverExit;
+            ControllerInput.Instance.laserPointer.DestinationMarkerEnter -= OnHoverEnter;
+            ControllerInput.Instance.laserPointer.DestinationMarkerExit -= OnHoverExit;
         }
     }
 
@@ -88,7 +70,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         if (theCollider == e.raycastHit.collider)
         {
-            interphaseCell.LabelStructure( this );
+            interphaseCell.HighlightAndLabelStructure( this );
         }
     }
 
@@ -96,18 +78,7 @@ public class CellStructure : VRTK_InteractableObject
     {
         if (theCollider == e.raycastHit.collider)
         {
-            interphaseCell.HideLabel( this );
-        }
-    }
-
-    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
-    {
-        base.StartUsing( currentUsingObject );
-
-        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby)
-        {
-            Debug.Log( "select from geometry " + structureName );
-            interphaseCell.SelectStructure( this );
+            interphaseCell.RemoveHighlightAndLabel( this );
         }
     }
 }

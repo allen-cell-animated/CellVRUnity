@@ -112,18 +112,10 @@ public class InterphaseCellManager : MonoBehaviour
 
     void Start ()
     {
-        HideLabel();
+        RemoveHighlightAndLabel();
         lobbyPosition = transform.position;
         lobbyRotation = transform.rotation;
         lobbyScale = transform.localScale.x;
-    }
-
-    public void SetColorsetForStructures (int colorSet)
-    {
-        foreach (CellStructure structure in structures)
-        {
-            structure.colorer.SetColor( colorSet );
-        }
     }
 
     public void TransitionToPlayMode (MitosisGameManager currentGameManager)
@@ -134,13 +126,7 @@ public class InterphaseCellManager : MonoBehaviour
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
         StartCoroutine( currentGameManager.TurnOffInterphaseCellTarget( duration ) );
-        structures.Find( s => s.structureName == currentGameManager.currentStructureName ).colorer.SetColor( 0 );
-        HideLabel();
-    }
-
-    public void ColorActiveStructure ()
-    {
-        structures.Find( s => s.gameObject.activeSelf && !s.isNucleus ).colorer.SetColor( 1 );
+        RemoveHighlightAndLabel();
     }
 
     public void TransitionToLobbyMode ()
@@ -157,31 +143,35 @@ public class InterphaseCellManager : MonoBehaviour
         scaler.ScaleOverDuration( lobbyScale, duration );
     }
 
-    public void LabelStructure (CellStructure _structure)
+    public void HighlightAndLabelStructure (CellStructure _structure)
     {
         if (canInteract)
         {
             highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
+            ColorNonHighlightedStructures( 0 );
         }
     }
 
-    public void HideLabel (CellStructure _structure = null)
+    public void RemoveHighlightAndLabel (CellStructure _structure = null)
     {
         if (structureLabel != null && (_structure == null || _structure == highlightedStructure))
         {
+            highlightedStructure = null;
             structureLabel.gameObject.SetActive( false );
+            ColorNonHighlightedStructures( 1 );
         }
     }
 
-    public void SelectStructure (CellStructure _structure)
+    void ColorNonHighlightedStructures (int colorset)
     {
-        if (canInteract && highlightedStructure == _structure)
+        foreach (CellStructure structure in structures)
         {
-            selectedStructure = _structure;
-            IsolateSelectedStructure();
-            VisualGuideManager.Instance.StartGame( _structure.structureName );
+            if (structure != highlightedStructure)
+            {
+                structure.colorer.SetColor( colorset );
+            }
         }
     }
 
@@ -190,8 +180,9 @@ public class InterphaseCellManager : MonoBehaviour
         CellStructure _structure = structures.Find( s => s.structureName == _structureName );
         if (_structure != null)
         {
-            highlightedStructure = _structure;
-            SelectStructure( _structure );
+            selectedStructure = _structure;
+            IsolateSelectedStructure();
+            VisualGuideManager.Instance.StartGame( _structureName );
         }
     }
 
@@ -214,7 +205,7 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
-    public void ExitIsolationMode ()
+    void ExitIsolationMode ()
     {
         if (inIsolationMode)
         {

@@ -244,7 +244,7 @@ public class MitosisGameManager : MonoBehaviour
     {
         for (int i = 0; i < throwableCells.Length; i++)
         {
-            VisualGuideManager.Instance.AnimateSuccess( throwableCells[i].gameObject );
+            VisualGuideManager.Instance.AnimateCellSuccess( throwableCells[i].gameObject );
         }
     }
 }

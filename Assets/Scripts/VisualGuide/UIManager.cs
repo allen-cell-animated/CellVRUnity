@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour
 
     void Update ()
     {
-        if (Input.GetKeyUp( KeyCode.X ))
+        if (Input.GetKeyUp( KeyCode.X ) && VisualGuideManager.Instance.currentMode != VisualGuideGameMode.Lobby)
         {
-            VisualGuideManager.Instance.ResetSolvedStructures();
+            VisualGuideManager.Instance.ReturnToLobby();
         }
 
         if (Input.GetKeyUp( KeyCode.C ))

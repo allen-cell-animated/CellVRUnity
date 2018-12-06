@@ -64,11 +64,6 @@ public class ProgressCanvas : MonoBehaviour
         }
     }
 
-    public void SelectStructureInUI (string structureName)
-    {
-        VisualGuideManager.Instance.interphaseCell.SelectStructure( structureName );
-    }
-
     public void GoBack ()
     {
         VisualGuideManager.Instance.ReturnToLobby();
