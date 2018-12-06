@@ -17,7 +17,6 @@ public class VisualGuideManager : MonoBehaviour
 
     MitosisGameManager successGameManager;
     string[] structureNames = { "Microtubules", "Mitochondria", "Endoplasmic Reticulum (ER)", "Golgi Apparatus" };
-    Dictionary<string,bool> structuresSolved;
     int currentStuctureIndex;
 
     static VisualGuideManager _Instance;
@@ -64,7 +63,6 @@ public class VisualGuideManager : MonoBehaviour
         Debug.Log( "-------start game with " + structureName );
         currentMode = VisualGuideGameMode.Play;
 
-        structuresSolved[structureName] = false;
         UIManager.Instance.EnterPlayMode( data.structureData.Find( s => s.structureName == structureName ) );
 
         Cleanup();
@@ -91,7 +89,6 @@ public class VisualGuideManager : MonoBehaviour
     {
         currentMode = VisualGuideGameMode.Success;
 
-        structuresSolved[currentGameManager.currentStructureName] = true;
         UIManager.Instance.EnterSuccessMode( currentGameManager.currentStructureName, elapsedTime );
 
         AnimateCellSuccess( interphaseCell.gameObject );
