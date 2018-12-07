@@ -7,29 +7,23 @@ public class CollapsiblePanel : MonoBehaviour
     public GameObject hotspot;
     public Animator panel;
 
-    List<Collider> collidingControllers = new List<Collider>();
+    bool colliding;
 
     void OnTriggerEnter (Collider other)
     {
-        if (other.tag == "GameController")
+        if (other.tag == "Head" && !colliding)
         {
-            if (collidingControllers.Count < 1)
-            {
-                SetPanel( true );
-            }
-            collidingControllers.Add( other );
+            SetPanel( true );
+            colliding = true;
         }
     }
 
     void OnTriggerExit (Collider other)
     {
-        if (collidingControllers.Contains( other ))
+        if (colliding)
         {
-            collidingControllers.Remove( other );
-            if (collidingControllers.Count < 1)
-            {
-                SetPanel( false );
-            }
+            SetPanel( false );
+            colliding = false;
         }
     }
 

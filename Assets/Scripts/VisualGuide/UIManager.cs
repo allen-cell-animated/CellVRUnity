@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public Keyboard keyboard;
     public GameObject playbutton;
     public Text nextStructureLabel;
+    public CountdownCanvas countdownCanvas;
 
     static UIManager _Instance;
     public static UIManager Instance
@@ -99,6 +100,8 @@ public class UIManager : MonoBehaviour
         dataInfoCanvas.transform.parent.gameObject.SetActive( false );
         structureInfoCanvas.transform.parent.gameObject.SetActive( true );
         playbutton.SetActive( false );
+        countdownCanvas.gameObject.SetActive( true );
+        countdownCanvas.StartCountdown();
     }
 
     public void EnterSuccessMode (string structureName, float timeSeconds)
