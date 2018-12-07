@@ -92,16 +92,20 @@ public class UIManager : MonoBehaviour
 
     public void EnterPlayMode (StructureData structureData)
     {
-        progressCanvas.AnimateTitle();
         progressCanvas.SetSelected( structureData.structureName, true );
-        progressCanvas.time.gameObject.SetActive( true );
-        progressCanvas.gameObject.SetActive( true );
         structureInfoCanvas.SetContent( structureData );
         dataInfoCanvas.transform.parent.gameObject.SetActive( false );
         structureInfoCanvas.transform.parent.gameObject.SetActive( true );
         playbutton.SetActive( false );
         countdownCanvas.gameObject.SetActive( true );
         countdownCanvas.StartCountdown();
+    }
+
+    public void StartTimer ()
+    {
+        VisualGuideManager.Instance.currentGameManager.StartTimer();
+        progressCanvas.time.gameObject.SetActive( true );
+        progressCanvas.gameObject.SetActive( true );
     }
 
     public void EnterSuccessMode (string structureName, float timeSeconds)

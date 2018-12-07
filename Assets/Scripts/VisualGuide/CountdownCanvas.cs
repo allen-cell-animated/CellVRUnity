@@ -13,6 +13,7 @@ public class CountdownCanvas : MonoBehaviour
 
     public void FinishCountdown ()
     {
+        UIManager.Instance.StartTimer();
         gameObject.SetActive( false );
     }
 }

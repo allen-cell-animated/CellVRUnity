@@ -34,6 +34,11 @@ public class MitosisGameManager : MonoBehaviour
         startTime = Time.time;
     }
 
+    public void StartTimer ()
+    {
+        startTime = Time.time;
+    }
+
     void Update ()
     {
         CheckIfThrowablesOutOfBounds();
