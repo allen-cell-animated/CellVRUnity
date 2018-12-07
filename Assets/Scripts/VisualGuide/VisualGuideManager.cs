@@ -55,10 +55,11 @@ public class VisualGuideManager : MonoBehaviour
 
     public void SetNextStructure (int index)
     {
-        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby)
+        if (currentMode == VisualGuideGameMode.Lobby)
         {
             currentStuctureIndex = index;
             UIManager.Instance.nextStructureLabel.text = structureNames[currentStuctureIndex];
+            UIManager.Instance.nextStructureLabel.GetComponent<Animator>().SetTrigger( "animate" );
         }
     }
 

@@ -51,7 +51,7 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    void OnEnable ()
+    protected override void OnEnable ()
     {
         if (ControllerInput.Instance.laserPointer != null)
         {
@@ -60,7 +60,7 @@ public class CellStructure : VRTK_InteractableObject
         }
     }
 
-    void OnDisable ()
+    protected override void OnDisable ()
     {
         if (ControllerInput.Instance != null && ControllerInput.Instance.laserPointer != null)
         {
