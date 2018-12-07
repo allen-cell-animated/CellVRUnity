@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 114270245623106132}
   - component: {fileID: 114568917923114010}
   - component: {fileID: 114444102548485740}
+  - component: {fileID: 95924842964863734}
   m_Layer: 5
   m_Name: ProgressCanvas
   m_TagString: Untagged
@@ -587,7 +588,6 @@ GameObject:
   - component: {fileID: 224043320825477994}
   - component: {fileID: 222685223213085176}
   - component: {fileID: 114850914443781936}
-  - component: {fileID: 95919118805605484}
   m_Layer: 5
   m_Name: Structures
   m_TagString: Untagged
@@ -612,16 +612,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &95919118805605484
+--- !u!95 &95924842964863734
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1973746568295148}
+  m_GameObject: {fileID: 1306044006312270}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b8ec9a2b510be464e92fa88091bd2990, type: 2}
+  m_Controller: {fileID: 9100000, guid: a8814d7dba0864e1f8667f94c881ffd8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

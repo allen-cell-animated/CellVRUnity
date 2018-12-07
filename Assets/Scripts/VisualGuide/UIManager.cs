@@ -32,7 +32,6 @@ public class UIManager : MonoBehaviour
     {
         leaderboard.gameObject.SetActive( false );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
-        progressCanvas.time.gameObject.SetActive( false );
     }
 
     void Update ()
@@ -103,7 +102,6 @@ public class UIManager : MonoBehaviour
     public void StartTimer ()
     {
         VisualGuideManager.Instance.currentGameManager.StartTimer();
-        progressCanvas.time.gameObject.SetActive( true );
         progressCanvas.gameObject.SetActive( true );
     }
 
@@ -119,7 +117,10 @@ public class UIManager : MonoBehaviour
         dataInfoCanvas.transform.parent.gameObject.SetActive( true );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
         playbutton.SetActive( true );
-        nextStructureLabel.text = "Next: " + currentStructureName;
+        playbutton.GetComponent<Animator>().SetTrigger( "Open" );
+
+        nextStructureLabel.text = (currentStructureName == "Endoplasmic Reticulum (ER)" ? "Endoplasmic\u2008Reticulum\u2008(ER)" :
+                                   currentStructureName == "Golgi Apparatus" ? "Golgi\u2008Apparatus" : currentStructureName);
     }
 
     public void Play ()

@@ -59,7 +59,7 @@ public class CellStructure : MonoBehaviour
 
     void OnDisable ()
     {
-        if (ControllerInput.Instance.laserPointer != null)
+        if (ControllerInput.Instance != null && ControllerInput.Instance.laserPointer != null)
         {
             ControllerInput.Instance.laserPointer.DestinationMarkerEnter -= OnHoverEnter;
             ControllerInput.Instance.laserPointer.DestinationMarkerExit -= OnHoverExit;
