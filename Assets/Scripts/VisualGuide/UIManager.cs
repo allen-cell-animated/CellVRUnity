@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour
     public InfoCanvas structureInfoCanvas;
     public ProgressCanvas progressCanvas;
     public Leaderboard leaderboard;
-    public Keyboard keyboard;
     public GameObject playbutton;
     public Text nextStructureLabel;
     public CountdownCanvas countdownCanvas;
@@ -86,12 +85,12 @@ public class UIManager : MonoBehaviour
     {
         leaderboard.gameObject.SetActive( true );
         leaderboard.RecordNewScore( elapsedTime );
-        keyboard.gameObject.SetActive( true );
     }
 
     public void EnterPlayMode (StructureData structureData)
     {
         progressCanvas.SetSelected( structureData.structureName, true );
+        progressCanvas.SetButtonLabel( false );
         structureInfoCanvas.SetContent( structureData );
         dataInfoCanvas.transform.parent.gameObject.SetActive( false );
         playbutton.SetActive( false );
@@ -109,6 +108,7 @@ public class UIManager : MonoBehaviour
     {
         DisplayScore( timeSeconds );
         structureInfoCanvas.transform.parent.gameObject.SetActive( true );
+        progressCanvas.SetButtonLabel( true );
     }
 
     public void EnterLobbyMode (string currentStructureName)

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Leaderboard : MonoBehaviour 
 {
+    public Keyboard keyboard;
+
     [SerializeField]
     List<HighScore> highScores;
     HighScore currentScore;
@@ -73,6 +75,8 @@ public class Leaderboard : MonoBehaviour
         currentScore = new HighScore( "[your name here!]", timeSeconds );
         highScores.Add( currentScore );
         highScores.Sort();
+        keyboard.gameObject.SetActive( true );
+        keyboard.ClearText();
 
         ClearDisplay();
         DisplayHighscores();

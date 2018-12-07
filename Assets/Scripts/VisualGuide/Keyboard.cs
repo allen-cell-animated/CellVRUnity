@@ -23,7 +23,11 @@ public class Keyboard : MonoBehaviour
 
     public void Dismiss ()
     {
-        currentText = "";
         gameObject.SetActive( false );
+    }
+
+    public void ClearText ()
+    {
+        currentText = "";
     }
 }

@@ -442,6 +442,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &1662074455553204
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224757871870510414}
+  - component: {fileID: 222088571575248986}
+  - component: {fileID: 114294940716658162}
+  m_Layer: 5
+  m_Name: BackLabel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1779687100273754
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +487,7 @@ GameObject:
   - component: {fileID: 222072400766642614}
   - component: {fileID: 114249563954829388}
   m_Layer: 5
-  m_Name: Label
+  m_Name: NextLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -850,7 +867,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 975bd966db0cd4fed99a6de7309ec163, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 038bc720c2af84a59b8efd75a26a5a8e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -961,6 +978,33 @@ MonoBehaviour:
   m_Sprite: {fileID: 21300000, guid: 7aa694d10452b44c79ce2527bc261a82, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &114294940716658162
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1662074455553204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 975bd966db0cd4fed99a6de7309ec163, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1327,6 +1371,8 @@ MonoBehaviour:
   selectedMTs: {fileID: 1589267168717556}
   selectedMitos: {fileID: 1528311121428872}
   titleLabel: {fileID: 114850914443781936}
+  backLabel: {fileID: 1662074455553204}
+  nextLabel: {fileID: 1803820235611220}
 --- !u!114 &114801216332730626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1562,6 +1608,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1016155131161606}
+--- !u!222 &222088571575248986
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1662074455553204}
 --- !u!222 &222150148917704262
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -2217,6 +2269,24 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1803820235611220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -4.0000153}
+  m_LocalScale: {x: 0.13638413, y: 0.13638414, z: 0.13638416}
+  m_Children: []
+  m_Father: {fileID: 224830447153610098}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.0000023841858}
+  m_SizeDelta: {x: 446, y: 188}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &224757871870510414
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1662074455553204}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -4}
   m_LocalScale: {x: 0.13611227, y: 0.13611233, z: 0.13611233}
   m_Children: []
@@ -2256,6 +2326,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -1.5}
   m_LocalScale: {x: 0.7953204, y: 0.7953205, z: 0.7953204}
   m_Children:
+  - {fileID: 224757871870510414}
   - {fileID: 224729925120708904}
   m_Father: {fileID: 224852243313921782}
   m_RootOrder: 3

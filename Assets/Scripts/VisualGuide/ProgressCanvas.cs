@@ -11,6 +11,8 @@ public class ProgressCanvas : MonoBehaviour
     public GameObject selectedMTs;
     public GameObject selectedMitos;
     public Text titleLabel;
+    public GameObject backLabel;
+    public GameObject nextLabel;
 
     Animator _animator;
     public Animator animator
@@ -57,6 +59,12 @@ public class ProgressCanvas : MonoBehaviour
                 selectedMitos.SetActive( true );
                 return;
         }
+    }
+
+    public void SetButtonLabel (bool next)
+    {
+        backLabel.SetActive( !next );
+        nextLabel.SetActive( next );
     }
 
     public void GoBack ()
