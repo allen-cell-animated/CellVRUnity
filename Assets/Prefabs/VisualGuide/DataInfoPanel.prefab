@@ -767,9 +767,9 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 0.8
   m_Text: Cells are full of tiny detailed structures (1), but we are limited to what
-    we can observe by the resolution of our light microscopes (2). To see structures
-    more clearly, we trace the edges of what we can see (3) and use computers to put
-    all of the structures together (4).
+    we can observe by the resolution of light microscopes (2). To see structures more
+    clearly, we trace the edges of what we can see (3) and use machine learning to
+    put all of the structures together (4).
 --- !u!114 &114992496660114880
 MonoBehaviour:
   m_ObjectHideFlags: 1

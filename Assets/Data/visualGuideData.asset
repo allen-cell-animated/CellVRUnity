@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureData:
   - structureName: Microtubules
-    infoImage: {fileID: 21300000, guid: a8107907cef4b429b822809d39e94133, type: 3}
+    infoImage: {fileID: 21300000, guid: b8bb2ed4650f74cd6a5f0ac7a5d83354, type: 3}
     description: The cytoskeleton is made of fiber networks that maintain cell shape
       and morph it in order to move and divide.
     nameWidth: 80
@@ -28,10 +28,10 @@ MonoBehaviour:
       cellular energy molecules.
     nameWidth: 108
   - structureName: Endoplasmic Reticulum (ER)
-    infoImage: {fileID: 21300000, guid: a32bf676db62f460681806539084b870, type: 3}
+    infoImage: {fileID: 21300000, guid: c5809155623914c7aa0fc375aa66e7a2, type: 3}
     description: The ER produces new molecules.
     nameWidth: 118
   - structureName: Golgi Apparatus
-    infoImage: {fileID: 21300000, guid: 5060b1ebed672469ab9ec0e4f7b06977, type: 3}
+    infoImage: {fileID: 21300000, guid: 0da75a18465144641b8deaf770084a71, type: 3}
     description: The Golgi Apparatus distributes new molecules.
     nameWidth: 90
