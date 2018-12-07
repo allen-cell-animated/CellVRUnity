@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383f55dc693d7492a9bdb375e18b3413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotspot: {fileID: 0}
+  hotspot: {fileID: 1347477122340366}
   panel: {fileID: 95987330348993648}
 --- !u!114 &114619014440718262
 MonoBehaviour:
