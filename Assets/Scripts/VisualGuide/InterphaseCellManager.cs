@@ -147,6 +147,7 @@ public class InterphaseCellManager : MonoBehaviour
     {
         if (canInteract)
         {
+            Debug.Log("ADD " + _structure.structureName);
             highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
@@ -156,6 +157,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     public void RemoveHighlightAndLabel (CellStructure _structure, bool force = false)
     {
+        Debug.Log("Remove " + _structure.structureName + " " + force);
         if (structureLabel != null && (_structure == highlightedStructure || force))
         {
             highlightedStructure = null;
