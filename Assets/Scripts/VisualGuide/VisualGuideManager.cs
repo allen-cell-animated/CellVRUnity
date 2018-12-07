@@ -45,7 +45,7 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
-    string nextStructureName 
+    public string nextStructureName 
     {
         get
         {

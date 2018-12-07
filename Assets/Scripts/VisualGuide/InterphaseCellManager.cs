@@ -112,7 +112,8 @@ public class InterphaseCellManager : MonoBehaviour
 
     void Start ()
     {
-        RemoveHighlightAndLabel( null, true );
+        structureLabel.gameObject.SetActive( false );
+        SetHighlightedStructure( VisualGuideManager.Instance.nextStructureName );
         lobbyPosition = transform.position;
         lobbyRotation = transform.rotation;
         lobbyScale = transform.localScale.x;
@@ -126,7 +127,8 @@ public class InterphaseCellManager : MonoBehaviour
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
         StartCoroutine( currentGameManager.TurnOffInterphaseCellTarget( duration ) );
-        RemoveHighlightAndLabel( null, true );
+        structureLabel.gameObject.SetActive( false );
+        SetHighlightedStructure( VisualGuideManager.Instance.nextStructureName );
     }
 
     public void TransitionToLobbyMode ()
@@ -147,34 +149,36 @@ public class InterphaseCellManager : MonoBehaviour
     {
         if (canInteract)
         {
-            Debug.Log("ADD " + (_structure == null ? "null" : _structure.structureName));
-            highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
-
-            highlightedStructure.colorer.SetColor( 1 );
-            foreach (CellStructure structure in structures)
-            {
-                if (structure != highlightedStructure)
-                {
-                    structure.colorer.SetColor( 0 );
-                }
-            }
+            SetHighlightedStructure( _structure );
         }
     }
 
-    public void RemoveHighlightAndLabel (CellStructure _structure, bool force = false)
+    public void RemoveHighlightAndLabel (CellStructure _structure)
     {
-        Debug.Log("Remove " + (_structure == null ? "null" : _structure.structureName) + " " + force);
-        if (structureLabel != null && (_structure == highlightedStructure || force))
+        if (structureLabel != null && _structure == highlightedStructure)
         {
-            highlightedStructure = null;
             structureLabel.gameObject.SetActive( false );
+            SetHighlightedStructure( VisualGuideManager.Instance.nextStructureName );
+        }
+    }
 
-            foreach (CellStructure structure in structures)
-            {
-                structure.colorer.SetColor( 1 );
-            }
+    public void SetHighlightedStructure (string _structureName)
+    {
+        CellStructure _structure = structures.Find( s => s.structureName == _structureName );
+        if (_structure != null)
+        {
+            SetHighlightedStructure( _structure );
+        }
+    }
+
+    public void SetHighlightedStructure (CellStructure _structure)
+    {
+        highlightedStructure = _structure;
+        foreach (CellStructure structure in structures)
+        {
+            structure.colorer.SetColor( structure != highlightedStructure ? 0 : 1);
         }
     }
 
