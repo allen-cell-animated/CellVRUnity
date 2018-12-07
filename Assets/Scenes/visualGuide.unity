@@ -4238,22 +4238,22 @@ Prefab:
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1.348
+      value: 0.84793043
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
@@ -4263,7 +4263,7 @@ Prefab:
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_RootOrder
-      value: 16
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
@@ -4273,37 +4273,37 @@ Prefab:
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 2.153
+      value: 1.6413218
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 48.66
+      value: 48.660004
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 14.67
+      value: 14.669998
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224386601446345680, guid: d92f5496f31904b15bc7eca5880bc4ee,
         type: 2}
@@ -4416,6 +4416,7 @@ GameObject:
   - component: {fileID: 1000040358}
   - component: {fileID: 1000040357}
   - component: {fileID: 1000040356}
+  - component: {fileID: 1000040363}
   m_Layer: 9
   m_Name: RightControllerScriptAlias
   m_TagString: Untagged
@@ -4487,7 +4488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playareaCursor: {fileID: 0}
   directionIndicator: {fileID: 0}
-  customRaycast: {fileID: 0}
+  customRaycast: {fileID: 1000040363}
   pointerOriginSmoothingSettings:
     smoothsPosition: 0
     maxAllowedPerFrameDistanceDifference: 0.003
@@ -4621,6 +4622,21 @@ MonoBehaviour:
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 0}
   interactGrab: {fileID: 0}
+--- !u!114 &1000040363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1000040354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3942f053b21854fbc5d1227c94120b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 1028
+  triggerInteraction: 0
 --- !u!1 &1000910378
 GameObject:
   m_ObjectHideFlags: 0

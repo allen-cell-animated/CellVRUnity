@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4458778064412622}
   - component: {fileID: 114583678179247102}
   - component: {fileID: 135643513881518256}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: StructureInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

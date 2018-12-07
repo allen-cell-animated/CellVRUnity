@@ -95,7 +95,6 @@ public class UIManager : MonoBehaviour
         progressCanvas.SetSelected( structureData.structureName, true );
         structureInfoCanvas.SetContent( structureData );
         dataInfoCanvas.transform.parent.gameObject.SetActive( false );
-        structureInfoCanvas.transform.parent.gameObject.SetActive( true );
         playbutton.SetActive( false );
         countdownCanvas.gameObject.SetActive( true );
         countdownCanvas.StartCountdown();
@@ -111,6 +110,7 @@ public class UIManager : MonoBehaviour
     public void EnterSuccessMode (string structureName, float timeSeconds)
     {
         DisplayScore( timeSeconds );
+        structureInfoCanvas.transform.parent.gameObject.SetActive( true );
     }
 
     public void EnterLobbyMode (string currentStructureName)

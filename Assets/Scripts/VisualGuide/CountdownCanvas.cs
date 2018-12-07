@@ -6,7 +6,7 @@ public class CountdownCanvas : MonoBehaviour
 {
     public Animator numbers;
 
-    Vector3 offsetFromCamera = new Vector3( -1f, 0, 1f );
+    Vector3 offsetFromCamera = new Vector3( 0, 0.5f, 3f );
 
     Transform _calculator;
     Transform calculator

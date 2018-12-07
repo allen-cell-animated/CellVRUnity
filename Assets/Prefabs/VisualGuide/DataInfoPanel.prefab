@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 4751607269187302}
   - component: {fileID: 114807118070154402}
   - component: {fileID: 135316597382883706}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: DataInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
