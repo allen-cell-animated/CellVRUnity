@@ -240,7 +240,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Endoplasmic\u2008Reticulum\u2008(ER)"
+  m_Text: Microtubules
 --- !u!114 &114507041876754462
 MonoBehaviour:
   m_ObjectHideFlags: 1

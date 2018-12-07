@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
 
     public void EnterLobbyMode (string currentStructureName)
     {
-        progressCanvas.gameObject.SetActive( false );
+        progressCanvas.animator.SetTrigger( "Close" );
         dataInfoCanvas.transform.parent.gameObject.SetActive( true );
         structureInfoCanvas.transform.parent.gameObject.SetActive( false );
         playbutton.SetActive( true );
