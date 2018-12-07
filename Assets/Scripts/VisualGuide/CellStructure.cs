@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-public class CellStructure : MonoBehaviour 
+public class CellStructure : VRTK_InteractableObject 
 {
+    [Header("Cell Structure Settings")]
+
     public bool isNucleus;
     public string structureName;
     public float nameWidth = 80f;
+    public int structureIndex;
 
     InterphaseCellManager _interphaseCell;
     InterphaseCellManager interphaseCell
@@ -80,5 +83,11 @@ public class CellStructure : MonoBehaviour
         {
             interphaseCell.RemoveHighlightAndLabel( this );
         }
+    }
+
+    public override void StartUsing (VRTK_InteractUse currentUsingObject = null)
+    {
+        base.StartUsing( currentUsingObject );
+        VisualGuideManager.Instance.SetNextStructure( structureIndex );
     }
 }

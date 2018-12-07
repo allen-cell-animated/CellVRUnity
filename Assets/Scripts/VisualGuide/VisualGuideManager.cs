@@ -53,6 +53,15 @@ public class VisualGuideManager : MonoBehaviour
         }
     }
 
+    public void SetNextStructure (int index)
+    {
+        if (VisualGuideManager.Instance.currentMode == VisualGuideGameMode.Lobby)
+        {
+            currentStuctureIndex = index;
+            UIManager.Instance.nextStructureLabel.text = structureNames[currentStuctureIndex];
+        }
+    }
+
     public void SelectNextStructureAndPlay ()
     {
         interphaseCell.SelectStructure( structureNames[currentStuctureIndex] );
