@@ -92,14 +92,14 @@ public class ControllerLabeller : MonoBehaviour
 
             ShowObject( grabButtonLabelRight, false );
             ShowObject( grabButtonLabelLeft, false );
-            ShowObject( backButtonLabelLeft, false );
+            //ShowObject( backButtonLabelLeft, false );
         }
         else
         {
             ShowObject( grabButtonLabelRight, !ControllerInput.Instance.rightTriggerDown && ControllerInput.Instance.touchingRight );
             ShowObject( grabButtonLabelLeft, !ControllerInput.Instance.leftTriggerDown && ControllerInput.Instance.touchingLeft );
 
-            ShowObject( backButtonLabelLeft, true );
+            //ShowObject( backButtonLabelLeft, true );
             ShowObject( backButtonLabelLeftHover, ControllerInput.Instance.leftTouchpadHover );
 
             ShowObject( gripRight, false );

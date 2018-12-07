@@ -521,6 +521,10 @@ Prefab:
       propertyPath: m_Radius
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1456254051303456, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 402ee478da2a14996aba1a2546ecc191, type: 2}
   m_IsPrefabParent: 0
@@ -11630,7 +11634,7 @@ Prefab:
     - target: {fileID: 224638982525472854, guid: 26da131efb6084075bb010364d6e2f97,
         type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0.566
+      value: 1.76
       objectReference: {fileID: 0}
     - target: {fileID: 224638982525472854, guid: 26da131efb6084075bb010364d6e2f97,
         type: 2}
@@ -11737,7 +11741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1451824958
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -27,30 +27,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void OnEnable ()
-    {
-        if (ControllerInput.Instance.pointerLeft != null)
-        {
-            ControllerInput.Instance.pointerLeft.TouchpadReleased += OnLeftControllerTouchpadUp;
-        }
-    }
-
-    void OnDisable ()
-    {
-        if (ControllerInput.Instance.pointerLeft != null)
-        {
-            ControllerInput.Instance.pointerLeft.TouchpadReleased -= OnLeftControllerTouchpadUp;
-        }
-    }
-
-    void OnLeftControllerTouchpadUp (object sender, ControllerInteractionEventArgs e)
-    {
-        if (VisualGuideManager.Instance.currentMode != VisualGuideGameMode.Lobby)
-        {
-            VisualGuideManager.Instance.ReturnToLobby();
-        }
-    }
-
     void Start ()
     {
         leaderboard.gameObject.SetActive( false );
