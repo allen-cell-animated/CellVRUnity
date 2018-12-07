@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 223858272394409082}
   - component: {fileID: 114428751066781042}
   - component: {fileID: 114708570703942914}
-  - component: {fileID: 114473169731597828}
   - component: {fileID: 95987330348993648}
   m_Layer: 5
   m_Name: InfoCanvas
@@ -174,7 +173,7 @@ Transform:
   m_GameObject: {fileID: 1034561153363442}
   m_LocalRotation: {x: -0, y: -0.9659259, z: -0, w: 0.258819}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.387444, y: 2.387444, z: 2.387444}
+  m_LocalScale: {x: 4.6344886, y: 4.634487, z: 4.6344886}
   m_Children: []
   m_Father: {fileID: 4613298489102754}
   m_RootOrder: 0
@@ -186,7 +185,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1092923136314514}
   m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
-  m_LocalPosition: {x: -0.898, y: 1, z: 1.565}
+  m_LocalPosition: {x: -0.898, y: 1, z: 1.126}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4613298489102754}
@@ -202,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 1347477122340366}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0.40999997, z: -0.50000006}
-  m_LocalScale: {x: 0.20943016, y: 0.20943, z: 0.20943016}
+  m_LocalScale: {x: 0.10788739, y: 0.107887305, z: 0.10788739}
   m_Children:
   - {fileID: 4437125987770164}
   m_Father: {fileID: 4458778064412622}
@@ -322,19 +321,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114473169731597828
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1314923721749372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1518a5e598c7da244bc4850d3ae63354, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickOnPointerCollision: 0
-  autoActivateWithinDistance: 0
 --- !u!114 &114532282137531916
 MonoBehaviour:
   m_ObjectHideFlags: 1

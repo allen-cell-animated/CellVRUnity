@@ -193,7 +193,6 @@ GameObject:
   - component: {fileID: 223996224129362478}
   - component: {fileID: 114737790750141924}
   - component: {fileID: 114059931329747820}
-  - component: {fileID: 114794130073542100}
   - component: {fileID: 95914083576739624}
   m_Layer: 5
   m_Name: InfoCanvas
@@ -293,7 +292,7 @@ Transform:
   m_GameObject: {fileID: 1504226063207952}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0.40999997, z: -0.50000006}
-  m_LocalScale: {x: 0.209429, y: 0.20942868, z: 0.20942903}
+  m_LocalScale: {x: 0.10788679, y: 0.10788663, z: 0.107886806}
   m_Children:
   - {fileID: 4982255846314412}
   m_Father: {fileID: 4751607269187302}
@@ -306,7 +305,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1456254051303456}
   m_LocalRotation: {x: 0, y: -0.258819, z: 0, w: 0.9659259}
-  m_LocalPosition: {x: -0.898, y: 1, z: 1.565}
+  m_LocalPosition: {x: -0.898, y: 1, z: 1.126}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4467276927681712}
@@ -322,7 +321,7 @@ Transform:
   m_GameObject: {fileID: 1950944867605052}
   m_LocalRotation: {x: -0, y: -0.9659259, z: -0, w: 0.258819}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.7748885, y: 4.774895, z: 4.774888}
+  m_LocalScale: {x: 4.63449, y: 4.6344876, z: 4.634489}
   m_Children: []
   m_Father: {fileID: 4467276927681712}
   m_RootOrder: 0
@@ -602,19 +601,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114794130073542100
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1741735953925174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1518a5e598c7da244bc4850d3ae63354, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickOnPointerCollision: 0
-  autoActivateWithinDistance: 0
 --- !u!114 &114807118070154402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -821,7 +807,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
   m_Center: {x: 0, y: 0.41, z: -0.5}
 --- !u!212 &212001477464530822
 SpriteRenderer:
