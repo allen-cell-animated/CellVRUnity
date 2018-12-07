@@ -112,7 +112,7 @@ public class InterphaseCellManager : MonoBehaviour
 
     void Start ()
     {
-        RemoveHighlightAndLabel();
+        RemoveHighlightAndLabel( null, true );
         lobbyPosition = transform.position;
         lobbyRotation = transform.rotation;
         lobbyScale = transform.localScale.x;
@@ -126,7 +126,7 @@ public class InterphaseCellManager : MonoBehaviour
         rotator.RotateToOverDuration( Quaternion.Euler( new Vector3( -18f, -60f, 27f) ), duration );
         scaler.ScaleOverDuration( lobbyScale, duration );
         StartCoroutine( currentGameManager.TurnOffInterphaseCellTarget( duration ) );
-        RemoveHighlightAndLabel();
+        RemoveHighlightAndLabel( null, true );
     }
 
     public void TransitionToLobbyMode ()
@@ -154,9 +154,9 @@ public class InterphaseCellManager : MonoBehaviour
         }
     }
 
-    public void RemoveHighlightAndLabel (CellStructure _structure = null)
+    public void RemoveHighlightAndLabel (CellStructure _structure, bool force = false)
     {
-        if (structureLabel != null && (_structure == null || _structure == highlightedStructure))
+        if (structureLabel != null && (_structure == highlightedStructure || force))
         {
             highlightedStructure = null;
             structureLabel.gameObject.SetActive( false );
