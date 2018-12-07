@@ -151,7 +151,15 @@ public class InterphaseCellManager : MonoBehaviour
             highlightedStructure = _structure;
             structureLabel.gameObject.SetActive( true );
             structureLabel.SetLabel( _structure.structureName, _structure.nameWidth );
-            ColorNonHighlightedStructures( 0 );
+
+            highlightedStructure.colorer.SetColor( 1 );
+            foreach (CellStructure structure in structures)
+            {
+                if (structure != highlightedStructure)
+                {
+                    structure.colorer.SetColor( 0 );
+                }
+            }
         }
     }
 
@@ -162,17 +170,10 @@ public class InterphaseCellManager : MonoBehaviour
         {
             highlightedStructure = null;
             structureLabel.gameObject.SetActive( false );
-            ColorNonHighlightedStructures( 1 );
-        }
-    }
 
-    void ColorNonHighlightedStructures (int colorset)
-    {
-        foreach (CellStructure structure in structures)
-        {
-            if (structure != highlightedStructure)
+            foreach (CellStructure structure in structures)
             {
-                structure.colorer.SetColor( colorset );
+                structure.colorer.SetColor( 1 );
             }
         }
     }

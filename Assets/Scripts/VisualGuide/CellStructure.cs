@@ -53,6 +53,7 @@ public class CellStructure : VRTK_InteractableObject
 
     protected override void OnEnable ()
     {
+        base.OnEnable();
         if (ControllerInput.Instance.laserPointer != null)
         {
             ControllerInput.Instance.laserPointer.DestinationMarkerEnter += OnHoverEnter;
@@ -62,6 +63,7 @@ public class CellStructure : VRTK_InteractableObject
 
     protected override void OnDisable ()
     {
+        base.OnDisable();
         if (ControllerInput.Instance != null && ControllerInput.Instance.laserPointer != null)
         {
             ControllerInput.Instance.laserPointer.DestinationMarkerEnter -= OnHoverEnter;
